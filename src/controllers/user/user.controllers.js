@@ -14,7 +14,7 @@ const getUsers = async (req, res) => {
 
     res.json({
         status: true,
-        data: [{ total, users }],
+        data: { total, users },
         errors: null
     })
 }

@@ -36,7 +36,7 @@ const login = async (req, res) => {
 
         res.json({
             status: true,
-            data: [{ user, token }],
+            data: { user, token },
             errors: null
 
         })
@@ -84,7 +84,7 @@ const googleSignIn = async (req, res) => {
 
         res.json({
             status: true,
-            data: [{ user, token }],
+            data: { user, token },
             errors: null
         });
 
