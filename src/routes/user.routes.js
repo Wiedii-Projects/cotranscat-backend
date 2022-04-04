@@ -1,10 +1,10 @@
 const { Router } = require('express');
 const { check } = require('express-validator');
 const { getUsers,
+    getUser,
     createUser,
     updateUser,
-    deleteUser,
-    usuariosPath
+    deleteUser
 } = require('../controllers/user/user.controllers');
 const { isValidRole, emailExists, userExistsById } = require('../helpers');
 const { validateFields, validateJWT, isRole } = require('../middlewares');
@@ -12,6 +12,11 @@ const { validateFields, validateJWT, isRole } = require('../middlewares');
 const router = Router();
 
 router.get('/', getUsers);
+
+router.get('/:id', [
+    check('id', 'The ID does not exist').isMongoId(),
+    validateFields
+], getUser);
 
 router.post('/', [
     check('name', 'The name is required').not().isEmpty(),

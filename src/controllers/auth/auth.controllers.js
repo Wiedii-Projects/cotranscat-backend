@@ -1,6 +1,6 @@
 const bcryptjs = require("bcryptjs");
 const { generateJWT, googleVerify } = require("../../helpers");
-const { User } = require("../../models");
+const { User, UserGoogle } = require("../../models");
 
 const login = async (req, res) => {
     const { email, password } = req.body;
@@ -56,19 +56,18 @@ const googleSignIn = async (req, res) => {
 
     try {
         const { email, name, picture } = await googleVerify(id_token);
-        let user = await User.findOne({ email });
+        let user = await UserGoogle.findOne({ email });
 
         if (!user) {
             const data = {
                 name,
                 email,
                 picture,
-                password: '123456',
                 google: true,
                 role: 'USER_ROLE'
             };
 
-            user = new User(data);
+            user = new UserGoogle(data);
             await user.save();
         };
 
