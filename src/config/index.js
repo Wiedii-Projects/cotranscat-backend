@@ -5,7 +5,7 @@ if (envFound.error) {
     throw new Error("Couldn't find .env file");
 }
 
-const port = process.env.PORT;
+const port = process.env.DB_PORT;
 const privateKey = process.env.SECRETORPRIVATEKEY;
 const googleClientId = process.env.GOOGLE_CLIENT_ID;
 

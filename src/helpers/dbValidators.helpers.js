@@ -1,4 +1,4 @@
-const { User, Role } = require("../models");
+const { User, Role, UserGoogle } = require("../models");
 
 const isValidRole = async (role = '') => {
     const roleExists = await Role.findOne({ role });
@@ -9,14 +9,16 @@ const isValidRole = async (role = '') => {
 
 const emailExists = async (email = '') => {
     const emailInUse = await User.findOne({ email });
-    if (emailInUse) {
+    const emailGoogleInUse = await UserGoogle.findOne({ email });
+    if (emailInUse || emailGoogleInUse) {
         throw new Error(`Email ${email} is already in use`)
     }
 }
 
 const userExistsById = async (id = '') => {
     const userExists = await User.findById(id);
-    if (!userExists) {
+    const userGoogleExists = await UserGoogle.findById(id);
+    if (!userExists && !userGoogleExists) {
         throw new Error(`The ID ${id} does not exist`);
     }
 }
