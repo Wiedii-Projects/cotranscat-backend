@@ -23,7 +23,7 @@ const getUsers = async (req, res) => {
         return res.json({
             status: false,
             data: null,
-            errors: 'No users registered in the DB'
+            errors: "There aren´t registered users in the database"
         })
     }
 
