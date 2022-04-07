@@ -6,7 +6,7 @@ const validateFields = (req, res, next) => {
         return res.status(400).json({
             status: false,
             data: null,
-            errors
+            errors: errors.array()
         });
     }
     next();

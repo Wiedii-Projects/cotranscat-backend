@@ -1,0 +1,102 @@
+{
+  "auth": {
+    "incorrectCredentials": {
+      "code": "AU0001",
+      "message": "Incorrect email or password"
+    },
+    "emailRequired": {
+      "code": "AU0002",
+      "message": "Email is required"
+    },
+    "passwordRequired": {
+      "code": "AU0003",
+      "message": "Password is required"
+    },
+    "userNotExist": {
+      "code": "AU0004",
+      "message": "User does not exist"
+    },
+    "userRemoved": {
+      "code": "AU0005",
+      "message": "User has been removed"
+    },
+    "somethingWentWrong": {
+      "code": "AU0006",
+      "message": "Something went wrong"
+    },
+    "tokenNotValidate": {
+      "code": "AU0008",
+      "message": "Token could not validate"
+    },
+    "googleToken": {
+        "code": "AU0010",
+        "message": "Google token is required"
+    }
+  },
+  "user": {
+    "unregisteredUsersDB": {
+      "code": "US0001",
+      "message": "There aren't any unregistered users in the database"
+    },
+    "idNotExist": {
+      "code": "US0002",
+      "message": "The ID does not exist"
+    },
+    "emailInUse": {
+      "code": "US0003",
+      "message": "The email is already in use"
+    },
+    "passwordCharactersLong": {
+      "code": "US0004",
+      "message": "The password must be at least 6 characters long"
+    },
+    "nameRequired": {
+      "code": "US0005",
+      "message": "The name is required"
+    },
+    "emailInvalid": {
+      "code": "US0006",
+      "message": "The email is invalid"
+    },
+    "unregisteredRoleDB": {
+      "code": "US0007",
+      "message": "The role does not exist in the database"
+    },
+    "invalidToken": {
+      "code": "US0008",
+      "message": "The token is invalid"
+    },
+    "allowedRoles": {
+        "code": "US0009",
+        "message": "The service requires one of the following roles: "
+    },
+    "userDeleted": {
+      "code": "US0010",
+      "message": "The user has been deleted"
+    },
+    "serverError": {
+      "code": "US0011",
+      "message": "Internal server error"
+    },
+    "invalidId": {
+      "code": "US0014",
+      "message": "The ID is invalid"
+    },
+    "userNoUpdated": {
+      "code": "US0015",
+      "message": "Unable to update a deleted user"
+    },
+    "noToken": {
+      "code": "US0016",
+      "message": "The token is missing from the request"
+    },
+    "userNotExist": {
+      "code": "AU0017",
+      "message": "User does not exist"
+    },
+    "verifyRole": {
+        "code": "US0018",
+        "message": "To verify the role, the token must first be validated."
+    }
+  }
+}

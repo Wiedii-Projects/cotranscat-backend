@@ -8,6 +8,8 @@ const { getUsers,
 } = require('../controllers/user/user.controllers');
 const { isValidRole, emailExists, userExistsById } = require('../helpers');
 const { validateFields, validateJWT, isRole } = require('../middlewares');
+const { MessageErrors } = require('../models');
+const errors = require('../errors/errors.json');
 
 const router = Router();
 
@@ -19,16 +21,16 @@ router.get('/:id', [
 ], getUser);
 
 router.post('/', [
-    check('name', 'The name is required').not().isEmpty(),
-    check('password', 'The password must be at least 6 characters long').isLength({ min: 6 }),
-    check('email', 'The email is invalid').isEmail(),
+    check('name', new MessageErrors(errors.user.nameRequired)).not().isEmpty(),
+    check('password', new MessageErrors(errors.user.passwordCharactersLong)).isLength({ min: 6 }),
+    check('email', new MessageErrors(errors.user.emailInvalid)).isEmail(),
     check('email').custom(emailExists),
     check('role').custom(isValidRole),
     validateFields
 ], createUser);
 
 router.put('/:id', [
-    check('id', 'Not a valid ID').isMongoId(),
+    check('id', new MessageErrors(errors.user.invalidId)).isMongoId(),
     check('id').custom(userExistsById),
     check('role').custom(isValidRole),
     validateFields
@@ -37,7 +39,7 @@ router.put('/:id', [
 router.delete('/:id', [
     validateJWT,
     isRole('ADMIN_ROLE'),
-    check('id', 'Not a valid ID').isMongoId(),
+    check('id', new MessageErrors(errors.user.invalidId)).isMongoId(),
     check('id').custom(userExistsById),
     validateFields
 ], deleteUser);

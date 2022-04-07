@@ -1,5 +1,6 @@
 const bcryptjs = require("bcryptjs");
-const { User, UserGoogle } = require("../../models")
+const { User, UserGoogle, MessageErrors } = require("../../models");
+const errors = require("../../errors/errors.json");
 
 const getUsers = async (req, res) => {
     const { limit = 10, since = 0 } = req.query;
@@ -23,7 +24,7 @@ const getUsers = async (req, res) => {
         return res.json({
             status: false,
             data: null,
-            errors: "There aren´t registered users in the database"
+            errors: new MessageErrors(errors.user.unregisteredUsersDB)
         })
     }
 
@@ -46,7 +47,7 @@ const getUser = async (req, res) => {
         return res.status(404).json({
             status: false,
             data: null,
-            errors: `The ID ${id} does not exist`
+            errors: new MessageErrors(errors.user.idNotExist)
         })
     }
 
@@ -61,16 +62,24 @@ const createUser = async (req, res) => {
     const { name, email, password, role } = req.body;
     const user = new User({ name, email, password, role });
 
-    const salt = bcryptjs.genSaltSync();
-    user.password = bcryptjs.hashSync(password, salt);
+    try {
+        const salt = bcryptjs.genSaltSync();
+        user.password = bcryptjs.hashSync(password, salt);
 
-    await user.save();
+        await user.save();
 
-    res.status(201).json({
-        status: true,
-        data: user,
-        errors: null
-    })
+        res.status(201).json({
+            status: true,
+            data: user,
+            errors: null
+        })
+    } catch (error) {
+        res.status(500).json({
+            status: false,
+            data: null,
+            errors: new MessageErrors(errors.user.serverError)
+        })
+    }
 }
 
 const updateUser = async (req, res) => {
@@ -86,6 +95,26 @@ const updateUser = async (req, res) => {
         const user = await User.findByIdAndUpdate(id, body);
         const userGoogle = await UserGoogle.findByIdAndUpdate(id, body);
 
+        if (user) {
+            if (user.state === false) {
+                return res.json({
+                    status: false,
+                    data: null,
+                    error: new MessageErrors(errors.user.userNoUpdated)
+                })
+            }
+        }
+
+        if (userGoogle) {
+            if (userGoogle.state === false) {
+                return res.json({
+                    status: false,
+                    data: null,
+                    error: new MessageErrors(errors.user.userNoUpdated)
+                })
+            }
+        }
+
         res.json({
             status: true,
             data: { user, userGoogle },
@@ -95,7 +124,7 @@ const updateUser = async (req, res) => {
         res.status(500).json({
             status: false,
             data: null,
-            errors: 'Internal Server Error'
+            errors: new MessageErrors(errors.user.serverError)
         })
     }
 }
@@ -112,7 +141,7 @@ const deleteUser = async (req, res) => {
             return res.json({
                 status: false,
                 data: null,
-                error: 'The user has been deleted'
+                error: new MessageErrors(errors.user.userDeleted)
             })
         }
     }
@@ -124,7 +153,7 @@ const deleteUser = async (req, res) => {
             return res.json({
                 status: false,
                 data: null,
-                error: 'The user has been deleted'
+                error: new MessageErrors(errors.user.userDeleted)
             })
         }
     }
