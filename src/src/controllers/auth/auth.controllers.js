@@ -1,6 +1,7 @@
 const bcryptjs = require("bcryptjs");
 const { generateJWT, googleVerify } = require("../../helpers");
-const { User, UserGoogle } = require("../../models");
+const { User, UserGoogle, MessageErrors } = require("../../models");
+const errors = require('../../errors/errors.json');
 
 const login = async (req, res) => {
     const { email, password } = req.body;
@@ -8,10 +9,11 @@ const login = async (req, res) => {
     try {
         const user = await User.findOne({ email });
         if (!user) {
+
             return res.status(400).json({
                 status: false,
                 data: null,
-                errors: 'Incorrect email or password'
+                errors: new MessageErrors(errors.auth.incorrectCredentials)
             })
         };
 
@@ -19,7 +21,7 @@ const login = async (req, res) => {
             return res.status(400).json({
                 status: false,
                 data: null,
-                errors: 'User does not exist'
+                errors: new MessageErrors(errors.auth.userNotExist)
             })
         };
 
@@ -28,7 +30,7 @@ const login = async (req, res) => {
             return res.status(400).json({
                 status: false,
                 data: null,
-                errors: 'Incorrect email or password'
+                errors: new MessageErrors(errors.auth.incorrectCredentials)
             })
         }
 
@@ -46,7 +48,7 @@ const login = async (req, res) => {
         res.status(500).json({
             status: false,
             data: null,
-            errors: 'Something went wrong'
+            errors: new MessageErrors(errors.auth.somethingWentWrong)
         })
     }
 };
@@ -75,7 +77,7 @@ const googleSignIn = async (req, res) => {
             return res.status(401).json({
                 status: false,
                 data: null,
-                errors: 'User removed'
+                errors: new MessageErrors(errors.auth.userRemoved)
             })
         };
 
@@ -92,7 +94,7 @@ const googleSignIn = async (req, res) => {
         res.status(400).json({
             status: false,
             data: null,
-            errors: 'Token could not validate'
+            errors: new MessageErrors(errors.auth.tokenNotValidate)
         })
     }
 };

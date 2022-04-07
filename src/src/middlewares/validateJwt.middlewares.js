@@ -1,6 +1,8 @@
 const jwt = require('jsonwebtoken');
 const { privateKey } = require('../config');
 const { User } = require('../models');
+const { MessageErrors } = require('../models');
+const errors = require('../errors/errors.json');
 
 const validateJWT = async (req, res, next) => {
     const token = req.header('x-token');
@@ -8,7 +10,7 @@ const validateJWT = async (req, res, next) => {
         return res.status(401).json({
             status: false,
             data: null,
-            errors: 'No token in request'
+            errors: new MessageErrors(errors.user.noToken)
         })
     };
     try {
@@ -19,7 +21,7 @@ const validateJWT = async (req, res, next) => {
             return res.status(401).json({
                 status: false,
                 data: null,
-                errors: 'User does not exist'
+                errors: new MessageErrors(errors.user.userNotExist)
             })
         };
 
@@ -27,7 +29,7 @@ const validateJWT = async (req, res, next) => {
             return res.status(401).json({
                 status: false,
                 data: null,
-                errors: 'Invalid token'
+                errors: new MessageErrors(errors.user.invalidToken)
             })
         };
 
@@ -39,7 +41,7 @@ const validateJWT = async (req, res, next) => {
         res.status(401).json({
             status: false,
             data: null,
-            errors: 'Invalid token'
+            errors: new MessageErrors(errors.user.invalidToken)
         });
     }
 }
