@@ -3,5 +3,5 @@ ENV NODE_ENV=develop
 WORKDIR /usr/src
 COPY ./src .
 RUN npm install
-EXPOSE 8082
+EXPOSE 8000
 CMD npm start
