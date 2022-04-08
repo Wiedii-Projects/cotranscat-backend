@@ -6,8 +6,20 @@
 + .env.staging
 + .env.production
 
-## How to use
+## How to use develop
 
-+ docker build . -t node_prototype
++ docker build . -t node_prototype:develop
 
-+ docker run -itd -p 80:8082 node_prototype
++ docker run -itd -e NODE_ENV=develop -p 81:8000 node_prototype:develop
+
+## How to use otherEnvironment
+
++ docker build . -t node_prototype:otherEnvironment
+
++ docker run -itd -e NODE_ENV=nameEnvironment -p numberPortVariant:8000 node_prototype:otherEnvironment
+
+## see all "docker" containers
+docker ps
+
+## view log records of a specific container
+docker logs -f idContainer
