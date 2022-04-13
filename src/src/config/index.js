@@ -10,14 +10,20 @@ if (envFound.error) {
 }
 const nodeEnv = process.env.NODE_ENV || 'development';
 const dbHost = process.env.DB_HOST || 'localhost';
-const port = process.env.DB_PORT || 8082;
-const privateKey = process.env.SECRETORPRIVATEKEY;
+const dbPort = process.env.DB_PORT;
+const port = process.env.PORT || 8082;
+const privateKey = process.env.SECRET_OR_PRIVATE_KEY;
 const googleClientId = process.env.GOOGLE_CLIENT_ID;
+const dbConnection = process.env.DB_CONNECTION;
+const dbDatabase = process.env.DB_DATABASE;
+
+const mongoConnection = `${dbConnection}://${dbHost}:${dbPort}/${dbDatabase}`;
 
 module.exports = {
     nodeEnv,
     dbHost,
     port,
     privateKey,
-    googleClientId
+    googleClientId,
+    mongoConnection
 }
