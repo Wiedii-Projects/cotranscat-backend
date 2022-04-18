@@ -1,0 +1,8 @@
+---
+- name: Deploy Service Prototype Backend node mongodb
+  hosts: webservers
+  become: yes
+  remote_user: ansible-workflow
+  roles:
+    - service
+...

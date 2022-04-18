@@ -1,0 +1,4 @@
+- name: service
+  src: https://gitlab-deploy-token:fMQCwnhKgsvM4f7sGyPS@gitlab.wiedii.co/puma/service.git
+  version: 2.0.2
+  scm: git
