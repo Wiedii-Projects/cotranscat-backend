@@ -1,5 +1,5 @@
 var apm = require('elastic-apm-node').start({
-serviceName: 'Node_Prototype',
+serviceName: 'Node_Prototype_Mongo',
 secretToken: '',
 serverUrl: 'https://elastic.wiedii.co:8200',
 environment: 'develop'
