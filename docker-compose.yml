@@ -1,12 +1,12 @@
 version: '3.8'
 services:
 
-  docker-nodemysql.com:
+  docker-nodemongo.com:
     build: .
     ports:
       - 80:8000 
     environment:
-      NODE_ENV: local
+      NODE_ENV: develop
 
   db_mongo:
     image: mongo:4.4.9
