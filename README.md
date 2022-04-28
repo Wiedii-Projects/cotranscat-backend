@@ -31,3 +31,6 @@ docker ps
 
 ## view log records of a specific container
 docker logs -f idContainer
+
+## How to use Docker Compose
+docker-compose up -d --build --remove-orphans
