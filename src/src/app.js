@@ -1,11 +1,16 @@
-var apm = require("elastic-apm-node").start({
-  serviceName: "Node_Prototype_Mongo",
-  secretToken: "",
-  serverUrl: "https://elastic.wiedii.co:8200",
-  environment: "develop",
-});
-require("dotenv").config();
-const Server = require("./models/server.models");
+require('dotenv').config();
+const { envFound } = require('./config');
+
+if (envFound.parsed.NODE_ENV === 'production') {
+    var apm = require('elastic-apm-node').start({
+    serviceName: 'Node_Prototype',
+    secretToken: '',
+    serverUrl: 'https://elastic.wiedii.co:8200',
+    environment: envFound
+    });
+}
+
+const Server = require('./models/server.models');
 
 const server = new Server();
 
