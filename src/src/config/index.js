@@ -14,10 +14,13 @@ const dbPort = process.env.DB_PORT;
 const port = process.env.PORT || 8082;
 const privateKey = process.env.SECRET_OR_PRIVATE_KEY;
 const googleClientId = process.env.GOOGLE_CLIENT_ID;
-const dbConnection = process.env.DB_CONNECTION;
 const dbDatabase = process.env.DB_DATABASE;
+const user = process.env.DB_USERNAME;
+const password = process.env.DB_PASSWORD;
 
-const mongoConnection = `${dbConnection}://${dbHost}:${dbPort}/${dbDatabase}`;
+let mongoConnection = `mongodb://${user}:${password}@${dbHost}:${dbPort}`;
+
+(nodeEnv === 'local') ? mongoConnection += `/${dbDatabase}` : '';
 
 module.exports = {
     nodeEnv,
@@ -25,5 +28,6 @@ module.exports = {
     port,
     privateKey,
     googleClientId,
-    mongoConnection
+    mongoConnection,
+    envFound
 }
