@@ -1,3 +1,7 @@
+# Multilevel Politician Backend
+
+Multilevel Politician Backend developed in Node js
+
 ## Pipeline Status
 
 [![pipeline status](https://gitlab.wiedii.co/lions/prototype-backend-node-mongodb/badges/develop/pipeline.svg)](https://gitlab.wiedii.co/lions/prototype-backend-node-mongodb/-/commits/develop)
