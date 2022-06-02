@@ -16,16 +16,19 @@ const router = Router();
 router.get('/', getUsers);
 
 router.get('/:id', [
-    check('id', 'The ID does not exist').isMongoId(),
+    check('id', new MessageErrors(errors.user.idNotExist)).isMongoId(),
     validateFields
 ], getUser);
 
 router.post('/', [
     check('name', new MessageErrors(errors.user.nameRequired)).not().isEmpty(),
-    check('password', new MessageErrors(errors.user.passwordCharactersLong)).isLength({ min: 6 }),
+    check('lastName', new MessageErrors(errors.user.lastNameRequired)).not().isEmpty(),
+    check('password', new MessageErrors(errors.user.validatePassword)).matches(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[$@$!%*?&#.$($)$-$_])[A-Za-z\d$@$!%*?&#.$($)$-$_]{8,15}$/),
     check('email', new MessageErrors(errors.user.emailInvalid)).isEmail(),
     check('email').custom(emailExists),
     check('role').custom(isValidRole),
+    check('phoneNumber', new MessageErrors(errors.user.phoneNumber)).not().isEmpty(),
+    check('email').custom(emailExists),
     validateFields
 ], createUser);
 

@@ -59,8 +59,8 @@ const getUser = async (req, res) => {
 }
 
 const createUser = async (req, res) => {
-    const { name, email, password, role } = req.body;
-    const user = new User({ name, email, password, role });
+    const { name, lastName, email, password, phoneNumber, role } = req.body;
+    const user = new User({ name, lastName, email, password, phoneNumber, role });
 
     try {
         const salt = bcryptjs.genSaltSync();

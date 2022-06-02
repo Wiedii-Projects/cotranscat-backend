@@ -29,8 +29,32 @@
       "message": "Token could not validate"
     },
     "googleToken": {
-        "code": "AU0010",
-        "message": "Google token is required"
+      "code": "AU0010",
+      "message": "Google token is required"
+    },
+    "emailExist": {
+      "code": "AU0011",
+      "message": "Email is not registered"
+    },
+    "passwordConfirmRequired": {
+      "code": "AU0012",
+      "message": "Password confirm is required"
+    },
+    "passwordNotMatch": {
+      "code": "AU0013",
+      "message": "Password does not match"
+    },
+    "codeNotValid": {
+      "code": "AU0014",
+      "message": "Code is not valid"
+    },
+    "validatePassword": {
+      "code": "AU0015",
+      "message": "The password is not secure"
+    },
+    "codeRequired": {
+      "code": "AU0016",
+      "message": "Code is required"
     }
   },
   "user": {
@@ -67,8 +91,8 @@
       "message": "The token is invalid"
     },
     "allowedRoles": {
-        "code": "US0009",
-        "message": "The service requires one of the following roles: "
+      "code": "US0009",
+      "message": "The service requires one of the following roles: "
     },
     "userDeleted": {
       "code": "US0010",
@@ -95,8 +119,20 @@
       "message": "User does not exist"
     },
     "verifyRole": {
-        "code": "US0018",
-        "message": "To verify the role, the token must first be validated."
+      "code": "US0018",
+      "message": "To verify the role, the token must first be validated."
+    },
+    "lastNameRequired": {
+      "code": "US0019",
+      "message": "The last name is required"
+    },
+    "phoneNumber": {
+      "code": "US0020",
+      "message": "The phone number is required"
+    },
+    "validatePassword": {
+      "code": "US0021",
+      "message": "The password is not secure"
     }
   }
 }

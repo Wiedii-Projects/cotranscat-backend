@@ -5,6 +5,10 @@ const UserSchema = Schema({
         type: String,
         required: [true, 'The name is required']
     },
+    lastName: {
+        type: String,
+        required: [true, 'The last name is required']
+    },
     email: {
         type: String,
         required: [true, 'Mail is required'],
@@ -16,6 +20,10 @@ const UserSchema = Schema({
     },
     img: {
         type: String
+    },
+    phoneNumber: {
+        type: String,
+        required: [true, 'Phone number is required']
     },
     state: {
         type: Boolean,
