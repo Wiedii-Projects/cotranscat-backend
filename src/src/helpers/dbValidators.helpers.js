@@ -25,8 +25,17 @@ const userExistsById = async (id = '') => {
     }
 }
 
+const validateEmailExists = async (email = '') => {
+    const user = await User.findOne({ email });
+    const userGoogle = await UserGoogle.findOne({ email });
+    if (!user && !userGoogle) {
+        throw new MessageErrors(errors.auth.emailExist);
+    }
+}
+
 module.exports = {
     isValidRole,
     emailExists,
-    userExistsById
+    userExistsById,
+    validateEmailExists
 }

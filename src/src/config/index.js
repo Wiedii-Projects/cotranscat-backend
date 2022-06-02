@@ -18,6 +18,10 @@ const dbDatabase = process.env.DB_DATABASE;
 const user = process.env.DB_USERNAME;
 const password = process.env.DB_PASSWORD;
 
+const accountSid = process.env.TWILIO_ACCOUNT_SID;
+const authToken = process.env.TWILIO_AUTH_TOKEN;
+const twilioNumber = process.env.TWILIO_NUMBER;
+
 let mongoConnection = `mongodb://${user}:${password}@${dbHost}:${dbPort}`;
 
 (nodeEnv === 'local') ? mongoConnection += `/${dbDatabase}` : '';
@@ -29,5 +33,8 @@ module.exports = {
     privateKey,
     googleClientId,
     mongoConnection,
-    envFound
+    envFound,
+    accountSid,
+    authToken,
+    twilioNumber
 }
