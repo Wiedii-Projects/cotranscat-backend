@@ -2,54 +2,30 @@ const bcryptjs = require("bcryptjs");
 const { generateJWT, googleVerify, createSMS } = require("../../helpers");
 const { User, UserGoogle, MessageErrors, CodeSms } = require("../../models");
 const errors = require('../../errors/errors.json');
+const { responseError, responseValid } = require("../../errors/response");
 
 const login = async (req, res) => {
     const { email, password } = req.body;
-
     try {
         const user = await User.findOne({ email });
 
         if (!user) {
-            return res.status(400).json({
-                status: false,
-                data: null,
-                errors: new MessageErrors(errors.auth.incorrectCredentials)
-            })
+            return responseError(res, 400, errors.auth.incorrectCredentials);
         };
 
         if (!user.state) {
-            return res.status(400).json({
-                status: false,
-                data: null,
-                errors: new MessageErrors(errors.auth.userNotExist)
-            })
+            return responseError(res, 400, errors.auth.userNotExist);
         };
 
         const validPassword = bcryptjs.compareSync(password, user.password);
         if (!validPassword) {
-            return res.status(400).json({
-                status: false,
-                data: null,
-                errors: new MessageErrors(errors.auth.incorrectCredentials)
-            })
+            return responseError(res, 400, errors.auth.incorrectCredentials);
         }
 
         const token = await generateJWT(user.id);
-
-        res.json({
-            status: true,
-            data: { user, token },
-            errors: null
-
-        })
-
+        return responseValid(res, { user, token });
     } catch (error) {
-        console.log(error);
-        res.status(500).json({
-            status: false,
-            data: null,
-            errors: new MessageErrors(errors.auth.somethingWentWrong)
-        })
+        return responseError(res, 500, errors.auth.somethingWentWrong);
     }
 };
 
@@ -61,41 +37,21 @@ const googleSignIn = async (req, res) => {
         let user = await UserGoogle.findOne({ email });
 
         if (!user) {
-            const data = {
-                name,
-                email,
-                picture,
-                google: true,
-                role: 'USER_ROLE'
-            };
-
+            const data = { name, email, picture, google: true, role: 'USER_ROLE' };
             user = new UserGoogle(data);
             await user.save();
         };
 
         if (!user.state) {
-            return res.status(401).json({
-                status: false,
-                data: null,
-                errors: new MessageErrors(errors.auth.userRemoved)
-            })
+            return responseError(res, 400, errors.auth.userRemoved);
         };
 
         const token = await generateJWT(user.id);
 
-        res.json({
-            status: true,
-            data: { user, token },
-            errors: null
-        });
+        return responseValid(res, { user, token });
 
     } catch (error) {
-        console.log(error);
-        res.status(400).json({
-            status: false,
-            data: null,
-            errors: new MessageErrors(errors.auth.tokenNotValidate)
-        })
+        return responseError(res, 500, errors.auth.tokenNotValidate);
     }
 };
 
@@ -106,35 +62,18 @@ const validateEmail = async (req, res) => {
         const user = await User.findOne({ email });
 
         if (!user) {
-            return res.status(400).json({
-                status: false,
-                data: null,
-                errors: new MessageErrors(errors.auth.emailExist)
-            })
+            return responseError(res, 400, errors.auth.emailExist);
         }
 
         if (!user.state) {
-            return res.status(400).json({
-                status: false,
-                data: null,
-                errors: new MessageErrors(errors.auth.userNotExist)
-            })
+            return responseError(res, 400, errors.auth.userNotExist);
         };
 
         const { id } = user;
-
-        res.json({
-            status: true,
-            data: { id },
-            errors: null
-        });
+        return responseValid(res, { id });
 
     } catch (error) {
-        res.status(500).json({
-            status: false,
-            data: null,
-            errors: new MessageErrors(errors.auth.somethingWentWrong)
-        })
+        return responseError(res, 500, errors.auth.somethingWentWrong);
     }
 };
 
@@ -152,20 +91,10 @@ const createCode = async (req, res) => {
         const codeSMS = new CodeSms({ code: code, userCode: user.id });
 
         await codeSMS.save();
-
-        return res.status(201).json({
-            status: true,
-            data: true,
-            errors: null
-        });
+        return responseValid(res, null);
 
     } catch (error) {
-        console.log('error', error);
-        res.status(500).json({
-            status: false,
-            data: null,
-            errors: new MessageErrors(errors.auth.somethingWentWrong)
-        })
+        return responseError(res, 500, errors.auth.somethingWentWrong);
     }
 };
 
@@ -176,27 +105,14 @@ const validateCode = async (req, res) => {
         const codeSMS = await CodeSms.findOne({ code: code, userCode: id });
 
         if (!codeSMS) {
-            return res.status(400).json({
-                status: false,
-                data: null,
-                errors: new MessageErrors(errors.auth.codeNotValid)
-            })
+            return responseError(res, 400, errors.auth.codeNotValid);
         }
 
         await CodeSms.deleteMany({ userCode: id });
-
-        return res.status(200).json({
-            status: true,
-            data: true,
-            errors: null
-        });
+        return responseValid(res, null);
 
     } catch (error) {
-        res.status(500).json({
-            status: false,
-            data: null,
-            errors: new MessageErrors(errors.auth.somethingWentWrong)
-        })
+        return responseError(res, 500, errors.auth.somethingWentWrong);
     }
 };
 
@@ -205,11 +121,7 @@ const changePassword = async (req, res) => {
 
     try {
         if (password !== passwordConfirm) {
-            return res.status(400).json({
-                status: false,
-                data: null,
-                errors: new MessageErrors(errors.auth.passwordNotMatch)
-            });
+            return responseError(res, 400, errors.auth.passwordNotMatch);
         }
 
         const salt = bcryptjs.genSaltSync();
@@ -217,19 +129,10 @@ const changePassword = async (req, res) => {
         passwordConfirm = bcryptjs.hashSync(passwordConfirm, salt);
 
         const user = await User.findByIdAndUpdate(id, { password });
-
-        res.json({
-            status: true,
-            data: { user },
-            errors: null
-        });
+        return responseValid(res, {user});
 
     } catch (error) {
-        res.status(500).json({
-            status: false,
-            data: null,
-            errors: new MessageErrors(errors.auth.somethingWentWrong)
-        })
+        return responseError(res, 500, errors.auth.somethingWentWrong);
     }
 };
 
