@@ -8,8 +8,8 @@ const login = async (req, res) => {
 
     try {
         const user = await User.findOne({ email });
-        if (!user) {
 
+        if (!user) {
             return res.status(400).json({
                 status: false,
                 data: null,
