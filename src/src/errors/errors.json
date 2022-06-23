@@ -55,6 +55,10 @@
     "codeRequired": {
       "code": "AU0016",
       "message": "Code is required"
+    },
+    "uidRequired": {
+      "code": "AU0016",
+      "message": "UID is required"
     }
   },
   "user": {
@@ -133,6 +137,10 @@
     "validatePassword": {
       "code": "US0021",
       "message": "The password is not secure"
+    },
+    "phoneNumberNoRegistered": {
+      "code": "US0020",
+      "message": "The phone number not registered"
     }
   }
 }

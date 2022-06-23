@@ -8,7 +8,6 @@ async function googleVerify(token = '') {
         idToken: token,
         audience: googleClientId,
     });
-
     const { name, picture, email } = ticket.getPayload();
 
     return {

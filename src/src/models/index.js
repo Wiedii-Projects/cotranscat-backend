@@ -1,9 +1,9 @@
 const Server = require('./server.models');
-const User = require('./user.models');
+const User = require('./user/user.models');
 const Role = require('./role.models');
-const UserGoogle = require('./userGoogle.models');
+const UserGoogle = require('./userGoogle/userGoogle.models');
 const MessageErrors =  require('./errors.models');
-const CodeSms = require('./codeSms.models');
+const CodeSms = require('./codeSms/codeSms.models');
 
 module.exports = {
     Server,
