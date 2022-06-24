@@ -1,6 +1,7 @@
 const bcryptjs = require("bcryptjs");
-const { User, UserGoogle, MessageErrors } = require("../../models");
+const { User, UserGoogle } = require("../../models");
 const errors = require("../../errors/errors.json");
+const { responseValid, responseError } = require("../../errors/response");
 
 const getUsers = async (req, res) => {
     const { limit = 10, since = 0 } = req.query;
@@ -21,21 +22,12 @@ const getUsers = async (req, res) => {
     ]);
 
     if (totalUsers === 0 && totalUserGoogle === 0) {
-        return res.json({
-            status: false,
-            data: null,
-            errors: new MessageErrors(errors.user.unregisteredUsersDB)
-        })
+        return responseError(res, 400, errors.user.unregisteredUsersDB);
     }
 
     const count = totalUsers + totalUserGoogle;
     const rows = Array.prototype.concat(users, usersGoogle);
-
-    res.json({
-        status: true,
-        data: { count, rows },
-        errors: null
-    })
+    return responseValid(res, { count, rows });
 }
 
 const getUser = async (req, res) => {
@@ -44,18 +36,10 @@ const getUser = async (req, res) => {
     const userGoogle = await UserGoogle.findOne({ state: true, _id: id });
 
     if (!user && !userGoogle) {
-        return res.status(404).json({
-            status: false,
-            data: null,
-            errors: new MessageErrors(errors.user.idNotExist)
-        })
+        return responseError(res, 400, errors.user.idNotExist);
     }
 
-    res.json({
-        status: true,
-        data: { user, userGoogle },
-        errors: null
-    })
+    return responseValid(res, { user, userGoogle });
 }
 
 const createUser = async (req, res) => {
@@ -67,18 +51,10 @@ const createUser = async (req, res) => {
         user.password = bcryptjs.hashSync(password, salt);
 
         await user.save();
+        return responseValid(res, user);
 
-        res.status(201).json({
-            status: true,
-            data: user,
-            errors: null
-        })
     } catch (error) {
-        res.status(500).json({
-            status: false,
-            data: null,
-            errors: new MessageErrors(errors.user.serverError)
-        })
+        return responseError(res, 500, errors.auth.somethingWentWrong);
     }
 }
 
@@ -97,35 +73,18 @@ const updateUser = async (req, res) => {
 
         if (user) {
             if (user.state === false) {
-                return res.json({
-                    status: false,
-                    data: null,
-                    error: new MessageErrors(errors.user.userNoUpdated)
-                })
+                return responseError(res, 400, errors.user.userNoUpdated);
             }
         }
-
         if (userGoogle) {
             if (userGoogle.state === false) {
-                return res.json({
-                    status: false,
-                    data: null,
-                    error: new MessageErrors(errors.user.userNoUpdated)
-                })
+                return responseError(res, 400, errors.user.userNoUpdated);
             }
         }
+        return responseValid(res, {user, userGoogle});
 
-        res.json({
-            status: true,
-            data: { user, userGoogle },
-            errors: null
-        })
     } catch (error) {
-        res.status(500).json({
-            status: false,
-            data: null,
-            errors: new MessageErrors(errors.user.serverError)
-        })
+        return responseError(res, 500, errors.auth.somethingWentWrong);
     }
 }
 
@@ -138,11 +97,7 @@ const deleteUser = async (req, res) => {
         if (user.state === true) {
             await User.findByIdAndUpdate(id, { state: false });
         } else {
-            return res.json({
-                status: false,
-                data: null,
-                error: new MessageErrors(errors.user.userDeleted)
-            })
+            return responseError(res, 400, errors.user.userDeleted);
         }
     }
 
@@ -150,19 +105,10 @@ const deleteUser = async (req, res) => {
         if (userGoogle.state === true) {
             await UserGoogle.findByIdAndUpdate(id, { state: false });
         } else {
-            return res.json({
-                status: false,
-                data: null,
-                error: new MessageErrors(errors.user.userDeleted)
-            })
+            return responseError(res, 400, errors.user.userDeleted);
         }
     }
-
-    res.json({
-        status: true,
-        data: { user, userGoogle },
-        errors: null
-    })
+    return responseValid(res, {user, userGoogle});
 }
 
 module.exports = {
