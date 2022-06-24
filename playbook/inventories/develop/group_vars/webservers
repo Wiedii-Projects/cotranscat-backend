@@ -1,6 +1,6 @@
 ---
 project_environment: prototype_backend_node_mongodb_develop
 internal_port: 8000
-external_port: 4011
+external_port: 4012
 envs: 
   NODE_ENV: develop
