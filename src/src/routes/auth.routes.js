@@ -4,13 +4,12 @@ const { login, googleSignIn, validateEmail, createCode, validateCode, changePass
 const { validateFields } = require("../middlewares");
 const { MessageErrors } = require("../models");
 const errors = require("../errors/errors.json");
-const { validateEmailExists } = require("../helpers");
+const { checkLogin, checkValidateEmail, checkChangePassword } = require("../middlewares/check/auth.middleware");
 
 const router = Router();
 
 router.post('/login', [
-    check('email', new MessageErrors(errors.auth.emailRequired)).isEmail(),
-    check('password', new MessageErrors(errors.auth.passwordRequired)).not().isEmpty(),
+    checkLogin(),
     validateFields
 ], login);
 
@@ -20,8 +19,7 @@ router.post('/google', [
 ], googleSignIn);
 
 router.post('/validateEmail', [
-    check('email', new MessageErrors(errors.auth.emailRequired)).isEmail(),
-    check('email').custom(validateEmailExists),
+    checkValidateEmail(),
     validateFields
 ], validateEmail);
 
@@ -32,10 +30,7 @@ router.post('/validateCode', [
 ], validateCode);
 
 router.post('/changePassword', [
-    check('password', new MessageErrors(errors.auth.passwordRequired)).not().isEmpty(),
-    check('password', new MessageErrors(errors.auth.validatePassword)).matches(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[$@$!%*?&#.$($)$-$_])[A-Za-z\d$@$!%*?&#.$($)$-$_]{8,15}$/),
-    check('passwordConfirm', new MessageErrors(errors.auth.passwordConfirmRequired)).not().isEmpty(),
-    check('passwordConfirm', new MessageErrors(errors.auth.validatePassword)).matches(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[$@$!%*?&#.$($)$-$_])[A-Za-z\d$@$!%*?&#.$($)$-$_]{8,15}$/),
+    checkChangePassword(),
     validateFields
 ], changePassword);
 
