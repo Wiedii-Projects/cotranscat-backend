@@ -1,22 +1,25 @@
 const { Router } = require('express');
-const { check } = require('express-validator');
 const { getUsers,
     getUser,
     createUser,
     updateUser,
     deleteUser
 } = require('../controllers/user/user.controllers');
-const { validateFields, validateJWT, isRole } = require('../middlewares');
-const { MessageErrors } = require('../models');
-const errors = require('../errors/errors.json');
-const { checkCreateUser, checkUpdateUser, checkDeleteUser } = require('../middlewares/check/user.middleware');
+const { 
+    checkCreateUser, 
+    checkUpdateUser, 
+    checkDeleteUser, 
+    checkGetUser
+ } = require('../middlewares/check/user.middleware');
+const { validateFields} = require('../middlewares');
+
 
 const router = Router();
 
 router.get('/', getUsers);
 
-router.get('/:id', [
-    check('id', new MessageErrors(errors.user.idNotExist)).isMongoId(),
+router.get('/:uid', [
+    checkGetUser(),
     validateFields
 ], getUser);
 
@@ -25,14 +28,12 @@ router.post('/', [
     validateFields
 ], createUser);
 
-router.put('/:id', [
+router.put('/:uid', [
     checkUpdateUser(),
     validateFields
 ], updateUser);
 
-router.delete('/:id', [
-    validateJWT,
-    isRole('ADMIN_ROLE'),
+router.delete('/', [
     checkDeleteUser(),
     validateFields
 ], deleteUser);

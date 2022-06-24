@@ -61,6 +61,7 @@ const checkValidateEmail = () => {
 const checkCreateCode = () => {
     return [
         check('uid', new MessageErrors(errors.auth.uidRequired)).not().isEmpty(),
+        check('uid', new MessageErrors(errors.user.idNotExist)).isMongoId(),
         check('uid', new MessageErrors(errors.auth.userNotExist))
             .custom((value, { req }) => showUserID(value, req))
             .custom((value, { req }) => req.body.user),

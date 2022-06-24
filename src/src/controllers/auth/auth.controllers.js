@@ -1,9 +1,9 @@
-const bcryptjs = require("bcryptjs");
 const { generateJWT } = require("../../helpers");
 const { User, CodeSms } = require("../../models");
 const errors = require('../../errors/errors.json');
 const { responseError, responseValid } = require("../../errors/response");
 const { createCodeID } = require("../../models/codeSms/query.codeSms");
+const { encryptPassword } = require("../../helpers/validator/user.validator");
 
 const login = async (req, res) => {
     try {
@@ -56,8 +56,8 @@ const validateCode = async (req, res) => {
 const changePassword = async (req, res) => {
     try {
         const { password, uid } = req.body;
-        const salt = bcryptjs.genSaltSync();
-        password = bcryptjs.hashSync(password, salt);
+        password = await encryptPassword(password);
+        console.log("salida", password);
         const user = await User.findByIdAndUpdate(uid, { password });
         return responseValid(res, {user});
     } catch (error) {
