@@ -1,6 +1,6 @@
-const { MessageErrors } = require("../models");
-const errors = require("../errors/errors.json");
-const { responseError } = require("../errors/response");
+const { MessageErrors } = require("../../models");
+const errors = require("../../errors/errors.json");
+const { responseError } = require("../../errors/response");
 
 const isRole = (...roles) => {
     return (req, res, next) => {

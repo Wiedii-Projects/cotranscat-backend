@@ -12,7 +12,7 @@ const responseAllError = (res, status, error) => {
     return res.status(status).json({
         status: false,
         data: null,
-        errors: error.array()
+        errors: error
     });
 }
 

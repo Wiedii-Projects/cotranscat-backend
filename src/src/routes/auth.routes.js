@@ -1,10 +1,14 @@
 const { Router } = require("express");
-const { check } = require("express-validator");
-const { login, googleSignIn, validateEmail, createCode, validateCode, changePassword } = require("../controllers/auth/auth.controllers");
+const { 
+    login, 
+    googleSignIn, 
+    validateEmail, 
+    createCode, 
+    validateCode, 
+    changePassword 
+} = require("../controllers/auth/auth.controllers");
 const { validateFields } = require("../middlewares");
-const { MessageErrors } = require("../models");
-const errors = require("../errors/errors.json");
-const { checkLogin, checkValidateEmail, checkChangePassword } = require("../middlewares/check/auth.middleware");
+const { checkLogin, checkValidateEmail, checkChangePassword, checkGoogleSignIn, checkCreateCode, checkValidateCode } = require("../middlewares/check/auth.middleware");
 
 const router = Router();
 
@@ -14,7 +18,7 @@ router.post('/login', [
 ], login);
 
 router.post('/google', [
-    check('id_token', new MessageErrors(errors.auth.googleToken)).not().isEmpty(),
+    checkGoogleSignIn(),
     validateFields
 ], googleSignIn);
 
@@ -23,10 +27,14 @@ router.post('/validateEmail', [
     validateFields
 ], validateEmail);
 
-router.post('/createCode', createCode)
+router.post('/createCode', [
+    checkCreateCode(),
+    validateFields
+], createCode)
 
 router.post('/validateCode', [
-    check('code', new MessageErrors(errors.auth.codeRequired)).not().isEmpty(),
+    checkValidateCode(),
+    validateFields
 ], validateCode);
 
 router.post('/changePassword', [

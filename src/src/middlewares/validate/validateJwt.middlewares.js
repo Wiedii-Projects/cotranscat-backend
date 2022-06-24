@@ -1,8 +1,8 @@
 const jwt = require('jsonwebtoken');
-const { privateKey } = require('../config');
-const { User } = require('../models');
-const errors = require('../errors/errors.json');
-const { responseError } = require('../errors/response');
+const { privateKey } = require('../../config');
+const { User } = require('../../models');
+const errors = require('../../errors/errors.json');
+const { responseError } = require('../../errors/response');
 
 const validateJWT = async (req, res, next) => {
     const token = req.header('x-token');
