@@ -2,89 +2,89 @@
   "auth": {
     "incorrectCredentials": {
       "code": "AU0001",
-      "message": "Incorrect email or password"
+      "message": "Incorrect email or password."
     },
     "emailRequired": {
       "code": "AU0002",
-      "message": "Email is required"
+      "message": "Email is required."
     },
     "passwordRequired": {
       "code": "AU0003",
-      "message": "Password is required"
+      "message": "Password is required."
     },
     "userNotExist": {
       "code": "AU0004",
-      "message": "User does not exist"
+      "message": "User does not exist."
     },
     "userRemoved": {
       "code": "AU0005",
-      "message": "User has been removed"
+      "message": "User has been removed."
     },
     "somethingWentWrong": {
       "code": "AU0006",
-      "message": "Something went wrong"
+      "message": "Something went wrong."
     },
     "tokenNotValidate": {
       "code": "AU0007",
-      "message": "Token could not validate"
+      "message": "Token could not validate."
     },
     "googleToken": {
       "code": "AU0008",
-      "message": "Google token is required"
+      "message": "Google token is required."
     },
     "emailExist": {
       "code": "AU0009",
-      "message": "Email is not registered"
+      "message": "Email is not registered."
     },
     "passwordConfirmRequired": {
       "code": "AU0010",
-      "message": "Password confirm is required"
+      "message": "Password confirm is required."
     },
     "passwordNotMatch": {
       "code": "AU0011",
-      "message": "Password does not match"
+      "message": "Password does not match."
     },
     "codeNotValid": {
       "code": "AU0012",
-      "message": "Code is not valid"
+      "message": "Code is not valid."
     },
     "validatePassword": {
       "code": "AU0013",
-      "message": "The password is not secure"
+      "message": "The password is not secure."
     },
     "codeRequired": {
       "code": "AU0014",
-      "message": "Code is required"
+      "message": "Code is required."
     },
     "uidRequired": {
       "code": "AU0015",
-      "message": "UID is required"
+      "message": "UID is required."
     }
   },
   "user": {
     "idNotExist": {
       "code": "US0001",
-      "message": "The ID does not exist"
+      "message": "The ID does not exist."
     },
     "emailInUse": {
       "code": "US0002",
-      "message": "The email is already in use"
+      "message": "The email is already in use."
     },
     "nameRequired": {
       "code": "US0003",
-      "message": "The name is required"
+      "message": "The name is required."
     },
     "emailInvalid": {
       "code": "US0004",
-      "message": "The email is invalid"
+      "message": "The email is invalid."
     },
     "unregisteredRoleDB": {
       "code": "US0005",
-      "message": "The role does not exist in the database"
+      "message": "The role does not exist in the database."
     },
     "invalidToken": {
       "code": "US0006",
-      "message": "The token is invalid"
+      "message": "The token is invalid."
     },
     "allowedRoles": {
       "code": "US0007",
@@ -92,19 +92,19 @@
     },
     "invalidId": {
       "code": "US0008",
-      "message": "The ID is invalid"
+      "message": "The ID is invalid."
     },
     "userNoUpdated": {
       "code": "US0009",
-      "message": "Unable to update a user"
+      "message": "Unable to update a user."
     },
     "noToken": {
       "code": "US0010",
-      "message": "The token is missing from the request"
+      "message": "The token is missing from the request."
     },
     "userNotExist": {
-      "code": "AU0011",
-      "message": "User does not exist"
+      "code": "US0011",
+      "message": "User does not exist."
     },
     "verifyRole": {
       "code": "US0012",
@@ -112,15 +112,15 @@
     },
     "lastNameRequired": {
       "code": "US0013",
-      "message": "The last name is required"
+      "message": "The last name is required."
     },
     "phoneNumber": {
       "code": "US0014",
-      "message": "The phone number is required"
+      "message": "The phone number is required."
     },
     "validatePassword": {
       "code": "US0015",
-      "message": "The password is not secure"
+      "message": "The password is not secure."
     },
     "adminRole": {
       "code": "US0016",
@@ -128,7 +128,7 @@
     },
     "userNoDelete": {
       "code": "US0017",
-      "message": "Can't delete User"
+      "message": "Can't delete User."
     }
   }
 }

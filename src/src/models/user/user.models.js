@@ -18,9 +18,6 @@ const UserSchema = Schema({
         type: String,
         required: [true, 'Password is required']
     },
-    img: {
-        type: String
-    },
     phoneNumber: {
         type: String,
         required: [true, 'Phone number is required']

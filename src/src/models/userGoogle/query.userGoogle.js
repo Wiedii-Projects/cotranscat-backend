@@ -9,7 +9,7 @@ const createUser = async(req) => {
 
 const getUserGoogle = async(email) => {
     try {
-        return await UserGoogle.findOne({ email });
+        return await UserGoogle.findOne({ email }, {google: 0});
     } catch (error) {
         return false;
     }
@@ -17,7 +17,7 @@ const getUserGoogle = async(email) => {
 
 const getUserGoogleID = async(id) => {
     try {
-        return await UserGoogle.findById(id);
+        return await UserGoogle.findById(id, {google: 0});
     } catch (error) {
         return false;
     }
