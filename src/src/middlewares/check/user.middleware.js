@@ -51,7 +51,7 @@ const checkUpdateUser = () => {
         check('role', new MessageErrors(errors.user.unregisteredRoleDB))
             .custom((value, { req }) => validRole(value, req))
             .custom((value, { req }) => req.body.validRole)
-            .custom((value, { req }) => extractUserData(req)),
+            .custom((value, { req }) => extractUserData(req))
     ];
 }
 

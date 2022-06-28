@@ -10,9 +10,6 @@ const UserGoogleSchema = Schema({
         required: [true, 'Mail is required'],
         unique: true
     },
-    img: {
-        type: String
-    },
     state: {
         type: Boolean,
         default: true

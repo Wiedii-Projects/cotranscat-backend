@@ -73,7 +73,8 @@ const validRole = async(role, req) => {
 
 const createUserModelUser = async(req) => {
     const { name, lastName, email, password, phoneNumber, role } = req.body;
-    return await createNewUser({ name, lastName, email, password, phoneNumber, role });
+    const passwordEncrypt = await encryptPassword(password);
+    return await createNewUser({ name, lastName, email, password: passwordEncrypt, phoneNumber, role });
 }
 
 const extractUserData = async(req) => {

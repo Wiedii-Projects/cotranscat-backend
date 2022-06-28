@@ -7,8 +7,8 @@ const { createUserModelUser, encryptPassword } = require("../../helpers/validato
 const getUsers = async (req, res) => {
 
     const { limit = 10, since = 0 } = req.query;
-    const { totalUsers, users } = await getAllUsers(limit, since);
-    const { totalUserGoogle, usersGoogle } = getAllUserGoogle(limit, since);
+    const { totalUsers, users } = await getAllUsers(limit, since, {state: true});
+    const { totalUserGoogle, usersGoogle } = getAllUserGoogle(limit, since, {state: true});
     return responseValid(res, { count: (totalUsers||0)+(totalUserGoogle||0), users, usersGoogle });
 }
 
@@ -23,8 +23,8 @@ const getUser = async (req, res) => {
 
 const createUser = async (req, res) => {
     try {
-        const user = await createUserModelUser(req);
-        return responseValid(res, user);
+        await createUserModelUser(req);
+        return responseValid(res, null);
 
     } catch (error) {
         return responseError(res, 500, errors.auth.somethingWentWrong);

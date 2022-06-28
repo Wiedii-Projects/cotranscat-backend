@@ -5,7 +5,7 @@ const bcryptjs = require("bcryptjs");
 
 const getUser = async(email) => {
     try {
-        return await User.findOne({ email });
+        return await User.findOne({ email }, {google: 0});
     } catch (error) {
         return false;
     }
@@ -21,7 +21,7 @@ const getUserID = async(id) => {
 
 const getUserIdState = async(id) => {
     try {
-        return await User.findOne({ state: true, _id: id });
+        return await User.findOne({ state: true, _id: id }, {google: 0});
     } catch (error) {
         return false;
     }
@@ -30,7 +30,7 @@ const getUserIdState = async(id) => {
 const getAllUsers = async(limit, since, query) => {
     const [totalUsers, users] = await Promise.all([
         User.countDocuments({ state: true }),
-        User.find(query)
+        User.find(query, {google:0, state:0, role:0,phoneNumber:0})
             .skip(Number(since))
             .limit(Number(limit))
     ]);
@@ -39,10 +39,7 @@ const getAllUsers = async(limit, since, query) => {
 
 const createNewUser = async(data) => {
     const user = new User(data);
-    const salt = bcryptjs.genSaltSync();
-    user.password = bcryptjs.hashSync(data.password, salt);
     await user.save();
-    return user;
 }
 
 const emailExists = async (email = '') => {
