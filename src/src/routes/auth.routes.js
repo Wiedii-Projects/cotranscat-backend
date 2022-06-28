@@ -7,8 +7,16 @@ const {
     validateCode, 
     changePassword 
 } = require("../controllers/auth/auth.controllers");
+const { 
+    checkLogin, 
+    checkValidateEmail, 
+    checkChangePassword, 
+    checkGoogleSignIn, 
+    checkCreateCode, 
+    checkValidateCode 
+} = require("../middlewares/check/auth.middleware");
 const { validateFields } = require("../middlewares");
-const { checkLogin, checkValidateEmail, checkChangePassword, checkGoogleSignIn, checkCreateCode, checkValidateCode } = require("../middlewares/check/auth.middleware");
+
 
 const router = Router();
 

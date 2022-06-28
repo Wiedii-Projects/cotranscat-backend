@@ -25,122 +25,110 @@
       "message": "Something went wrong"
     },
     "tokenNotValidate": {
-      "code": "AU0008",
+      "code": "AU0007",
       "message": "Token could not validate"
     },
     "googleToken": {
-      "code": "AU0010",
+      "code": "AU0008",
       "message": "Google token is required"
     },
     "emailExist": {
-      "code": "AU0011",
+      "code": "AU0009",
       "message": "Email is not registered"
     },
     "passwordConfirmRequired": {
-      "code": "AU0012",
+      "code": "AU0010",
       "message": "Password confirm is required"
     },
     "passwordNotMatch": {
-      "code": "AU0013",
+      "code": "AU0011",
       "message": "Password does not match"
     },
     "codeNotValid": {
-      "code": "AU0014",
+      "code": "AU0012",
       "message": "Code is not valid"
     },
     "validatePassword": {
-      "code": "AU0015",
+      "code": "AU0013",
       "message": "The password is not secure"
     },
     "codeRequired": {
-      "code": "AU0016",
+      "code": "AU0014",
       "message": "Code is required"
     },
     "uidRequired": {
-      "code": "AU0016",
+      "code": "AU0015",
       "message": "UID is required"
     }
   },
   "user": {
-    "unregisteredUsersDB": {
-      "code": "US0001",
-      "message": "There aren't any unregistered users in the database"
-    },
     "idNotExist": {
-      "code": "US0002",
+      "code": "US0001",
       "message": "The ID does not exist"
     },
     "emailInUse": {
-      "code": "US0003",
+      "code": "US0002",
       "message": "The email is already in use"
     },
-    "passwordCharactersLong": {
-      "code": "US0004",
-      "message": "The password must be at least 6 characters long"
-    },
     "nameRequired": {
-      "code": "US0005",
+      "code": "US0003",
       "message": "The name is required"
     },
     "emailInvalid": {
-      "code": "US0006",
+      "code": "US0004",
       "message": "The email is invalid"
     },
     "unregisteredRoleDB": {
-      "code": "US0007",
+      "code": "US0005",
       "message": "The role does not exist in the database"
     },
     "invalidToken": {
-      "code": "US0008",
+      "code": "US0006",
       "message": "The token is invalid"
     },
     "allowedRoles": {
-      "code": "US0009",
+      "code": "US0007",
       "message": "The service requires one of the following roles: "
     },
-    "userDeleted": {
-      "code": "US0010",
-      "message": "The user has been deleted"
-    },
-    "serverError": {
-      "code": "US0011",
-      "message": "Internal server error"
-    },
     "invalidId": {
-      "code": "US0014",
+      "code": "US0008",
       "message": "The ID is invalid"
     },
     "userNoUpdated": {
-      "code": "US0015",
-      "message": "Unable to update a deleted user"
+      "code": "US0009",
+      "message": "Unable to update a user"
     },
     "noToken": {
-      "code": "US0016",
+      "code": "US0010",
       "message": "The token is missing from the request"
     },
     "userNotExist": {
-      "code": "AU0017",
+      "code": "AU0011",
       "message": "User does not exist"
     },
     "verifyRole": {
-      "code": "US0018",
+      "code": "US0012",
       "message": "To verify the role, the token must first be validated."
     },
     "lastNameRequired": {
-      "code": "US0019",
+      "code": "US0013",
       "message": "The last name is required"
     },
     "phoneNumber": {
-      "code": "US0020",
+      "code": "US0014",
       "message": "The phone number is required"
     },
     "validatePassword": {
-      "code": "US0021",
+      "code": "US0015",
       "message": "The password is not secure"
     },
-    "phoneNumberNoRegistered": {
-      "code": "US0020",
-      "message": "The phone number not registered"
+    "adminRole": {
+      "code": "US0016",
+      "message": "This action can only be performed by administrator users."
+    },
+    "userNoDelete": {
+      "code": "US0017",
+      "message": "Can't delete User"
     }
   }
 }
