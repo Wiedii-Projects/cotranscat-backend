@@ -12,7 +12,12 @@ const getCode = async(code, id) => {
     return await CodeSms.findOne({ code: code, userCode: id });
 }
 
+const deleteAllCode = async(userCode) => {
+    await CodeSms.deleteMany({ userCode });
+}
+
 module.exports = {
     createCodeID,
-    getCode
+    getCode,
+    deleteAllCode
 }

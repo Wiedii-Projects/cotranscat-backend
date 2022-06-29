@@ -25,7 +25,7 @@ const checkLogin = () => {
             .custom((value, { req }) => showUser(value, req))
             .custom((value, { req }) => req.body.user?true:false),
         check('user', new MessageErrors(errors.user.userNotExist))
-            .custom((value, { req }) =>  req.body.user.state),
+            .custom((value) =>  value.state),
         check('password', new MessageErrors(errors.auth.incorrectCredentials))
             .custom((value, { req }) => validPassword(value , req.body.user.password, req))
             .custom((value, { req }) =>  req.body.validPassword), 
