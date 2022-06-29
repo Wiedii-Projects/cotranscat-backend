@@ -1,8 +1,7 @@
 const { generateJWT } = require("../../helpers");
-const { User, CodeSms } = require("../../models");
 const errors = require('../../errors/errors.json');
 const { responseError, responseValid } = require("../../errors/response");
-const { createCodeID } = require("../../models/codeSms/query.codeSms");
+const { createCodeID, deleteAllCode } = require("../../models/codeSms/query.codeSms");
 const { encryptPassword } = require("../../helpers/validator/user.validator");
 const { updateDataUser } = require("../../models/user/query.user");
 
@@ -47,7 +46,7 @@ const createCode = async (req, res) => {
 const validateCode = async (req, res) => {
     try {
         const { uid } = req.body;
-        await CodeSms.deleteMany({ userCode: uid });
+        await deleteAllCode(uid);
         return responseValid(res, null);
     } catch (error) {
         return responseError(res, 500, errors.auth.somethingWentWrong);
