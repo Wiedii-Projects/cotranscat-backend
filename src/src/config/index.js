@@ -9,27 +9,34 @@ if (envFound.error) {
     throw new Error("Couldn't find .env file");
 }
 const nodeEnv = process.env.NODE_ENV || 'development';
-const dbHost = process.env.DB_HOST || 'localhost';
-const dbPort = process.env.DB_PORT;
-const port = process.env.PORT || 8082;
+
+const serverHost = process.env.SERVER_HOST || 'localhost';
+const serverPort = process.env.SERVER_PORT || 8082;
+
 const privateKey = process.env.SECRET_OR_PRIVATE_KEY;
 const googleClientId = process.env.GOOGLE_CLIENT_ID;
+
+const dbHost = process.env.DB_HOST || 'localhost';
+const dbPort = process.env.DB_PORT;
 const dbDatabase = process.env.DB_DATABASE;
-const user = process.env.DB_USERNAME;
-const password = process.env.DB_PASSWORD;
+const dbUser = process.env.DB_USERNAME;
+const dbPassword = process.env.DB_PASSWORD;
 
 const accountSid = process.env.TWILIO_ACCOUNT_SID;
 const authToken = process.env.TWILIO_AUTH_TOKEN;
 const twilioNumber = process.env.TWILIO_NUMBER;
 
-let mongoConnection = `mongodb://${user}:${password}@${dbHost}:${dbPort}`;
+let mongoConnection = `mongodb://${dbUser}:${dbPassword}@${dbHost}:${dbPort}/${dbDatabase}`;
 
-(nodeEnv === 'local') ? mongoConnection += `/${dbDatabase}` : '';
+(nodeEnv === 'develop' || nodeEnv === 'production') 
+    ? mongoConnection += `?authSource=admin&socketTimeoutMS=500&wTimeoutMS=500&connectTimeoutMS=500` 
+    : '';
 
 module.exports = {
     nodeEnv,
+    serverHost,
+    serverPort,
     dbHost,
-    port,
     privateKey,
     googleClientId,
     mongoConnection,

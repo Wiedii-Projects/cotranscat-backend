@@ -1,12 +1,13 @@
 const express = require('express');
 const cors = require('cors');
 const { dbConnection } = require('../loaders/mongoose.loaders');
-const { port, dbHost } = require('../config');
+const { serverPort, serverHost, dbHost } = require('../config');
 
 class Server {
     constructor() {
         this.app = express();
-        this.port = port;
+        this.serverHost = serverHost;
+        this.serverPort = serverPort;
         this.paths = {
             auth: '/api/auth',
             users: '/api/users',
@@ -33,8 +34,8 @@ class Server {
     }
 
     listen() {
-        this.app.listen(this.port, this.dbHost, () => {
-            console.log(`Server listening on http://${this.dbHost}:${this.port}`)
+        this.app.listen(this.serverPort, this.serverHost, () => {
+            console.log(`Server listening on http://${this.serverHost}:${this.serverPort}`)
         })
     }
 }
