@@ -26,11 +26,9 @@ const accountSid = process.env.TWILIO_ACCOUNT_SID;
 const authToken = process.env.TWILIO_AUTH_TOKEN;
 const twilioNumber = process.env.TWILIO_NUMBER;
 
-let mongoConnection = `mongodb://${dbUser}:${dbPassword}@${dbHost}:${dbPort}/${dbDatabase}`;
+let mongoConnection = `mongodb://${dbUser}:${dbPassword}@${dbHost}:${dbPort}`;
 
-(nodeEnv === 'develop' || nodeEnv === 'production') 
-    ? mongoConnection += `?authSource=admin&socketTimeoutMS=500&wTimeoutMS=500&connectTimeoutMS=500` 
-    : '';
+(nodeEnv === 'local') ? mongoConnection += `/${dbDatabase}` : '';
 
 module.exports = {
     nodeEnv,
