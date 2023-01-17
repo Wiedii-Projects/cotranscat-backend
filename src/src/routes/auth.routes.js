@@ -1,53 +1,45 @@
-const { Router } = require("express");
-const { 
-    login, 
-    googleSignIn, 
-    validateEmail, 
-    createCode, 
-    validateCode, 
-    changePassword 
-} = require("../controllers/auth/auth.controllers");
-const { 
-    checkLogin, 
-    checkValidateEmail, 
-    checkChangePassword, 
-    checkGoogleSignIn, 
-    checkCreateCode, 
-    checkValidateCode 
-} = require("../middlewares/check/auth.middleware");
-const { validateFields } = require("../middlewares");
+// Controllers
+const authController = require('./../controllers/auth/auth.controllers')
 
+// Libraries
+const { Router } = require("express");
+
+// Middleware
+const authMiddleware = require('./../middleware/checks/auth.check.middleware')
+
+// Validators - middleware
+const sharedValidator = require('./../middleware/validators/shared.validator.middleware')
 
 const router = Router();
 
 router.post('/login', [
-    checkLogin(),
-    validateFields
-], login);
+    authMiddleware.checkLogin(),
+    sharedValidator.validateFields
+], authController.login);
 
 router.post('/google', [
-    checkGoogleSignIn(),
-    validateFields
-], googleSignIn);
+    authMiddleware.checkGoogleSignIn(),
+    sharedValidator.validateFields
+], authController.googleSignIn);
 
 router.post('/validateEmail', [
-    checkValidateEmail(),
-    validateFields
-], validateEmail);
+    authMiddleware.checkValidateEmail(),
+    sharedValidator.validateFields
+], authController.validateEmail);
 
 router.post('/createCode', [
-    checkCreateCode(),
-    validateFields
-], createCode)
+    authMiddleware.checkCreateCode(),
+    sharedValidator.validateFields
+], authController.createCode)
 
 router.post('/validateCode', [
-    checkValidateCode(),
-    validateFields
-], validateCode);
+    authMiddleware.checkValidateCode(),
+    sharedValidator.validateFields
+], authController.validateCode);
 
 router.post('/changePassword', [
-    checkChangePassword(),
-    validateFields
-], changePassword);
+    authMiddleware.checkChangePassword(),
+    sharedValidator.validateFields
+], authController.changePassword);
 
 module.exports = router;

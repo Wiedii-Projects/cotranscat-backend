@@ -1,3 +1,7 @@
+// Constants
+
+const constants = require('./../constants/index')
+// Libraries
 const dotenv = require('dotenv');
 const path = require('path');
 
@@ -6,7 +10,7 @@ const envFound = dotenv.config({
 });
 
 if (envFound.error) {
-    throw new Error("Couldn't find .env file");
+    throw new Error(constants.appConst.ENV_FILE_NOT_FOUND);
 }
 const nodeEnv = process.env.NODE_ENV || 'development';
 

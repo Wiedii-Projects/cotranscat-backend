@@ -1,5 +1,8 @@
-require('dotenv').config();
+// Configuration environment
 const { envFound } = require('./config');
+
+// Libraries
+require('dotenv').config();
 
 if (envFound.parsed.NODE_ENV === 'production') {
     var apm = require('elastic-apm-node').start({
@@ -10,7 +13,7 @@ if (envFound.parsed.NODE_ENV === 'production') {
     });
 }
 
-const Server = require('./models/server.models');
+const Server = require('./models/aggregates/server/server.model');
 
 const server = new Server();
 
