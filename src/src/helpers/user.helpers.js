@@ -21,4 +21,14 @@ module.exports = {
         const { name, email, picture, google = true, role = constants.roleConst.USER_ROLE } = req.body;
         await userGoogleQuery.createUserQuery({ name, email, picture, google, role });
     },
+    extractUserDataHelper: (data) => {
+        const {
+            _id, password, name, email, google, lastName, socialStratification, identificationNumber,
+            dateBirth, phoneNumber, ...body
+        } = data;
+        return {
+            _id, password, email, google, name, lastName, socialStratification, identificationNumber,
+            dateBirth, phoneNumber
+        }
+    }
 }

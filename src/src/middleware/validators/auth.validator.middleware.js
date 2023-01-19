@@ -39,7 +39,7 @@ module.exports = {
             return responseHelpers.responseError(res, 500, errorsConst.userErrors.invalidToken);
         }
     },
-    validPassword: async (value, password, req) => {
+    validatePassword: async (value, password, req) => {
         req.body.validPassword = await bcryptjs.compareSync(value, password);
     }
 }

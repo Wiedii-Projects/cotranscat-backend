@@ -5,7 +5,7 @@ const responseHelpers = require('./../../helpers/response.helpers')
 const { validationResult } = require("express-validator");
 
 module.exports = {
-    validateFields: (req, res, next) => {
+    validateErrorFields: (req, res, next) => {
         const errors = validationResult(req);
         if (!errors.isEmpty()) {
             return responseHelpers.responseAllError(res, 400, errors.errors[0].msg);

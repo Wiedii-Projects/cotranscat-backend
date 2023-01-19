@@ -16,22 +16,22 @@ router.get('/', userController.getUsers);
 
 router.get('/:uid', [
     userMiddleware.checkGetUser(),
-    sharedValidator.validateFields
+    sharedValidator.validateErrorFields
 ], userController.getUser);
 
 router.post('/', [
     userMiddleware.checkCreateUser(),
-    sharedValidator.validateFields
+    sharedValidator.validateErrorFields
 ], userController.createUser);
 
 router.put('/:uid', [
     userMiddleware.checkUpdateUser(),
-    sharedValidator.validateFields
+    sharedValidator.validateErrorFields
 ], userController.updateUser);
 
 router.delete('/', [
     userMiddleware.checkDeleteUser(),
-    sharedValidator.validateFields
+    sharedValidator.validateErrorFields
 ], userController.deleteUser);
 
 module.exports = router

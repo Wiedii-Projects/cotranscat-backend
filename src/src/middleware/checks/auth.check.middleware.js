@@ -22,24 +22,24 @@ module.exports = {
             check('email', new ErrorModel(errorsConst.authErrors.emailRequired)).isEmail(),
             check('password', new ErrorModel(errorsConst.authErrors.passwordRequired)).not().isEmpty(),
             check('password', new ErrorModel(errorsConst.authErrors.validatePassword))
-                .custom((value, { req }) => userValidators.validPasswordRules(value, req))
+                .custom((value, { req }) => userValidators.validatePasswordRules(value, req))
                 .custom((value, { req }) => req.body.validPasswordRules),
-            sharedValidators.validateFields,
+            sharedValidators.validateErrorFields,
             check('email', new ErrorModel(errorsConst.authErrors.incorrectCredentials))
-                .custom((value, { req }) => userValidators.showUser(value, req))
+                .custom((value, { req }) => userValidators.validateUserByEmail(value, req))
                 .custom((value, { req }) => req.body.user ? true : false),
             check('user', new ErrorModel(errorsConst.userErrors.userNotExist))
                 .custom((value) => value.state),
             check('password', new ErrorModel(errorsConst.authErrors.incorrectCredentials))
-                .custom((value, { req }) => authValidators.validPassword(value, req.body.user.password, req))
+                .custom((value, { req }) => authValidators.validatePassword(value, req.body.user.password, req))
                 .custom((value, { req }) => req.body.validPassword),
         ]
     },
     checkValidateEmail: () => {
         return [
             check('email', new ErrorModel(errorsConst.authErrors.emailRequired)).isEmail(),
-            check('email').custom((value, { req }) => userValidators.showUserGoogle(value, req)),
-            check('email').custom((value, { req }) => userValidators.showUser(value, req)),
+            check('email').custom((value, { req }) => userValidators.validateUserGoogleByEmail(value, req)),
+            check('email').custom((value, { req }) => userValidators.validateUserByEmail(value, req)),
             check('user', new ErrorModel(errorsConst.authErrors.emailExist))
                 .custom((value, { req }) => value === null && req.body.userGoogle === null ? false : true),
             check('user', new ErrorModel(errorsConst.authErrors.userNotExist))
@@ -50,11 +50,11 @@ module.exports = {
         return [
             check('password', new ErrorModel(errorsConst.authErrors.passwordRequired)).not().isEmpty(),
             check('password', new ErrorModel(errorsConst.authErrors.validatePassword))
-                .custom((value, { req }) => userValidators.validPasswordRules(value, req))
+                .custom((value, { req }) => userValidators.validatePasswordRules(value, req))
                 .custom((value, { req }) => req.body.validPasswordRules),
             check('passwordConfirm', new ErrorModel(errorsConst.authErrors.passwordConfirmRequired)).not().isEmpty(),
             check('passwordConfirm', new ErrorModel(errorsConst.authErrors.validatePassword))
-                .custom((value, { req }) => userValidators.validPasswordRules(value, req))
+                .custom((value, { req }) => userValidators.validatePasswordRules(value, req))
                 .custom((value, { req }) => req.body.validPasswordRules),
             check('password', new ErrorModel(errorsConst.authErrors.passwordNotMatch))
                 .custom((value, { req }) => value === req.body.passwordConfirm)
@@ -67,7 +67,7 @@ module.exports = {
                 .custom((value, { req }) => userValidators.validUserGoogle(value, req))
                 .custom((value, { req }) => req.body.noVerify),
             check('email', new ErrorModel(errorsConst.authErrors.incorrectCredentials))
-                .custom((value, { req }) => userValidators.showUserGoogle(value, req))
+                .custom((value, { req }) => userValidators.validateUserGoogleByEmail(value, req))
                 .custom((value, { req }) => req.body.userGoogle ? true : userHelpers.createUserGoogleHelper()),
             check('user', new ErrorModel(errorsConst.authErrors.userRemoved))
                 .custom((value, { req }) => req.body.user.state),
@@ -78,7 +78,7 @@ module.exports = {
             check('uid', new ErrorModel(errorsConst.authErrors.uidRequired)).not().isEmpty(),
             check('uid', new ErrorModel(errorsConst.userErrors.idNotExist)).isMongoId(),
             check('uid', new ErrorModel(errorsConst.authErrors.userNotExist))
-                .custom((value, { req }) => userValidators.showUserID(value, req))
+                .custom((value, { req }) => userValidators.validateUserByID(value, req))
                 .custom((value, { req }) => req.body.user),
         ];
     },
@@ -86,7 +86,7 @@ module.exports = {
         return [
             check('code', new ErrorModel(errorsConst.authErrors.codeRequired)).not().isEmpty(),
             check('code', new ErrorModel(errorsConst.authErrors.codeNotValid))
-                .custom((value, { req }) => codeValidators.validCode(value, req))
+                .custom((value, { req }) => codeValidators.validateCode(value, req))
                 .custom((value, { req }) => req.body.validCode ? true : false),
         ];
     }

@@ -14,32 +14,32 @@ const router = Router();
 
 router.post('/login', [
     authMiddleware.checkLogin(),
-    sharedValidator.validateFields
+    sharedValidator.validateErrorFields
 ], authController.login);
 
 router.post('/google', [
     authMiddleware.checkGoogleSignIn(),
-    sharedValidator.validateFields
+    sharedValidator.validateErrorFields
 ], authController.googleSignIn);
 
 router.post('/validateEmail', [
     authMiddleware.checkValidateEmail(),
-    sharedValidator.validateFields
+    sharedValidator.validateErrorFields
 ], authController.validateEmail);
 
 router.post('/createCode', [
     authMiddleware.checkCreateCode(),
-    sharedValidator.validateFields
+    sharedValidator.validateErrorFields
 ], authController.createCode)
 
 router.post('/validateCode', [
     authMiddleware.checkValidateCode(),
-    sharedValidator.validateFields
+    sharedValidator.validateErrorFields
 ], authController.validateCode);
 
 router.post('/changePassword', [
     authMiddleware.checkChangePassword(),
-    sharedValidator.validateFields
+    sharedValidator.validateErrorFields
 ], authController.changePassword);
 
 module.exports = router;

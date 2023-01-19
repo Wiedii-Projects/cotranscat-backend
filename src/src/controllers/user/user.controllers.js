@@ -7,7 +7,7 @@ const userHelpers = require('./../../helpers/user.helpers')
 const responseHelpers = require('./../../helpers/response.helpers')
 
 // Models - Queries
-const { userQuery, userGoogleQuery } = require('./../../models/index.queries')
+const { userQuery, userGoogleQuery } = require('./../../models/index.queries');
 
 module.exports = {
     getUsers: async (req, res) => {
@@ -40,7 +40,8 @@ module.exports = {
         }
     },
     updateUser: async (req, res) => {
-        const { dataUpdate, user } = req.body;
+        const { user } = req.body;
+        const dataUpdate = userHelpers.extractUserDataHelper(req.body)
 
         try {
             dataUpdate.password = dataUpdate.password 
