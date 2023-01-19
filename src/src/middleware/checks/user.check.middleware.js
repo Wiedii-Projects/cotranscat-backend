@@ -1,6 +1,5 @@
 // Constants
-const constants = require('./../../constants/index')
-const errorsConst = require('./../../constants/index');
+const { errorsConst, roleConst } = require('./../../constants/index');
 
 // Libraries
 const { check } = require('express-validator');
@@ -47,7 +46,7 @@ module.exports = {
         return [
             authValidators.validateJWT,
             check('user', new ErrorModel(errorsConst.userErrors.adminRole))
-                .custom((value, { req }) => req.user.role == constants.roleConst.ADMIN_ROLE),
+                .custom((value, { req }) => req.user.role == roleConst.ADMIN_ROLE),
             check('uid', new ErrorModel(errorsConst.userErrors.invalidId)).isMongoId(),
             check('uid').custom((value, { req }) => userValidators.validateUserByID(value, req)),
             check('uid', new ErrorModel(errorsConst.authErrors.userNotExist))

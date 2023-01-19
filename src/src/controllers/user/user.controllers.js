@@ -1,5 +1,5 @@
 // Constants
-const errorsConst = require('./../../constants/index');
+const { errorsConst } = require('./../../constants/index');
 
 // Helpers
 const authHelpers = require('./../../helpers/auth.helpers')
@@ -44,8 +44,8 @@ module.exports = {
         const dataUpdate = userHelpers.extractUserDataHelper(req.body)
 
         try {
-            dataUpdate.password = dataUpdate.password 
-                ?  await authHelpers.encryptPasswordHelper(dataUpdate.password) 
+            dataUpdate.password = dataUpdate.password
+                ? await authHelpers.encryptPasswordHelper(dataUpdate.password)
                 : dataUpdate.password;
             const userUpdate = await userQuery.updateDataUserQuery(user._id, dataUpdate);
             const userGoogleUpdate = await userGoogleQuery.updateDataUserGoogleQuery(user._id, dataUpdate);
@@ -62,8 +62,8 @@ module.exports = {
         try {
             const userUpdate = await userQuery.updateDataUserQuery(user._id, { state: false });
             const userGoogleUpdate = await userGoogleQuery.updateDataUserGoogleQuery(user._id, { state: false });
-            return userUpdate || userGoogleUpdate 
-                ? responseHelpers.responseValid(res, null) 
+            return userUpdate || userGoogleUpdate
+                ? responseHelpers.responseValid(res, null)
                 : responseHelpers.responseError(res, 400, errorsConst.userErrors.userNoDelete);
         } catch (error) {
             return responseHelpers.responseError(res, 500, error);

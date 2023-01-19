@@ -1,6 +1,6 @@
 // Constants
 
-const constants = require('./../constants/index')
+const { appConst } = require('./../constants/index')
 // Libraries
 const dotenv = require('dotenv');
 const path = require('path');
@@ -10,7 +10,7 @@ const envFound = dotenv.config({
 });
 
 if (envFound.error) {
-    throw new Error(constants.appConst.ENV_FILE_NOT_FOUND);
+    throw new Error(appConst.ENV_FILE_NOT_FOUND);
 }
 const nodeEnv = process.env.NODE_ENV || 'development';
 
@@ -32,8 +32,8 @@ const twilioNumber = process.env.TWILIO_NUMBER;
 
 let mongoConnection = `mongodb://${dbUser}:${dbPassword}@${dbHost}:${dbPort}/${dbDatabase}`;
 
-(nodeEnv === 'develop' || nodeEnv === 'production') 
-    ? mongoConnection += `?authSource=admin&socketTimeoutMS=500&wTimeoutMS=500&connectTimeoutMS=500` 
+(nodeEnv === 'develop' || nodeEnv === 'production')
+    ? mongoConnection += `?authSource=admin&socketTimeoutMS=500&wTimeoutMS=500&connectTimeoutMS=500`
     : '';
 
 module.exports = {

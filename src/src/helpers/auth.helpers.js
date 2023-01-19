@@ -2,15 +2,13 @@
 const { googleClientId, privateKey } = require('../config');
 
 // Constants
-const constants = require('./../constants/index')
+const { errorsConst } = require('./../constants/index');
 
 // Libraries
 const bcryptjs = require("bcryptjs");
 const { OAuth2Client } = require('google-auth-library');
 const jwt = require('jsonwebtoken');
 
-// Constants
-const errorsConst = require('./../constants/index');
 
 const client = new OAuth2Client(googleClientId);
 
@@ -41,9 +39,9 @@ module.exports = {
         }
     },
     generateJWTHelper: async (uid = '') => {
-        return new Promise((res, rej) => { 
+        return new Promise((res, rej) => {
             const payload = { uid };
-             jwt.sign(payload, privateKey, {
+            jwt.sign(payload, privateKey, {
                 expiresIn: '4h'
             }, (error, token) => {
                 if (error) {
@@ -52,6 +50,6 @@ module.exports = {
                     res(token)
                 }
             })
-         })
+        })
     }
 }

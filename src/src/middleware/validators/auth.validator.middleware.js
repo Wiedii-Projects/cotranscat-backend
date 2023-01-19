@@ -2,7 +2,7 @@
 const { privateKey } = require('../../config');
 
 // Constants
-const errorsConst = require('./../../constants/index');
+const { errorsConst } = require('./../../constants/index');
 
 // Helpers
 const responseHelpers = require('./../../helpers/response.helpers')

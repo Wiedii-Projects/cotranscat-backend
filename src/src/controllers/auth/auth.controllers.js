@@ -1,12 +1,12 @@
 // Constants
-const errorsConst = require('./../../constants/index');
+const { errorsConst } = require('./../../constants/index');
 
 // Helpers
 const authHelpers = require('./../../helpers/auth.helpers')
 const responseHelpers = require('./../../helpers/response.helpers')
 
 // Models - Queries
-const { codeSMSQuery, userQuery} = require('./../../models/index.queries')
+const { codeSMSQuery, userQuery } = require('./../../models/index.queries')
 
 module.exports = {
     login: async (req, res) => {
@@ -16,7 +16,7 @@ module.exports = {
             const token = await authHelpers.generateJWTHelper(user.id);
             return responseHelpers.responseValid(res, { user, token });
         } catch (error) {
-            return responseHelpers.responseError(res, 500,error);
+            return responseHelpers.responseError(res, 500, error);
         }
     },
     googleSignIn: async (req, res) => {
@@ -32,9 +32,9 @@ module.exports = {
     validateEmail: async (req, res) => {
         const { user, userGoogle } = req.body;
 
-        if(!userGoogle && !user){
+        if (!userGoogle && !user) {
             return responseHelpers.responseError(res, 500, errorsConst.aggregateErrorsApp.errorValidateEmail);
-        } 
+        }
 
         return responseHelpers.responseValid(res, userGoogle || user);
     },

@@ -1,5 +1,5 @@
 // Constants
-const errorsConst = require('./../../constants/index');
+const { errorsConst } = require('./../../constants/index');
 
 // Models
 const { User } = require('./../index.models')
@@ -33,17 +33,17 @@ module.exports = {
                 .skip(Number(since))
                 .limit(Number(limit))
         ])
-        .then(responses => { 
-            return { 
-                totalUsers: responses[0],
-                users: responses[1]
-            }
-         })
-         .catch(() => { 
-            throw errorsConst.aggregateErrorsApp.errorGetAllUser
-          })
-          
-          return responseAllUser
+            .then(responses => {
+                return {
+                    totalUsers: responses[0],
+                    users: responses[1]
+                }
+            })
+            .catch(() => {
+                throw errorsConst.aggregateErrorsApp.errorGetAllUser
+            })
+
+        return responseAllUser
     },
     createNewUserQuery: async (data) => {
         try {

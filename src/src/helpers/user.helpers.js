@@ -1,5 +1,5 @@
 // Constants
-const constants = require('./../constants/index')
+const {roleConst} = require('./../constants/index')
 
 // Helpers
 const authHelpers = require('./auth.helpers')
@@ -18,7 +18,7 @@ module.exports = {
         }
     },
     createUserGoogleHelper: async (req) => {
-        const { name, email, picture, google = true, role = constants.roleConst.USER_ROLE } = req.body;
+        const { name, email, picture, google = true, role = roleConst.USER_ROLE } = req.body;
         await userGoogleQuery.createUserQuery({ name, email, picture, google, role });
     },
     extractUserDataHelper: (data) => {

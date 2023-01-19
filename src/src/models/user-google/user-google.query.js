@@ -1,5 +1,5 @@
 // Constants
-const errorsConst = require('./../../constants/index');
+const { errorsConst } = require('./../../constants/index');
 
 // Models
 const { UserGoogle } = require('./../index.models')
@@ -23,17 +23,17 @@ module.exports = {
                 .skip(Number(since))
                 .limit(Number(limit))
         ])
-        .then(responses => { 
-            return { 
-                totalUserGoogle: responses[0],
-                usersGoogle: responses[1]
-            }
-         })
-         .catch(() => { 
-            throw errorsConst.aggregateErrorsApp.errorGetAllUserGoogle
-          })
-          
-          return responseAllUserGoogle
+            .then(responses => {
+                return {
+                    totalUserGoogle: responses[0],
+                    usersGoogle: responses[1]
+                }
+            })
+            .catch(() => {
+                throw errorsConst.aggregateErrorsApp.errorGetAllUserGoogle
+            })
+
+        return responseAllUserGoogle
     },
     emailGoogleExistsQuery: async (email = '') => {
         const emailGoogleInUse = await UserGoogle.findOne({ email });

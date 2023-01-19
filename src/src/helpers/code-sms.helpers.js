@@ -2,7 +2,7 @@
 const { accountSid, authToken, twilioNumber } = require('../config/index');
 
 // Constants
-const constants = require('./../constants/index')
+const { errorsConst, codeSMSConst } = require('./../constants/index')
 
 // Libraries
 const client = require('twilio')(accountSid, authToken);
@@ -17,13 +17,13 @@ module.exports = {
         const code = await codeSMSHelper();
         try {
             client.messages.create({
-                body: `${constants.codeSMSConst.SMS_CODE_MESSAGE} ${code}`,
-                    from: twilioNumber,
-                    to: phoneNumber
-                });
+                body: `${codeSMSConst.SMS_CODE_MESSAGE} ${code}`,
+                from: twilioNumber,
+                to: phoneNumber
+            });
             return code;
         } catch {
-            throw constants.aggregateErrorsApp.errorCreateCode
+            throw errorsConst.aggregateErrorsApp.errorCreateCode
         }
     }
 }

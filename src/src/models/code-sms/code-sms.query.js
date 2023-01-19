@@ -1,5 +1,5 @@
 // Constants
-const errorsConst = require('./../../constants/index');
+const { errorsConst } = require('./../../constants/index');
 
 // Models
 const { CodeSms } = require('./../index.models')
