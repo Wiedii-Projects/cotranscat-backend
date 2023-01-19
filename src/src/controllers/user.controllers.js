@@ -1,13 +1,13 @@
 // Constants
-const { errorsConst } = require('./../../constants/index');
+const { errorsConst } = require('../constants/index');
 
 // Helpers
-const authHelpers = require('./../../helpers/auth.helpers')
-const userHelpers = require('./../../helpers/user.helpers')
-const responseHelpers = require('./../../helpers/response.helpers')
+const authHelpers = require('../helpers/auth.helpers')
+const userHelpers = require('../helpers/user.helpers')
+const responseHelpers = require('../helpers/response.helpers')
 
 // Models - Queries
-const { userQuery, userGoogleQuery } = require('./../../models/index.queries');
+const { userQuery, userGoogleQuery } = require('../models/index.queries');
 
 module.exports = {
     getUsers: async (req, res) => {

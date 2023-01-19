@@ -1,5 +1,5 @@
 // Controllers
-const userController = require('./../controllers/user/user.controllers.js')
+const userController = require('./../controllers/user.controllers.js')
 
 // Libraries
 const { Router } = require('express');
