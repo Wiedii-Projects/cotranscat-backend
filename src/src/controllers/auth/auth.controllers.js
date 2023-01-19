@@ -10,56 +10,63 @@ const { codeSMSQuery, userQuery} = require('./../../models/index.queries')
 
 module.exports = {
     login: async (req, res) => {
+        const { user } = req.body;
+
         try {
-            const { user } = req.body;
             const token = await authHelpers.generateJWTHelper(user.id);
             return responseHelpers.responseValid(res, { user, token });
         } catch (error) {
-            return responseHelpers.responseError(res, 500, errorsConst.authErrors.somethingWentWrong);
+            return responseHelpers.responseError(res, 500,error);
         }
     },
     googleSignIn: async (req, res) => {
+        const { user } = req.body;
+
         try {
-            const { user } = req.body;
             const token = await authHelpers.generateJWTHelper(user.id);
             return responseHelpers.responseValid(res, { user, token });
         } catch (error) {
-            return responseHelpers.responseError(res, 500, errorsConst.authErrors.tokenNotValidate);
+            return responseHelpers.responseError(res, 500, error);
         }
     },
     validateEmail: async (req, res) => {
-        try {
-            const { user, userGoogle } = req.body;
-            return responseHelpers.responseValid(res, userGoogle || user);
-        } catch (error) {
-            return responseHelpers.responseError(res, 500, errorsConst.authErrors.somethingWentWrong);
-        }
+        const { user, userGoogle } = req.body;
+
+        if(!userGoogle && !user){
+            return responseHelpers.responseError(res, 500, errorsConst.aggregateErrorsApp.errorValidateEmail);
+        } 
+
+        return responseHelpers.responseValid(res, userGoogle || user);
     },
     createCode: async (req, res) => {
+        const { user } = req.body;
+
         try {
-            await codeSMSQuery.createCodeIDQuery(req.body.user);
+            await codeSMSQuery.createCodeIDQuery(user);
             return responseHelpers.responseValid(res, null);
         } catch (error) {
-            return responseHelpers.responseError(res, 500, errorsConst.authErrors.somethingWentWrong);
+            return responseHelpers.responseError(res, 500, error);
         }
     },
     validateCode: async (req, res) => {
+        const { uid } = req.body;
+
         try {
-            const { uid } = req.body;
             await codeSMSQuery.deleteAllCodeQuery(uid);
             return responseHelpers.responseValid(res, null);
         } catch (error) {
-            return responseHelpers.responseError(res, 500, errorsConst.authErrors.somethingWentWrong);
+            return responseHelpers.responseError(res, 500, error);
         }
     },
     changePassword: async (req, res) => {
+        const { password, uid } = req.body;
+
         try {
-            const { password, uid } = req.body;
             const passwordEncrypt = await authHelpers.encryptPasswordHelper(password);
-            userQuery.updateDataUserQuery(uid, { password: passwordEncrypt });
+            await userQuery.updateDataUserQuery(uid, { password: passwordEncrypt });
             return responseHelpers.responseValid(res, null);
         } catch (error) {
-            return responseHelpers.responseError(res, 500, errorsConst.authErrors.somethingWentWrong);
+            return responseHelpers.responseError(res, 500, error);
         }
     }
 }

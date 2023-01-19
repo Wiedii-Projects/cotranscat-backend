@@ -130,5 +130,67 @@
       "code": "US0017",
       "message": "Can't delete User."
     }
+  },
+  "aggregateErrorsApp": {
+
+    "__comment_AUTH__": "__ AUTH These are API acronym comments__",
+
+    "errorGenerateJWT": {
+      "code": "AUTH_001",
+      "message": "Something went wrong."
+    },
+    "errorEncryptPassword": {
+      "code": "AUTH_002",
+      "message": "Something went wrong."
+    },
+    "errorVerifyTokenGoogle": {
+      "code": "AUTH_003",
+      "message": "Something went wrong."
+    },
+    "errorValidateEmail": {
+      "code": "AUTH_004",
+      "message": "Something went wrong."
+    },
+
+    "__comment_USRL__": "__ USRL These are API acronym comments__",
+
+    "errorGetAllUser": {
+      "code": "USRL_001",
+      "message": "Something went wrong."
+    },
+    "errorGetUser": {
+      "code": "USRL_002",
+      "message": "Something went wrong."
+    },
+    "errorCreateUser": {
+      "code": "USRL_003",
+      "message": "Something went wrong."
+    },
+    "errorUpdateUser": {
+      "code": "USRL_004",
+      "message": "Something went wrong."
+    },
+
+    "__comment_USRG__": "__ USRG These are API acronym comments__",
+
+    "errorGetAllUserGoogle": {
+      "code": "USRG_001",
+      "message": "Something went wrong."
+    },
+    "errorUpdateUserGoogle": {
+      "code": "USRG_004",
+      "message": "Something went wrong."
+    },
+    
+    "__comment_CODD__": "__ CODE These are API acronym comments__",
+
+    "errorCreateCode": {
+      "code": "CODD_001",
+      "message": "Something went wrong."
+    },
+    "errorDeleteAllCode": {
+      "code": "CODD_002",
+      "message": "Something went wrong."
+    }
   }
 }

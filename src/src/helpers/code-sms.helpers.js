@@ -15,11 +15,15 @@ const codeSMSHelper = async () => {
 module.exports = {
     createSMSHelper: async (phoneNumber) => {
         const code = await codeSMSHelper();
-        client.messages.create({
-            body: `${constants.codeSMSConst.SMS_CODE_MESSAGE} ${code}`,
-                from: twilioNumber,
-                to: phoneNumber
-            });
-        return code;
+        try {
+            client.messages.create({
+                body: `${constants.codeSMSConst.SMS_CODE_MESSAGE} ${code}`,
+                    from: twilioNumber,
+                    to: phoneNumber
+                });
+            return code;
+        } catch {
+            throw constants.aggregateErrorsApp.errorCreateCode
+        }
     }
 }

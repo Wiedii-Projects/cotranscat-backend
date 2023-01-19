@@ -9,38 +9,49 @@ const bcryptjs = require("bcryptjs");
 const { OAuth2Client } = require('google-auth-library');
 const jwt = require('jsonwebtoken');
 
+// Constants
+const errorsConst = require('./../constants/index');
+
 const client = new OAuth2Client(googleClientId);
 
 module.exports = {
     encryptPasswordHelper: async (password) => {
-        const salt = bcryptjs.genSaltSync();
-        return bcryptjs.hashSync(password, salt);
+        try {
+            const salt = bcryptjs.genSaltSync();
+            return bcryptjs.hashSync(password, salt);
+        } catch {
+            throw errorsConst.aggregateErrorsApp.errorEncryptPassword
+        }
     },
     googleVerifyHelper: async (token = '') => {
-        const ticket = await client.verifyIdToken({
-            idToken: token,
-            audience: googleClientId,
-        });
-        const { name, picture, email } = ticket.getPayload();
+        try {
+            const ticket = await client.verifyIdToken({
+                idToken: token,
+                audience: googleClientId,
+            });
+            const { name, picture, email } = ticket.getPayload();
 
-        return {
-            name,
-            picture,
-            email
-        };
+            return {
+                name,
+                picture,
+                email
+            };
+        } catch {
+            throw errorsConst.aggregateErrorsApp.errorVerifyTokenGoogle
+        }
     },
-    generateJWTHelper: (uid = '') => {
-        return new Promise((resolve, reject) => {
+    generateJWTHelper: async (uid = '') => {
+        return new Promise((res, rej) => { 
             const payload = { uid };
-            jwt.sign(payload, privateKey, {
+             jwt.sign(payload, privateKey, {
                 expiresIn: '4h'
             }, (error, token) => {
                 if (error) {
-                    reject(constants.authConst.FAILED_TO_GENERATE_TOKEN);
+                    rej(errorsConst.aggregateErrorsApp.errorGenerateJWT)
                 } else {
-                    resolve(token);
+                    res(token)
                 }
             })
-        })
+         })
     }
 }

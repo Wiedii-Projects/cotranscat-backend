@@ -1,3 +1,6 @@
+// Constants
+const errorsConst = require('./../../constants/index');
+
 // Models
 const { UserGoogle } = require('./../index.models')
 
@@ -13,21 +16,24 @@ module.exports = {
             return false;
         }
     },
-    getUserStateGoogleQuery: async (id) => {
-        try {
-            return await UserGoogle.findOne({ state: true, _id: id });
-        } catch (error) {
-            return false;
-        }
-    },
     getAllUserGoogleQuery: async (limit, since, query) => {
-        const [totalUserGoogle, usersGoogle] = await Promise.all([
+        const responseAllUserGoogle = await Promise.all([
             UserGoogle.countDocuments(query),
             UserGoogle.find(query)
                 .skip(Number(since))
                 .limit(Number(limit))
-        ]);
-        return { totalUserGoogle, usersGoogle };
+        ])
+        .then(responses => { 
+            return { 
+                totalUserGoogle: responses[0],
+                usersGoogle: responses[1]
+            }
+         })
+         .catch(() => { 
+            throw errorsConst.aggregateErrorsApp.errorGetAllUserGoogle
+          })
+          
+          return responseAllUserGoogle
     },
     emailGoogleExistsQuery: async (email = '') => {
         const emailGoogleInUse = await UserGoogle.findOne({ email });
@@ -41,6 +47,10 @@ module.exports = {
         }
     },
     updateDataUserGoogleQuery: async (id, data) => {
-        return await UserGoogle.findByIdAndUpdate(id, data)
+        try {
+            return await UserGoogle.findByIdAndUpdate(id, data)
+        } catch {
+            throw errorsConst.aggregateErrorsApp.errorUpdateUserGoogle
+        }
     }
 }
