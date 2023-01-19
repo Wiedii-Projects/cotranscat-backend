@@ -1,15 +1,15 @@
 // Configuration environment
-const { envFound } = require('./config');
+const { coreConfigurationsConst } = require('./constants/index');
 
 // Libraries
 require('dotenv').config();
 
-if (envFound.parsed.NODE_ENV === 'production') {
+if (coreConfigurationsConst.envFound.parsed.NODE_ENV === 'production') {
     var apm = require('elastic-apm-node').start({
     serviceName: 'Node_Prototype',
     secretToken: '',
     serverUrl: 'https://elastic.wiedii.co:8200',
-    environment: envFound
+    environment: coreConfigurationsConst.envFound
     });
 }
 

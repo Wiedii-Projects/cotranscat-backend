@@ -1,11 +1,8 @@
-// Configuration environment
-const { accountSid, authToken, twilioNumber } = require('../config/index');
-
 // Constants
-const { errorsConst, codeSMSConst } = require('./../constants/index')
+const { errorsConst, codeSMSConst, coreConfigurationsConst } = require('./../constants/index')
 
 // Libraries
-const client = require('twilio')(accountSid, authToken);
+const client = require('twilio')(coreConfigurationsConst.accountSid, coreConfigurationsConst.authToken);
 
 const codeSMSHelper = async () => {
     const code = Math.floor(Math.random() * (999999 - 100000) + 100000);
@@ -18,7 +15,7 @@ module.exports = {
         try {
             client.messages.create({
                 body: `${codeSMSConst.SMS_CODE_MESSAGE} ${code}`,
-                from: twilioNumber,
+                from: coreConfigurationsConst.authToken,
                 to: phoneNumber
             });
             return code;

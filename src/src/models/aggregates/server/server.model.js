@@ -1,5 +1,5 @@
-// Config
-const { serverPort, serverHost, dbHost } = require('../../../config');
+// Constants
+const { coreConfigurationsConst } = require('./../../../constants/index')
 
 // Libraries
 const express = require('express');
@@ -11,13 +11,13 @@ const { dbConnection } = require('../../../loaders/mongoose.loaders');
 class Server {
     constructor() {
         this.app = express();
-        this.serverHost = serverHost;
-        this.serverPort = serverPort;
+        this.serverHost = coreConfigurationsConst.serverHost;
+        this.serverPort = coreConfigurationsConst.serverPort;
         this.paths = {
             auth: '/api/auth',
             users: '/api/users',
         }
-        this.dbHost = dbHost;
+        this.dbHost = coreConfigurationsConst.dbHost;
         this.db();
         this.middleware();
         this.routes();

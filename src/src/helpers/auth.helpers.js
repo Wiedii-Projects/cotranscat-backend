@@ -1,8 +1,5 @@
-// Configuration environment
-const { googleClientId, privateKey } = require('../config');
-
 // Constants
-const { errorsConst } = require('./../constants/index');
+const { errorsConst, coreConfigurationsConst } = require('./../constants/index');
 
 // Libraries
 const bcryptjs = require("bcryptjs");
@@ -10,7 +7,7 @@ const { OAuth2Client } = require('google-auth-library');
 const jwt = require('jsonwebtoken');
 
 
-const client = new OAuth2Client(googleClientId);
+const client = new OAuth2Client(coreConfigurationsConst.googleClientId);
 
 module.exports = {
     encryptPasswordHelper: async (password) => {
@@ -25,7 +22,7 @@ module.exports = {
         try {
             const ticket = await client.verifyIdToken({
                 idToken: token,
-                audience: googleClientId,
+                audience: coreConfigurationsConst.googleClientId,
             });
             const { name, picture, email } = ticket.getPayload();
 
@@ -41,7 +38,7 @@ module.exports = {
     generateJWTHelper: async (uid = '') => {
         return new Promise((res, rej) => {
             const payload = { uid };
-            jwt.sign(payload, privateKey, {
+            jwt.sign(payload, coreConfigurationsConst.privateKey, {
                 expiresIn: '4h'
             }, (error, token) => {
                 if (error) {

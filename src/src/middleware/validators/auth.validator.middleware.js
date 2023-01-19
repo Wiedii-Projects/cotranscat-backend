@@ -1,8 +1,5 @@
-// Configuration environment
-const { privateKey } = require('../../config');
-
 // Constants
-const { errorsConst } = require('./../../constants/index');
+const { errorsConst, coreConfigurationsConst } = require('./../../constants/index');
 
 // Helpers
 const responseHelpers = require('./../../helpers/response.helpers')
@@ -21,7 +18,7 @@ module.exports = {
             return responseHelpers.responseError(res, 400, errorsConst.userErrors.noToken);
         };
         try {
-            const { uid } = jwt.verify(token, privateKey);
+            const { uid } = jwt.verify(token, coreConfigurationsConst.privateKey);
             const user = await User.findById(uid);
 
             if (!user) {

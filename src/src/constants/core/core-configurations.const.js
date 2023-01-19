@@ -1,12 +1,12 @@
 // Constants
+const { appConst } = require('./../../constants/index')
 
-const { appConst } = require('./../constants/index')
 // Libraries
 const dotenv = require('dotenv');
 const path = require('path');
 
 const envFound = dotenv.config({
-    path: path.resolve(__dirname, `../../${process.env.NODE_ENV}.env`),
+    path: path.resolve(__dirname, `../../../${process.env.NODE_ENV}.env`),
 });
 
 if (envFound.error) {
