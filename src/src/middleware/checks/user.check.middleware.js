@@ -8,9 +8,7 @@ const { check } = require('express-validator');
 const { ErrorModel } = require("../../models/index.models");
 
 // Validators - Middleware
-const {
-    authValidators, userValidators, roleValidators
-} = require('../index.validators.middleware')
+const { authValidators, userValidators, roleValidators } = require('../index.validators.middleware')
 
 module.exports = {
     checkCreateUser: () => {

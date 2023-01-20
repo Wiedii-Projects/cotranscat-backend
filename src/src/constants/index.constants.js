@@ -1,13 +1,7 @@
-const appConst = require('./core/app.const')
-const codeSMSConst = require('./core/code-sms.const')
-const roleConst = require('./core/role.const')
-const errorsConst = require('./errors/errors.json')
-const coreConfigurationsConst = require('./core/core-configurations.const')
-
 module.exports = {
-    appConst,
-    codeSMSConst,
-    roleConst,
-    errorsConst,
-    coreConfigurationsConst
+    appConst: require('./core/app.const'),
+    codeSMSConst: require('./core/code-sms.const'),
+    roleConst: require('./core/role.const'),
+    errorsConst: require('./errors/errors.json'),
+    coreConfigurationsConst: require('./core/core-configurations.const')
 }

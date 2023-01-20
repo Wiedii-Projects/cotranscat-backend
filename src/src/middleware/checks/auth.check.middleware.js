@@ -8,9 +8,7 @@ const { userHelpers } = require('../../helpers/index.helpers')
 const { check } = require('express-validator');
 
 // Validators - middleware
-const {
-    userValidators, authValidators, sharedValidators, codeValidators
-} = require('../index.validators.middleware')
+const { userValidators, authValidators, sharedValidators, codeValidators } = require('../index.validators.middleware')
 
 // Models
 const { ErrorModel } = require("../../models/index.models");

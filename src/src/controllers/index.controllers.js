@@ -1,8 +1,4 @@
-// Controllers
-const authController = require('./auth.controllers')
-const userController = require('./user.controllers')
-
 module.exports = {
-    authController,
-    userController
+    authController: require('./auth.controllers'),
+    userController: require('./user.controllers')
 }
