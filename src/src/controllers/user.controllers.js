@@ -1,10 +1,10 @@
 // Constants
-const { errorsConst } = require('../constants/index');
+const { errorsConst } = require('../constants/index.constants');
 
 // Helpers
-const authHelpers = require('../helpers/auth.helpers')
-const userHelpers = require('../helpers/user.helpers')
-const responseHelpers = require('../helpers/response.helpers')
+const {
+    authHelpers, userHelpers, responseHelpers
+} = require('../helpers/index.helpers')
 
 // Models - Queries
 const { userQuery, userGoogleQuery } = require('../models/index.queries');

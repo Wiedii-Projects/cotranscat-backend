@@ -1,5 +1,5 @@
 // Constants
-const { errorsConst, codeSMSConst, coreConfigurationsConst } = require('./../constants/index')
+const { errorsConst, codeSMSConst, coreConfigurationsConst } = require('../constants/index.constants')
 
 // Libraries
 const client = require('twilio')(coreConfigurationsConst.accountSid, coreConfigurationsConst.authToken);

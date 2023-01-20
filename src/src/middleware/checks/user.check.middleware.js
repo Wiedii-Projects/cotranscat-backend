@@ -1,5 +1,5 @@
 // Constants
-const { errorsConst, roleConst } = require('./../../constants/index');
+const { errorsConst, roleConst } = require('../../constants/index.constants');
 
 // Libraries
 const { check } = require('express-validator');
@@ -8,9 +8,9 @@ const { check } = require('express-validator');
 const { ErrorModel } = require("../../models/index.models");
 
 // Validators - Middleware
-const authValidators = require('./../validators/auth.validator.middleware')
-const userValidators = require('./../validators/user.validator.middleware')
-const roleValidators = require('./../validators/role.validator.middleware')
+const {
+    authValidators, userValidators, roleValidators
+} = require('../index.validators.middleware')
 
 module.exports = {
     checkCreateUser: () => {

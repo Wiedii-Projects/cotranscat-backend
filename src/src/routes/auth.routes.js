@@ -1,45 +1,45 @@
 // Controllers
-const authController = require('./../controllers/auth.controllers')
+const { authController } = require('../controllers/index.controllers')
 
 // Libraries
 const { Router } = require("express");
 
-// Middleware
-const authMiddleware = require('./../middleware/checks/auth.check.middleware')
+// Checks - middleware
+const { authMiddleware } = require('./../middleware/index.checks.middleware')
 
 // Validators - middleware
-const sharedValidator = require('./../middleware/validators/shared.validator.middleware')
+const { sharedValidators } = require('../middleware/index.validators.middleware')
 
 const router = Router();
 
 router.post('/login', [
     authMiddleware.checkLogin(),
-    sharedValidator.validateErrorFields
+    sharedValidators.validateErrorFields
 ], authController.login);
 
 router.post('/google', [
     authMiddleware.checkGoogleSignIn(),
-    sharedValidator.validateErrorFields
+    sharedValidators.validateErrorFields
 ], authController.googleSignIn);
 
 router.post('/validateEmail', [
     authMiddleware.checkValidateEmail(),
-    sharedValidator.validateErrorFields
+    sharedValidators.validateErrorFields
 ], authController.validateEmail);
 
 router.post('/createCode', [
     authMiddleware.checkCreateCode(),
-    sharedValidator.validateErrorFields
+    sharedValidators.validateErrorFields
 ], authController.createCode)
 
 router.post('/validateCode', [
     authMiddleware.checkValidateCode(),
-    sharedValidator.validateErrorFields
+    sharedValidators.validateErrorFields
 ], authController.validateCode);
 
 router.post('/changePassword', [
     authMiddleware.checkChangePassword(),
-    sharedValidator.validateErrorFields
+    sharedValidators.validateErrorFields
 ], authController.changePassword);
 
 module.exports = router;

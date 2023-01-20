@@ -1,5 +1,5 @@
 // Constants
-const { appConst } = require('./../../constants/index')
+const { appConst } = require('../index.constants')
 
 // Libraries
 const dotenv = require('dotenv');

@@ -1,14 +1,14 @@
 // Controllers
-const userController = require('./../controllers/user.controllers.js')
+const { userController } = require('../controllers/index.controllers')
 
 // Libraries
 const { Router } = require('express');
 
-// Middleware
-const userMiddleware = require('./../middleware/checks/user.check.middleware')
+// Checks - middleware
+const { userMiddleware } = require('./../middleware/index.checks.middleware')
 
 // Validators - middleware
-const sharedValidator = require('./../middleware/validators/shared.validator.middleware')
+const { sharedValidators } = require('../middleware/index.validators.middleware')
 
 const router = Router();
 
@@ -16,22 +16,22 @@ router.get('/', userController.getUsers);
 
 router.get('/:uid', [
     userMiddleware.checkGetUser(),
-    sharedValidator.validateErrorFields
+    sharedValidators.validateErrorFields
 ], userController.getUser);
 
 router.post('/', [
     userMiddleware.checkCreateUser(),
-    sharedValidator.validateErrorFields
+    sharedValidators.validateErrorFields
 ], userController.createUser);
 
 router.put('/:uid', [
     userMiddleware.checkUpdateUser(),
-    sharedValidator.validateErrorFields
+    sharedValidators.validateErrorFields
 ], userController.updateUser);
 
 router.delete('/', [
     userMiddleware.checkDeleteUser(),
-    sharedValidator.validateErrorFields
+    sharedValidators.validateErrorFields
 ], userController.deleteUser);
 
 module.exports = router

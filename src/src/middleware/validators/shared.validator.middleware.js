@@ -1,5 +1,5 @@
 // Helpers
-const responseHelpers = require('./../../helpers/response.helpers')
+const { responseHelpers } = require('../../helpers/index.helpers')
 
 // Libraries
 const { validationResult } = require("express-validator");

@@ -1,9 +1,10 @@
 // Constants
-const { errorsConst } = require('../constants/index');
+const { errorsConst } = require('../constants/index.constants');
 
 // Helpers
-const authHelpers = require('../helpers/auth.helpers')
-const responseHelpers = require('../helpers/response.helpers')
+const {
+    authHelpers,responseHelpers
+} = require('../helpers/index.helpers')
 
 // Models - Queries
 const { codeSMSQuery, userQuery } = require('../models/index.queries')

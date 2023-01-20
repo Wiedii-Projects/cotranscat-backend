@@ -1,5 +1,5 @@
-// Configuration environment
-const { coreConfigurationsConst } = require('./constants/index');
+// Constants
+const { coreConfigurationsConst } = require('./constants/index.constants');
 
 // Libraries
 require('dotenv').config();

@@ -1,5 +1,5 @@
 // Constants
-const {roleConst} = require('./../constants/index')
+const { roleConst } = require('../constants/index.constants')
 
 // Helpers
 const authHelpers = require('./auth.helpers')

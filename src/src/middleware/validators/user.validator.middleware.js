@@ -1,5 +1,5 @@
 // Helpers
-const authHelpers = require('./../../helpers/auth.helpers')
+const { authHelpers } = require('../../helpers/index.helpers')
 
 // Queries
 const { userQuery, userGoogleQuery } = require('./../../models/index.queries')

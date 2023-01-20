@@ -1,5 +1,5 @@
 // Constants
-const { appConst, coreConfigurationsConst } = require('./../constants/index')
+const { appConst, coreConfigurationsConst } = require('../constants/index.constants')
 
 // Libraries
 const mongoose = require('mongoose');

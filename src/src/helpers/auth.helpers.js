@@ -1,5 +1,5 @@
 // Constants
-const { errorsConst, coreConfigurationsConst } = require('./../constants/index');
+const { errorsConst, coreConfigurationsConst } = require('../constants/index.constants');
 
 // Libraries
 const bcryptjs = require("bcryptjs");

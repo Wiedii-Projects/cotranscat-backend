@@ -1,11 +1,11 @@
 // Constants
-const { errorsConst } = require('./../../constants/index');
+const { errorsConst } = require('../../constants/index.constants');
 
 // Models
 const { CodeSms } = require('./../index.models')
 
 // Helpers
-const codeSmsHelpers = require('./../../helpers/code-sms.helpers')
+const { codeSmsHelpers } = require('../../helpers/index.helpers')
 
 module.exports = {
     createCodeIDQuery: async (user) => {

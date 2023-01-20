@@ -1,12 +1,12 @@
 // Constants
-const { coreConfigurationsConst } = require('./../../../constants/index')
+const { coreConfigurationsConst } = require('../../../constants/index.constants')
 
 // Libraries
 const express = require('express');
 const cors = require('cors');
 
-// Loaders
-const { dbConnection } = require('../../../loaders/mongoose.loaders');
+// DB Connections
+const { dbConnection } = require('../../../db-connections/mongoose.loaders');
 
 class Server {
     constructor() {

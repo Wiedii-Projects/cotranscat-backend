@@ -1,17 +1,16 @@
 // Constants
-const { errorsConst } = require('./../../constants/index');
+const { errorsConst } = require('../../constants/index.constants');
 
 // Helpers
-const userHelpers = require('./../../helpers/user.helpers')
+const { userHelpers } = require('../../helpers/index.helpers')
 
 // Libraries
 const { check } = require('express-validator');
 
-// Validator - middleware
-const userValidators = require('./../validators/user.validator.middleware')
-const authValidators = require('./../validators/auth.validator.middleware')
-const sharedValidators = require('./../validators/shared.validator.middleware')
-const codeValidators = require('./../validators/code.validator.middleware')
+// Validators - middleware
+const {
+    userValidators, authValidators, sharedValidators, codeValidators
+} = require('../index.validators.middleware')
 
 // Models
 const { ErrorModel } = require("../../models/index.models");
