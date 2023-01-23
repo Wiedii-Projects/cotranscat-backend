@@ -27,10 +27,10 @@ Base node JS project created by the Lions team that mainly implements general fu
 - Node.js web application infrastructure - `express ^4.17.3`
 - Set of middleware for express.js that wraps the validation functions - `express-validator ^6.14.0`
 - Library for google authentication - `google-auth-library ^7.14.1`
-- JWT manager - `jsonwebtoken ^8.5.1`
+- JWT manager - `jsonwebtoken ^9.0.0`
 - Library for the connection between MongoDB - `mongoose ^6.2.8`
 - Monitor script for use during development - `nodemon ^2.0.15`
-- SMS message sending manager - `twilio ^3.77.1`
+- SMS message sending manager - `twilio ^4.0.0-rc.5`
 
 -------------
 
@@ -282,7 +282,7 @@ All files must contain the following characteristics
     - code-sms.query.js
     - code-sms.helpers.js
  + The file name must contain the following structure
-    - **filename-file-name**.**file-type**.js, **for example:** 
+    - **file-name**.**file-type**.js, **for example:** 
         - auth.routes.js
         - auth.check.middleware.js
         - auth.validator.middleware.js
@@ -303,7 +303,7 @@ All files must contain the following characteristics
 |Controller             |authController |NAME`Controller` |
 |Helper                 |authHelpers    |NAME`Helpers`    |
 |Check (middleware)     |authMiddleware |NAME`Middleware` |
-|Validator (middleware) |authValidators |NAME`Middleware` |
+|Validator (middleware) |authValidators |NAME`Validators` |
 |Model (model)          |n/a            |n/a              |
 |Query (model)          |userQuery      |NAME`Query`      |
 
