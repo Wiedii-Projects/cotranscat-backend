@@ -1,16 +1,19 @@
-require('dotenv').config();
-const { envFound } = require('./config');
+// Constants
+const { coreConfigurationsConst } = require('./constants/index.constants');
 
-if (envFound.parsed.NODE_ENV === 'production') {
+// Libraries
+require('dotenv').config();
+
+if (coreConfigurationsConst.envFound.parsed.NODE_ENV === 'production') {
     var apm = require('elastic-apm-node').start({
     serviceName: 'Node_Prototype',
     secretToken: '',
     serverUrl: 'https://elastic.wiedii.co:8200',
-    environment: envFound
+    environment: coreConfigurationsConst.envFound
     });
 }
 
-const Server = require('./models/server.models');
+const Server = require('./models/aggregates/server/server.model');
 
 const server = new Server();
 

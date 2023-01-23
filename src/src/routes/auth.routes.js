@@ -1,53 +1,45 @@
-const { Router } = require("express");
-const { 
-    login, 
-    googleSignIn, 
-    validateEmail, 
-    createCode, 
-    validateCode, 
-    changePassword 
-} = require("../controllers/auth/auth.controllers");
-const { 
-    checkLogin, 
-    checkValidateEmail, 
-    checkChangePassword, 
-    checkGoogleSignIn, 
-    checkCreateCode, 
-    checkValidateCode 
-} = require("../middlewares/check/auth.middleware");
-const { validateFields } = require("../middlewares");
+// Controllers
+const { authController } = require('../controllers/index.controllers')
 
+// Libraries
+const { Router } = require("express");
+
+// Checks - middleware
+const { authMiddleware } = require('./../middleware/index.checks.middleware')
+
+// Validators - middleware
+const { sharedValidators } = require('../middleware/index.validators.middleware')
 
 const router = Router();
 
 router.post('/login', [
-    checkLogin(),
-    validateFields
-], login);
+    authMiddleware.checkLogin(),
+    sharedValidators.validateErrorFields
+], authController.login);
 
 router.post('/google', [
-    checkGoogleSignIn(),
-    validateFields
-], googleSignIn);
+    authMiddleware.checkGoogleSignIn(),
+    sharedValidators.validateErrorFields
+], authController.googleSignIn);
 
 router.post('/validateEmail', [
-    checkValidateEmail(),
-    validateFields
-], validateEmail);
+    authMiddleware.checkValidateEmail(),
+    sharedValidators.validateErrorFields
+], authController.validateEmail);
 
 router.post('/createCode', [
-    checkCreateCode(),
-    validateFields
-], createCode)
+    authMiddleware.checkCreateCode(),
+    sharedValidators.validateErrorFields
+], authController.createCode)
 
 router.post('/validateCode', [
-    checkValidateCode(),
-    validateFields
-], validateCode);
+    authMiddleware.checkValidateCode(),
+    sharedValidators.validateErrorFields
+], authController.validateCode);
 
 router.post('/changePassword', [
-    checkChangePassword(),
-    validateFields
-], changePassword);
+    authMiddleware.checkChangePassword(),
+    sharedValidators.validateErrorFields
+], authController.changePassword);
 
 module.exports = router;

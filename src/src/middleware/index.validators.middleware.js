@@ -1,0 +1,7 @@
+module.exports = {
+    authValidators: require('./validators/auth.validator.middleware'),
+    userValidators: require('./validators/user.validator.middleware'),
+    roleValidators: require('./validators/role.validator.middleware'),
+    codeValidators: require('./validators/code.validator.middleware'),
+    sharedValidators: require('./validators/shared.validator.middleware')
+}

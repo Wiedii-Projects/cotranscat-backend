@@ -1,41 +1,37 @@
-const { Router } = require('express');
-const { getUsers,
-    getUser,
-    createUser,
-    updateUser,
-    deleteUser
-} = require('../controllers/user/user.controllers');
-const { 
-    checkCreateUser, 
-    checkUpdateUser, 
-    checkDeleteUser, 
-    checkGetUser
- } = require('../middlewares/check/user.middleware');
-const { validateFields} = require('../middlewares');
+// Controllers
+const { userController } = require('../controllers/index.controllers')
 
+// Libraries
+const { Router } = require('express');
+
+// Checks - middleware
+const { userMiddleware } = require('./../middleware/index.checks.middleware')
+
+// Validators - middleware
+const { sharedValidators } = require('../middleware/index.validators.middleware')
 
 const router = Router();
 
-router.get('/', getUsers);
+router.get('/', userController.getUsers);
 
 router.get('/:uid', [
-    checkGetUser(),
-    validateFields
-], getUser);
+    userMiddleware.checkGetUser(),
+    sharedValidators.validateErrorFields
+], userController.getUser);
 
 router.post('/', [
-    checkCreateUser(),
-    validateFields
-], createUser);
+    userMiddleware.checkCreateUser(),
+    sharedValidators.validateErrorFields
+], userController.createUser);
 
 router.put('/:uid', [
-    checkUpdateUser(),
-    validateFields
-], updateUser);
+    userMiddleware.checkUpdateUser(),
+    sharedValidators.validateErrorFields
+], userController.updateUser);
 
 router.delete('/', [
-    checkDeleteUser(),
-    validateFields
-], deleteUser);
+    userMiddleware.checkDeleteUser(),
+    sharedValidators.validateErrorFields
+], userController.deleteUser);
 
 module.exports = router
