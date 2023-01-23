@@ -7,6 +7,7 @@ const mongoose = require('mongoose');
 module.exports = {
     dbConnection: async () => {
         try {
+            mongoose.set("strictQuery", false);
             await mongoose.connect(coreConfigurationsConst.mongoConnection)
             console.log(appConst.CONNECTION_BD_SUCCESS)
         } catch (error) {
