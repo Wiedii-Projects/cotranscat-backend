@@ -15,11 +15,11 @@ module.exports = {
         try {
             client.messages.create({
                 body: `${codeSMSConst.SMS_CODE_MESSAGE} ${code}`,
-                from: coreConfigurationsConst.authToken,
+                from: coreConfigurationsConst.twilioNumber,
                 to: phoneNumber
             });
             return code;
-        } catch {
+        } catch(err) {
             throw errorsConst.aggregateErrorsApp.errorCreateCode
         }
     }

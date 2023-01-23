@@ -29,7 +29,7 @@ module.exports = {
                 return responseHelpers.responseError(res, 400, errorsConst.userErrors.invalidToken);
             };
 
-            req.user = user;
+            req.body.user = user;
             next()
 
         } catch (error) {

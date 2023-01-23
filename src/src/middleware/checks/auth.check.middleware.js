@@ -1,9 +1,6 @@
 // Constants
 const { errorsConst } = require('../../constants/index.constants');
 
-// Helpers
-const { userHelpers } = require('../../helpers/index.helpers')
-
 // Libraries
 const { check } = require('express-validator');
 
@@ -17,26 +14,29 @@ module.exports = {
     checkLogin: () => {
         return [
             check('email', new ErrorModel(errorsConst.authErrors.emailRequired)).isEmail(),
-            check('password', new ErrorModel(errorsConst.authErrors.passwordRequired)).not().isEmpty(),
-            check('password', new ErrorModel(errorsConst.authErrors.validatePassword))
-                .custom((value, { req }) => userValidators.validatePasswordRules(value, req))
-                .custom((value, { req }) => req.body.validPasswordRules),
+            check('password', new ErrorModel(errorsConst.authErrors.passwordRequired)).isString(),
+            check('password')
+                .custom((value, { req }) => userValidators.validatePasswordRules(value, req)),
+            check('isValidPassword', new ErrorModel(errorsConst.authErrors.validatePassword))
+                .custom((value) => value ? true : false),
             sharedValidators.validateErrorFields,
-            check('email', new ErrorModel(errorsConst.authErrors.incorrectCredentials))
-                .custom((value, { req }) => userValidators.validateUserByEmail(value, req))
-                .custom((value, { req }) => req.body.user ? true : false),
+            check('email')
+                .custom((value, { req }) => userValidators.validateUserByEmail(value, req)),
             check('user', new ErrorModel(errorsConst.userErrors.userNotExist))
-                .custom((value) => value.state),
-            check('password', new ErrorModel(errorsConst.authErrors.incorrectCredentials))
-                .custom((value, { req }) => authValidators.validatePassword(value, req.body.user.password, req))
-                .custom((value, { req }) => req.body.validPassword),
+                .custom((value) => value ? true : false),
+            check('password')
+                .custom((value, { req }) => authValidators.validatePassword(value, req.body.user.password, req)),
+            check('validPassword', new ErrorModel(errorsConst.authErrors.incorrectCredentials))
+                .custom((value) => value ? true : false),
         ]
     },
     checkValidateEmail: () => {
         return [
             check('email', new ErrorModel(errorsConst.authErrors.emailRequired)).isEmail(),
-            check('email').custom((value, { req }) => userValidators.validateUserGoogleByEmail(value, req)),
-            check('email').custom((value, { req }) => userValidators.validateUserByEmail(value, req)),
+            check('email')
+                .custom((value, { req }) => userValidators.validateUserGoogleByEmail(value, req)),
+            check('email')
+                .custom((value, { req }) => userValidators.validateUserByEmail(value, req)),
             check('user', new ErrorModel(errorsConst.authErrors.emailExist))
                 .custom((value, { req }) => value === null && req.body.userGoogle === null ? false : true),
             check('user', new ErrorModel(errorsConst.authErrors.userNotExist))
@@ -45,46 +45,57 @@ module.exports = {
     },
     checkChangePassword: () => {
         return [
-            check('password', new ErrorModel(errorsConst.authErrors.passwordRequired)).not().isEmpty(),
-            check('password', new ErrorModel(errorsConst.authErrors.validatePassword))
-                .custom((value, { req }) => userValidators.validatePasswordRules(value, req))
-                .custom((value, { req }) => req.body.validPasswordRules),
-            check('passwordConfirm', new ErrorModel(errorsConst.authErrors.passwordConfirmRequired)).not().isEmpty(),
-            check('passwordConfirm', new ErrorModel(errorsConst.authErrors.validatePassword))
-                .custom((value, { req }) => userValidators.validatePasswordRules(value, req))
-                .custom((value, { req }) => req.body.validPasswordRules),
+            check('password', new ErrorModel(errorsConst.authErrors.passwordRequired)).isString(),
+            check('password')
+                .custom((value, { req }) => userValidators.validatePasswordRules(value, req)),
+            check('isValidPassword', new ErrorModel(errorsConst.authErrors.validatePassword))
+                .custom((value) => value ? true : false),
+
+            check('passwordConfirm', new ErrorModel(errorsConst.authErrors.passwordConfirmRequired)).isString(),
+            check('passwordConfirm')
+                .custom((value, { req }) => userValidators.validatePasswordRules(value, req)),
+            check('isValidPassword', new ErrorModel(errorsConst.authErrors.validatePassword))
+                .custom((value) => value ? true : false),
             check('password', new ErrorModel(errorsConst.authErrors.passwordNotMatch))
                 .custom((value, { req }) => value === req.body.passwordConfirm)
         ];
     },
     checkGoogleSignIn: () => {
         return [
-            check('id_token', new ErrorModel(errorsConst.authErrors.googleToken)).not().isEmpty(),
-            check('id_token', new ErrorModel(errorsConst.authErrors.googleToken))
-                .custom((value, { req }) => userValidators.validUserGoogle(value, req))
-                .custom((value, { req }) => req.body.noVerify),
-            check('email', new ErrorModel(errorsConst.authErrors.incorrectCredentials))
-                .custom((value, { req }) => userValidators.validateUserGoogleByEmail(value, req))
-                .custom((value, { req }) => req.body.userGoogle ? true : userHelpers.createUserGoogleHelper()),
+            check('id_token', new ErrorModel(errorsConst.authErrors.googleToken)).isString(),
+            check('id_token')
+                .custom((value, { req }) => userValidators.validUserGoogle(value, req)),
+            check('noVerify', new ErrorModel(errorsConst.authErrors.googleToken))
+                .custom((value) => value ? true : false),
+            check('email')
+                .custom((value, { req }) => userValidators.validateUserGoogleByEmail(value, req)),
+            check('userGoogle', new ErrorModel(errorsConst.authErrors.incorrectCredentials))
+                .custom((value, { req }) => value ? true : userValidators.validateProcessCreateUserGoogle(req)),
             check('user', new ErrorModel(errorsConst.authErrors.userRemoved))
-                .custom((value, { req }) => req.body.user.state),
+                .custom((value) => value ? true : false),
         ];
     },
     checkCreateCode: () => {
         return [
-            check('uid', new ErrorModel(errorsConst.authErrors.uidRequired)).not().isEmpty(),
-            check('uid', new ErrorModel(errorsConst.userErrors.idNotExist)).isMongoId(),
-            check('uid', new ErrorModel(errorsConst.authErrors.userNotExist))
-                .custom((value, { req }) => userValidators.validateUserByID(value, req))
-                .custom((value, { req }) => req.body.user),
+            check('uid', new ErrorModel(errorsConst.authErrors.uidRequired)).isString(),
+            check('uid')
+                .custom((value, { req }) => userValidators.validateUserByID(value, req)),
+            check('user', new ErrorModel(errorsConst.authErrors.userNotExist))
+                .custom((value) => value ? true : false)
         ];
     },
     checkValidateCode: () => {
         return [
-            check('code', new ErrorModel(errorsConst.authErrors.codeRequired)).not().isEmpty(),
-            check('code', new ErrorModel(errorsConst.authErrors.codeNotValid))
-                .custom((value, { req }) => codeValidators.validateCode(value, req))
-                .custom((value, { req }) => req.body.validCode ? true : false),
+            check('code', new ErrorModel(errorsConst.authErrors.codeRequired)).isString(),
+            check('uid', new ErrorModel(errorsConst.authErrors.uidRequired)).isString(),
+            check('uid')
+                .custom((value, { req }) => userValidators.validateUserByID(value, req)),
+            check('user', new ErrorModel(errorsConst.authErrors.userNotExist))
+                .custom((value) => value ? true : false),
+            check('code')
+                .custom((value, { req }) => codeValidators.validateCode(value, req)),
+            check('validCode', new ErrorModel(errorsConst.authErrors.codeNotValid))
+                .custom((value) => value ? true : false)
         ];
     }
 }

@@ -3,6 +3,11 @@ const { codeSMSQuery } = require('./../../models/index.queries')
 
 module.exports = {
     validateCode: async (code, req) => {
-    req.body.validCode = await codeSMSQuery.getCodeQuery(code, req.body.uid);
+        const { user } = req.body
+        try {
+            req.body.validCode = await codeSMSQuery.getCodeQuery(code, user.id);
+        } catch {
+            req.body.validCode = false
+        }
 },
 }

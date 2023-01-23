@@ -2,7 +2,10 @@
 const { errorsConst } = require('../constants/index.constants');
 
 // Helpers
-const { authHelpers,responseHelpers } = require('../helpers/index.helpers')
+const { authHelpers, responseHelpers, codeSmsHelpers } = require('../helpers/index.helpers')
+
+// Libraries
+const ObjectId = require('mongoose').Types.ObjectId;
 
 // Models - Queries
 const { codeSMSQuery, userQuery } = require('../models/index.queries')
@@ -41,7 +44,9 @@ module.exports = {
         const { user } = req.body;
 
         try {
-            await codeSMSQuery.createCodeIDQuery(user);
+            await codeSMSQuery.deleteAllCodeQuery( ObjectId(user.id) )
+            const code = await codeSmsHelpers.createSMSHelper(user.phoneNumber)
+            await codeSMSQuery.createCodeIDQuery(code, user.id)
             return responseHelpers.responseValid(res, null);
         } catch (error) {
             return responseHelpers.responseError(res, 500, error);

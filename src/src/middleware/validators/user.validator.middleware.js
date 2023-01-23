@@ -1,5 +1,8 @@
+// Constants
+const { roleConst } = require('./../../constants/index.constants')
+
 // Helpers
-const { authHelpers } = require('../../helpers/index.helpers')
+const { authHelpers } = require('./../../helpers/index.helpers')
 
 // Queries
 const { userQuery, userGoogleQuery } = require('./../../models/index.queries')
@@ -26,9 +29,7 @@ module.exports = {
         req.body.user = await userQuery.getUserIDQuery(value);
     },
     validatePasswordRules: async (password = '', req) => {
-        if (req.body.validPasswordRules !== false) {
-            req.body.validPasswordRules = !(password.match(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[$@$!%*?&#.$($)$-$_])[A-Za-z\d$@$!%*?&#.$($)$-$_]{8,15}$/) === null);
-        }
+        req.body.isValidPassword = !(password.match(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[$@$!%*?&#.$($)$-$_])[A-Za-z\d$@$!%*?&#.$($)$-$_]{8,15}$/) === null);
     },
     validateUserStateByID: async (value, req) => {
         req.body.user = await userQuery.getUserIdStateQuery(value);
@@ -39,9 +40,13 @@ module.exports = {
     validateEmailExists: async (email, req) => {
         req.body.user = await userQuery.emailExistsQuery(email);
         req.body.userGoogle = await userGoogleQuery.emailGoogleExistsQuery(email);
-        req.body.validUser = (req.body.user || req.body.userGoogle);
+        req.body.validUser = !(req.body.user || req.body.userGoogle);
     },
     validateUserGoogleByID: async (value, req) => {
         req.body.user = await userGoogleQuery.getUserGoogleIDQuery(value) || req.body.user;
-    }
+    },
+    validateProcessCreateUserGoogle: async (req) => {
+        const { name, email, picture, google = true, role = roleConst.USER_ROLE } = req.body;
+        req.body.user = await userGoogleQuery.createUserQuery({ name, email, picture, google, role });
+    },
 }
