@@ -1,0 +1,216 @@
+{
+  "authErrors": {
+    "incorrectCredentials": {
+      "code": "AU0001",
+      "message": "Incorrect email or password."
+    },
+    "emailRequired": {
+      "code": "AU0002",
+      "message": "Email is required."
+    },
+    "passwordRequired": {
+      "code": "AU0003",
+      "message": "Password is required."
+    },
+    "userNotExist": {
+      "code": "AU0004",
+      "message": "User does not exist."
+    },
+    "userRemoved": {
+      "code": "AU0005",
+      "message": "User has been removed."
+    },
+    "somethingWentWrong": {
+      "code": "AU0006",
+      "message": "Something went wrong."
+    },
+    "tokenNotValidate": {
+      "code": "AU0007",
+      "message": "Token could not validate."
+    },
+    "googleToken": {
+      "code": "AU0008",
+      "message": "Google token is required."
+    },
+    "emailExist": {
+      "code": "AU0009",
+      "message": "Email is not registered."
+    },
+    "passwordConfirmRequired": {
+      "code": "AU0010",
+      "message": "Password confirm is required."
+    },
+    "passwordNotMatch": {
+      "code": "AU0011",
+      "message": "Password does not match."
+    },
+    "codeNotValid": {
+      "code": "AU0012",
+      "message": "Code is not valid."
+    },
+    "validatePassword": {
+      "code": "AU0013",
+      "message": "The password is not secure."
+    },
+    "codeRequired": {
+      "code": "AU0014",
+      "message": "Code is required."
+    },
+    "uidRequired": {
+      "code": "AU0015",
+      "message": "UID is required."
+    }
+  },
+  "userErrors": {
+    "roleRequired": {
+      "code": "US0001",
+      "message": "The role is required"
+    },
+
+
+
+
+
+
+
+
+
+    "emailInUse": {
+      "code": "US0002",
+      "message": "The email is already in use."
+    },
+    "nameRequired": {
+      "code": "US0003",
+      "message": "The name is required."
+    },
+    "emailInvalid": {
+      "code": "US0004",
+      "message": "The email is invalid."
+    },
+    "unregisteredRoleDB": {
+      "code": "US0005",
+      "message": "The role does not exist in the database."
+    },
+    "invalidToken": {
+      "code": "US0006",
+      "message": "The token is invalid."
+    },
+    "allowedRoles": {
+      "code": "US0007",
+      "message": "The service requires one of the following roles: "
+    },
+
+
+
+
+
+    "idRequired": {
+      "code": "US0008",
+      "message": "The ID is required."
+    },
+
+
+
+
+
+    
+    "userNoUpdated": {
+      "code": "US0009",
+      "message": "Unable to update a user."
+    },
+    "noToken": {
+      "code": "US0010",
+      "message": "The token is missing from the request."
+    },
+    "userNotExist": {
+      "code": "US0011",
+      "message": "User does not exist."
+    },
+    "verifyRole": {
+      "code": "US0012",
+      "message": "To verify the role, the token must first be validated."
+    },
+    "lastNameRequired": {
+      "code": "US0013",
+      "message": "The last name is required."
+    },
+    "phoneNumberRequired": {
+      "code": "US0014",
+      "message": "The phone number is required."
+    },
+    "validatePassword": {
+      "code": "US0015",
+      "message": "The password is not secure."
+    },
+    "adminRole": {
+      "code": "US0016",
+      "message": "This action can only be performed by administrator users."
+    },
+    "userNoDelete": {
+      "code": "US0017",
+      "message": "Can't delete User."
+    }
+  },
+  "aggregateErrorsApp": {
+
+    "__comment_AUTH__": "__ AUTH These are API acronym comments__",
+
+    "errorGenerateJWT": {
+      "code": "AUTH_001",
+      "message": "Something went wrong."
+    },
+    "errorEncryptPassword": {
+      "code": "AUTH_002",
+      "message": "Something went wrong."
+    },
+    "errorVerifyTokenGoogle": {
+      "code": "AUTH_003",
+      "message": "Something went wrong."
+    },
+    "errorValidateEmail": {
+      "code": "AUTH_004",
+      "message": "Something went wrong."
+    },
+
+    "__comment_USRL__": "__ USRL These are API acronym comments__",
+
+    "errorGetAllUser": {
+      "code": "USRL_001",
+      "message": "Something went wrong."
+    },
+    "errorGetUser": {
+      "code": "USRL_002",
+      "message": "Something went wrong."
+    },
+    "errorCreateUser": {
+      "code": "USRL_003",
+      "message": "Something went wrong."
+    },
+    "errorUpdateUser": {
+      "code": "USRL_004",
+      "message": "Something went wrong."
+    },
+
+    "__comment_USRG__": "__ USRG These are API acronym comments__",
+
+    "errorGetAllUserGoogle": {
+      "code": "USRG_001",
+      "message": "Something went wrong."
+    },
+    "errorUpdateUserGoogle": {
+      "code": "USRG_004",
+      "message": "Something went wrong."
+    },
+    
+    "__comment_CODD__": "__ CODE These are API acronym comments__",
+
+    "errorCreateCode": {
+      "code": "CODD_001",
+      "message": "Something went wrong."
+    },
+    "errorDeleteAllCode": {
+      "code": "CODD_002",
+      "message": "Something went wrong."
+    }
+  }
+}

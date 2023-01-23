@@ -1,92 +1,117 @@
-# Cotranscat Backend
+# About the project
+Cotranscat Back-end is in charge of serving as API to the Cotranscat project (front-end) on the business model.
 
+-------------
 
+# Table of contents
 
-## Getting started
+1. [Env files (project configuration constants)](#envFiles)
+2. [Pre-configurations required for project compilation](#preconfigurationsRequiredCompilation)
+3. [How to compile the project](#howToCompileTheProject)
+    1. [Option to compile the project with docker](#optionToCompileTheProjectWithDocker)
+    2. [Option to compile the project with package.json scripts](#optionToCompileTheProjectWithPackagejsonScripts)
+-------------
 
-To make it easy for you to get started with GitLab, here's a list of recommended next steps.
+## 1. .env files (project configuration constants) <a id="envFiles"/>
 
-Already a pro? Just edit this README.md and make it your own. Want to make it easy? [Use the template at the bottom](#editing-this-readme)!
+The present project contains .env configuration files, contemplating on a large scale the implementation of different development environments. These are the following:
 
-## Add your files
++ local.env (Local environment, should be ignored on git.)
++ develop.env
++ production.env
 
-- [ ] [Create](https://docs.gitlab.com/ee/user/project/repository/web_editor.html#create-a-file) or [upload](https://docs.gitlab.com/ee/user/project/repository/web_editor.html#upload-a-file) files
-- [ ] [Add files using the command line](https://docs.gitlab.com/ee/gitlab-basics/add-file.html#add-a-file-using-the-command-line) or push an existing Git repository with the following command:
+## 2. Pre-configurations required for project compilation <a id="preconfigurationsRequiredCompilation"/>
 
+Open the environment file (.env) that will compile the project
+
++ It is required to assign values to the node JS server keys, the`SERVER_PORT` key that by **default** will take the **port 8082** and the `SERVER_HOST` key that by **default** will take the **value 'localhost'**.
+
+    
++ It requires the assignment of values for the mongo DB connection keys.
+    - `DB_HOST`
+    - `DB_PORT`
+    - `DB_DATABASE`
+    - `DB_USERNAME`
+    - `DB_PASSWORD`
+
++ Assign a value to the `SECRET_OR_PRIVATE_KEY` key (can be any value - This value will be used for the signature of the JWT - Json Web Token.)
+
++ It is required to have a [Twilio](https://www.twilio.com/try-twilio?utm_source=google&utm_medium=cpc&utm_term=twilio&utm_campaign=Sitelink_G_S_LATAM_Brand_Twilio_Spanish&cq_plac=&cq_net=g&cq_pos=&cq_med=&cq_plt=gp&gclid=CjwKCAiA2rOeBhAsEiwA2Pl7Q-kWEg4qIJVn6R_KMSvwqy9QYIPz3eOJ5yFO92xgWFQPi3NfKiTQihoCh3AQAvD_BwE) account for sending SMS messages, for which it is required to assign the following keys
+    - `TWILIO_ACCOUNT_SID`
+    - `TWILIO_AUTH_TOKEN`
+    - `TWILIO_NUMBER`
+
+ 
+## 3. How to compile the project <a id="howToCompileTheProject"/>
+
+The present project has two ways to be compiled, which are through **Docker** or through the **package.json scripts**.
+
+### 3.1. Option to compile the project with docker <a id="optionToCompileTheProjectWithDocker"/>
+
+To compile the project with `Docker` we must take into account the 'enviroment' we want to compile, below are the required commands
+
+``` console
++ docker build . -t contranscat_backend:[OTHER_ENVIRONMENT]
+
++ docker run -itd -e NODE_ENV=[NAME_ENVIRONMENT] -p [NUMBER_PORT_VARIANT]:8000 contranscat_backend:[OTHER_ENVIRONMENT]
 ```
-cd existing_repo
-git remote add origin https://gitlab.wiedii.co/lions/cotranscat-backend.git
-git branch -M master
-git push -uf origin master
+
+**For example to compile with the develop environment:**
+
+``` console
++ docker build . -t contranscat_backend:develop
+
++ docker run -itd -e NODE_ENV=develop -p 81:8000 contranscat_backend:develop
 ```
 
-## Integrate with your tools
+#### Other commands of interest for compilation with Docker 
 
-- [ ] [Set up project integrations](https://gitlab.wiedii.co/lions/cotranscat-backend/-/settings/integrations)
++ See all docker containers
 
-## Collaborate with your team
+``` console
+docker ps
+```
 
-- [ ] [Invite team members and collaborators](https://docs.gitlab.com/ee/user/project/members/)
-- [ ] [Create a new merge request](https://docs.gitlab.com/ee/user/project/merge_requests/creating_merge_requests.html)
-- [ ] [Automatically close issues from merge requests](https://docs.gitlab.com/ee/user/project/issues/managing_issues.html#closing-issues-automatically)
-- [ ] [Enable merge request approvals](https://docs.gitlab.com/ee/user/project/merge_requests/approvals/)
-- [ ] [Automatically merge when pipeline succeeds](https://docs.gitlab.com/ee/user/project/merge_requests/merge_when_pipeline_succeeds.html)
++ View log records of a specific container
 
-## Test and Deploy
+``` console
+docker logs -f idContainer
+```
 
-Use the built-in continuous integration in GitLab.
++ How to use Docker Compose
 
-- [ ] [Get started with GitLab CI/CD](https://docs.gitlab.com/ee/ci/quick_start/index.html)
-- [ ] [Analyze your code for known vulnerabilities with Static Application Security Testing(SAST)](https://docs.gitlab.com/ee/user/application_security/sast/)
-- [ ] [Deploy to Kubernetes, Amazon EC2, or Amazon ECS using Auto Deploy](https://docs.gitlab.com/ee/topics/autodevops/requirements.html)
-- [ ] [Use pull-based deployments for improved Kubernetes management](https://docs.gitlab.com/ee/user/clusters/agent/)
-- [ ] [Set up protected environments](https://docs.gitlab.com/ee/ci/environments/protected_environments.html)
+``` console
+docker-compose up -d --build --remove-orphans
+```
 
-***
+### 3.2 Option to compile the project with package.json scripts <a id="optionToCompileTheProjectWithPackagejsonScripts"/>
 
-# Editing this README
+To perform the compilation with the `packge.json scripts` we must first locate through the terminal on the `'src'` folder of the node JS project
 
-When you're ready to make this README your own, just edit this file and use the handy template below (or feel free to structure it however you want - this is just a starting point!). Thank you to [makeareadme.com](https://www.makeareadme.com/) for this template.
+``` console
+cd /src
+```
 
-## Suggestions for a good README
-Every project is different, so consider which of these sections apply to yours. The sections used in the template are suggestions for most open source projects. Also keep in mind that while a README can be too long and detailed, too long is better than too short. If you think your README is too long, consider utilizing another form of documentation rather than cutting out information.
+To make sure that we are in the specified folder we must execute the command
 
-## Name
-Choose a self-explaining name for your project.
+``` console
+pwd
+```
 
-## Description
-Let people know what your project can do specifically. Provide context and add a link to any reference visitors might be unfamiliar with. A list of Features or a Background subsection can also be added here. If there are alternatives to your project, this is a good place to list differentiating factors.
+And get a result of a 'relative path' as follows
 
-## Badges
-On some READMEs, you may see small images that convey metadata, such as whether or not all the tests are passing for the project. You can use Shields to add some to your README. Many services also have instructions for adding a badge.
+``` console
+.../cotranscat - backend/src
+```
 
-## Visuals
-Depending on what you are making, it can be a good idea to include screenshots or even a video (you'll frequently see GIFs rather than actual videos). Tools like ttygif can help, but check out Asciinema for a more sophisticated method.
+Execute the following command, taking into account the environment in which we want to compile the project
 
-## Installation
-Within a particular ecosystem, there may be a common way of installing things, such as using Yarn, NuGet, or Homebrew. However, consider the possibility that whoever is reading your README is a novice and would like more guidance. Listing specific steps helps remove ambiguity and gets people to using your project as quickly as possible. If it only runs in a specific context like a particular programming language version or operating system or has dependencies that have to be installed manually, also add a Requirements subsection.
+``` console
+npm run NAME_ENVIRONMENT
+```
 
-## Usage
-Use examples liberally, and show the expected output if you can. It's helpful to have inline the smallest example of usage that you can demonstrate, while providing links to more sophisticated examples if they are too long to reasonably include in the README.
+**For example**, in the case of the local environment
 
-## Support
-Tell people where they can go to for help. It can be any combination of an issue tracker, a chat room, an email address, etc.
-
-## Roadmap
-If you have ideas for releases in the future, it is a good idea to list them in the README.
-
-## Contributing
-State if you are open to contributions and what your requirements are for accepting them.
-
-For people who want to make changes to your project, it's helpful to have some documentation on how to get started. Perhaps there is a script that they should run or some environment variables that they need to set. Make these steps explicit. These instructions could also be useful to your future self.
-
-You can also document commands to lint the code or run tests. These steps help to ensure high code quality and reduce the likelihood that the changes inadvertently break something. Having instructions for running tests is especially helpful if it requires external setup, such as starting a Selenium server for testing in a browser.
-
-## Authors and acknowledgment
-Show your appreciation to those who have contributed to the project.
-
-## License
-For open source projects, say how it is licensed.
-
-## Project status
-If you have run out of energy or time for your project, put a note at the top of the README saying that development has slowed down or stopped completely. Someone may choose to fork your project or volunteer to step in as a maintainer or owner, allowing your project to keep going. You can also make an explicit request for maintainers.
+``` console
+npm run local
+```
