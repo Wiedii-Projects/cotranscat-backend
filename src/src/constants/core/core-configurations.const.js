@@ -6,13 +6,13 @@ const dotenv = require('dotenv');
 const path = require('path');
 
 const envFound = dotenv.config({
-    path: path.resolve(__dirname, `../../../${process.env.NODE_ENV}.env`),
+    path: path.resolve(__dirname, `../../../${process.env.APP_ENV}.env`),
 });
 
 if (envFound.error) {
     throw new Error(appConst.ENV_FILE_NOT_FOUND);
 }
-const nodeEnv = process.env.NODE_ENV || 'development';
+const nodeEnv = process.env.APP_ENV || 'development';
 
 const serverHost = process.env.SERVER_HOST || 'localhost';
 const serverPort = process.env.SERVER_PORT || 8082;
