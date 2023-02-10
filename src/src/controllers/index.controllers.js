@@ -1,4 +1,4 @@
 module.exports = {
-    authController: require('./auth.controllers'),
-    userController: require('./user.controllers')
+    authController: require('./auth.controller'),
+    userController: require('./user.controller')
 }

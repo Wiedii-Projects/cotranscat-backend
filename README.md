@@ -48,21 +48,79 @@ The present project has two ways to be compiled, which are through **Docker** or
 
 ### 3.1. Option to compile the project with docker <a id="optionToCompileTheProjectWithDocker"/>
 
-To compile the project with `Docker` we must take into account the 'enviroment' we want to compile, below are the required commands
++ **Step 1.** To compile the project with `Docker` we must take into account the 'enviroment'. That is, we must write the environment we want to compile in the file en`docker-compose.yml` the `APP_ENV` property (see example below)
 
-``` console
-+ docker build . -t contranscat_backend:[OTHER_ENVIRONMENT]
-
-+ docker run -itd -e NODE_ENV=[NAME_ENVIRONMENT] -p [NUMBER_PORT_VARIANT]:8000 contranscat_backend:[OTHER_ENVIRONMENT]
+```Docker
+    docker-cotranstcat-backend.com:
+    build: .
+    ports:
+      - 80:8000 
+    environment:
+      APP_ENV: local
+    volumes:
+      - ./src:/usr/src
 ```
 
-**For example to compile with the develop environment:**
++ **Step 2.** we want to compile, below are the required commands `on a terminal located in the root folder of the Cotranscat back-end project`.
 
 ``` console
-+ docker build . -t contranscat_backend:develop
-
-+ docker run -itd -e NODE_ENV=develop -p 81:8000 contranscat_backend:develop
+docker-compose up -d --build --remove-orphans
 ```
+
+> ***Note**: the steps contained in `step 3` will only be performed once at the start of the database configuration for the Cotranscat back-end project container.*
+
++ **Step 3.** Access the docker dashboard and select the terminal of the sub-container "mongo database service" which is located inside the Cotranscat back-end project container. 
+    
+    >**Within the `Docker terminal` run the following:**
+
+    - **Step 3.1.** Activate the terminal bash shell
+
+    ``` console
+    bash
+    ```
+
+    - **Step 3.2.** Access the mongo server as an 'admin' user. For this it is recommended to take into account the credentials set in `MONGO_INITDB_ROOT_USERNAME` and `MONGO_INITDB_ROOT_PASSWORD` that are inside the `docker-compose.yml` file.
+
+    ``` console
+    mongosh -u "MONGO_INITDB_ROOT_USERNAME" -p "MONGO_INITDB_ROOT_PASSWORD" 127.0.0.1 --authenticationDatabase "admin"
+    ```
+
+    > ****Note***: the flag '--authenticationDatabase' refers to a role, i.e., considering the above command, the mongo database server is accessed with the role of 'admin'.*
+
+    - **Step 3.3.** Create the database with the following command
+    > ***Note**: For this point it is recommended to take into account the values stored in the .env that you want to execute (DB_DATABASE).*
+
+    ```console
+    use DB_DATABASE
+    ```
+    
+    - **Step 3.4.** Insert the following documents on the **collection role**, in order to make the creation of the DB effective.
+    
+    ```console
+    db.role.insert([ { "role": "ADMIN_ROLE" }, { "role": "USER_ROLE" }])
+    ```
+    
+    - **Step 3.5.** Create the user with permissions to the database from the previous step.
+
+    > ***Note**: For this point it is recommended to take into account the values stored in the .env that you want to execute (DB_USERNAME, DB_PASSWORD and DB_DATABASE).*
+
+    ```console
+    db.createUser(
+      {
+        user: "DB_USERNAME",
+        pwd: "DB_PASSWORD",   
+        roles:
+          [
+            { role: "dbOwner", db: "DB_DATABASE" }
+          ]
+      }
+    )
+    ```
+    - **Step 3.6.** After the previous steps have been performed, the following command must be executed `on a terminal located in the root folder of the Cotranscat back-end project`, in order to compile the new changes in the database server.
+
+    ```console
+    docker-compose up -d --build
+    ```
 
 #### Other commands of interest for compilation with Docker 
 
@@ -78,11 +136,6 @@ docker ps
 docker logs -f idContainer
 ```
 
-+ How to use Docker Compose
-
-``` console
-docker-compose up -d --build --remove-orphans
-```
 
 ### 3.2 Option to compile the project with package.json scripts <a id="optionToCompileTheProjectWithPackagejsonScripts"/>
 

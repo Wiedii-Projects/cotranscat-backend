@@ -4,4 +4,4 @@ internal_port: 8000
 external_port: 4012
 conect: false
 envs: 
-  NODE_ENV: develop
+  APP_ENV: develop

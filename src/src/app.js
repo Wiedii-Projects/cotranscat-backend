@@ -4,7 +4,7 @@ const { coreConfigurationsConst } = require('./constants/index.constants');
 // Libraries
 require('dotenv').config();
 
-if (coreConfigurationsConst.envFound.parsed.NODE_ENV === 'production') {
+if (coreConfigurationsConst.envFound.parsed.APP_ENV === 'production') {
     var apm = require('elastic-apm-node').start({
     serviceName: 'Node_Prototype',
     secretToken: '',

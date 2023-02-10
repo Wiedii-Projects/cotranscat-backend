@@ -4,4 +4,4 @@ internal_port: 8000
 external_port: 4013
 conect: false
 envs: 
-  NODE_ENV: production
+  APP_ENV: production

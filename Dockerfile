@@ -1,7 +1,7 @@
-FROM node:alpine
+FROM node:16.17.0-alpine3.16
 RUN apk update && apk add tzdata
 ENV TZ=America/Bogota
-ENV NODE_ENV=develop
+ENV APP_ENV=develop
 WORKDIR /usr/src
 COPY ./src .
 RUN npm install
