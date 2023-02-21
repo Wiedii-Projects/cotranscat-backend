@@ -16,7 +16,7 @@ module.exports = {
             errors: error
         });
     },
-    responseValid: (res, data) => {
+    responseSuccess: (res, data) => {
         return res.json({
             status: true,
             data: data,

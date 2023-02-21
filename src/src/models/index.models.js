@@ -1,6 +1,6 @@
 module.exports = {
     // Aggregates Models
-    Server: require('./aggregates/server/server.model'),
+    ServerModel: require('./aggregates/server/server.model'),
     ErrorModel: require('./aggregates/error/error.model'),
     // Models
     User: require('./user/user.model'),

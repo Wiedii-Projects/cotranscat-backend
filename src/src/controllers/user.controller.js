@@ -14,7 +14,7 @@ module.exports = {
         try {
             const { totalUsers, users } = await userQuery.getAllUsersQuery(limit, since, { state: true });
             const { totalUserGoogle, usersGoogle } = await userGoogleQuery.getAllUserGoogleQuery(limit, since, { state: true });
-            return responseHelpers.responseValid(res, { count: (totalUsers || 0) + (totalUserGoogle || 0), users, usersGoogle });
+            return responseHelpers.responseSuccess(res, { count: (totalUsers || 0) + (totalUserGoogle || 0), users, usersGoogle });
         } catch (error) {
             return responseHelpers.responseError(res, 500, error);
         }
@@ -26,13 +26,13 @@ module.exports = {
             return responseHelpers.responseError(res, 500, errorsConst.aggregateErrorsApp.errorGetUser);
         }
 
-        return responseHelpers.responseValid(res, { user });
+        return responseHelpers.responseSuccess(res, { user });
 
     },
     createUser: async (req, res) => {
         try {
             await userHelpers.createUserModelUserHelper(req);
-            return responseHelpers.responseValid(res, null);
+            return responseHelpers.responseSuccess(res, null);
         } catch (error) {
             return responseHelpers.responseError(res, 500, error);
         }
@@ -48,7 +48,7 @@ module.exports = {
             const userUpdate = await userQuery.updateDataUserQuery(user._id, dataUpdate);
             const userGoogleUpdate = await userGoogleQuery.updateDataUserGoogleQuery(user._id, dataUpdate);
             return userUpdate || userGoogleUpdate
-                ? responseHelpers.responseValid(res, null)
+                ? responseHelpers.responseSuccess(res, null)
                 : responseHelpers.responseError(res, 400, errorsConst.userErrors.userNoUpdated);
         } catch (error) {
             return responseHelpers.responseError(res, 500, error);
@@ -61,7 +61,7 @@ module.exports = {
             const userUpdate = await userQuery.updateDataUserQuery(user._id, { state: false });
             const userGoogleUpdate = await userGoogleQuery.updateDataUserGoogleQuery(user._id, { state: false });
             return userUpdate || userGoogleUpdate
-                ? responseHelpers.responseValid(res, null)
+                ? responseHelpers.responseSuccess(res, null)
                 : responseHelpers.responseError(res, 400, errorsConst.userErrors.userNoDelete);
         } catch (error) {
             return responseHelpers.responseError(res, 500, error);

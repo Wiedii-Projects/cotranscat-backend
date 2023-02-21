@@ -5,9 +5,8 @@ const { appConst, coreConfigurationsConst } = require('../constants/index.consta
 const mongoose = require('mongoose');
 
 module.exports = {
-    dbConnection: async () => {
+    mongoDBConnection: async () => {
         try {
-            console.log(coreConfigurationsConst.mongoConnection)
             mongoose.set("strictQuery", false);
             await mongoose.connect(coreConfigurationsConst.mongoConnection)
             console.log(appConst.CONNECTION_BD_SUCCESS)

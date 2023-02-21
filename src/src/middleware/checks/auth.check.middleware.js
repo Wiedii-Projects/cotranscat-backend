@@ -4,11 +4,11 @@ const { errorsConst } = require('../../constants/index.constants');
 // Libraries
 const { check } = require('express-validator');
 
-// Validators - middleware
-const { userValidators, authValidators, sharedValidators, codeValidators } = require('../index.validators.middleware')
-
 // Models
 const { ErrorModel } = require("../../models/index.models");
+
+// Validators - middleware
+const { userValidators, authValidators, sharedValidators, codeValidators } = require('../index.validators.middleware')
 
 module.exports = {
     checkLogin: () => {
