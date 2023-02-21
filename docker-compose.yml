@@ -4,7 +4,7 @@ services:
   docker-cotranstcat-backend.com:
     build: .
     ports:
-      - 80:8000 
+      - 80:3000 
     environment:
       APP_ENV: local
     volumes:

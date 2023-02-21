@@ -5,5 +5,5 @@ ENV APP_ENV=develop
 WORKDIR /usr/src
 COPY ./src .
 RUN npm install
-EXPOSE 8000
+EXPOSE 3000
 CMD npm start
