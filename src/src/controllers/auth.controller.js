@@ -16,7 +16,7 @@ module.exports = {
 
         try {
             const token = await authHelpers.generateJWTHelper(user.id);
-            return responseHelpers.responseValid(res, { user, token });
+            return responseHelpers.responseSuccess(res, { user, token });
         } catch (error) {
             return responseHelpers.responseError(res, 500, error);
         }
@@ -26,7 +26,7 @@ module.exports = {
 
         try {
             const token = await authHelpers.generateJWTHelper(user.id);
-            return responseHelpers.responseValid(res, { user, token });
+            return responseHelpers.responseSuccess(res, { user, token });
         } catch (error) {
             return responseHelpers.responseError(res, 500, error);
         }
@@ -38,7 +38,7 @@ module.exports = {
             return responseHelpers.responseError(res, 500, errorsConst.aggregateErrorsApp.errorValidateEmail);
         }
 
-        return responseHelpers.responseValid(res, userGoogle || user);
+        return responseHelpers.responseSuccess(res, userGoogle || user);
     },
     createCode: async (req, res) => {
         const { user } = req.body;
@@ -47,7 +47,7 @@ module.exports = {
             await codeSMSQuery.deleteAllCodeQuery( ObjectId(user.id) )
             const code = await codeSmsHelpers.createSMSHelper(user.phoneNumber)
             await codeSMSQuery.createCodeIDQuery(code, user.id)
-            return responseHelpers.responseValid(res, null);
+            return responseHelpers.responseSuccess(res, null);
         } catch (error) {
             return responseHelpers.responseError(res, 500, error);
         }
@@ -57,7 +57,7 @@ module.exports = {
 
         try {
             await codeSMSQuery.deleteAllCodeQuery(uid);
-            return responseHelpers.responseValid(res, null);
+            return responseHelpers.responseSuccess(res, null);
         } catch (error) {
             return responseHelpers.responseError(res, 500, error);
         }
@@ -68,7 +68,7 @@ module.exports = {
         try {
             const passwordEncrypt = await authHelpers.encryptPasswordHelper(password);
             await userQuery.updateDataUserQuery(uid, { password: passwordEncrypt });
-            return responseHelpers.responseValid(res, null);
+            return responseHelpers.responseSuccess(res, null);
         } catch (error) {
             return responseHelpers.responseError(res, 500, error);
         }

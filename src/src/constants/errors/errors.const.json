@@ -59,6 +59,10 @@
     "uidRequired": {
       "code": "AU0015",
       "message": "UID is required."
+    },
+    "tokenInvalid": {
+      "code": "US0016",
+      "message": "Token invalid"
     }
   },
   "userErrors": {
@@ -66,15 +70,6 @@
       "code": "US0001",
       "message": "The role is required"
     },
-
-
-
-
-
-
-
-
-
     "emailInUse": {
       "code": "US0002",
       "message": "The email is already in use."
@@ -99,21 +94,10 @@
       "code": "US0007",
       "message": "The service requires one of the following roles: "
     },
-
-
-
-
-
     "idRequired": {
       "code": "US0008",
       "message": "The ID is required."
     },
-
-
-
-
-
-    
     "userNoUpdated": {
       "code": "US0009",
       "message": "Unable to update a user."

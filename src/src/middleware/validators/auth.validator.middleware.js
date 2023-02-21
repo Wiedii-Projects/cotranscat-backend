@@ -1,39 +1,28 @@
 // Constants
-const { errorsConst, coreConfigurationsConst } = require('../../constants/index.constants');
-
-// Helpers
-const { responseHelpers } = require('../../helpers/index.helpers')
+const { coreConfigurationsConst } = require('../../constants/index.constants');
 
 // Libraries
 const bcryptjs = require("bcryptjs");
 const jwt = require('jsonwebtoken');
 
-// Models
-const { User } = require('../../models/index.models');
+// Queries
+const { userQuery } = require('./../../models/index.queries')
 
 module.exports = {
-    validateJWT: async (req, res, next) => {
-        const token = req.header('x-token');
-        if (!token) {
-            return responseHelpers.responseError(res, 400, errorsConst.userErrors.noToken);
-        };
+    validateJWT: async (value, req) => {
+
         try {
-            const { uid } = jwt.verify(token, coreConfigurationsConst.privateKey);
-            const user = await User.findById(uid);
-
-            if (!user) {
-                return responseHelpers.responseError(res, 400, errorsConst.userErrors.userNotExist);
-            };
-
-            if (!user.state) {
-                return responseHelpers.responseError(res, 400, errorsConst.userErrors.invalidToken);
-            };
-
-            req.body.user = user;
-            next()
-
+            const { uid } = jwt.verify(value, coreConfigurationsConst.privateKey);
+            if (!uid) {
+                req.body.isValidToken = false
+                req.body.user = false
+            } else {
+                req.body.isValidToken = true
+                req.body.user = await userQuery.getUserIDQuery(uid);
+            }
         } catch (error) {
-            return responseHelpers.responseError(res, 500, errorsConst.userErrors.invalidToken);
+            req.body.user = false;
+            req.body.isValidToken = false
         }
     },
     validatePassword: async (value, password, req) => {

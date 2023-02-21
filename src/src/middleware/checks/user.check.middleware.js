@@ -4,11 +4,14 @@ const { errorsConst, roleConst } = require('../../constants/index.constants');
 // Libraries
 const { check } = require('express-validator');
 
+// Middleware
+const sharedMiddleware = require('./shared.check.middleware')
+
 // Models
 const { ErrorModel } = require("../../models/index.models");
 
 // Validators - Middleware
-const { authValidators, userValidators, roleValidators } = require('../index.validators.middleware')
+const { userValidators, roleValidators } = require('../index.validators.middleware')
 
 module.exports = {
     checkCreateUser: () => {
@@ -51,7 +54,7 @@ module.exports = {
     },
     checkDeleteUser: () => {
         return [
-            authValidators.validateJWT,
+            ...sharedMiddleware.checkJwt(),
             check('user', new ErrorModel(errorsConst.userErrors.adminRole))
                 .custom((value) => value.role == roleConst.ADMIN_ROLE ? true : false),
             check('uid', new ErrorModel(errorsConst.userErrors.idRequired)).isString(),

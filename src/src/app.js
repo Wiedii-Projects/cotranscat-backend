@@ -4,6 +4,9 @@ const { coreConfigurationsConst } = require('./constants/index.constants');
 // Libraries
 require('dotenv').config();
 
+// Models
+const { ServerModel } = require('./models/index.models');
+
 if (coreConfigurationsConst.envFound.parsed.APP_ENV === 'production') {
     var apm = require('elastic-apm-node').start({
     serviceName: 'Node_Prototype',
@@ -13,8 +16,6 @@ if (coreConfigurationsConst.envFound.parsed.APP_ENV === 'production') {
     });
 }
 
-const Server = require('./models/aggregates/server/server.model');
-
-const server = new Server();
+const server = new ServerModel();
 
 server.listen();

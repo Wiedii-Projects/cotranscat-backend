@@ -6,9 +6,9 @@ const express = require('express');
 const cors = require('cors');
 
 // DB Connections
-const { dbConnection } = require('../../../db-connections/mongoose.connection');
+const { mongoDBConnection } = require('./../../../connections/mongo-db.connection');
 
-class Server {
+class ServerModel {
     constructor() {
         this.app = express();
         this.serverHost = coreConfigurationsConst.serverHost;
@@ -24,7 +24,7 @@ class Server {
     }
 
     async db() {
-        await dbConnection();
+        await mongoDBConnection();
     }
 
     middleware() {
@@ -45,4 +45,4 @@ class Server {
     }
 }
 
-module.exports = Server;
+module.exports = ServerModel;
