@@ -4,6 +4,7 @@ const { appConst } = require('../core/app.const')
 // Libraries
 const dotenv = require('dotenv');
 const path = require('path');
+const { Sequelize } = require('sequelize');
 
 const envFound = dotenv.config({
     path: path.resolve(__dirname, `../../../${process.env.APP_ENV}.env`),
@@ -20,6 +21,7 @@ const serverPort = process.env.SERVER_PORT || 8082;
 const privateKey = process.env.SECRET_OR_PRIVATE_KEY;
 const googleClientId = process.env.GOOGLE_CLIENT_ID;
 
+const dbNameServer = process.env.DB_NAME_SERVER;
 const dbHost = process.env.DB_HOST || 'localhost';
 const dbPort = process.env.DB_PORT;
 const dbDatabase = process.env.DB_DATABASE;
@@ -30,11 +32,17 @@ const accountSid = process.env.TWILIO_ACCOUNT_SID;
 const authToken = process.env.TWILIO_AUTH_TOKEN;
 const twilioNumber = process.env.TWILIO_NUMBER;
 
-let mongoConnection = `mongodb://${dbUser}:${dbPassword}@${dbHost}:${dbPort}/${dbDatabase}`;
-
-(nodeEnv === 'develop' || nodeEnv === 'production')
-    ? mongoConnection += `?authSource=admin&socketTimeoutMS=500&wTimeoutMS=500&connectTimeoutMS=500`
-    : '';
+const dbConnectionOptions = new Sequelize(
+    dbDatabase, dbUser, dbPassword, {
+        host: dbHost,
+        dialect: dbNameServer,
+        port: dbPort,
+        define: {
+            timestamps: false
+        },
+        logging: false
+      }
+  );
 
 module.exports = {
     nodeEnv,
@@ -43,7 +51,7 @@ module.exports = {
     dbHost,
     privateKey,
     googleClientId,
-    mongoConnection,
+    dbConnectionOptions,
     envFound,
     accountSid,
     authToken,

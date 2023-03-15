@@ -27,7 +27,8 @@ Open the environment file (.env) that will compile the project
 + It is required to assign values to the node JS server keys, the`SERVER_PORT` key that by **default** will take the **port 8082** and the `SERVER_HOST` key that by **default** will take the **value 'localhost'**.
 
     
-+ It requires the assignment of values for the mongo DB connection keys.
++ It requires the assignment of values for the mysql DB connection keys.
+    - `DB_NAME_SERVER`
     - `DB_HOST`
     - `DB_PORT`
     - `DB_DATABASE`
@@ -69,7 +70,7 @@ docker-compose up -d --build --remove-orphans
 
 > ***Note**: the steps contained in `step 3` will only be performed once at the start of the database configuration for the Cotranscat back-end project container.*
 
-+ **Step 3.** Access the docker dashboard and select the terminal of the sub-container "mongo database service" which is located inside the Cotranscat back-end project container. 
++ **Step 3.** Access the docker dashboard and select the terminal of the sub-container "mysql database service" which is located inside the Cotranscat back-end project container. 
     
     >**Within the `Docker terminal` run the following:**
 
@@ -79,13 +80,13 @@ docker-compose up -d --build --remove-orphans
     bash
     ```
 
-    - **Step 3.2.** Access the mongo server as an 'admin' user. For this it is recommended to take into account the credentials set in `MONGO_INITDB_ROOT_USERNAME` and `MONGO_INITDB_ROOT_PASSWORD` that are inside the `docker-compose.yml` file.
+    - **Step 3.2.** Access the mysql server as an 'admin' user. For this it is recommended to take into account the credentials set in `MONGO_INITDB_ROOT_USERNAME` and `MONGO_INITDB_ROOT_PASSWORD` that are inside the `docker-compose.yml` file.
 
     ``` console
-    mongosh -u "MONGO_INITDB_ROOT_USERNAME" -p "MONGO_INITDB_ROOT_PASSWORD" 127.0.0.1 --authenticationDatabase "admin"
+    mysql -u "MONGO_INITDB_ROOT_USERNAME" -p "MONGO_INITDB_ROOT_PASSWORD" 127.0.0.1 --authenticationDatabase "admin"
     ```
 
-    > ****Note***: the flag '--authenticationDatabase' refers to a role, i.e., considering the above command, the mongo database server is accessed with the role of 'admin'.*
+    > ****Note***: the flag '--authenticationDatabase' refers to a role, i.e., considering the above command, the mysql database server is accessed with the role of 'admin'.*
 
     - **Step 3.3.** Create the database with the following command
     > ***Note**: For this point it is recommended to take into account the values stored in the .env that you want to execute (DB_DATABASE).*

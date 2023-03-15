@@ -1,35 +1,48 @@
-// Libraries
-const { Schema, model } = require('mongoose');
+// DB Connections
+const { dbConnectionOptions } = require("../../constants/core/core-configurations.const");
 
-const UserGoogleSchema = Schema({
+// Libraries
+const { DataTypes } = require('sequelize');
+
+const UserGoogleSchema = dbConnectionOptions.define('UserGoogle', {
     name: {
-        type: String,
+        type: DataTypes.STRING,
         required: [true, 'The name is required']
     },
+    lastName: {
+        type: DataTypes.STRING,
+        required: [true, 'The last name is required']
+    },
     email: {
-        type: String,
+        type: DataTypes.STRING,
         required: [true, 'Mail is required'],
         unique: true
     },
+    phoneNumber: {
+        type: DataTypes.STRING,
+        required: [true, 'The phoneNumber is required']
+    },
+    img: {
+        type: DataTypes.STRING,
+    },
     state: {
-        type: Boolean,
+        type: DataTypes.BOOLEAN,
         default: true
     },
     google: {
-        type: Boolean,
+        type: DataTypes.BOOLEAN,
         default: false
     },
     role: {
-        type: String,
+        type: DataTypes.STRING,
         required: true,
-        emun: ['ADMIN_ROLE', 'USER_ROLE']
+        // emun: ['ADMIN_ROLE', 'USER_ROLE']
     }
+},{
+    freezeTableName: true,
+    tableName: 'user_google',
+    underscored: true
+  
 });
 
-UserGoogleSchema.methods.toJSON = function () {
-    const { __v, password, _id, ...user } = this.toObject();
-    user.uid = _id;
-    return user;
-}
-
-module.exports = model('UserGoogle', UserGoogleSchema);
+module.exports = UserGoogleSchema;

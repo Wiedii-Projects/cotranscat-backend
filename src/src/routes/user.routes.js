@@ -14,7 +14,7 @@ const router = Router();
 
 router.get('/', userController.getUsers);
 
-router.get('/:uid', [
+router.get('/:id', [
     userMiddleware.checkGetUser(),
     sharedValidators.validateErrorFields
 ], userController.getUser);
@@ -24,7 +24,7 @@ router.post('/', [
     sharedValidators.validateErrorFields
 ], userController.createUser);
 
-router.put('/:uid', [
+router.put('/:id', [
     userMiddleware.checkUpdateUser(),
     sharedValidators.validateErrorFields
 ], userController.updateUser);

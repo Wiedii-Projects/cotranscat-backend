@@ -18,11 +18,11 @@ module.exports = {
     },
     extractUserDataHelper: (data) => {
         const {
-            _id, password, name, email, google, lastName, socialStratification, identificationNumber,
+            id, password, name, email, google, lastName, socialStratification, identificationNumber,
             dateBirth, phoneNumber, ...body
         } = data;
         return {
-            _id, password, email, google, name, lastName, socialStratification, identificationNumber,
+            id, password, email, google, name, lastName, socialStratification, identificationNumber,
             dateBirth, phoneNumber
         }
     }

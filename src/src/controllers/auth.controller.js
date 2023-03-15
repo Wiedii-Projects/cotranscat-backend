@@ -4,9 +4,6 @@ const { errorsConst } = require('../constants/index.constants');
 // Helpers
 const { authHelpers, responseHelpers, codeSmsHelpers } = require('../helpers/index.helpers')
 
-// Libraries
-const ObjectId = require('mongoose').Types.ObjectId;
-
 // Models - Queries
 const { codeSMSQuery, userQuery } = require('../models/index.queries')
 
@@ -44,7 +41,7 @@ module.exports = {
         const { user } = req.body;
 
         try {
-            await codeSMSQuery.deleteAllCodeQuery( ObjectId(user.id) )
+            await codeSMSQuery.deleteAllCodeQuery( user.id )
             const code = await codeSmsHelpers.createSMSHelper(user.phoneNumber)
             await codeSMSQuery.createCodeIDQuery(code, user.id)
             return responseHelpers.responseSuccess(res, null);
@@ -53,21 +50,21 @@ module.exports = {
         }
     },
     validateCode: async (req, res) => {
-        const { uid } = req.body;
+        const { id } = req.body;
 
         try {
-            await codeSMSQuery.deleteAllCodeQuery(uid);
+            await codeSMSQuery.deleteAllCodeQuery(id);
             return responseHelpers.responseSuccess(res, null);
         } catch (error) {
             return responseHelpers.responseError(res, 500, error);
         }
     },
     changePassword: async (req, res) => {
-        const { password, uid } = req.body;
+        const { password, id } = req.body;
 
         try {
             const passwordEncrypt = await authHelpers.encryptPasswordHelper(password);
-            await userQuery.updateDataUserQuery(uid, { password: passwordEncrypt });
+            await userQuery.updateDataUserQuery(id, { password: passwordEncrypt });
             return responseHelpers.responseSuccess(res, null);
         } catch (error) {
             return responseHelpers.responseError(res, 500, error);

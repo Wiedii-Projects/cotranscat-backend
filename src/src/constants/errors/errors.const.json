@@ -56,12 +56,12 @@
       "code": "AU0014",
       "message": "Code is required."
     },
-    "uidRequired": {
+    "idRequired": {
       "code": "AU0015",
       "message": "UID is required."
     },
     "tokenInvalid": {
-      "code": "US0016",
+      "code": "AU0016",
       "message": "Token invalid"
     }
   },
@@ -82,9 +82,9 @@
       "code": "US0004",
       "message": "The email is invalid."
     },
-    "unregisteredRoleDB": {
+    "": {
       "code": "US0005",
-      "message": "The role does not exist in the database."
+      "message": ""
     },
     "invalidToken": {
       "code": "US0006",
@@ -135,7 +135,20 @@
       "message": "Can't delete User."
     }
   },
+  "roleErrors":{
+    "unregisteredRoleDB": {
+      "code": "RL0005",
+      "message": "The role does not exist in the database."
+    }
+  },
   "aggregateErrorsApp": {
+
+    "__comment_RLLE__": "__ RLLE (RoleModel) These are API acronym comments__",
+
+    "errorGetRoleByName": {
+      "code": "RLLE_001",
+      "message": "Something went wrong."
+    },
 
     "__comment_AUTH__": "__ AUTH These are API acronym comments__",
 
@@ -156,7 +169,7 @@
       "message": "Something went wrong."
     },
 
-    "__comment_USRL__": "__ USRL These are API acronym comments__",
+    "__comment_USRL__": "__ USRL (UserModel) These are API acronym comments__",
 
     "errorGetAllUser": {
       "code": "USRL_001",
@@ -175,7 +188,7 @@
       "message": "Something went wrong."
     },
 
-    "__comment_USRG__": "__ USRG These are API acronym comments__",
+    "__comment_USRG__": "__ USRG (UserGoogleModel) These are API acronym comments__",
 
     "errorGetAllUserGoogle": {
       "code": "USRG_001",
@@ -185,8 +198,12 @@
       "code": "USRG_004",
       "message": "Something went wrong."
     },
+    "errorCreateUserGoogle": {
+      "code": "USRG_003",
+      "message": "Something went wrong."
+    },
     
-    "__comment_CODD__": "__ CODE These are API acronym comments__",
+    "__comment_CODD__": "__ CODE (CodeSmsModel) These are API acronym comments__",
 
     "errorCreateCode": {
       "code": "CODD_001",

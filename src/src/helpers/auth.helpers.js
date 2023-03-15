@@ -35,9 +35,9 @@ module.exports = {
             throw errorsConst.aggregateErrorsApp.errorVerifyTokenGoogle
         }
     },
-    generateJWTHelper: async (uid = '') => {
+    generateJWTHelper: async (id = '') => {
         return new Promise((res, rej) => {
-            const payload = { uid };
+            const payload = { id };
             jwt.sign(payload, coreConfigurationsConst.privateKey, {
                 expiresIn: '4h'
             }, (error, token) => {

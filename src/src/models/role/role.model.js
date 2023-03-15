@@ -1,11 +1,18 @@
-// Libraries
-const { Schema, model } = require('mongoose');
+// DB Connections
+const { dbConnectionOptions } = require("../../constants/core/core-configurations.const");
 
-const RoleSchema = Schema({
+// Libraries
+const { DataTypes } = require('sequelize');
+
+const RoleSchema = dbConnectionOptions.define('Role', {
     role: {
-        type: String,
+        type: DataTypes.STRING,
         required: [true, 'The role is obligatory']
     }
+},{
+    freezeTableName: true,
+    tableName: 'role',
+    underscored: true
 });
 
-module.exports = model('Role', RoleSchema);
+module.exports = RoleSchema;

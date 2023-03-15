@@ -19,7 +19,7 @@ module.exports = {
                 to: phoneNumber
             });
             return code;
-        } catch(err) {
+        } catch {
             throw errorsConst.aggregateErrorsApp.errorCreateCode
         }
     }

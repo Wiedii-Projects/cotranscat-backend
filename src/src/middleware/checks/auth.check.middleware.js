@@ -77,8 +77,8 @@ module.exports = {
     },
     checkCreateCode: () => {
         return [
-            check('uid', new ErrorModel(errorsConst.authErrors.uidRequired)).isString(),
-            check('uid')
+            check('id', new ErrorModel(errorsConst.authErrors.idRequired)).isInt(),
+            check('id')
                 .custom((value, { req }) => userValidators.validateUserByID(value, req)),
             check('user', new ErrorModel(errorsConst.authErrors.userNotExist))
                 .custom((value) => value ? true : false)
@@ -87,8 +87,8 @@ module.exports = {
     checkValidateCode: () => {
         return [
             check('code', new ErrorModel(errorsConst.authErrors.codeRequired)).isString(),
-            check('uid', new ErrorModel(errorsConst.authErrors.uidRequired)).isString(),
-            check('uid')
+            check('id', new ErrorModel(errorsConst.authErrors.idRequired)).isInt(),
+            check('id')
                 .custom((value, { req }) => userValidators.validateUserByID(value, req)),
             check('user', new ErrorModel(errorsConst.authErrors.userNotExist))
                 .custom((value) => value ? true : false),

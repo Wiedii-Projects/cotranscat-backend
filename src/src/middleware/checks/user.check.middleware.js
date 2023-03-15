@@ -32,21 +32,21 @@ module.exports = {
                 .custom((value) => value ? true : false),
             check('role')
                 .custom((value, { req }) => roleValidators.validateRole(value, req)),
-            check('validRole', new ErrorModel(errorsConst.userErrors.unregisteredRoleDB))
+            check('validRole', new ErrorModel(errorsConst.roleErrors.unregisteredRoleDB))
                 .custom((value) => value ? true : false)
         ];
     },
     checkUpdateUser: () => {
         return [
             check('role', new ErrorModel(errorsConst.userErrors.roleRequired)).isString(),
-            check('uid', new ErrorModel(errorsConst.userErrors.idRequired)).isString(),
+            check('id', new ErrorModel(errorsConst.userErrors.idRequired)).isInt(),
             check('role')
                 .custom((value, { req }) => roleValidators.validateRole(value, req)),
-            check('validRole', new ErrorModel(errorsConst.userErrors.unregisteredRoleDB))
+            check('validRole', new ErrorModel(errorsConst.roleErrors.unregisteredRoleDB))
                 .custom((value) => value ? true : false),
-            check('uid')
+            check('id')
                 .custom((value, { req }) => userValidators.validateUserByID(value, req)),
-            check('uid',)
+            check('id',)
                 .custom((value, { req }) => userValidators.validateUserGoogleByID(value, req)),
             check('user', new ErrorModel(errorsConst.authErrors.userNotExist))
                 .custom((value) => value ? true : false)
@@ -57,10 +57,10 @@ module.exports = {
             ...sharedMiddleware.checkJwt(),
             check('user', new ErrorModel(errorsConst.userErrors.adminRole))
                 .custom((value) => value.role == roleConst.ADMIN_ROLE ? true : false),
-            check('uid', new ErrorModel(errorsConst.userErrors.idRequired)).isString(),
-            check('uid')
+            check('id', new ErrorModel(errorsConst.userErrors.idRequired)).isInt(),
+            check('id')
                 .custom((value, { req }) => userValidators.validateUserByID(value, req)),
-            check('uid')
+            check('id')
                 .custom((value, { req }) => userValidators.validateUserGoogleByID(value, req)),
             check('user', new ErrorModel(errorsConst.authErrors.userNotExist))
                 .custom((value) => value ? true : false)
@@ -68,9 +68,9 @@ module.exports = {
     },
     checkGetUser: () => {
         return [
-            check('uid')
+            check('id')
                 .custom((value, { req }) => userValidators.validateUserStateByID(value, req)),
-            check('uid')
+            check('id')
                 .custom((value, { req }) => userValidators.validateUserGoogleStateByID(value, req)),
             check('user', new ErrorModel(errorsConst.authErrors.userNotExist))
                 .custom((value) => value ? true : false)

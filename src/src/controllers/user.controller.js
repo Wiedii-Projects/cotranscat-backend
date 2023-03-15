@@ -38,15 +38,15 @@ module.exports = {
         }
     },
     updateUser: async (req, res) => {
-        const { user } = req.body;
+        const {id } = req.params
         const dataUpdate = userHelpers.extractUserDataHelper(req.body)
 
         try {
             dataUpdate.password = dataUpdate.password
                 ? await authHelpers.encryptPasswordHelper(dataUpdate.password)
                 : dataUpdate.password;
-            const userUpdate = await userQuery.updateDataUserQuery(user._id, dataUpdate);
-            const userGoogleUpdate = await userGoogleQuery.updateDataUserGoogleQuery(user._id, dataUpdate);
+            const userUpdate = await userQuery.updateDataUserQuery(id, dataUpdate);
+            const userGoogleUpdate = await userGoogleQuery.updateDataUserGoogleQuery(id, dataUpdate);
             return userUpdate || userGoogleUpdate
                 ? responseHelpers.responseSuccess(res, null)
                 : responseHelpers.responseError(res, 400, errorsConst.userErrors.userNoUpdated);
@@ -58,12 +58,12 @@ module.exports = {
         const { user } = req.body;
 
         try {
-            const userUpdate = await userQuery.updateDataUserQuery(user._id, { state: false });
-            const userGoogleUpdate = await userGoogleQuery.updateDataUserGoogleQuery(user._id, { state: false });
+            const userUpdate = await userQuery.updateDataUserQuery(user.id, { state: false });
+            const userGoogleUpdate = await userGoogleQuery.updateDataUserGoogleQuery(user.id, { state: false });
             return userUpdate || userGoogleUpdate
                 ? responseHelpers.responseSuccess(res, null)
                 : responseHelpers.responseError(res, 400, errorsConst.userErrors.userNoDelete);
-        } catch (error) {
+        } catch {
             return responseHelpers.responseError(res, 500, error);
         }
     }

@@ -12,13 +12,13 @@ module.exports = {
     validateJWT: async (value, req) => {
 
         try {
-            const { uid } = jwt.verify(value, coreConfigurationsConst.privateKey);
-            if (!uid) {
+            const { id } = jwt.verify(value, coreConfigurationsConst.privateKey);
+            if (!id) {
                 req.body.isValidToken = false
                 req.body.user = false
             } else {
                 req.body.isValidToken = true
-                req.body.user = await userQuery.getUserIDQuery(uid);
+                req.body.user = await userQuery.getUserIDQuery(id);
             }
         } catch (error) {
             req.body.user = false;
