@@ -13,9 +13,7 @@ const CodeSmsSchema = dbConnectionOptions.define('CodeSms', {
         type: DataTypes.INTEGER
     }
 },{
-    freezeTableName: true,
-    tableName: 'code_sms',
-    underscored: true
+    tableName: 'code_sms'
 });
 
 module.exports = CodeSmsSchema

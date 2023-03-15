@@ -6,7 +6,7 @@ const mySqlDBConnection = async () => {
     try {
         await dbConnectionOptions.authenticate();
         console.log(appConst.CONNECTION_BD_SUCCESS)
-    } catch (error) {
+    } catch {
         throw new Error(appConst.CONNECTION_BD_ERROR);
     }
 }

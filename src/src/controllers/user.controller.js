@@ -30,7 +30,10 @@ module.exports = {
 
     },
     createUser: async (req, res) => {
+        const { password } = req.body;
         try {
+            const passwordEncrypt = await authHelpers.encryptPasswordHelper(password);
+            req.body.password = passwordEncrypt
             await userHelpers.createUserModelUserHelper(req);
             return responseHelpers.responseSuccess(res, null);
         } catch (error) {
@@ -63,7 +66,7 @@ module.exports = {
             return userUpdate || userGoogleUpdate
                 ? responseHelpers.responseSuccess(res, null)
                 : responseHelpers.responseError(res, 400, errorsConst.userErrors.userNoDelete);
-        } catch {
+        } catch (error) {
             return responseHelpers.responseError(res, 500, error);
         }
     }

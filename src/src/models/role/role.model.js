@@ -10,9 +10,7 @@ const RoleSchema = dbConnectionOptions.define('Role', {
         required: [true, 'The role is obligatory']
     }
 },{
-    freezeTableName: true,
-    tableName: 'role',
-    underscored: true
+    tableName: 'role'
 });
 
 module.exports = RoleSchema;

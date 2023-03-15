@@ -38,7 +38,9 @@ const dbConnectionOptions = new Sequelize(
         dialect: dbNameServer,
         port: dbPort,
         define: {
-            timestamps: false
+            timestamps: false,
+            freezeTableName: true,
+            underscored: true
         },
         logging: false
       }

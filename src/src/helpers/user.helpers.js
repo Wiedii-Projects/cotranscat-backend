@@ -1,17 +1,11 @@
-
-
-// Helpers
-const authHelpers = require('./auth.helpers')
-
 // Queries
 const { userQuery } = require('./../models/index.queries')
 
 module.exports = {
     createUserModelUserHelper: async (req) => {
+        const { name, lastName, email, password, phoneNumber, role } = req.body;
         try {
-            const { name, lastName, email, password, phoneNumber, role } = req.body;
-            const passwordEncrypt = await authHelpers.encryptPasswordHelper(password);
-            return await userQuery.createNewUserQuery({ name, lastName, email, password: passwordEncrypt, phoneNumber, role });
+            return await userQuery.createNewUserQuery({ name, lastName, email, password, phoneNumber, role });
         } catch (error) {
             throw error
         }

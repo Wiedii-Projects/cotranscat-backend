@@ -1,6 +1,5 @@
 // Constants
-const { errorsConst } = require('../../constants/index.constants');
-const { authHelpers } = require('./../../helpers/index.helpers');
+const { errorsConst } = require('../../constants/index.constants')
 
 // Models
 const { User } = require('./../index.models')
@@ -47,11 +46,11 @@ module.exports = {
         }
     },
     createNewUserQuery: async (user) => {
-        const { name, lastName, email, password, role } = user
+        const { name, lastName, email, phoneNumber, password, role } = user
 
         try {
             await User.findOrCreate({
-                where: { name, lastName, email, password, role },
+                where: { name, lastName, email, password, phoneNumber, role },
                 defaults: { google: false, state: true, img: "" }
             });
         } catch {

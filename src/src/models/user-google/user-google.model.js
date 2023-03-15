@@ -39,10 +39,7 @@ const UserGoogleSchema = dbConnectionOptions.define('UserGoogle', {
         // emun: ['ADMIN_ROLE', 'USER_ROLE']
     }
 },{
-    freezeTableName: true,
-    tableName: 'user_google',
-    underscored: true
-  
+    tableName: 'user_google'
 });
 
 module.exports = UserGoogleSchema;

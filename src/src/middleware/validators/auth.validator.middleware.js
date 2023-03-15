@@ -20,7 +20,7 @@ module.exports = {
                 req.body.isValidToken = true
                 req.body.user = await userQuery.getUserIDQuery(id);
             }
-        } catch (error) {
+        } catch {
             req.body.user = false;
             req.body.isValidToken = false
         }

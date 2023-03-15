@@ -45,9 +45,7 @@ const UserSchema = dbConnectionOptions.define('User', {
         emun: ['ADMIN_ROLE', 'USER_ROLE']
     }
 }, {
-    freezeTableName: true,
-    tableName: 'user',
-    underscored: true
+    tableName: 'user'
 })
 
 module.exports = UserSchema;
