@@ -21,7 +21,7 @@ module.exports = {
             check('password', new ErrorModel(errorsConst.authErrors.passwordRequired)).isString(),
             check('email', new ErrorModel(errorsConst.userErrors.emailInvalid)).isEmail(),
             check('phoneNumber', new ErrorModel(errorsConst.userErrors.phoneNumberRequired)).isString(),
-            check('role', new ErrorModel(errorsConst.userErrors.roleRequired)).isString(),
+            //check('role', new ErrorModel(errorsConst.userErrors.roleRequired)).isString(),
             check('password')
                 .custom((value, { req }) => userValidators.validatePasswordRules(value, req)),
             check('isValidPassword', new ErrorModel(errorsConst.authErrors.validatePassword))
@@ -30,10 +30,10 @@ module.exports = {
                 .custom((value, { req }) => userValidators.validateEmailExists(value, req)),
             check('validUser', new ErrorModel(errorsConst.userErrors.emailInUse))
                 .custom((value) => value ? true : false),
-            check('role')
+            /* check('role')
                 .custom((value, { req }) => roleValidators.validateRole(value, req)),
             check('validRole', new ErrorModel(errorsConst.roleErrors.unregisteredRoleDB))
-                .custom((value) => value ? true : false)
+                .custom((value) => value ? true : false) */
         ];
     },
     checkUpdateUser: () => {

@@ -150,6 +150,11 @@
       "message": "Something went wrong."
     },
 
+    "errorCreateRoleDefault": {
+      "code": "RLLE_002",
+      "message": "Default roles cannot be created."
+    },
+
     "__comment_AUTH__": "__ AUTH These are API acronym comments__",
 
     "errorGenerateJWT": {

@@ -32,19 +32,22 @@ const accountSid = process.env.TWILIO_ACCOUNT_SID;
 const authToken = process.env.TWILIO_AUTH_TOKEN;
 const twilioNumber = process.env.TWILIO_NUMBER;
 
-const dbConnectionOptions = new Sequelize(
-    dbDatabase, dbUser, dbPassword, {
-        host: dbHost,
-        dialect: dbNameServer,
-        port: dbPort,
-        define: {
-            timestamps: false,
-            freezeTableName: true,
-            underscored: true
-        },
-        logging: false
-      }
-  );
+const option = {
+    host: dbHost,
+    dialect: dbNameServer,
+    port: dbPort,
+    define: {
+        timestamps: false,
+        freezeTableName: true,
+        underscored: true
+    },
+    config: {
+        path: '/src/src/config/config.json'
+      },
+    //logging: false
+  };
+  
+const dbConnectionOptions = new Sequelize(dbDatabase, dbUser, dbPassword, option);
 
 module.exports = {
     nodeEnv,

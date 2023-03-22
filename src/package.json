@@ -26,5 +26,8 @@
     "nodemon": "^2.0.15",
     "sequelize": "^6.29.3",
     "twilio": "^4.0.0-rc.5"
+  },
+  "devDependencies": {
+    "sequelize-cli": "^6.6.0"
   }
 }
