@@ -1,7 +1,7 @@
 const User = require("./user/user.model");
 const Role = require("./role/role.model");
-const UserGoogle = require("./userGoogle/user-google.model");
-const CodeSms = require("./codeSms/code-sms.model");
+const UserGoogle = require("./user-google/user-google.model");
+const CodeSms = require("./code-sms/code-sms.model");
 
 // Relationships BD
 
