@@ -2,7 +2,7 @@
 const { errorsConst } = require('../../constants/index.constants');
 
 // Models
-const { UserGoogle } = require('./../index.models')
+const { UserGoogle } = require('../index.models')
 
 module.exports = {
     createUserQuery: async (data) => {

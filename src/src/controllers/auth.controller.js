@@ -31,10 +31,8 @@ module.exports = {
     validateEmail: async (req, res) => {
         const { user, userGoogle } = req.body;
 
-        if (!userGoogle && !user) {
-            return responseHelpers.responseError(res, 500, errorsConst.aggregateErrorsApp.errorValidateEmail);
-        }
-
+        if (!userGoogle && !user) return responseHelpers.responseError(res, 500, errorsConst.aggregateErrorsApp.errorValidateEmail);
+        
         return responseHelpers.responseSuccess(res, userGoogle || user);
     },
     createCode: async (req, res) => {

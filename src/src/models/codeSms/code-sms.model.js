@@ -6,18 +6,18 @@ const {
 // Libraries
 const { DataTypes } = require("sequelize");
 
-const RoleSchema = dbConnectionOptions.define(
-  "Role",
+const CodeSmsSchema = dbConnectionOptions.define(
+  "CodeSms",
   {
-    role: {
+    code: {
       type: DataTypes.STRING,
-      field: "role",
+      field: "code",
       required: [true, "The role is obligatory"],
     },
   },
   {
-    tableName: "role",
+    tableName: "codeSms",
   }
 );
 
-module.exports = RoleSchema;
+module.exports = CodeSmsSchema;

@@ -6,8 +6,8 @@ const {
 // Libraries
 const { DataTypes } = require("sequelize");
 
-const UserSchema = dbConnectionOptions.define(
-  "User",
+const UserGoogleSchema = dbConnectionOptions.define(
+  "UserGoogle",
   {
     name: {
       type: DataTypes.STRING,
@@ -30,15 +30,9 @@ const UserSchema = dbConnectionOptions.define(
       field: "phoneNumber",
       required: [true, "The phoneNumber is required"],
     },
-    password: {
-      type: DataTypes.STRING,
-      field: "password",
-      required: [true, "Password is required"],
-    },
     img: {
       type: DataTypes.STRING,
       field: "img",
-      default: "No image",
     },
     state: {
       type: DataTypes.BOOLEAN,
@@ -52,8 +46,8 @@ const UserSchema = dbConnectionOptions.define(
     },
   },
   {
-    tableName: "user",
+    tableName: "userGoogle",
   }
 );
 
-module.exports = UserSchema;
+module.exports = UserGoogleSchema;
