@@ -22,20 +22,19 @@ router.post('/validateEmail', [
     sharedValidators.validateErrorFields
 ], authController.validateEmail);
 
-// ACA QUEDAMOS ******+
+router.post('/changePassword', [
+    authMiddleware.checkChangePassword(),
+    sharedValidators.validateErrorFields
+], authController.changePassword);
+
 router.post('/createCode', [
     authMiddleware.checkCreateCode(),
     sharedValidators.validateErrorFields
-], authController.createCode)
+], authController.createCode);
 
 router.post('/validateCode', [
     authMiddleware.checkValidateCode(),
     sharedValidators.validateErrorFields
 ], authController.validateCode);
-
-router.post('/changePassword', [
-    authMiddleware.checkChangePassword(),
-    sharedValidators.validateErrorFields
-], authController.changePassword);
 
 module.exports = router;

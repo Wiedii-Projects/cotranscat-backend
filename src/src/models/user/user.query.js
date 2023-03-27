@@ -79,11 +79,10 @@ module.exports = {
         }
     },
     createNewUserQuery: async (user) => {
-        const { name, lastName, email, phoneNumber, password, role } = user;
+        const { name, lastName, email, phoneNumber, password, role, img } = user;
         try {
             return await User.findOrCreate({
-                where: { name, lastName, email, password, phoneNumber, role },
-                defaults: { google: false, state: true, img: "" }
+                where: { name, lastName, email, password, phoneNumber, role, img }
             });
         } catch {
             throw errorsConst.aggregateErrorsApp.errorCreateUser

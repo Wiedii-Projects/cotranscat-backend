@@ -16,25 +16,25 @@
       "code": "AU0004",
       "message": "User does not exist."
     },
-    "userRemoved": {
+    "": {
       "code": "AU0005",
-      "message": "User has been removed."
+      "message": ""
     },
-    "somethingWentWrong": {
+    "": {
       "code": "AU0006",
-      "message": "Something went wrong."
+      "message": ""
     },
-    "tokenNotValidate": {
+    "": {
       "code": "AU0007",
-      "message": "Token could not validate."
+      "message": ""
     },
-    "googleToken": {
+    "": {
       "code": "AU0008",
-      "message": "Google token is required."
+      "message": ""
     },
-    "emailExist": {
+    "": {
       "code": "AU0009",
-      "message": "Email is not registered."
+      "message": ""
     },
     "passwordConfirmRequired": {
       "code": "AU0010",
@@ -58,7 +58,7 @@
     },
     "idRequired": {
       "code": "AU0015",
-      "message": "UID is required."
+      "message": "ID is required."
     },
     "tokenInvalid": {
       "code": "AU0016",
@@ -66,9 +66,9 @@
     }
   },
   "userErrors": {
-    "roleRequired": {
+    "": {
       "code": "US0001",
-      "message": "The role is required"
+      "message": ""
     },
     "emailInUse": {
       "code": "US0002",
@@ -86,21 +86,21 @@
       "code": "US0005",
       "message": ""
     },
-    "invalidToken": {
+    "": {
       "code": "US0006",
-      "message": "The token is invalid."
+      "message": ""
     },
-    "allowedRoles": {
+    "": {
       "code": "US0007",
-      "message": "The service requires one of the following roles: "
+      "message": ""
     },
     "idRequired": {
       "code": "US0008",
       "message": "The ID is required."
     },
-    "userNoUpdated": {
+    "": {
       "code": "US0009",
-      "message": "Unable to update a user."
+      "message": ""
     },
     "noToken": {
       "code": "US0010",
@@ -110,9 +110,9 @@
       "code": "US0011",
       "message": "User does not exist."
     },
-    "verifyRole": {
+    "": {
       "code": "US0012",
-      "message": "To verify the role, the token must first be validated."
+      "message": ""
     },
     "lastNameRequired": {
       "code": "US0013",
@@ -146,9 +146,9 @@
       "message": "Something went wrong."
     },
 
-    "errorCreateRoleDefault": {
+    "": {
       "code": "RLLE_002",
-      "message": "Default roles cannot be created."
+      "message": ""
     },
 
     "__comment_AUTH__": "__ AUTH These are API acronym comments__",
@@ -161,13 +161,13 @@
       "code": "AUTH_002",
       "message": "Something went wrong."
     },
-    "errorVerifyTokenGoogle": {
+    "": {
       "code": "AUTH_003",
-      "message": "Something went wrong."
+      "message": ""
     },
-    "errorValidateEmail": {
+    "": {
       "code": "AUTH_004",
-      "message": "Something went wrong."
+      "message": ""
     },
 
     "__comment_USRL__": "__ USRL (UserModel) These are API acronym comments__",
@@ -191,17 +191,17 @@
 
     "__comment_USRG__": "__ USRG (UserGoogleModel) These are API acronym comments__",
 
-    "errorGetAllUserGoogle": {
+    "": {
       "code": "USRG_001",
-      "message": "Something went wrong."
+      "message": ""
     },
-    "errorUpdateUserGoogle": {
+    "": {
       "code": "USRG_004",
-      "message": "Something went wrong."
+      "message": ""
     },
-    "errorCreateUserGoogle": {
+    "": {
       "code": "USRG_003",
-      "message": "Something went wrong."
+      "message": ""
     },
     
     "__comment_CODD__": "__ CODE (CodeSmsModel) These are API acronym comments__",

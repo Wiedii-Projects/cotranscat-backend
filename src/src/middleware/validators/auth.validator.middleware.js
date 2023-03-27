@@ -15,7 +15,7 @@ module.exports = {
             const { id } = jwt.verify(value, coreConfigurationsConst.privateKey);
             if (id) {
                 const [ validateUser ] = await userQuery.findUserQuery({
-                    where: { id }
+                    where: { id, state: true }
                 });
                 req.body.user = validateUser;  
                 req.body.isValidToken = validateUser? true:false;

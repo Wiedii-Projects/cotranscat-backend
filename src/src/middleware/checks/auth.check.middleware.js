@@ -1,6 +1,9 @@
 // Constants
 const { errorsConst } = require('../../constants/index.constants');
 
+// Middleware
+const sharedMiddleware = require('./shared.check.middleware')
+
 // Libraries
 const { check } = require('express-validator');
 
@@ -23,7 +26,7 @@ module.exports = {
             check('email')
                 .custom((value, { req }) => 
                     userValidators.validateGetUser({ 
-                        where: { email: value }, 
+                        where: { email: value, state: true }, 
                         attributes: [  'id', 'name', 'lastName', 'email', 'phoneNumber', 'state', 'img', 'google', 'password' ] 
                     }, req)),
             check('user', new ErrorModel(errorsConst.userErrors.userNotExist))
@@ -38,45 +41,38 @@ module.exports = {
         return [
             check('email', new ErrorModel(errorsConst.authErrors.emailRequired)).isEmail(),
             check('email')
-                .custom((value, { req }) => userValidators.validateGetUser({ where: { email: value }}, req))
+                .custom((value, { req }) => userValidators.validateGetUser({ where: { email: value, state: true }}, req))
         ]
     },
     checkChangePassword: () => {
         return [
+            ...sharedMiddleware.checkJwt(),
             check('password', new ErrorModel(errorsConst.authErrors.passwordRequired)).isString(),
+            check('passwordConfirm', new ErrorModel(errorsConst.authErrors.passwordConfirmRequired)).isString(),
+            check('password', new ErrorModel(errorsConst.authErrors.passwordNotMatch))
+                .custom((value, { req }) => value === req.body.passwordConfirm),
             check('password')
                 .custom((value, { req }) => userValidators.validatePasswordRules(value, req)),
             check('isValidPassword', new ErrorModel(errorsConst.authErrors.validatePassword))
-                .custom((value) => value ? true : false),
-
-            check('passwordConfirm', new ErrorModel(errorsConst.authErrors.passwordConfirmRequired)).isString(),
-            check('passwordConfirm')
-                .custom((value, { req }) => userValidators.validatePasswordRules(value, req)),
-            check('isValidPassword', new ErrorModel(errorsConst.authErrors.validatePassword))
-                .custom((value) => value ? true : false),
-            check('password', new ErrorModel(errorsConst.authErrors.passwordNotMatch))
-                .custom((value, { req }) => value === req.body.passwordConfirm)
+                .custom((value) => value ? true : false)
+            
         ];
     },
     checkCreateCode: () => {
         return [
             check('email', new ErrorModel(errorsConst.authErrors.emailRequired)).isEmail(),
             check('email')
-                .custom((value, { req }) => userValidators.validateGetUser({ where: { email: value }}, req)),
+                .custom((value, { req }) => userValidators.validateGetUser({ where: { email: value, state: true }}, req)),
             check('user', new ErrorModel(errorsConst.userErrors.userNotExist))
                 .custom((value) => value? true : false),
         ];
     },
     checkValidateCode: () => {
         return [
-            check('code', new ErrorModel(errorsConst.authErrors.codeRequired)).isString(),
+            check('code', new ErrorModel(errorsConst.authErrors.codeRequired)).isInt(),
             check('id', new ErrorModel(errorsConst.authErrors.idRequired)).isInt(),
-            check('id')
-                .custom((value, { req }) => userValidators.validateUserByID(value, req)),
-            check('user', new ErrorModel(errorsConst.authErrors.userNotExist))
-                .custom((value) => value ? true : false),
             check('code')
-                .custom((value, { req }) => codeValidators.validateCode(value, req)),
+                .custom((value, { req }) => codeValidators.validateCode({ code: value, userCode: req.body.id }, req)),
             check('validCode', new ErrorModel(errorsConst.authErrors.codeNotValid))
                 .custom((value) => value ? true : false)
         ];

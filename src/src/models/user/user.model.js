@@ -38,17 +38,17 @@ const UserSchema = dbConnectionOptions.define(
     img: {
       type: DataTypes.STRING,
       field: "img",
-      default: "No image",
+      defaultValue: "",
     },
     state: {
       type: DataTypes.BOOLEAN,
       field: "state",
-      default: true,
+      defaultValue: true,
     },
     google: {
       type: DataTypes.BOOLEAN,
       field: "google",
-      default: false,
+      defaultValue: false,
     },
   },
   {

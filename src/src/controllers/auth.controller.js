@@ -23,33 +23,32 @@ module.exports = {
         const { user } = req.body;
         return responseHelpers.responseSuccess(res, user?.state ? true : false);
     },
+    changePassword: async (req, res) => {
+        const { password, user } = req.body;
+
+        try {
+            const passwordEncrypt = await authHelpers.encryptPasswordHelper(password);
+            await userQuery.updateUserQuery({ id: user.id }, { password: passwordEncrypt });
+            return responseHelpers.responseSuccess(res, null);
+        } catch (error) {
+            return responseHelpers.responseError(res, 500, error);
+        }
+    },
     createCode: async (req, res) => {
         const { user } = req.body;
         try {
-            await codeSMSQuery.deleteAllCodeQuery( user.id )
-            const code = await codeSmsHelpers.createSMSHelper(user.phoneNumber)
-            await codeSMSQuery.createCodeIDQuery(code, user.id)
-            return responseHelpers.responseSuccess(res, null);
+            await codeSMSQuery.deleteAllCodeQuery( { userCode: user.id } );
+            const code = await codeSmsHelpers.createSMSHelper(user.phoneNumber);
+            await codeSMSQuery.createCodeIDQuery({ code, userCode: user.id })
+            return responseHelpers.responseSuccess(res, { code, id: user.id });
         } catch (error) {
             return responseHelpers.responseError(res, 500, error);
         }
     },
     validateCode: async (req, res) => {
-        const { id } = req.body;
-
+        const { userCode } = req.body.validCode;
         try {
-            await codeSMSQuery.deleteAllCodeQuery(id);
-            return responseHelpers.responseSuccess(res, null);
-        } catch (error) {
-            return responseHelpers.responseError(res, 500, error);
-        }
-    },
-    changePassword: async (req, res) => {
-        const { password, id } = req.body;
-
-        try {
-            const passwordEncrypt = await authHelpers.encryptPasswordHelper(password);
-            await userQuery.updateUserQuery(id, { password: passwordEncrypt });
+            await codeSMSQuery.deleteAllCodeQuery( { userCode } );
             return responseHelpers.responseSuccess(res, null);
         } catch (error) {
             return responseHelpers.responseError(res, 500, error);
