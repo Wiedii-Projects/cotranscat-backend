@@ -12,8 +12,9 @@ module.exports = {
         const { user } = req.body;
 
         try {
+            delete user.password;
             const token = await authHelpers.generateJWTHelper(user.id);
-            return responseHelpers.responseSuccess(res, { user, token });
+            return responseHelpers.responseSuccess(res, { ...user, token });
         } catch (error) {
             return responseHelpers.responseError(res, 500, error);
         }
@@ -29,15 +30,11 @@ module.exports = {
         }
     },
     validateEmail: async (req, res) => {
-        const { user, userGoogle } = req.body;
-
-        if (!userGoogle && !user) return responseHelpers.responseError(res, 500, errorsConst.aggregateErrorsApp.errorValidateEmail);
-        
-        return responseHelpers.responseSuccess(res, userGoogle || user);
+        const { user } = req.body;
+        return responseHelpers.responseSuccess(res, user?.state ? true : false);
     },
     createCode: async (req, res) => {
         const { user } = req.body;
-
         try {
             await codeSMSQuery.deleteAllCodeQuery( user.id )
             const code = await codeSmsHelpers.createSMSHelper(user.phoneNumber)
@@ -62,7 +59,7 @@ module.exports = {
 
         try {
             const passwordEncrypt = await authHelpers.encryptPasswordHelper(password);
-            await userQuery.updateDataUserQuery(id, { password: passwordEncrypt });
+            await userQuery.updateUserQuery(id, { password: passwordEncrypt });
             return responseHelpers.responseSuccess(res, null);
         } catch (error) {
             return responseHelpers.responseError(res, 500, error);

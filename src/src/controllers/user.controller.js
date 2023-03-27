@@ -1,20 +1,19 @@
 // Constants
-const { errorsConst } = require('../constants/index.constants');
+const { errorsConst, roleConst } = require('../constants/index.constants');
 
 // Helpers
 const { authHelpers, userHelpers, responseHelpers } = require('../helpers/index.helpers')
 
 // Models - Queries
-const { userQuery, userGoogleQuery } = require('../models/index.queries');
+const { userQuery, userGoogleQuery, roleQuery } = require('../models/index.queries');
 
 module.exports = {
     getUsers: async (req, res) => {
-        const { limit = 10, since = 0 } = req.query;
+        const { limit = 10, offset = 0 } = req.query;
 
         try {
-            const { totalUsers, users } = await userQuery.getAllUsersQuery(limit, since, { state: true });
-            const { totalUserGoogle, usersGoogle } = await userGoogleQuery.getAllUserGoogleQuery(limit, since, { state: true });
-            return responseHelpers.responseSuccess(res, { count: (totalUsers || 0) + (totalUserGoogle || 0), users, usersGoogle });
+            const { count, users } = await userQuery.findAndCountUserQuery({ where: { state: true }, limit, offset})
+            return responseHelpers.responseSuccess(res, { count, users });
         } catch (error) {
             return responseHelpers.responseError(res, 500, error);
         }
@@ -22,48 +21,41 @@ module.exports = {
     getUser: async (req, res) => {
         const { user } = req.body;
 
-        if (!user) {
-            return responseHelpers.responseError(res, 500, errorsConst.aggregateErrorsApp.errorGetUser);
-        }
-
-        return responseHelpers.responseSuccess(res, { user });
-
+        return user
+            ? responseHelpers.responseSuccess(res, user)
+            :responseHelpers.responseError(res, 500, errorsConst.aggregateErrorsApp.errorGetUser);
     },
     createUser: async (req, res) => {
         const { password } = req.body;
+
         try {
+            const [ role ] = await roleQuery.findRoleQuery({ role: roleConst.USER_ROLE });
             const passwordEncrypt = await authHelpers.encryptPasswordHelper(password);
-            req.body.password = passwordEncrypt
-            await userHelpers.createUserModelUserHelper(req);
+            const user = userHelpers.extractUserDataHelper({ ...req.body, password: passwordEncrypt, role: role.id });
+            await userHelpers.createUserModelUserHelper(user);
             return responseHelpers.responseSuccess(res, null);
         } catch (error) {
             return responseHelpers.responseError(res, 500, error);
         }
     },
     updateUser: async (req, res) => {
-        const {id } = req.params
-        const dataUpdate = userHelpers.extractUserDataHelper(req.body)
-
+        const { user } = req.body;
+        const dataUpdate = userHelpers.extractUserDataHelper(req.body);
         try {
             dataUpdate.password = dataUpdate.password
                 ? await authHelpers.encryptPasswordHelper(dataUpdate.password)
                 : dataUpdate.password;
-            const userUpdate = await userQuery.updateDataUserQuery(id, dataUpdate);
-            const userGoogleUpdate = await userGoogleQuery.updateDataUserGoogleQuery(id, dataUpdate);
-            return userUpdate || userGoogleUpdate
-                ? responseHelpers.responseSuccess(res, null)
-                : responseHelpers.responseError(res, 400, errorsConst.userErrors.userNoUpdated);
+            await userQuery.updateUserQuery({ id: user.id }, dataUpdate);
+            return responseHelpers.responseSuccess(res, null);
         } catch (error) {
             return responseHelpers.responseError(res, 500, error);
         }
     },
     deleteUser: async (req, res) => {
         const { user } = req.body;
-
         try {
-            const userUpdate = await userQuery.updateDataUserQuery(user.id, { state: false });
-            const userGoogleUpdate = await userGoogleQuery.updateDataUserGoogleQuery(user.id, { state: false });
-            return userUpdate || userGoogleUpdate
+            const [ update ] = await userQuery.updateUserQuery({ id: user.id }, { state: false });
+            return update
                 ? responseHelpers.responseSuccess(res, null)
                 : responseHelpers.responseError(res, 400, errorsConst.userErrors.userNoDelete);
         } catch (error) {

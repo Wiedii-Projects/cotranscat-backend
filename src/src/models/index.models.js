@@ -6,12 +6,12 @@ const CodeSms = require("./code-sms/code-sms.model");
 // Relationships BD
 
 // Relationship User-Role
-User.belongsTo(Role, { foreignKey: { name: "role", allowNull: false } });
-Role.hasMany(User, { foreignKey: { name: "role", allowNull: false } });
+User.belongsTo(Role, { as: 'userRole', foreignKey: { name: "role", allowNull: false } });
+Role.hasMany(User, { as: 'userRole', foreignKey: { name: "role", allowNull: false } });
 
 // Relationship UserGoogle-Role
-UserGoogle.belongsTo(Role, { foreignKey: { name: "role", allowNull: false } });
-Role.hasMany(UserGoogle, { foreignKey: { name: "role", allowNull: false } });
+UserGoogle.belongsTo(Role, { as: 'userGoogleRole', foreignKey: { name: "role", allowNull: false } });
+Role.hasMany(UserGoogle, { as: 'userGoogleRole', foreignKey: { name: "role", allowNull: false } });
 
 // Relationship CodeSms-User
 CodeSms.belongsTo(User, { foreignKey: { name: "userCode", allowNull: false } });

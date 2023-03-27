@@ -24,7 +24,8 @@ module.exports = {
       await CodeSms.destroy({
         where: { userCode },
       });
-    } catch {
+    } catch (e){
+      console.log(e)
       throw errorsConst.aggregateErrorsApp.errorDeleteAllCode;
     }
   },

@@ -2,9 +2,83 @@
 const { errorsConst } = require('../../constants/index.constants');
 
 // Models
-const { UserGoogle } = require('../index.models')
+const { UserGoogle, Role } = require('../index.models')
 
 module.exports = {
+    findUserGoogleQuery: async (query) => {
+        try {
+            let {
+                where, 
+                attributes = [ 'id', 'name', 'lastName', 'email', 'phoneNumber', 'state', 'img', 'google'], 
+                group, 
+                limit, 
+                offset, 
+                order
+            } = query;
+            return await UserGoogle.findAll({ 
+                where, 
+                attributes, 
+                raw: true,
+                include: [{
+                    model: Role,
+                    as: 'userGoogleRole'
+                  }],
+                group,
+                order,
+                limit, 
+                offset
+                }).then( users => {
+                    const usersWithRole = users.map(user => {
+                        user.role = {};
+                        user.role['id'] = user['userGoogleRole.id'];
+                        user.role['role'] = user['userGoogleRole.role'];
+                        delete user['userGoogleRole.id'];
+                        delete user['userGoogleRole.role'];
+                        return user;
+                    });
+                    return usersWithRole;
+                });
+        } catch (e){
+            console.log(e)
+            throw errorsConst.aggregateErrorsApp.errorGetAllUser
+        }
+    },
+    findAndCountUserGoogleQuery: async (query) => {
+        try {
+            let {
+                where, 
+                attributes = [ 'id', 'name', 'lastName', 'email', 'phoneNumber', 'state', 'img', 'google'], 
+                group, 
+                limit, 
+                offset, 
+                order
+            } = query;
+            const { rows, count: countUserGoogle } = await UserGoogle.findAndCountAll({
+                where,
+                attributes,
+                raw: true,
+                include: [{
+                    model: Role,
+                    as: 'userGoogleRole'
+                  }],
+                group,
+                order,
+                offset: Number(offset),
+                limit: Number(limit)
+            });
+            const usersGoogle = rows.map( (user) => {
+                user.role = {};
+                user.role['id'] = user['userGoogleRole.id'];
+                user.role['role'] = user['userGoogleRole.role'];
+                delete user['userGoogleRole.id'];
+                delete user['userGoogleRole.role'];
+                return user;
+            });
+            return { usersGoogle, countUserGoogle }; 
+        } catch {
+            throw errorsConst.aggregateErrorsApp.errorGetAllUserGoogle
+        }
+    },
     createUserQuery: async (data) => {
         try {
             const userGoogle = await UserGoogle.findByPk(id);
@@ -14,51 +88,11 @@ module.exports = {
             throw errorsConst.aggregateErrorsApp.errorCreateUserGoogle
         }
     },
-    getUserGoogleQuery: async (email) => {
+    updateDataUserGoogleQuery: async (where, update) => {
         try {
-            return await UserGoogle.findOne({ where: { email, google: 0  } });
-        } catch {
-            return false;
-        }
-    },
-    getAllUserGoogleQuery: async (limit, offset, query) => {
-        try {
-            const countsUser = await UserGoogle.findAndCountAll({
-                where: query,
-                offset: Number(offset),
-                limit: Number(limit)
+            return await UserGoogle.update(update, {
+                where
             });
-    
-            return {
-                totalUsers: countsUser.count,
-                users: countsUser.rows
-            }
-        } catch {
-            throw errorsConst.aggregateErrorsApp.errorGetAllUserGoogle
-        }
-    },
-    emailGoogleExistsQuery: async (email = '') => {
-        try {
-            return await UserGoogle.findOne({ where: { email } });
-        } catch {
-            return false
-        }
-    },
-    getUserGoogleIDQuery: async (id) => {
-        try {
-            const user = await UserGoogle.findAll({ where: { state: true, id: id, google: 0 } });
-            if (user.length === 0) throw false
-            return { ...user[0].dataValues}
-        } catch {
-            return false;
-        }
-    },
-    updateDataUserGoogleQuery: async (id, data) => {
-        try {
-            await UserGoogle.update(data, {
-                where: { id }
-              });
-            return true
         } catch {
             throw errorsConst.aggregateErrorsApp.errorUpdateUserGoogle
         }

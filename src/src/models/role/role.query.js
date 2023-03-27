@@ -5,13 +5,11 @@ const { errorsConst } = require('../../constants/index.constants');
 const { Role } = require('./../index.models');
 
 module.exports = {
-    isValidRoleQuery: async (role = '') => {
+    findRoleQuery: async ( where ) => {
         try {
-            const roleExists = await Role.findOne({ where: { role } });
-            if (!roleExists) throw new MessageErrors(errorsConst.roleErrors.unregisteredRoleDB);
-            return roleExists
+            return await Role.findAll({ where, raw: true });
         } catch {
             throw new MessageErrors(errorsConst.aggregateErrorsApp.errorGetRoleByName);
         }
-    },
+    }
 }

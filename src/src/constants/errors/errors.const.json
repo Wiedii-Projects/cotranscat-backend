@@ -136,10 +136,6 @@
     }
   },
   "roleErrors":{
-    "unregisteredRoleDB": {
-      "code": "RL0005",
-      "message": "The role does not exist in the database."
-    }
   },
   "aggregateErrorsApp": {
 

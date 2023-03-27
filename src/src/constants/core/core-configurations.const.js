@@ -39,7 +39,7 @@ const option = {
   define: {
     timestamps: false,
     freezeTableName: true,
-    underscored: false,
+    underscored: false
   },
   config: {
     path: "/src/src/config/config.json",

@@ -16,7 +16,7 @@ const RoleSchema = dbConnectionOptions.define(
     },
   },
   {
-    tableName: "role",
+    tableName: "role"
   }
 );
 
