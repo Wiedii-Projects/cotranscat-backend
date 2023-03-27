@@ -5,7 +5,7 @@ const { errorsConst, roleConst } = require('../constants/index.constants');
 const { authHelpers, userHelpers, responseHelpers } = require('../helpers/index.helpers')
 
 // Models - Queries
-const { userQuery, userGoogleQuery, roleQuery } = require('../models/index.queries');
+const { userQuery, roleQuery } = require('../models/index.queries');
 
 module.exports = {
     getUsers: async (req, res) => {

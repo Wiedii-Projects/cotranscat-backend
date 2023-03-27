@@ -17,11 +17,6 @@ router.post('/login', [
     sharedValidators.validateErrorFields
 ], authController.login);
 
-router.post('/google', [
-    authMiddleware.checkGoogleSignIn(),
-    sharedValidators.validateErrorFields
-], authController.googleSignIn);
-
 router.post('/validateEmail', [
     authMiddleware.checkValidateEmail(),
     sharedValidators.validateErrorFields

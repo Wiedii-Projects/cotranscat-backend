@@ -19,16 +19,6 @@ module.exports = {
             return responseHelpers.responseError(res, 500, error);
         }
     },
-    googleSignIn: async (req, res) => {
-        const { user } = req.body;
-
-        try {
-            const token = await authHelpers.generateJWTHelper(user.id);
-            return responseHelpers.responseSuccess(res, { user, token });
-        } catch (error) {
-            return responseHelpers.responseError(res, 500, error);
-        }
-    },
     validateEmail: async (req, res) => {
         const { user } = req.body;
         return responseHelpers.responseSuccess(res, user?.state ? true : false);

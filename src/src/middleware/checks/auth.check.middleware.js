@@ -38,8 +38,6 @@ module.exports = {
         return [
             check('email', new ErrorModel(errorsConst.authErrors.emailRequired)).isEmail(),
             check('email')
-                .custom((value, { req }) => userValidators.validateGetUserGoogle({ where: { email: value }}, req)),
-            check('email')
                 .custom((value, { req }) => userValidators.validateGetUser({ where: { email: value }}, req))
         ]
     },
@@ -60,26 +58,9 @@ module.exports = {
                 .custom((value, { req }) => value === req.body.passwordConfirm)
         ];
     },
-    checkGoogleSignIn: () => {
-        return [
-            check('id_token', new ErrorModel(errorsConst.authErrors.googleToken)).isString(),
-            check('id_token')
-                .custom((value, { req }) => userValidators.validUserGoogle(value, req)),
-            check('noVerify', new ErrorModel(errorsConst.authErrors.googleToken))
-                .custom((value) => value ? true : false),
-            check('email')
-                .custom((value, { req }) => userValidators.validateGetUserGoogle({ where: { email: value }}, req)),
-            check('userGoogle', new ErrorModel(errorsConst.authErrors.incorrectCredentials))
-                .custom((value, { req }) => value ? true : userValidators.validateProcessCreateUserGoogle(req)),
-            check('user', new ErrorModel(errorsConst.authErrors.userRemoved))
-                .custom((value) => value ? true : false),
-        ];
-    },
     checkCreateCode: () => {
         return [
             check('email', new ErrorModel(errorsConst.authErrors.emailRequired)).isEmail(),
-            check('email')
-                .custom((value, { req }) => userValidators.validateGetUserGoogle({ where: { email: value }}, req)),
             check('email')
                 .custom((value, { req }) => userValidators.validateGetUser({ where: { email: value }}, req)),
             check('user', new ErrorModel(errorsConst.userErrors.userNotExist))

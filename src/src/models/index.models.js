@@ -1,6 +1,5 @@
 const User = require("./user/user.model");
 const Role = require("./role/role.model");
-const UserGoogle = require("./user-google/user-google.model");
 const CodeSms = require("./code-sms/code-sms.model");
 
 // Relationships BD
@@ -8,10 +7,6 @@ const CodeSms = require("./code-sms/code-sms.model");
 // Relationship User-Role
 User.belongsTo(Role, { as: 'userRole', foreignKey: { name: "role", allowNull: false } });
 Role.hasMany(User, { as: 'userRole', foreignKey: { name: "role", allowNull: false } });
-
-// Relationship UserGoogle-Role
-UserGoogle.belongsTo(Role, { as: 'userGoogleRole', foreignKey: { name: "role", allowNull: false } });
-Role.hasMany(UserGoogle, { as: 'userGoogleRole', foreignKey: { name: "role", allowNull: false } });
 
 // Relationship CodeSms-User
 CodeSms.belongsTo(User, { foreignKey: { name: "userCode", allowNull: false } });
@@ -24,6 +19,5 @@ module.exports = {
   // Models
   User,
   Role,
-  UserGoogle,
   CodeSms,
 };

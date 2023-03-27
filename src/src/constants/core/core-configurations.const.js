@@ -19,7 +19,6 @@ const serverHost = process.env.SERVER_HOST || "localhost";
 const serverPort = process.env.SERVER_PORT || 8082;
 
 const privateKey = process.env.SECRET_OR_PRIVATE_KEY;
-const googleClientId = process.env.GOOGLE_CLIENT_ID;
 
 const dbNameServer = process.env.DB_NAME_SERVER;
 const dbHost = process.env.DB_HOST || "localhost";
@@ -60,7 +59,6 @@ module.exports = {
   serverPort,
   dbHost,
   privateKey,
-  googleClientId,
   dbConnectionOptions,
   envFound,
   accountSid,
