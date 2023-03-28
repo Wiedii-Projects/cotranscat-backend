@@ -2,22 +2,24 @@
 const { userQuery } = require('./../models/index.queries')
 
 module.exports = {
-    createUserModelUserHelper: async (req) => {
-        const { name, lastName, email, password, phoneNumber, role } = req.body;
+    createUserModelUserHelper: async (data) => {
         try {
-            return await userQuery.createNewUserQuery({ name, lastName, email, password, phoneNumber, role });
+            return await userQuery.createNewUserQuery(data);
         } catch (error) {
             throw error
         }
     },
-    extractUserDataHelper: (data) => {
-        const {
-            id, password, name, email, google, lastName, socialStratification, identificationNumber,
-            dateBirth, phoneNumber, ...body
-        } = data;
-        return {
-            id, password, email, google, name, lastName, socialStratification, identificationNumber,
-            dateBirth, phoneNumber
-        }
+    extractUserDataHelper: (user) => {
+        const { 
+            name = undefined, 
+            lastName = undefined, 
+            email = undefined, 
+            phoneNumber = undefined, 
+            password = undefined, 
+            img = undefined, 
+            google = false, 
+            role = undefined 
+        } = user;
+        return { name, lastName, email, phoneNumber, password, img, google, role }
     }
 }

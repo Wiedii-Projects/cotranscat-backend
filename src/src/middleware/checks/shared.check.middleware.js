@@ -19,7 +19,7 @@ module.exports = {
             check('isValidToken', new ErrorModel(errorsConst.authErrors.tokenInvalid))
                 .custom((value) => value ? true : false),
             check('user', new ErrorModel(errorsConst.userErrors.userNotExist))
-                .custom((value) => value ? true : false),
+                .custom((value) => value.state ? true : false),
             sharedValidators.validateErrorFields
         ];
     }

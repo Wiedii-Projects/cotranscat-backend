@@ -2,74 +2,97 @@
 const { errorsConst } = require('../../constants/index.constants')
 
 // Models
-const { User } = require('./../index.models')
+const { User, Role } = require('./../index.models')
 
 module.exports = {
-    getUserQuery: async (email) => {
+    findAndCountUserQuery: async (query) => {
         try {
-            return await User.findOne({ where: { email, google: 0  } });
-        } catch {
-            return false;
-        }
-    },
-    getUserIDQuery: async (id) => {
-        try {
-            const user = await User.findAll({ where: { state: true, id: id } });
-            if (user.length === 0) throw false
-            return { ...user[0].dataValues}
-        } catch {
-            return false;
-        }
-    },
-    getUserIdStateQuery: async (id) => {
-        try {
-            return await User.findOne({ where: { state: true, id: id, google: 0  } });
-        } catch {
-            return false;
-        }
-    },
-    getAllUsersQuery: async (limit, offset, query) => {
-        try {
-            const countsUser = await User.findAndCountAll({
-                where: query,
-                offset: Number(offset),
-                limit: Number(limit)
+            let {
+                where, 
+                attributes = [ 'id', 'name', 'lastName', 'email', 'phoneNumber', 'state', 'img', 'google'], 
+                group, 
+                limit, 
+                offset, 
+                order
+            } = query;
+            const { rows, count } = await User.findAndCountAll({
+                where,
+                attributes,
+                raw: true,
+                include: [{
+                    model: Role,
+                    as: 'userRole'
+                  }],
+                group,
+                order,
+                offset,
+                limit
             });
-
-            return {
-                totalUsers: countsUser.count,
-                users: countsUser.rows
-            }
-
+            const users = rows.map( (user) => {
+                user.role = {};
+                user.role['id'] = user['userRole.id'];
+                user.role['role'] = user['userRole.role'];
+                delete user['userRole.id'];
+                delete user['userRole.role'];
+                return user;
+            });
+            return { users, count }; 
+        } catch {
+            throw errorsConst.aggregateErrorsApp.errorGetAllUser
+        }
+    },
+    findUserQuery: async (query) => {
+        try {
+            const {
+                where, 
+                attributes = [ 'id', 'name', 'lastName', 'email', 'phoneNumber', 'state', 'img', 'google'], 
+                group, 
+                limit, 
+                offset, 
+                order
+            } = query;
+            return await User.findAll({ 
+                where, 
+                attributes, 
+                raw: true,
+                include: [{
+                    model: Role,
+                    as: 'userRole'
+                  }],
+                group,
+                order,
+                limit, 
+                offset
+                }).then( users => {
+                    const usersWithRole = users.map(user => {
+                        user.role = {};
+                        user.role['id'] = user['userRole.id'];
+                        user.role['role'] = user['userRole.role'];
+                        delete user['userRole.id'];
+                        delete user['userRole.role'];
+                        return user;
+                    });
+                    return usersWithRole;
+                });
         } catch {
             throw errorsConst.aggregateErrorsApp.errorGetAllUser
         }
     },
     createNewUserQuery: async (user) => {
-        const { name, lastName, email, phoneNumber, password, role } = user
-
+        const { name, lastName, email, phoneNumber, password, role, img } = user;
         try {
-            await User.findOrCreate({
-                where: { name, lastName, email, password, phoneNumber, role },
-                defaults: { google: false, state: true, img: "" }
+            return await User.findOrCreate({
+                where: { name, lastName, email, password, phoneNumber, role, img }
             });
         } catch {
             throw errorsConst.aggregateErrorsApp.errorCreateUser
         }
     },
-    emailExistsQuery: async (email = '') => {
+    updateUserQuery: async (where, update) => {
         try {
-            return await User.findOne({ where: { email } });
-        } catch  {
-            return false
-        }
-    },
-    updateDataUserQuery: async (id, data) => {
-        try {
-            await User.update(data, {
-                where: { id }
+            return await User.update(update, {
+                where
               });
-            return true
         } catch {
             throw errorsConst.aggregateErrorsApp.errorUpdateUser
         }

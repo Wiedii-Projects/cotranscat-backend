@@ -13,16 +13,16 @@ module.exports = {
 
         try {
             const { id } = jwt.verify(value, coreConfigurationsConst.privateKey);
-            if (!id) {
-                req.body.isValidToken = false
-                req.body.user = false
-            } else {
-                req.body.isValidToken = true
-                req.body.user = await userQuery.getUserIDQuery(id);
+            if (id) {
+                const [ validateUser ] = await userQuery.findUserQuery({
+                    where: { id, state: true }
+                });
+                req.body.user = validateUser;  
+                req.body.isValidToken = validateUser? true:false;
             }
         } catch {
             req.body.user = false;
-            req.body.isValidToken = false
+            req.body.isValidToken = false;
         }
     },
     validatePassword: async (value, password, req) => {

@@ -12,7 +12,10 @@ const { sharedValidators } = require('../middleware/index.validators.middleware'
 
 const router = Router();
 
-router.get('/', userController.getUsers);
+router.get('/', [
+    userMiddleware.checkAllGetUser(),
+    sharedValidators.validateErrorFields
+],userController.getUsers);
 
 router.get('/:id', [
     userMiddleware.checkGetUser(),
@@ -24,7 +27,12 @@ router.post('/', [
     sharedValidators.validateErrorFields
 ], userController.createUser);
 
-router.put('/:id', [
+router.post('/createAdmin', [
+    userMiddleware.checkCreateAdminUser(),
+    sharedValidators.validateErrorFields
+], userController.createAdminUser);
+
+router.put('/', [
     userMiddleware.checkUpdateUser(),
     sharedValidators.validateErrorFields
 ], userController.updateUser);

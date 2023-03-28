@@ -17,29 +17,24 @@ router.post('/login', [
     sharedValidators.validateErrorFields
 ], authController.login);
 
-router.post('/google', [
-    authMiddleware.checkGoogleSignIn(),
-    sharedValidators.validateErrorFields
-], authController.googleSignIn);
-
 router.post('/validateEmail', [
     authMiddleware.checkValidateEmail(),
     sharedValidators.validateErrorFields
 ], authController.validateEmail);
 
+router.post('/changePassword', [
+    authMiddleware.checkChangePassword(),
+    sharedValidators.validateErrorFields
+], authController.changePassword);
+
 router.post('/createCode', [
     authMiddleware.checkCreateCode(),
     sharedValidators.validateErrorFields
-], authController.createCode)
+], authController.createCode);
 
 router.post('/validateCode', [
     authMiddleware.checkValidateCode(),
     sharedValidators.validateErrorFields
 ], authController.validateCode);
-
-router.post('/changePassword', [
-    authMiddleware.checkChangePassword(),
-    sharedValidators.validateErrorFields
-], authController.changePassword);
 
 module.exports = router;

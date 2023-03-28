@@ -5,24 +5,32 @@ const { errorsConst } = require("../../constants/index.constants");
 const { CodeSms } = require("../index.models");
 
 module.exports = {
-  createCodeIDQuery: async (code, userId) => {
+  createCodeIDQuery: async (codeSMS) => {
     try {
-      await CodeSms.create({ code, userCode: userId });
+      await CodeSms.create(codeSMS);
     } catch {
       throw errorsConst.aggregateErrorsApp.errorCreateCode;
     }
   },
-  getCodeQuery: async (code, id) => {
+  findCodeQuery: async (query) => {
     try {
-      return await CodeSms.findOne({ where: { code: code, userCode: id } });
+      const {
+        where, 
+        attributes = [ 'id', 'code', 'userCode']
+    } = query;
+      return await CodeSms.findOne({ 
+          where, 
+          raw: true,
+          attributes, 
+       });
     } catch {
       return false;
     }
   },
-  deleteAllCodeQuery: async (userCode) => {
+  deleteAllCodeQuery: async (where) => {
     try {
       await CodeSms.destroy({
-        where: { userCode },
+        where,
       });
     } catch {
       throw errorsConst.aggregateErrorsApp.errorDeleteAllCode;

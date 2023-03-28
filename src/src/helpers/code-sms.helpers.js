@@ -17,7 +17,7 @@ module.exports = {
                 body: `${codeSMSConst.SMS_CODE_MESSAGE} ${code}`,
                 from: coreConfigurationsConst.twilioNumber,
                 to: phoneNumber
-            });
+            }).catch( (error) => console.log(error));
             return code;
         } catch {
             throw errorsConst.aggregateErrorsApp.errorCreateCode
