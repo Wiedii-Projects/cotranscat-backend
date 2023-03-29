@@ -2,7 +2,7 @@
 const { errorsConst, roleConst } = require('../constants/index.constants');
 
 // Helpers
-const { authHelpers, userHelpers, responseHelpers } = require('../helpers/index.helpers')
+const { authHelpers, userHelpers, responseHelpers, sharedHelpers } = require('../helpers/index.helpers');
 
 // Models - Queries
 const { userQuery, roleQuery } = require('../models/index.queries');
@@ -55,10 +55,11 @@ module.exports = {
         const { user } = req.body;
         const dataUpdate = userHelpers.extractUserDataHelper(req.body);
         try {
+            const id = sharedHelpers.decryptIdDataBase(user.id);
             dataUpdate.password = dataUpdate.password
                 ? await authHelpers.encryptPasswordHelper(dataUpdate.password)
                 : dataUpdate.password;
-            await userQuery.updateUserQuery({ id: user.id }, dataUpdate);
+            await userQuery.updateUserQuery({ id }, dataUpdate);
             return responseHelpers.responseSuccess(res, null);
         } catch (error) {
             return responseHelpers.responseError(res, 500, error);
@@ -67,7 +68,8 @@ module.exports = {
     deleteUser: async (req, res) => {
         const { user } = req.body;
         try {
-            const [ update ] = await userQuery.updateUserQuery({ id: user.id }, { state: false });
+            const id = sharedHelpers.decryptIdDataBase(user.id);
+            const [ update ] = await userQuery.updateUserQuery({ id }, { state: false });
             return update
                 ? responseHelpers.responseSuccess(res, null)
                 : responseHelpers.responseError(res, 400, errorsConst.userErrors.userNoDelete);

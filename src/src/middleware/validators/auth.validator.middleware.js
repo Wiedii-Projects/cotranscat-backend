@@ -6,13 +6,17 @@ const bcryptjs = require("bcryptjs");
 const jwt = require('jsonwebtoken');
 
 // Queries
-const { userQuery } = require('./../../models/index.queries')
+const { userQuery } = require('./../../models/index.queries');
+
+//Helpers
+const { sharedHelpers } = require('../../helpers/index.helpers');
 
 module.exports = {
     validateJWT: async (value, req) => {
 
         try {
-            const { id } = jwt.verify(value, coreConfigurationsConst.privateKey);
+            const { id: uuid } = jwt.verify(value, coreConfigurationsConst.privateKey);
+            const id = sharedHelpers.decryptIdDataBase(uuid)
             if (id) {
                 const [ validateUser ] = await userQuery.findUserQuery({
                     where: { id, state: true }

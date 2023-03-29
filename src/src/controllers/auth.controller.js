@@ -2,7 +2,7 @@
 const { errorsConst } = require('../constants/index.constants');
 
 // Helpers
-const { authHelpers, responseHelpers, codeSmsHelpers } = require('../helpers/index.helpers')
+const { authHelpers, responseHelpers, codeSmsHelpers, sharedHelpers } = require('../helpers/index.helpers')
 
 // Models - Queries
 const { codeSMSQuery, userQuery } = require('../models/index.queries')
@@ -27,8 +27,9 @@ module.exports = {
         const { password, user } = req.body;
 
         try {
+            const id = sharedHelpers.decryptIdDataBase(user.id);
             const passwordEncrypt = await authHelpers.encryptPasswordHelper(password);
-            await userQuery.updateUserQuery({ id: user.id }, { password: passwordEncrypt });
+            await userQuery.updateUserQuery({ id }, { password: passwordEncrypt });
             return responseHelpers.responseSuccess(res, null);
         } catch (error) {
             return responseHelpers.responseError(res, 500, error);
@@ -37,9 +38,10 @@ module.exports = {
     createCode: async (req, res) => {
         const { user } = req.body;
         try {
-            await codeSMSQuery.deleteAllCodeQuery( { userCode: user.id } );
+            const id = sharedHelpers.decryptIdDataBase(user.id);
+            await codeSMSQuery.deleteAllCodeQuery( { userCode: id } );
             const code = await codeSmsHelpers.createSMSHelper(user.phoneNumber);
-            await codeSMSQuery.createCodeIDQuery({ code, userCode: user.id })
+            await codeSMSQuery.createCodeIDQuery({ code, userCode: id })
             return responseHelpers.responseSuccess(res, { code, id: user.id });
         } catch (error) {
             return responseHelpers.responseError(res, 500, error);

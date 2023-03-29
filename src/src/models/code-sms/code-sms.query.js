@@ -4,6 +4,9 @@ const { errorsConst } = require("../../constants/index.constants");
 // Models
 const { CodeSms } = require("../index.models");
 
+// Helpers
+const { encryptIdDataBase } = require('../../helpers/shared.helpers');
+
 module.exports = {
   createCodeIDQuery: async (codeSMS) => {
     try {
@@ -22,6 +25,9 @@ module.exports = {
           where, 
           raw: true,
           attributes, 
+       }).then( code => {
+          code.id = encryptIdDataBase(code.id)
+          return code
        });
     } catch {
       return false;
