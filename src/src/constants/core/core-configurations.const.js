@@ -31,6 +31,10 @@ const accountSid = process.env.TWILIO_ACCOUNT_SID;
 const authToken = process.env.TWILIO_AUTH_TOKEN;
 const twilioNumber = process.env.TWILIO_NUMBER;
 
+const algorithmEncrypt = process.env.ALGORITHM_ENCRYPT;
+const keyEncrypt = process.env.KEY_ENCRYPT;
+const ivEncrypt = process.env.IV_ENCRYPT;
+
 const option = {
   host: dbHost,
   dialect: dbNameServer,
@@ -64,4 +68,7 @@ module.exports = {
   accountSid,
   authToken,
   twilioNumber,
+  algorithmEncrypt,
+  keyEncrypt,
+  ivEncrypt
 };

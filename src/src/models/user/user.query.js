@@ -1,8 +1,11 @@
 // Constants
-const { errorsConst } = require('../../constants/index.constants')
+const { errorsConst } = require('../../constants/index.constants');
 
 // Models
-const { User, Role } = require('./../index.models')
+const { User, Role } = require('./../index.models');
+
+// Helpers
+const { encryptIdDataBase } = require('../../helpers/shared.helpers');
 
 module.exports = {
     findAndCountUserQuery: async (query) => {
@@ -30,10 +33,11 @@ module.exports = {
             });
             const users = rows.map( (user) => {
                 user.role = {};
-                user.role['id'] = user['userRole.id'];
+                user.role['id'] = encryptIdDataBase(user['userRole.id']);
                 user.role['role'] = user['userRole.role'];
                 delete user['userRole.id'];
                 delete user['userRole.role'];
+                user.id = encryptIdDataBase(user.id)
                 return user;
             });
             return { users, count }; 
@@ -64,12 +68,13 @@ module.exports = {
                 limit, 
                 offset
                 }).then( users => {
-                    const usersWithRole = users.map(user => {
+                    const usersWithRole = users.map( user => {
                         user.role = {};
-                        user.role['id'] = user['userRole.id'];
+                        user.role['id'] = encryptIdDataBase(user['userRole.id']);
                         user.role['role'] = user['userRole.role'];
                         delete user['userRole.id'];
                         delete user['userRole.role'];
+                        user.id = encryptIdDataBase(user.id)
                         return user;
                     });
                     return usersWithRole;

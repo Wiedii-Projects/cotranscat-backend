@@ -70,9 +70,9 @@ module.exports = {
     checkValidateCode: () => {
         return [
             check('code', new ErrorModel(errorsConst.authErrors.codeRequired)).isInt(),
-            check('id', new ErrorModel(errorsConst.authErrors.idRequired)).isInt(),
+            ...sharedMiddleware.checkId(),
             check('code')
-                .custom((value, { req }) => codeValidators.validateCode({ code: value, userCode: req.body.id }, req)),
+                .custom((value, { req }) => codeValidators.validateCode({ code: value, userCode: req.body.decryptId }, req)),
             check('validCode', new ErrorModel(errorsConst.authErrors.codeNotValid))
                 .custom((value) => value ? true : false)
         ];
