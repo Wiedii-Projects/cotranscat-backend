@@ -2,7 +2,7 @@
 const { errorsConst } = require('../constants/index.constants');
 
 // Helpers
-const { authHelpers, responseHelpers, codeSmsHelpers } = require('../helpers/index.helpers')
+const { authHelpers, responseHelpers, codeSmsHelpers, sharedHelpers } = require('../helpers/index.helpers')
 
 // Models - Queries
 const { codeSMSQuery, userQuery } = require('../models/index.queries')
@@ -12,59 +12,45 @@ module.exports = {
         const { user } = req.body;
 
         try {
+            delete user.password;
             const token = await authHelpers.generateJWTHelper(user.id);
-            return responseHelpers.responseSuccess(res, { user, token });
-        } catch (error) {
-            return responseHelpers.responseError(res, 500, error);
-        }
-    },
-    googleSignIn: async (req, res) => {
-        const { user } = req.body;
-
-        try {
-            const token = await authHelpers.generateJWTHelper(user.id);
-            return responseHelpers.responseSuccess(res, { user, token });
+            return responseHelpers.responseSuccess(res, { ...user, token });
         } catch (error) {
             return responseHelpers.responseError(res, 500, error);
         }
     },
     validateEmail: async (req, res) => {
-        const { user, userGoogle } = req.body;
+        const { user } = req.body;
+        return responseHelpers.responseSuccess(res, user?.state ? true : false);
+    },
+    changePassword: async (req, res) => {
+        const { password, user } = req.body;
 
-        if (!userGoogle && !user) {
-            return responseHelpers.responseError(res, 500, errorsConst.aggregateErrorsApp.errorValidateEmail);
+        try {
+            const id = sharedHelpers.decryptIdDataBase(user.id);
+            const passwordEncrypt = await authHelpers.encryptPasswordHelper(password);
+            await userQuery.updateUserQuery({ id }, { password: passwordEncrypt });
+            return responseHelpers.responseSuccess(res, null);
+        } catch (error) {
+            return responseHelpers.responseError(res, 500, error);
         }
-
-        return responseHelpers.responseSuccess(res, userGoogle || user);
     },
     createCode: async (req, res) => {
         const { user } = req.body;
-
         try {
-            await codeSMSQuery.deleteAllCodeQuery( user.id )
-            const code = await codeSmsHelpers.createSMSHelper(user.phoneNumber)
-            await codeSMSQuery.createCodeIDQuery(code, user.id)
-            return responseHelpers.responseSuccess(res, null);
+            const id = sharedHelpers.decryptIdDataBase(user.id);
+            await codeSMSQuery.deleteAllCodeQuery( { userCode: id } );
+            const code = await codeSmsHelpers.createSMSHelper(user.phoneNumber);
+            await codeSMSQuery.createCodeIDQuery({ code, userCode: id })
+            return responseHelpers.responseSuccess(res, { code, id: user.id });
         } catch (error) {
             return responseHelpers.responseError(res, 500, error);
         }
     },
     validateCode: async (req, res) => {
-        const { id } = req.body;
-
+        const { userCode } = req.body.validCode;
         try {
-            await codeSMSQuery.deleteAllCodeQuery(id);
-            return responseHelpers.responseSuccess(res, null);
-        } catch (error) {
-            return responseHelpers.responseError(res, 500, error);
-        }
-    },
-    changePassword: async (req, res) => {
-        const { password, id } = req.body;
-
-        try {
-            const passwordEncrypt = await authHelpers.encryptPasswordHelper(password);
-            await userQuery.updateDataUserQuery(id, { password: passwordEncrypt });
+            await codeSMSQuery.deleteAllCodeQuery( { userCode } );
             return responseHelpers.responseSuccess(res, null);
         } catch (error) {
             return responseHelpers.responseError(res, 500, error);

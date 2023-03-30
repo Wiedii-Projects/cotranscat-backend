@@ -6,7 +6,7 @@ const express = require('express');
 const cors = require('cors');
 
 // DB Connections
-const { mySqlDBConnection } = require('../../../connections/my-sql.connection');
+const { mySqlDBConnection, mySqlDBSynchronization, mySqlDBDefaultDataCreation } = require('../../../connections/my-sql.connection');
 
 class ServerModel {
     constructor() {
@@ -25,6 +25,8 @@ class ServerModel {
 
     async db() {
         await mySqlDBConnection();
+        await mySqlDBSynchronization();
+        await mySqlDBDefaultDataCreation();
     }
 
     middleware() {
