@@ -9,8 +9,9 @@ const { userQuery, roleQuery } = require('../models/index.queries');
 
 module.exports = {
     getUsers: async (req, res) => {
-        const { limit = 10, offset = 0 } = req.query;
-
+        const { limit: limitDefault = 10, offset: offsetDefault = 0 } = req.query;
+        const { limit, offset } = userHelpers.extractQueryUserHelper({ limitDefault , offsetDefault });
+        
         try {
             const { count, users } = await userQuery.findAndCountUserQuery({ where: { state: true }, limit, offset})
             return responseHelpers.responseSuccess(res, { count, users });
@@ -26,13 +27,13 @@ module.exports = {
             :responseHelpers.responseError(res, 500, errorsConst.aggregateErrorsApp.errorGetUser);
     },
     createUser: async (req, res) => {
-        const { password } = req.body;
+        const { password, img = '', state = true  } = req.body;
 
         try {
             const [ role ] = await roleQuery.findRoleQuery({ role: roleConst.USER_ROLE });
             const passwordEncrypt = await authHelpers.encryptPasswordHelper(password);
             const user = userHelpers.extractUserDataHelper({ ...req.body, password: passwordEncrypt, role: role.id });
-            await userHelpers.createUserModelUserHelper(user);
+            await userHelpers.createUserModelUserHelper({...user, img, state});
             return responseHelpers.responseSuccess(res, null);
         } catch (error) {
             return responseHelpers.responseError(res, 500, error);
