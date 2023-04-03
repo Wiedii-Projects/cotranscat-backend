@@ -1,47 +1,59 @@
-// Libraries
-const { Schema, model } = require('mongoose');
+// DB Connections
+const {
+  dbConnectionOptions,
+} = require("../../constants/core/core-configurations.const");
 
-const UserSchema = Schema({
+// Libraries
+const { DataTypes } = require("sequelize");
+
+const UserSchema = dbConnectionOptions.define(
+  "User",
+  {
     name: {
-        type: String,
-        required: [true, 'The name is required']
+      type: DataTypes.STRING,
+      field: "name",
+      required: [true, "The name is required"],
     },
     lastName: {
-        type: String,
-        required: [true, 'The last name is required']
+      type: DataTypes.STRING,
+      field: "lastName",
+      required: [true, "The last name is required"],
     },
     email: {
-        type: String,
-        required: [true, 'Mail is required'],
-        unique: true
-    },
-    password: {
-        type: String,
-        required: [true, 'Password is required']
+      type: DataTypes.STRING,
+      field: "email",
+      required: [true, "Mail is required"],
+      unique: true,
     },
     phoneNumber: {
-        type: String,
-        required: [true, 'Phone number is required']
+      type: DataTypes.STRING,
+      field: "phoneNumber",
+      required: [true, "The phoneNumber is required"],
+    },
+    password: {
+      type: DataTypes.STRING,
+      field: "password",
+      required: [true, "Password is required"],
+    },
+    img: {
+      type: DataTypes.STRING,
+      field: "img",
+      defaultValue: "",
     },
     state: {
-        type: Boolean,
-        default: true
+      type: DataTypes.BOOLEAN,
+      field: "state",
+      defaultValue: true,
     },
     google: {
-        type: Boolean,
-        default: false
+      type: DataTypes.BOOLEAN,
+      field: "google",
+      defaultValue: false,
     },
-    role: {
-        type: String,
-        required: true,
-        emun: ['ADMIN_ROLE', 'USER_ROLE']
-    }
-});
+  },
+  {
+    tableName: "user",
+  }
+);
 
-UserSchema.methods.toJSON = function () {
-    const { __v, password, _id, ...user } = this.toObject();
-    user.uid = _id;
-    return user;
-}
-
-module.exports = model('User', UserSchema);
+module.exports = UserSchema;

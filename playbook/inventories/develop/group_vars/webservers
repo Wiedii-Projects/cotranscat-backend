@@ -1,5 +1,5 @@
 ---
-project_environment: prototype_backend_node_mongodb_develop
+project_environment: prototype_backend_node_mysqldb_develop
 internal_port: 8000
 external_port: 4012
 conect: false

@@ -1,5 +1,5 @@
 ---
-- name: Deploy Service Prototype Backend node mongodb
+- name: Deploy Service Prototype Backend node mysql
   hosts: webservers
   become: yes
   remote_user: ansible-workflow

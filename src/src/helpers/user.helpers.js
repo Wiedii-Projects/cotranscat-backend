@@ -1,29 +1,32 @@
-
-
-// Helpers
-const authHelpers = require('./auth.helpers')
-
 // Queries
 const { userQuery } = require('./../models/index.queries')
 
 module.exports = {
-    createUserModelUserHelper: async (req) => {
+    createUserModelUserHelper: async (data) => {
         try {
-            const { name, lastName, email, password, phoneNumber, role } = req.body;
-            const passwordEncrypt = await authHelpers.encryptPasswordHelper(password);
-            return await userQuery.createNewUserQuery({ name, lastName, email, password: passwordEncrypt, phoneNumber, role });
+            return await userQuery.createNewUserQuery(data);
         } catch (error) {
             throw error
         }
     },
-    extractUserDataHelper: (data) => {
-        const {
-            _id, password, name, email, google, lastName, socialStratification, identificationNumber,
-            dateBirth, phoneNumber, ...body
-        } = data;
+    extractQueryUserHelper: (query) => {
+        const { limitDefault, offsetDefault } = query;
         return {
-            _id, password, email, google, name, lastName, socialStratification, identificationNumber,
-            dateBirth, phoneNumber
+            limit: (/^[0-9]+$/).test(limitDefault)? parseInt(limitDefault): 10,
+            offset: (/^[0-9]+$/).test(offsetDefault)? parseInt(offsetDefault): 0
         }
+    },
+    extractUserDataHelper: (user) => {
+        const { 
+            name = undefined, 
+            lastName = undefined, 
+            email = undefined, 
+            phoneNumber = undefined, 
+            password = undefined, 
+            img = undefined, 
+            google = false, 
+            role = undefined 
+        } = user;
+        return { name, lastName, email, phoneNumber, password, img, google, role }
     }
 }

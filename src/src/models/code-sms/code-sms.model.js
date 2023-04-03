@@ -1,15 +1,23 @@
+// DB Connections
+const {
+  dbConnectionOptions,
+} = require("../../constants/core/core-configurations.const");
+
 // Libraries
-const { Schema, model } = require('mongoose');
+const { DataTypes } = require("sequelize");
 
-const codeSmsSchema = Schema({
+const CodeSmsSchema = dbConnectionOptions.define(
+  "CodeSms",
+  {
     code: {
-        type: Number,
+      type: DataTypes.STRING,
+      field: "code",
+      required: [true, "The role is obligatory"],
     },
-    userCode: {
-        type: Schema.Types.ObjectId,
-        ref: 'User',
-        required: [true, 'The user is required']
-    }
-});
+  },
+  {
+    tableName: "codeSms",
+  }
+);
 
-module.exports = model('CodeSms', codeSmsSchema);
+module.exports = CodeSmsSchema;

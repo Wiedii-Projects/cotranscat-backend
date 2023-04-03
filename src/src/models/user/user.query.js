@@ -2,64 +2,102 @@
 const { errorsConst } = require('../../constants/index.constants');
 
 // Models
-const { User } = require('./../index.models')
+const { User, Role } = require('./../index.models');
+
+// Helpers
+const { encryptIdDataBase } = require('../../helpers/shared.helpers');
 
 module.exports = {
-    getUserQuery: async (email) => {
+    findAndCountUserQuery: async (query) => {
         try {
-            return await User.findOne({ email }, { google: 0 });
+            let {
+                where, 
+                attributes = [ 'id', 'name', 'lastName', 'email', 'phoneNumber', 'state', 'img', 'google'], 
+                group, 
+                limit, 
+                offset, 
+                order
+            } = query;
+            const { rows, count } = await User.findAndCountAll({
+                where,
+                attributes,
+                raw: true,
+                include: [{
+                    model: Role,
+                    as: 'userRole'
+                  }],
+                group,
+                order,
+                offset,
+                limit
+            });
+            const users = rows.map( (user) => {
+                user.role = {};
+                user.role['id'] = encryptIdDataBase(user['userRole.id']);
+                user.role['role'] = user['userRole.role'];
+                delete user['userRole.id'];
+                delete user['userRole.role'];
+                user.id = encryptIdDataBase(user.id)
+                return user;
+            });
+            return { users, count }; 
         } catch {
-            return false;
+            throw errorsConst.aggregateErrorsApp.errorGetAllUser
         }
     },
-    getUserIDQuery: async (id) => {
+    findUserQuery: async (query) => {
         try {
-            return await User.findById(id);
+            const {
+                where, 
+                attributes = [ 'id', 'name', 'lastName', 'email', 'phoneNumber', 'state', 'img', 'google'], 
+                group, 
+                limit, 
+                offset, 
+                order
+            } = query;
+            return await User.findAll({ 
+                where, 
+                attributes, 
+                raw: true,
+                include: [{
+                    model: Role,
+                    as: 'userRole'
+                  }],
+                group,
+                order,
+                limit, 
+                offset
+                }).then( users => {
+                    const usersWithRole = users.map( user => {
+                        user.role = {};
+                        user.role['id'] = encryptIdDataBase(user['userRole.id']);
+                        user.role['role'] = user['userRole.role'];
+                        delete user['userRole.id'];
+                        delete user['userRole.role'];
+                        user.id = encryptIdDataBase(user.id)
+                        return user;
+                    });
+                    return usersWithRole;
+                });
         } catch {
-            return false;
+            throw errorsConst.aggregateErrorsApp.errorGetAllUser
         }
     },
-    getUserIdStateQuery: async (id) => {
+    createNewUserQuery: async (user) => {
+        const { name, lastName, email, phoneNumber, password, role, img } = user;
         try {
-            return await User.findOne({ state: true, _id: id }, { google: 0 });
-        } catch {
-            return false;
-        }
-    },
-    getAllUsersQuery: async (limit, since, query) => {
-        const responseAllUser = await Promise.all([
-            User.countDocuments({ state: true }),
-            User.find(query, { google: 0, state: 0, role: 0, phoneNumber: 0 })
-                .skip(Number(since))
-                .limit(Number(limit))
-        ])
-            .then(responses => {
-                return {
-                    totalUsers: responses[0],
-                    users: responses[1]
-                }
-            })
-            .catch(() => {
-                throw errorsConst.aggregateErrorsApp.errorGetAllUser
-            })
-
-        return responseAllUser
-    },
-    createNewUserQuery: async (data) => {
-        try {
-            const user = new User(data);
-            await user.save();
+            return await User.findOrCreate({
+                where: { name, lastName, email, password, phoneNumber, role, img }
+            });
         } catch {
             throw errorsConst.aggregateErrorsApp.errorCreateUser
         }
     },
-    emailExistsQuery: async (email = '') => {
-        const emailInUse = await User.findOne({ email });
-        return emailInUse;
-    },
-    updateDataUserQuery: async (id, data) => {
+    updateUserQuery: async (where, update) => {
         try {
-            return await User.findByIdAndUpdate(id, data)
+            return await User.update(update, {
+                where
+              });
         } catch {
             throw errorsConst.aggregateErrorsApp.errorUpdateUser
         }
