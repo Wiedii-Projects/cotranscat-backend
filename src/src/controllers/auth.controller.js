@@ -42,7 +42,7 @@ module.exports = {
             await codeSMSQuery.deleteAllCodeQuery( { userCode: id } );
             const code = await codeSmsHelpers.createSMSHelper(user.phoneNumber);
             await codeSMSQuery.createCodeIDQuery({ code, userCode: id })
-            return responseHelpers.responseSuccess(res, { code, id: user.id });
+            return responseHelpers.responseSuccess(res, { id: user.id });
         } catch (error) {
             return responseHelpers.responseError(res, 500, error);
         }
