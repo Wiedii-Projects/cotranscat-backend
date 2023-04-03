@@ -16,126 +16,80 @@
       "code": "AU0004",
       "message": "User does not exist."
     },
-    "": {
-      "code": "AU0005",
-      "message": ""
-    },
-    "": {
-      "code": "AU0006",
-      "message": ""
-    },
-    "": {
-      "code": "AU0007",
-      "message": ""
-    },
-    "": {
-      "code": "AU0008",
-      "message": ""
-    },
-    "": {
-      "code": "AU0009",
-      "message": ""
-    },
     "passwordConfirmRequired": {
-      "code": "AU0010",
+      "code": "AU0005",
       "message": "Password confirm is required."
     },
     "passwordNotMatch": {
-      "code": "AU0011",
+      "code": "AU0006",
       "message": "Password does not match."
     },
     "codeNotValid": {
-      "code": "AU0012",
+      "code": "AU0007",
       "message": "Code is not valid."
     },
     "validatePassword": {
-      "code": "AU0013",
+      "code": "AU0008",
       "message": "The password is not secure."
     },
     "codeRequired": {
-      "code": "AU0014",
+      "code": "AU0009",
       "message": "Code is required."
     },
     "idRequired": {
-      "code": "AU0015",
+      "code": "AU0010",
       "message": "ID is required."
     },
     "tokenInvalid": {
-      "code": "AU0016",
+      "code": "AU0011",
       "message": "Token invalid"
     }
   },
   "userErrors": {
-    "": {
-      "code": "US0001",
-      "message": ""
-    },
     "emailInUse": {
-      "code": "US0002",
+      "code": "US0001",
       "message": "The email is already in use."
     },
     "nameRequired": {
-      "code": "US0003",
+      "code": "US0002",
       "message": "The name is required."
     },
     "emailInvalid": {
-      "code": "US0004",
+      "code": "US0003",
       "message": "The email is invalid."
     },
-    "": {
-      "code": "US0005",
-      "message": ""
-    },
-    "": {
-      "code": "US0006",
-      "message": ""
-    },
-    "": {
-      "code": "US0007",
-      "message": ""
-    },
     "idRequired": {
-      "code": "US0008",
+      "code": "US0004",
       "message": "The ID is required."
     },
-    "": {
-      "code": "US0009",
-      "message": ""
-    },
     "noToken": {
-      "code": "US0010",
+      "code": "US0005",
       "message": "The token is missing from the request."
     },
     "userNotExist": {
-      "code": "US0011",
+      "code": "US0006",
       "message": "User does not exist."
     },
-    "": {
-      "code": "US0012",
-      "message": ""
-    },
     "lastNameRequired": {
-      "code": "US0013",
+      "code": "US0007",
       "message": "The last name is required."
     },
     "phoneNumberRequired": {
-      "code": "US0014",
+      "code": "US0008",
       "message": "The phone number is required."
     },
     "validatePassword": {
-      "code": "US0015",
+      "code": "US0009",
       "message": "The password is not secure."
     },
     "adminRole": {
-      "code": "US0016",
+      "code": "US0010",
       "message": "This action can only be performed by administrator users."
     },
     "userNoDelete": {
-      "code": "US0017",
+      "code": "US0011",
       "message": "Can't delete User."
     }
-  },
-  "roleErrors":{
   },
   "aggregateErrorsApp": {
 
@@ -144,11 +98,6 @@
     "errorGetRoleByName": {
       "code": "RLLE_001",
       "message": "Something went wrong."
-    },
-
-    "": {
-      "code": "RLLE_002",
-      "message": ""
     },
 
     "__comment_AUTH__": "__ AUTH These are API acronym comments__",
@@ -160,14 +109,6 @@
     "errorEncryptPassword": {
       "code": "AUTH_002",
       "message": "Something went wrong."
-    },
-    "": {
-      "code": "AUTH_003",
-      "message": ""
-    },
-    "": {
-      "code": "AUTH_004",
-      "message": ""
     },
 
     "__comment_USRL__": "__ USRL (UserModel) These are API acronym comments__",
@@ -187,21 +128,6 @@
     "errorUpdateUser": {
       "code": "USRL_004",
       "message": "Something went wrong."
-    },
-
-    "__comment_USRG__": "__ USRG (UserGoogleModel) These are API acronym comments__",
-
-    "": {
-      "code": "USRG_001",
-      "message": ""
-    },
-    "": {
-      "code": "USRG_004",
-      "message": ""
-    },
-    "": {
-      "code": "USRG_003",
-      "message": ""
     },
     
     "__comment_CODD__": "__ CODE (CodeSmsModel) These are API acronym comments__",
