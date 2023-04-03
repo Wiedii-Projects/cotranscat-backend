@@ -16,7 +16,7 @@ const { userValidators } = require('../index.validators.middleware');
 module.exports = {
     checkAllGetUser: () => {
         return [
-            ...sharedMiddleware.checkJwt()
+            ...sharedMiddleware.checkJwt(),
         ];
     },
     checkGetUser: () => {
