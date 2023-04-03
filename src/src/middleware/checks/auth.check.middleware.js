@@ -71,6 +71,7 @@ module.exports = {
         return [
             check('code', new ErrorModel(errorsConst.authErrors.codeRequired)).isInt(),
             ...sharedMiddleware.checkId(),
+            check('decryptId', new ErrorModel(errorsConst.userErrors.idRequired)).isInt(),
             check('code')
                 .custom((value, { req }) => codeValidators.validateCode({ code: value, userCode: req.body.decryptId }, req)),
             check('validCode', new ErrorModel(errorsConst.authErrors.codeNotValid))
