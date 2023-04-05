@@ -13,20 +13,20 @@ User.belongsTo(Role, { as: 'userRole', foreignKey: { name: "idRole", allowNull: 
 Role.hasMany(User, { as: 'userRole', foreignKey: { name: "idRole", allowNull: false } });
 
 // Relationship User-DocumentType
-User.belongsTo(DocumentType, { as: 'userDocumentType', foreignKey: { name: "documentType", allowNull: false } });
-DocumentType.hasMany(User, { as: 'userDocumentType', foreignKey: { name: "documentType", allowNull: false } });
+User.belongsTo(DocumentType, { as: 'userDocumentType', foreignKey: { name: "idDocumentType", allowNull: false } });
+DocumentType.hasMany(User, { as: 'userDocumentType', foreignKey: { name: "idDocumentType", allowNull: false } });
 
 // Relationship User-callSign
-User.belongsTo(CallSign, { as: 'userCallSign', foreignKey: { name: "callSign", allowNull: false } });
-CallSign.hasMany(User, { as: 'userCallSign', foreignKey: { name: "callSign", allowNull: false } });
+User.belongsTo(CallSign, { as: 'userCallSign', foreignKey: { name: "idIndicativeNumberPhone", allowNull: false } });
+CallSign.hasMany(User, { as: 'userCallSign', foreignKey: { name: "idIndicativeNumberPhone", allowNull: false } });
 
 // Relationship User-WhatsAppCallSign
-User.belongsTo(CallSign, { as: 'WhatsAppCallSign', foreignKey: { name: "callSignWhatsApp", allowNull: false } });
-CallSign.hasMany(User, { as: 'WhatsAppCallSign', foreignKey: { name: "callSignWhatsApp", allowNull: false } });
+User.belongsTo(CallSign, { as: 'WhatsAppCallSign', foreignKey: { name: "idIndicativeNumberPhoneWhatsApp", allowNull: false } });
+CallSign.hasMany(User, { as: 'WhatsAppCallSign', foreignKey: { name: "idIndicativeNumberPhoneWhatsApp", allowNull: false } });
 
 // Relationship User-Municipality
-User.belongsTo(Municipality, { as: 'UserMunicipality', foreignKey: { name: "municipality", allowNull: true } });
-Municipality.hasMany(User, { as: 'UserMunicipality', foreignKey: { name: "municipality", allowNull: true } });
+User.belongsTo(Municipality, { as: 'UserMunicipality', foreignKey: { name: "idMunicipality", allowNull: true } });
+Municipality.hasMany(User, { as: 'UserMunicipality', foreignKey: { name: "idMunicipality", allowNull: true } });
 
 // Relationship Municipality-Department
 Municipality.belongsTo(Department, { as: 'MunicipalityDepartment', foreignKey: { name: "department", allowNull: false } });

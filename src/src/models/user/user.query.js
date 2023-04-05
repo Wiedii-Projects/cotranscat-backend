@@ -83,12 +83,9 @@ module.exports = {
             throw errorsConst.aggregateErrorsApp.errorGetAllUser
         }
     },
-    createNewUserQuery: async (user) => {
-        const { name, lastName, email, phoneNumber, password, role, img } = user;
+    createNewUserQuery: async (where) => {
         try {
-            return await User.findOrCreate({
-                where: { name, lastName, email, password, phoneNumber, role, img }
-            });
+            return await User.findOrCreate({ where });
         } catch {
             throw errorsConst.aggregateErrorsApp.errorCreateUser
         }

@@ -24,12 +24,12 @@ const UserSchema = dbConnectionOptions.define(
       field: "lastName",
       required: [true, "The last name is required"],
     },
-    phoneNumber: {
+    numberPhone: {
       type: DataTypes.STRING,
       field: "phoneNumber",
-      required: [true, "The phoneNumber is required"],
+      required: [true, "The phone Number is required"],
     },
-    whatsAppPhoneNumber: {
+    numberPhoneWhatsApp: {
       type: DataTypes.STRING,
       field: "phoneNumber",
       required: [true, "The whatsApp phoneNumber is required"],
@@ -37,8 +37,7 @@ const UserSchema = dbConnectionOptions.define(
     email: {
       type: DataTypes.STRING,
       field: "email",
-      required: [true, "Mail is required"],
-      unique: true,
+      defaultValue: null,
     },
     img: {
       type: DataTypes.STRING,
@@ -53,8 +52,13 @@ const UserSchema = dbConnectionOptions.define(
     password: {
       type: DataTypes.STRING,
       field: "password",
-      required: [true, "Password is required"],
+      defaultValue: null,
     },
+    address: {
+      type: DataTypes.STRING,
+      field: "address",
+      defaultValue: "",
+    }
   },
   {
     tableName: "user",

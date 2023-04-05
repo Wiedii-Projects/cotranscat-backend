@@ -89,6 +89,30 @@
     "userNoDelete": {
       "code": "US0011",
       "message": "Can't delete User."
+    },
+    "idDocumentTypeRequired": {
+      "code": "US0012",
+      "message": "The id document type is required."
+    },
+    "numberDocumentRequired": {
+      "code": "US0013",
+      "message": "The number document is required."
+    },
+    "idIndicativeNumberPhoneRequired": {
+      "code": "US0014",
+      "message": "The id Indicative Number Phone is required."
+    },
+    "idIndicativeNumberPhoneWhatsAppRequired": {
+      "code": "US0015",
+      "message": "The id Indicative Number Phone WhatsApp is required."
+    },
+    "numberPhoneWhatsAppRequired": {
+      "code": "US0016",
+      "message": "The number Phone WhatsApp is required."
+    },
+    "addressRequired": {
+      "code": "US0017",
+      "message": "The address is required."
     }
   },
   "aggregateErrorsApp": {

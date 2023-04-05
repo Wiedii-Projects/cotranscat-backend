@@ -48,19 +48,15 @@ module.exports = {
     },
     checkCreateClientUser: () => {
         return [
-            check('name', new ErrorModel(errorsConst.userErrors.nameRequired)).isString(),
-            check('lastName', new ErrorModel(errorsConst.userErrors.lastNameRequired)).isString(),
-            check('password', new ErrorModel(errorsConst.authErrors.passwordRequired)).isString(),
-            check('email', new ErrorModel(errorsConst.userErrors.emailInvalid)).isEmail(),
-            check('phoneNumber', new ErrorModel(errorsConst.userErrors.phoneNumberRequired)).isString(),
-            check('password')
-                .custom((value, { req }) => userValidators.validatePasswordRules(value, req)),
-            check('isValidPassword', new ErrorModel(errorsConst.authErrors.validatePassword))
-                .custom((value) => value ? true : false),
-            check('email')
-                .custom((value, { req }) => userValidators.validateGetUser({ where: { email: value } }, req)),
-            check('user', new ErrorModel(errorsConst.userErrors.emailInUse))
-                .custom((value) => value ? false: true),
+            check('idDocumentType', new ErrorModel(errorsConst.userErrors.idDocumentTypeRequired)).notEmpty(),
+            check('numberDocument', new ErrorModel(errorsConst.userErrors.numberDocumentRequired)).notEmpty(),
+            check('name', new ErrorModel(errorsConst.userErrors.nameRequired)).notEmpty(),
+            check('lastName', new ErrorModel(errorsConst.userErrors.lastNameRequired)).notEmpty(),
+            check('idIndicativeNumberPhone', new ErrorModel(errorsConst.userErrors.idIndicativeNumberPhoneRequired)).notEmpty(),
+            check('phoneNumber', new ErrorModel(errorsConst.userErrors.phoneNumberRequired)).notEmpty(),
+            check('idIndicativeNumberPhoneWhatsApp', new ErrorModel(errorsConst.userErrors.idIndicativeNumberPhoneWhatsAppRequired)).notEmpty(),
+            check('numberPhoneWhatsApp', new ErrorModel(errorsConst.userErrors.numberPhoneWhatsAppRequired)).notEmpty(),
+            check('address', new ErrorModel(errorsConst.userErrors.addressRequired)).notEmpty(),
         ];
     },
     checkCreateAdminUser: () => {
