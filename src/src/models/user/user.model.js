@@ -9,6 +9,11 @@ const { DataTypes } = require("sequelize");
 const UserSchema = dbConnectionOptions.define(
   "User",
   {
+    numberDocument: {
+      type: DataTypes.INTEGER,
+      field: "numberDocument",
+      required: [true, "The number document is required"],
+    },
     name: {
       type: DataTypes.STRING,
       field: "name",
@@ -19,21 +24,21 @@ const UserSchema = dbConnectionOptions.define(
       field: "lastName",
       required: [true, "The last name is required"],
     },
-    email: {
-      type: DataTypes.STRING,
-      field: "email",
-      required: [true, "Mail is required"],
-      unique: true,
-    },
     phoneNumber: {
       type: DataTypes.STRING,
       field: "phoneNumber",
       required: [true, "The phoneNumber is required"],
     },
-    password: {
+    whatsAppPhoneNumber: {
       type: DataTypes.STRING,
-      field: "password",
-      required: [true, "Password is required"],
+      field: "phoneNumber",
+      required: [true, "The whatsApp phoneNumber is required"],
+    },
+    email: {
+      type: DataTypes.STRING,
+      field: "email",
+      required: [true, "Mail is required"],
+      unique: true,
     },
     img: {
       type: DataTypes.STRING,
@@ -45,10 +50,10 @@ const UserSchema = dbConnectionOptions.define(
       field: "state",
       defaultValue: true,
     },
-    google: {
-      type: DataTypes.BOOLEAN,
-      field: "google",
-      defaultValue: false,
+    password: {
+      type: DataTypes.STRING,
+      field: "password",
+      required: [true, "Password is required"],
     },
   },
   {

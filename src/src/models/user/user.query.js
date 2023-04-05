@@ -9,15 +9,15 @@ const { encryptIdDataBase } = require('../../helpers/shared.helpers');
 
 module.exports = {
     findAndCountUserQuery: async (query) => {
+        let {
+            where, 
+            attributes = [ 'id', 'name', 'lastName', 'email', 'phoneNumber', 'state', 'img', 'google'], 
+            group, 
+            limit, 
+            offset, 
+            order
+        } = query;
         try {
-            let {
-                where, 
-                attributes = [ 'id', 'name', 'lastName', 'email', 'phoneNumber', 'state', 'img', 'google'], 
-                group, 
-                limit, 
-                offset, 
-                order
-            } = query;
             const { rows, count } = await User.findAndCountAll({
                 where,
                 attributes,

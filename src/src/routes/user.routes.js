@@ -27,6 +27,11 @@ router.post('/', [
     sharedValidators.validateErrorFields
 ], userController.createUser);
 
+router.post('/', [
+    userMiddleware.checkCreateClientUser(),
+    sharedValidators.validateErrorFields
+], userController.createClientUser);
+
 router.post('/createAdmin', [
     userMiddleware.checkCreateAdminUser(),
     sharedValidators.validateErrorFields

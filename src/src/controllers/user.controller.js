@@ -39,6 +39,19 @@ module.exports = {
             return responseHelpers.responseError(res, 500, error);
         }
     },
+    createClientUser: async (req, res) => {
+        const { password, img = '', state = true  } = req.body;
+
+        try {
+            const [ role ] = await roleQuery.findRoleQuery({ role: roleConst.USER_ROLE });
+            const passwordEncrypt = await authHelpers.encryptPasswordHelper(password);
+            const user = userHelpers.extractUserDataHelper({ ...req.body, password: passwordEncrypt, role: role.id });
+            await userHelpers.createUserModelUserHelper({...user, img, state});
+            return responseHelpers.responseSuccess(res, null);
+        } catch (error) {
+            return responseHelpers.responseError(res, 500, error);
+        }
+    },
     createAdminUser: async (req, res) => {
         const { password } = req.body;
 
