@@ -14,6 +14,11 @@ const CallSignTypeSchema = dbConnectionOptions.define(
       field: "callSignNumber",
       required: [true, "The call sign number is required"],
     },
+    callSignCountry: {
+      type: DataTypes.STRING,
+      field: "callSignCountry",
+      required: [true, "The call sign country is required"],
+    }
   },
   {
     tableName: "callSign",
