@@ -9,7 +9,7 @@ const { DataTypes } = require("sequelize");
 const DocumentTypeSchema = dbConnectionOptions.define(
   "DocumentType",
   {
-    document: {
+    name: {
       type: DataTypes.STRING,
       field: "document",
       required: [true, "The name document type is required"],
