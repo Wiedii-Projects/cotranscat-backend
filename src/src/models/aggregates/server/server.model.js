@@ -16,6 +16,7 @@ class ServerModel {
         this.paths = {
             auth: '/api/auth',
             users: '/api/users',
+            documentType: '/api/documentType',
         }
         this.dbHost = coreConfigurationsConst.dbHost;
         this.db();
@@ -38,6 +39,7 @@ class ServerModel {
     routes() {
         this.app.use(this.paths.auth, require('../../../routes/auth.routes'));
         this.app.use(this.paths.users, require('../../../routes/user.routes'));
+        this.app.use(this.paths.documentType, require('../../../routes/document-type.routes'));
     }
 
     listen() {

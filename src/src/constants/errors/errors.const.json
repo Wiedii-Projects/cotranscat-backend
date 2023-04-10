@@ -115,6 +115,20 @@
       "message": "The address is required."
     }
   },
+  "documentType":{
+    "nameRequired": {
+      "code": "DTP0001",
+      "message": "The document type name is required"
+    },
+    "lengthName": {
+      "code": "DTP0002",
+      "message": "The document type name must contain at least two characters"
+    },
+    "idRequired": {
+      "code": "DTP0003",
+      "message": "The ID document type is required."
+    }
+  },
   "aggregateErrorsApp": {
 
     "__comment_RLLE__": "__ RLLE (RoleModel) These are API acronym comments__",
@@ -162,6 +176,25 @@
     },
     "errorDeleteAllCode": {
       "code": "CODD_002",
+      "message": "Something went wrong."
+    },
+
+    "__comment_DCMTP__": "__ DCMTP (DocumentTypeModel) These are API acronym comments__",
+
+    "errorCreateDocumentType": {
+      "code": "DCMTP_001",
+      "message": "Something went wrong."
+    },
+    "errorUpdateDocumentType": {
+      "code": "DCMTP_002",
+      "message": "Something went wrong."
+    },
+    "errorGetDocumentType": {
+      "code": "DCMTP_003",
+      "message": "Something went wrong."
+    },
+    "errorDeleteDocumentType": {
+      "code": "DCMTP_004",
       "message": "Something went wrong."
     }
   }

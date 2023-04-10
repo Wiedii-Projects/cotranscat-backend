@@ -1,5 +1,5 @@
 // Constants
-const { errorsConst } = require('../../constants/index.constants');
+const { errorsConst, roleConst } = require('../../constants/index.constants');
 
 // Libraries
 const { check } = require('express-validator');
@@ -32,5 +32,11 @@ module.exports = {
                 .custom((value, { req }) => req.body.decryptId = sharedHelpers.decryptIdDataBase(value))
                 .custom((_, { req }) => req.body.decryptId ? true : false),
         ];
+    },
+    checkAdminRole: () => {
+        return [
+            check('user', new ErrorModel(errorsConst.userErrors.idRequired))
+                .custom((value) => value.role.role === roleConst.ADMIN_ROLE)
+        ]
     }
 }
