@@ -10,32 +10,33 @@ const UserSchema = dbConnectionOptions.define(
   "User",
   {
     numberDocument: {
-      type: DataTypes.INTEGER,
+      type: DataTypes.STRING(20),
+      unique: true,
       field: "numberDocument",
       required: [true, "The number document is required"],
     },
     name: {
-      type: DataTypes.STRING,
+      type: DataTypes.STRING(50),
       field: "name",
       required: [true, "The name is required"],
     },
     lastName: {
-      type: DataTypes.STRING,
+      type: DataTypes.STRING(50),
       field: "lastName",
       required: [true, "The last name is required"],
     },
     numberPhone: {
-      type: DataTypes.STRING,
+      type: DataTypes.STRING(12),
       field: "phoneNumber",
       required: [true, "The phone Number is required"],
     },
     numberPhoneWhatsApp: {
-      type: DataTypes.STRING,
+      type: DataTypes.STRING(12),
       field: "phoneNumber",
       required: [true, "The whatsApp phoneNumber is required"],
     },
     email: {
-      type: DataTypes.STRING,
+      type: DataTypes.STRING(100),
       field: "email",
       defaultValue: null,
     },
