@@ -13,7 +13,7 @@ module.exports = {
     createNewDocumentTypeQuery: async (name) => {
         try {
             return await DocumentType.findOrCreate({
-                where: { document: name }
+                where: { name }
             });
         } catch {
             throw errorsConst.aggregateErrorsApp.errorCreateDocumentType
@@ -25,9 +25,9 @@ module.exports = {
             return await DocumentType.findAll({
                 where,
                 raw: true
-            }).then(documentTypes => documentTypes.map(({ id, document }) => ({
+            }).then(documentTypes => documentTypes.map(({ id, name }) => ({
                 id: encryptIdDataBase(id),
-                document: document
+                name
             })))
         } catch (error) {
             throw errorsConst.aggregateErrorsApp.errorGetDocumentType
@@ -42,7 +42,7 @@ module.exports = {
     },
     deleteDocumentTypeQuery: async (where) => {
         try {
-            return await DocumentType.destroy({where})
+            return await DocumentType.destroy({ where })
         } catch {
             throw errorsConst.aggregateErrorsApp.errorDeleteDocumentType
         }

@@ -27,7 +27,7 @@ module.exports = {
                 .custom((value, { req }) => 
                     userValidators.validateGetUser({ 
                         where: { email: value, state: true }, 
-                        attributes: [  'id', 'name', 'lastName', 'email', 'phoneNumber', 'state', 'img', 'google', 'password' ] 
+                        attributes: ['id', 'name', 'lastName', 'email', 'phoneNumber', 'state', 'img', 'password'] 
                     }, req)),
             check('user', new ErrorModel(errorsConst.userErrors.userNotExist))
                 .custom((value) => value? true : false),

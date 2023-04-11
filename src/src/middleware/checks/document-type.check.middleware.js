@@ -13,16 +13,16 @@ const { ErrorModel } = require("../../models/index.models");
 module.exports = {
     checkCreateDocumentType: () => {
         return [
-            // ...sharedMiddleware.checkJwt(),
-            // ...sharedMiddleware.checkAdminRole(),
+            ...sharedMiddleware.checkJwt(),
+            ...sharedMiddleware.checkAdminRole(),
             check('name', new ErrorModel(errorsConst.documentType.nameRequired)).isString(),
             check('name', new ErrorModel(errorsConst.documentType.lengthName)).isLength({ min: 2 }),
         ]
     },
     checkAdministratorCredentials: () => {
         return [
-            // ...sharedMiddleware.checkJwt(),
-            // ...sharedMiddleware.checkAdminRole()
+            ...sharedMiddleware.checkJwt(),
+            ...sharedMiddleware.checkAdminRole()
         ]
     }
 }

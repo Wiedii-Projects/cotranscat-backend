@@ -28,7 +28,7 @@ module.exports = {
         try {
             await documentTypeQuery.updateDocumentTypeQuery(
                 { id: sharedHelpers.decryptIdDataBase(id) },
-                { document: name }
+                { name }
             )
             return responseHelpers.responseSuccess(res, null);
         } catch (error) {

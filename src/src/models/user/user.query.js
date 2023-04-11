@@ -49,7 +49,7 @@ module.exports = {
         try {
             const {
                 where, 
-                attributes = [ 'id', 'name', 'lastName', 'email', 'phoneNumber', 'state', 'img', 'google'], 
+                attributes = ['id', 'name', 'lastName', 'email', 'phoneNumber', 'state', 'img'], 
                 group, 
                 limit, 
                 offset, 
@@ -79,7 +79,8 @@ module.exports = {
                     });
                     return usersWithRole;
                 });
-        } catch {
+        } catch (e){
+            console.log('ww',e)
             throw errorsConst.aggregateErrorsApp.errorGetAllUser
         }
     },
