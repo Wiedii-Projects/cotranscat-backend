@@ -79,8 +79,7 @@ module.exports = {
                     });
                     return usersWithRole;
                 });
-        } catch (e){
-            console.log('ww',e)
+        } catch {
             throw errorsConst.aggregateErrorsApp.errorGetAllUser
         }
     },

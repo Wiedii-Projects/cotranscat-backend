@@ -9,7 +9,6 @@ const { encryptIdDataBase } = require('../../helpers/shared.helpers');
 
 
 module.exports = {
-    // TODO: Change names according to the database model
     createNewDocumentTypeQuery: async (name) => {
         try {
             return await DocumentType.findOrCreate({
