@@ -35,30 +35,31 @@ module.exports = {
     ],
     defaultCallSign: [
         {
-          callSignNumber: "+57",
-          callSignCountry: "Colombia"
+          number: "+57",
+          country: "Colombia"
         },
         {
-          callSignNumber: "+58",
-          callSignCountry: "Venezuela"
+          number: "+58",
+          country: "Venezuela"
         },
         {
-          callSignNumber: "+1",
-          callSignCountry: "Estados Unidos"
+          number: "+1",
+          country: "Estados Unidos"
         },
         {
-          callSignNumber: "+52",
-          callSignCountry: "México"
+          number: "+52",
+          country: "México"
         },
         {
-          callSignNumber: "+1",
-          callSignCountry: "Canadá"
+          number: "+1",
+          country: "Canadá"
         }
     ],
     defaultAdmin: { 
             numberDocument: "0000000000", 
             name: "ADMIN", 
             lastName: "USER", 
-            phoneNumber: "3052627084"
+            phoneNumber: "3052627084",
+            email: "admi@admin.co"
     }
 }

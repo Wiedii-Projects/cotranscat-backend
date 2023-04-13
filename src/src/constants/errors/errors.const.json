@@ -129,6 +129,16 @@
       "message": "The ID document type is required."
     }
   },
+  "indicativeNumber":{
+    "numberRequired":{
+      "code": "INNU_001",
+      "message": "number is required"
+    },
+    "countryRequired":{
+      "code": "INNU_002",
+      "message": "country is required"
+    }
+  },
   "aggregateErrorsApp": {
 
     "__comment_RLLE__": "__ RLLE (RoleModel) These are API acronym comments__",
@@ -195,6 +205,25 @@
     },
     "errorDeleteDocumentType": {
       "code": "DCMTP_004",
+      "message": "Something went wrong."
+    },
+
+    "__comment_INNU__": "__ IDNU (IndicativeNumberModel) These are API acronym comments__",
+
+    "errorCreateIndicativeNumber": {
+      "code": "INNU_001",
+      "message": "Something went wrong."
+    },
+    "errorUpdateIndicativeNumber": {
+      "code": "INNU_002",
+      "message": "Something went wrong."
+    },
+    "errorGetIndicativeNumber": {
+      "code": "INNU_003",
+      "message": "Something went wrong."
+    },
+    "errorDeleteIndicativeNumber": {
+      "code": "INNU_004",
       "message": "Something went wrong."
     }
   }
