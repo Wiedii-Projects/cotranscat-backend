@@ -5,7 +5,7 @@ const { documentTypeController } = require('../controllers/index.controllers')
 const { Router } = require("express");
 
 // Checks - middleware
-const { documentTypeMiddleware } = require('../middleware/index.checks.middleware');
+const { documentTypeMiddleware, sharedMiddleware } = require('../middleware/index.checks.middleware');
 
 // Validators - middleware
 const { sharedValidators } = require('../middleware/index.validators.middleware');
@@ -19,17 +19,17 @@ router.post('/', [
 ], documentTypeController.createDocumentType);
 
 router.get('/', [
-    documentTypeMiddleware.checkAdministratorCredentials(),
+    sharedMiddleware.checkAdminRole(),
     sharedValidators.validateErrorFields,
 ], documentTypeController.getAllDocumentTypes);
 
 router.put('/:id', [
-    documentTypeMiddleware.checkAdministratorCredentials(),
+    sharedMiddleware.checkAdminRole(),
     sharedValidators.validateErrorFields,
 ], documentTypeController.updateDocumentType);
 
 router.delete('/:id', [
-    documentTypeMiddleware.checkAdministratorCredentials(),
+    sharedMiddleware.checkAdminRole(),
     sharedValidators.validateErrorFields,
 ], documentTypeController.deleteDocumentType);
 

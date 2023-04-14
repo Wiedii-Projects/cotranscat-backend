@@ -5,7 +5,7 @@ const { indicativeNumberController } = require('../controllers/index.controllers
 const { Router } = require("express");
 
 // Checks - middleware
-const { indicativeNumberMiddleware } = require('../middleware/index.checks.middleware');
+const { indicativeNumberMiddleware, sharedMiddleware } = require('../middleware/index.checks.middleware');
 
 // Validators - middleware
 const { sharedValidators } = require('../middleware/index.validators.middleware');
@@ -19,17 +19,17 @@ router.post('/', [
 ], indicativeNumberController.createIndicativeNumber);
 
 router.get('/', [
-    indicativeNumberMiddleware.checkAdministratorCredentials(),
+    sharedMiddleware.checkAdminRole(),
     sharedValidators.validateErrorFields,
 ], indicativeNumberController.getAllIndicativeNumber);
 
 router.put('/:id', [
-    indicativeNumberMiddleware.checkAdministratorCredentials(),
+    sharedMiddleware.checkAdminRole(),
     sharedValidators.validateErrorFields,
 ], indicativeNumberController.updateIndicativeNumber);
 
 router.delete('/:id', [
-    indicativeNumberMiddleware.checkAdministratorCredentials(),
+    sharedMiddleware.checkAdminRole(),
     sharedValidators.validateErrorFields,
 ], indicativeNumberController.deleteIndicativeNumber);
 
