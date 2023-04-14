@@ -24,7 +24,7 @@ module.exports = {
                 raw: true,
                 include: [{
                     model: Role,
-                    as: 'userRole'
+                    as: 'UserRole'
                   }],
                 group,
                 order,
@@ -33,10 +33,10 @@ module.exports = {
             });
             const users = rows.map( (user) => {
                 user.role = {};
-                user.role['id'] = encryptIdDataBase(user['userRole.id']);
-                user.role['role'] = user['userRole.role'];
-                delete user['userRole.id'];
-                delete user['userRole.role'];
+                user.role['id'] = encryptIdDataBase(user['UserRole.id']);
+                user.role['role'] = user['UserRole.role'];
+                delete user['UserRole.id'];
+                delete user['UserRole.role'];
                 user.id = encryptIdDataBase(user.id)
                 return user;
             });
@@ -61,7 +61,7 @@ module.exports = {
                 raw: true,
                 include: [{
                     model: Role,
-                    as: 'userRole'
+                    as: 'UserRole'
                   }],
                 group,
                 order,
@@ -70,10 +70,10 @@ module.exports = {
                 }).then( users => {
                     const usersWithRole = users.map( user => {
                         user.role = {};
-                        user.role['id'] = encryptIdDataBase(user['userRole.id']);
-                        user.role['role'] = user['userRole.role'];
-                        delete user['userRole.id'];
-                        delete user['userRole.role'];
+                        user.role['id'] = encryptIdDataBase(user['UserRole.id']);
+                        user.role['role'] = user['UserRole.role'];
+                        delete user['UserRole.id'];
+                        delete user['UserRole.role'];
                         user.id = encryptIdDataBase(user.id)
                         return user;
                     });

@@ -1,6 +1,6 @@
 const Role = require('../../role/role.model');
 const User = require('../../user/user.model');
-const CallSign = require('../../call-sign/call-sign.model');
+const CallSign = require('../../indicative-number/indicative-number.model');
 const DocumentType = require('../../document-type/document-type.model');
 const { defaultRole, defaultCallSign, defaultAdmin, defaultDocumentType } = require('./default-data.model');
 const { encryptPasswordHelper } = require('../../../helpers/auth.helpers');
@@ -23,8 +23,8 @@ class defaultDataBaseModel {
     }
 
     async getCallSign () {
-        const [{ callSignCountry }] = defaultCallSign;
-        const { id } = await CallSign.findOne({ where: { callSignCountry }});
+        const [{ country }] = defaultCallSign;
+        const { id } = await CallSign.findOne({ where: { country }});
         return id;
     }
 
