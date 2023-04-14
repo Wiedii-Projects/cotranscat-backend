@@ -13,19 +13,21 @@ const { authValidators, sharedValidators } = require('../index.validators.middle
 // Helpers
 const { sharedHelpers } = require('../../helpers/index.helpers');
 
+const checkJwt = () => {
+    return [
+        check('x-token', new ErrorModel(errorsConst.userErrors.noToken)).isString(),
+        check('x-token')
+            .custom((value, { req }) => authValidators.validateJWT(value, req)),
+        check('isValidToken', new ErrorModel(errorsConst.authErrors.tokenInvalid))
+            .custom((value) => value ? true : false),
+        check('user', new ErrorModel(errorsConst.userErrors.userNotExist))
+            .custom((value) => value.state ? true : false),
+        sharedValidators.validateErrorFields
+    ];
+}
+
 module.exports = {
-    checkJwt: () => {
-        return [
-            check('x-token', new ErrorModel(errorsConst.userErrors.noToken)).isString(),
-            check('x-token')
-                .custom((value, { req }) => authValidators.validateJWT(value, req)),
-            check('isValidToken', new ErrorModel(errorsConst.authErrors.tokenInvalid))
-                .custom((value) => value ? true : false),
-            check('user', new ErrorModel(errorsConst.userErrors.userNotExist))
-                .custom((value) => value.state ? true : false),
-            sharedValidators.validateErrorFields
-        ];
-    },
+    checkJwt,
     checkId: () => {
         return [
             check('id', new ErrorModel(errorsConst.userErrors.idRequired))
@@ -35,6 +37,7 @@ module.exports = {
     },
     checkAdminRole: () => {
         return [
+            ...checkJwt(),
             check('user', new ErrorModel(errorsConst.userErrors.idRequired))
                 .custom((value) => value.role.role === roleConst.ADMIN_ROLE)
         ]
