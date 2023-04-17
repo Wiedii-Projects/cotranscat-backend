@@ -11,11 +11,11 @@ const sharedCheckMiddleware = require('./shared.check.middleware');
 const { ErrorModel } = require("../../models/index.models");
 
 module.exports = {
-    checkCreateDocumentType: () => {
+    checkCreateDepartment: () => {
         return [
             ...sharedCheckMiddleware.checkAdminRole(),
-            check('name', new ErrorModel(errorsConst.documentType.nameRequired)).isString(),
-            check('name', new ErrorModel(errorsConst.documentType.lengthName)).isLength({ min: 2 }),
+            check('name', new ErrorModel(errorsConst.department.nameRequired)).isString(),
+            check('name', new ErrorModel(errorsConst.department.lengthName)).isLength(1),
         ]
     }
 }
