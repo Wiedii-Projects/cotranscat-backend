@@ -10,7 +10,7 @@ const MunicipalitySchema = dbConnectionOptions.define(
   "municipality",
   {
     name: {
-      type: DataTypes.STRING,
+      type: DataTypes.STRING(50),
       field: "name",
       required: [true, "The name municipality is required"],
     },

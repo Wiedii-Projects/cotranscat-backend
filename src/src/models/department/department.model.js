@@ -10,7 +10,7 @@ const DepartmentSchema = dbConnectionOptions.define(
   "department",
   {
     name: {
-      type: DataTypes.STRING,
+      type: DataTypes.STRING(30),
       field: "name",
       required: [true, "The name department is required"],
     },

@@ -1,32 +1,34 @@
 // Helpers
-const { sharedHelpers, responseHelpers } = require('../helpers/index.helpers');
+const { responseHelpers, sharedHelpers } = require('../helpers/index.helpers');
 
 // Models - Queries
-const { departmentQuery } = require('../models/index.queries');
+const { municipalityQuery } = require('../models/index.queries');
 
 
 module.exports = {
-    createDepartment: async (req, res) => {
-        const { name } = req.body;
+    createMunicipality: async (req, res) => {
         try {
-            await departmentQuery.createDepartmentQuery(name)
+            const { name, idDepartment } = req.body;
+            municipalityQuery.createMunicipalityQuery({name, idDepartment: sharedHelpers.decryptIdDataBase(idDepartment)})
             return responseHelpers.responseSuccess(res, null);
         } catch (error) {
             return responseHelpers.responseError(res, 500, error);
         }
     },
-    getAllDepartment: async (req, res) => {
+
+    getAllMunicipality: async (req, res) => {
         try {
-            const resp = await departmentQuery.findDepartment();
+            const resp = await municipalityQuery.findMunicipalityQuery()
             return responseHelpers.responseSuccess(res, resp);
         } catch (error) {
             return responseHelpers.responseError(res, 500, error);
         }
     },
-    updateDepartment: async (req, res) => {
-        const { decryptId, name } = req.body;
+    
+    updateMunicipality: async (req, res) => {
+        const { decryptId , name } = req.body;
         try {
-            await departmentQuery.updateDepartmentQuery(
+            await municipalityQuery.updateMunicipalityQuery(
                 { id: decryptId },
                 { name }
             )
@@ -35,10 +37,11 @@ module.exports = {
             return responseHelpers.responseError(res, 500, error);
         }
     },
-    deleteDepartment: async (req, res) => {
-        const { id } = req.params;
+
+    deleteMunicipality: async (req, res) => {
+        const { decryptId } = req.body;
         try {
-            await departmentQuery.deleteDepartmentQuery({ id: sharedHelpers.decryptIdDataBase(id) });
+            await municipalityQuery.deleteMunicipalityQuery({ id: decryptId });
             return responseHelpers.responseSuccess(res, null);
         } catch (error) {
             return responseHelpers.responseError(res, 500, error);

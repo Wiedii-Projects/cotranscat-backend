@@ -11,19 +11,16 @@ const sharedCheckMiddleware = require('./shared.check.middleware');
 const { ErrorModel } = require("../../models/index.models");
 
 module.exports = {
-    checkCreateDepartment: () => {
+    checkCreateMunicipality: () => {
         return [
             ...sharedCheckMiddleware.checkAdminRole(),
-            check('name', new ErrorModel(errorsConst.department.nameRequired)).isString(),
-            check('name', new ErrorModel(errorsConst.department.lengthName)).isLength({min: 1, max: 30}),
+            check('name', new ErrorModel(errorsConst.municipality.nameRequired)).isString().isLength({ min:1, max: 50 }),
         ]
     },
-
-    checkUpdateDepartment: () => {
+    checkUpdateMunicipality: () => {
         return [
             ...sharedCheckMiddleware.checkAdminRole(),
-            check('name', new ErrorModel(errorsConst.department.nameRequired)).isString(),
-            check('name', new ErrorModel(errorsConst.department.lengthName)).isLength({min: 1, max: 30}),
+            check('name', new ErrorModel(errorsConst.municipality.nameRequired)).isString().isLength({ min:1, max: 50 }),
         ]
-    }
+    },
 }

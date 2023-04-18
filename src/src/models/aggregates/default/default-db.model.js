@@ -1,8 +1,14 @@
+//Models - Default Data
+const { defaultRole, defaultIndicativeNumber, defaultAdmin, defaultDocumentType, defaultDepartment } = require('./default-data.model');
+
+//Models
 const Role = require('../../role/role.model');
 const User = require('../../user/user.model');
-const CallSign = require('../../indicative-number/indicative-number.model');
+const IndicativeNumber = require('../../indicative-number/indicative-number.model');
 const DocumentType = require('../../document-type/document-type.model');
-const { defaultRole, defaultCallSign, defaultAdmin, defaultDocumentType } = require('./default-data.model');
+const Department = require('../../department/department.model');
+
+//Helpers
 const { encryptPasswordHelper } = require('../../../helpers/auth.helpers');
 
 class defaultDataBaseModel {
@@ -22,9 +28,15 @@ class defaultDataBaseModel {
         return id;
     }
 
-    async getCallSign () {
-        const [{ country }] = defaultCallSign;
-        const { id } = await CallSign.findOne({ where: { country }});
+    async getIndicativeNumber () {
+        const [{ country }] = defaultIndicativeNumber;
+        const { id } = await IndicativeNumber.findOne({ where: { country }});
+        return id;
+    }
+
+    async getDepartment () {
+        const [{ name }] = defaultDepartment;
+        const { id } = await Department.findOne({ where: { name }});
         return id;
     }
 
@@ -40,19 +52,27 @@ class defaultDataBaseModel {
         return await Role.count();
     }
 
-    async countCallSign() {
-        return await CallSign.count();
+    async countIndicativeNumber() {
+        return await IndicativeNumber.count();
+    }
+
+    async countDepartment() {
+        return await Department.count();
     }
 
     async createDefaultDataBase() {
         await this.countRole() || defaultRole.map( async(element) => await Role.create( element ) );
-        await this.countCallSign() || defaultCallSign.map(  async(element) => await CallSign.create( element ) );
+        await this.countIndicativeNumber() || defaultIndicativeNumber.map(  async(element) => await IndicativeNumber.create( element ) );
         await this.countDocumentType() || defaultDocumentType.map(  async(element) => await DocumentType.create( element ) );
+        await this.countDepartment() || defaultDepartment.map(  async(element) => await Department.create( element ) );
 
-        const callSign = await this.getCallSign();
+
+        const indicativeNumber = await this.getIndicativeNumber();
         const idRole = await this.getAdminRole();
         const idDocumentType = await this.getDocumentType();
         const password = await encryptPasswordHelper(process.env.PASSWORD_ADMIN_ROOT);
+        const idDepartment = await this.getDepartment();
+
         await this.countUser() || 
             await User.create( 
                 { 
@@ -60,8 +80,9 @@ class defaultDataBaseModel {
                     password,
                     idRole, 
                     idDocumentType, 
-                    idIndicativeNumberPhone: callSign, 
-                    idIndicativeNumberPhoneWhatsApp: callSign
+                    idIndicativeNumberPhone: indicativeNumber, 
+                    idIndicativeNumberPhoneWhatsApp: indicativeNumber,
+                    idDepartment
                 });
     }
 }

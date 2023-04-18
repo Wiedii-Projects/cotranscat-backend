@@ -29,8 +29,8 @@ User.belongsTo(Municipality, { as: 'UserMunicipality', foreignKey: { name: "idMu
 Municipality.hasMany(User, { as: 'UserMunicipality', foreignKey: { name: "idMunicipality", allowNull: true } });
 
 // Relationship Municipality-Department
-Municipality.belongsTo(Department, { as: 'MunicipalityDepartment', foreignKey: { name: "department", allowNull: false } });
-Department.hasMany(Municipality, { as: 'MunicipalityDepartment', foreignKey: { name: "department", allowNull: false } });
+Municipality.belongsTo(Department, { as: 'MunicipalityDepartment', foreignKey: { name: "idDepartment", allowNull: false } });
+Department.hasMany(Municipality, { as: 'MunicipalityDepartment', foreignKey: { name: "idDepartment", allowNull: false } });
 
 // Relationship CodeSms-User
 CodeSms.belongsTo(User, { foreignKey: { name: "UserCode", allowNull: false } });
