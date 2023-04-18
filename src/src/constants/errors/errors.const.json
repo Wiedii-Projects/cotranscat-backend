@@ -131,12 +131,26 @@
   },
   "indicativeNumber":{
     "numberRequired":{
-      "code": "INNU_001",
+      "code": "INNU001",
       "message": "number is required"
     },
     "countryRequired":{
-      "code": "INNU_002",
+      "code": "INNU002",
       "message": "country is required"
+    }
+  },
+  "department":{
+    "nameRequired": {
+      "code": "DEPT001",
+      "message": "Department name is required"
+    },
+    "lengthName": {
+      "code": "DEPT002",
+      "message": "department name must have at least one character"
+    },
+    "idRequired": {
+      "code": "DEPT003",
+      "message": "The ID department is required."
     }
   },
   "aggregateErrorsApp": {
@@ -208,7 +222,7 @@
       "message": "Something went wrong."
     },
 
-    "__comment_INNU__": "__ IDNU (IndicativeNumberModel) These are API acronym comments__",
+    "__comment_INNU__": "__ INNU (IndicativeNumberModel) These are API acronym comments__",
 
     "errorCreateIndicativeNumber": {
       "code": "INNU_001",
@@ -224,6 +238,25 @@
     },
     "errorDeleteIndicativeNumber": {
       "code": "INNU_004",
+      "message": "Something went wrong."
+    },
+
+    "__comment_DEPT__": "__ INNU (DepartmentModel) These are API acronym comments__",
+
+    "errorCreateDepartment": {
+      "code": "DEPT_001",
+      "message": "Something went wrong."
+    },
+    "errorUpdateDepartment": {
+      "code": "DEPT_002",
+      "message": "Something went wrong."
+    },
+    "errorGetDepartment": {
+      "code": "DEPT_003",
+      "message": "Something went wrong."
+    },
+    "errorDeleteDepartment": {
+      "code": "DEPT_004",
       "message": "Something went wrong."
     }
   }

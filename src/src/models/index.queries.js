@@ -3,5 +3,6 @@ module.exports = {
   documentTypeQuery: require("./document-type/document-type.query"),
   codeSMSQuery: require("./code-sms/code-sms.query"),
   roleQuery: require("./role/role.query"),
-  indicativeNumberQuery: require("./indicative-number/indicative-number.query")
+  indicativeNumberQuery: require("./indicative-number/indicative-number.query"),
+  departmentQuery: require("./department/department.query")
 };

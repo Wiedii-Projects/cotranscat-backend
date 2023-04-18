@@ -5,7 +5,7 @@ const { errorsConst } = require('../../constants/index.constants');
 const { check } = require('express-validator');
 
 // Middleware
-const { sharedMiddleware } = require('../index.checks.middleware');
+const sharedCheckMiddleware = require('./shared.check.middleware');
 
 // Models
 const { ErrorModel } = require("../../models/index.models");
@@ -13,7 +13,7 @@ const { ErrorModel } = require("../../models/index.models");
 module.exports = {
     checkCreateIndicativeNumber: () => {
         return [
-            ...sharedMiddleware.checkAdminRole(),
+            ...sharedCheckMiddleware.checkAdminRole(),
             check('number', new ErrorModel(errorsConst.indicativeNumber.numberRequired)).isString().isLength({ min:1, max: 10 }),
             check('country', new ErrorModel(errorsConst.indicativeNumber.countryRequired)).isString().isLength({ min:1, max: 50 }),
         ]

@@ -3,5 +3,7 @@ module.exports = {
     userMiddleware: require('./checks/user.check.middleware'),
     documentTypeMiddleware: require('./checks/document-type.check.middleware'),
     sharedMiddleware: require('./checks/shared.check.middleware'),
-    indicativeNumberMiddleware: require('./checks/indicative-number.check.middleware')
+    indicativeNumberMiddleware: require('./checks/indicative-number.check.middleware'),
+    departmentMiddleware: require('./checks/department.check.middleware')
+
 }
