@@ -38,7 +38,7 @@ module.exports = {
     checkAdminRole: () => {
         return [
             ...checkJwt(),
-            check('user', new ErrorModel(errorsConst.userErrors.idRequired))
+            check('user', new ErrorModel(errorsConst.userErrors.adminRole))
                 .custom((value) => value.role.role === roleConst.ADMIN_ROLE)
         ]
     }
