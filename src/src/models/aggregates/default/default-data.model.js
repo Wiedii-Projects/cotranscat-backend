@@ -74,6 +74,15 @@ module.exports = {
         { name: 'Casanare' },
         { name: 'Cauca' },
         { name: 'Cesar' },
-        { name: 'Chocó' }
+        { name: 'Chocó' },
+        { name: 'Norte de Santander'}
+    ],
+    defaultPaymentMethod : [
+        { name: 'Transferencia' },
+        { name: 'Efectivo' },
+        { name: 'Tarjeta Crédito' },
+        { name: 'Crédito' },
+        { name: 'Contraentrega' },
+        { name: 'Crédito Cliente' }
     ]
 }
