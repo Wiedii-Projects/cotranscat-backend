@@ -1,6 +1,5 @@
 // Helpers
 const { responseHelpers } = require('../helpers/index.helpers');
-const sharedHelpers = require('../helpers/shared.helpers');
 
 // Models - Queries
 const { indicativeNumberQuery } = require('../models/index.queries');
@@ -27,10 +26,10 @@ module.exports = {
     },
     
     updateIndicativeNumber: async (req, res) => {
-        const [{ id }, { number , country }] = [req.params, req.body];
+        const { number , country, decryptId } = req.body;
         try {
             await indicativeNumberQuery.updateIndicativeNumberQuery(
-                { id: sharedHelpers.decryptIdDataBase(id) },
+                { id: decryptId },
                 { number: `+${number}`, country }
             )
             return responseHelpers.responseSuccess(res, null);
@@ -40,9 +39,9 @@ module.exports = {
     },
 
     deleteIndicativeNumber: async (req, res) => {
-        const { id } = req.params;
+        const { decryptId } = req.body;
         try {
-            await indicativeNumberQuery.deleteIndicativeNumberQuery({ id: sharedHelpers.decryptIdDataBase(id) });
+            await indicativeNumberQuery.deleteIndicativeNumberQuery({ id: decryptId });
             return responseHelpers.responseSuccess(res, null);
         } catch (error) {
             return responseHelpers.responseError(res, 500, error);
