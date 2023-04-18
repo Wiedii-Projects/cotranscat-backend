@@ -4,6 +4,6 @@ module.exports = {
     documentTypeMiddleware: require('./checks/document-type.check.middleware'),
     sharedMiddleware: require('./checks/shared.check.middleware'),
     indicativeNumberMiddleware: require('./checks/indicative-number.check.middleware'),
-    departmentMiddleware: require('./checks/department.check.middleware')
-
+    departmentMiddleware: require('./checks/department.check.middleware'),
+    municipalityMiddleware: require('./checks/municipality.check.middleware')
 }

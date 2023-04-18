@@ -4,5 +4,6 @@ module.exports = {
   codeSMSQuery: require("./code-sms/code-sms.query"),
   roleQuery: require("./role/role.query"),
   indicativeNumberQuery: require("./indicative-number/indicative-number.query"),
-  departmentQuery: require("./department/department.query")
+  departmentQuery: require("./department/department.query"),
+  municipalityQuery: require("./municipality/municipality.query")
 };

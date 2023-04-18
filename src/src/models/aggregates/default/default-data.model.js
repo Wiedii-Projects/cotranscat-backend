@@ -33,7 +33,7 @@ module.exports = {
             name: "R.C." 
         } 
     ],
-    defaultCallSign: [
+    defaultIndicativeNumber: [
         {
           number: "+57",
           country: "Colombia"
@@ -61,5 +61,19 @@ module.exports = {
             lastName: "USER", 
             phoneNumber: "3052627084",
             email: "admi@admin.co"
-    }
+    },
+    defaultDepartment : [
+        { name: 'Amazonas' },
+        { name: 'Antioquia' },
+        { name: 'Arauca' },
+        { name: 'Atlántico' },
+        { name: 'Bolívar' },
+        { name: 'Boyacá' },
+        { name: 'Caldas' },
+        { name: 'Caquetá' },
+        { name: 'Casanare' },
+        { name: 'Cauca' },
+        { name: 'Cesar' },
+        { name: 'Chocó' }
+    ]
 }

@@ -5,7 +5,7 @@ const { errorsConst } = require('../../constants/index.constants');
 const { Department } = require('../index.models');
 
 // Helpers
-const { encryptIdDataBase } = require('../../helpers/shared.helpers');
+const sharedHelpers = require('../../helpers/shared.helpers');
 
 module.exports = {
     createDepartmentQuery: async (name) => {
@@ -24,7 +24,7 @@ module.exports = {
                 where,
                 raw: true
             }).then(departments => departments.map(({ id, name }) => ({
-                id: encryptIdDataBase(id),
+                id: sharedHelpers.encryptIdDataBase(id),
                 name
             })))
         } catch {

@@ -2,7 +2,7 @@
 const { errorsConst } = require('../../constants/index.constants');
 
 // Helpers
-const { encryptIdDataBase } = require('../../helpers/shared.helpers');
+const sharedHelpers = require('../../helpers/shared.helpers');
 
 // Models
 const { IndicativeNumber } = require('../index.models');
@@ -24,7 +24,7 @@ module.exports = {
                 where,
                 raw: true
             }).then(indicativeNumber => indicativeNumber.map(({id,number,country}) => ({
-                id:encryptIdDataBase(id),
+                id: sharedHelpers.encryptIdDataBase(id),
                 number,
                 country
             })))

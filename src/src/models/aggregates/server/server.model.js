@@ -18,7 +18,8 @@ class ServerModel {
             users: '/api/users',
             documentType: '/api/documentType',
             indicativeNumber: '/api/indicativeNumber',
-            department: '/api/department'
+            department: '/api/department',
+            municipality:'/api/municipality'
         }
         this.dbHost = coreConfigurationsConst.dbHost;
         this.db();
@@ -44,6 +45,7 @@ class ServerModel {
         this.app.use(this.paths.documentType, require('../../../routes/document-type.routes'));
         this.app.use(this.paths.indicativeNumber, require('../../../routes/indicative-number.routes'));
         this.app.use(this.paths.department, require('../../../routes/department.routes'));
+        this.app.use(this.paths.municipality, require('../../../routes/municipality.routes'));
     }
 
     listen() {
