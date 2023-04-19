@@ -1,5 +1,5 @@
 //Models - Default Data
-const { defaultRole, defaultIndicativeNumber, defaultAdmin, defaultDocumentType, defaultDepartment, defaultPaymentMethod } = require('./default-data.model');
+const { defaultRole, defaultIndicativeNumber, defaultAdmin, defaultDocumentType, defaultDepartment, defaultPaymentMethod, defaultMunicipality } = require('./default-data.model');
 
 //Models
 const Role = require('../../role/role.model');
@@ -8,6 +8,7 @@ const IndicativeNumber = require('../../indicative-number/indicative-number.mode
 const DocumentType = require('../../document-type/document-type.model');
 const Department = require('../../department/department.model');
 const PaymentMethod = require('../../payment-method/payment-method.model');
+const Municipality = require('../../municipality/municipality.model');
 
 //Helpers
 const { encryptPasswordHelper } = require('../../../helpers/auth.helpers');
@@ -41,6 +42,12 @@ class defaultDataBaseModel {
         return id;
     }
 
+    async getMunicipality () {
+        const [{ name }] = defaultMunicipality;
+        const { id } = await Municipality.findOne({ where: { name }});
+        return id;
+    }
+
     async getPaymentMethod () {
         const [{ name }] = defaultDepartment;
         const { id } = await Department.findOne({ where: { name }});
@@ -67,6 +74,10 @@ class defaultDataBaseModel {
         return await Department.count();
     }
 
+    async countMunicipality() {
+        return await Municipality.count();
+    }
+
     async countPaymentMethod() {
         return await PaymentMethod.count();
     }
@@ -77,7 +88,7 @@ class defaultDataBaseModel {
         await this.countDocumentType() || defaultDocumentType.map(  async(element) => await DocumentType.create( element ) );
         await this.countDepartment() || defaultDepartment.map(  async(element) => await Department.create( element ) );
         await this.countPaymentMethod() || defaultPaymentMethod.map(  async(element) => await PaymentMethod.create( element ) );
-
+        await this.countMunicipality() || defaultMunicipality.map(  async(element) => await Municipality.create( element ) );
 
         const indicativeNumber = await this.getIndicativeNumber();
         const idRole = await this.getAdminRole();
@@ -85,6 +96,7 @@ class defaultDataBaseModel {
         const password = await encryptPasswordHelper(process.env.PASSWORD_ADMIN_ROOT);
         const idDepartment = await this.getDepartment();
         const idPaymentMethod = await this.getPaymentMethod();
+        const idMunicipality = await this.getMunicipality();
 
 
         await this.countUser() || 
@@ -97,7 +109,8 @@ class defaultDataBaseModel {
                     idIndicativeNumberPhone: indicativeNumber, 
                     idIndicativeNumberPhoneWhatsApp: indicativeNumber,
                     idDepartment,
-                    idPaymentMethod
+                    idPaymentMethod,
+                    idMunicipality
                 });
     }
 }
