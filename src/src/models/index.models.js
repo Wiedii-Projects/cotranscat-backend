@@ -6,6 +6,7 @@ const IndicativeNumber = require("./indicative-number/indicative-number.model");
 const Department = require("./department/department.model");
 const Municipality = require("./municipality/municipality.model");
 const PaymentMethod = require("./payment-method/payment-method.model");
+const UnitMeasure = require("./unit-measure/unit-measure.model");
 
 // Relationships BD
 
@@ -49,5 +50,6 @@ module.exports = {
   IndicativeNumber,
   Department,
   Municipality,
-  PaymentMethod
+  PaymentMethod,
+  UnitMeasure
 };

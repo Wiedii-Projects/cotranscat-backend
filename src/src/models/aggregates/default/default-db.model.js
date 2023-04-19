@@ -1,5 +1,5 @@
 //Models - Default Data
-const { defaultRole, defaultIndicativeNumber, defaultAdmin, defaultDocumentType, defaultDepartment, defaultPaymentMethod, defaultMunicipality } = require('./default-data.model');
+const { defaultRole, defaultIndicativeNumber, defaultAdmin, defaultDocumentType, defaultDepartment, defaultPaymentMethod, defaultMunicipality, defaultUnitMeasure } = require('./default-data.model');
 
 //Models
 const Role = require('../../role/role.model');
@@ -9,6 +9,7 @@ const DocumentType = require('../../document-type/document-type.model');
 const Department = require('../../department/department.model');
 const PaymentMethod = require('../../payment-method/payment-method.model');
 const Municipality = require('../../municipality/municipality.model');
+const UnitMeasure = require('../../unit-measure/unit-measure.model');
 
 //Helpers
 const { encryptPasswordHelper } = require('../../../helpers/auth.helpers');
@@ -54,6 +55,12 @@ class defaultDataBaseModel {
         return id;
     }
 
+    async getUnitMeasure () {
+        const [{ name }] = defaultUnitMeasure;
+        const { id } = await UnitMeasure.findOne({ where: { name }});
+        return id;
+    }
+
     async countUser() {
         return await User.count();
     }
@@ -82,6 +89,10 @@ class defaultDataBaseModel {
         return await PaymentMethod.count();
     }
 
+    async countUnitMeasure() {
+        return await UnitMeasure.count();
+    }
+
     async createDefaultDataBase() {
         await this.countRole() || defaultRole.map( async(element) => await Role.create( element ) );
         await this.countIndicativeNumber() || defaultIndicativeNumber.map(  async(element) => await IndicativeNumber.create( element ) );
@@ -89,6 +100,7 @@ class defaultDataBaseModel {
         await this.countDepartment() || defaultDepartment.map(  async(element) => await Department.create( element ) );
         await this.countPaymentMethod() || defaultPaymentMethod.map(  async(element) => await PaymentMethod.create( element ) );
         await this.countMunicipality() || defaultMunicipality.map(  async(element) => await Municipality.create( element ) );
+        await this.countUnitMeasure() || defaultUnitMeasure.map(  async(element) => await UnitMeasure.create( element ) );
 
         const indicativeNumber = await this.getIndicativeNumber();
         const idRole = await this.getAdminRole();
@@ -97,7 +109,7 @@ class defaultDataBaseModel {
         const idDepartment = await this.getDepartment();
         const idPaymentMethod = await this.getPaymentMethod();
         const idMunicipality = await this.getMunicipality();
-
+        const idUnitMeasure = await this.getUnitMeasure();
 
         await this.countUser() || 
             await User.create( 
@@ -110,7 +122,8 @@ class defaultDataBaseModel {
                     idIndicativeNumberPhoneWhatsApp: indicativeNumber,
                     idDepartment,
                     idPaymentMethod,
-                    idMunicipality
+                    idMunicipality,
+                    idUnitMeasure
                 });
     }
 }

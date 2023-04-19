@@ -126,5 +126,9 @@ module.exports = {
         { idDepartment: "13" , name: 'Toledo' },
         { idDepartment: "13" , name: 'Villa Caro' },
         { idDepartment: "13" , name: 'Villa Del Rosario' }
-      ]
+    ],
+    defaultUnitMeasure:[
+        { name : "kg" },
+        { name : "gr" }
+    ]
 }
