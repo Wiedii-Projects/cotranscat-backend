@@ -5,6 +5,7 @@ const DocumentType = require("./document-type/document-type.model");
 const IndicativeNumber = require("./indicative-number/indicative-number.model");
 const Department = require("./department/department.model");
 const Municipality = require("./municipality/municipality.model");
+const PaymentMethod = require("./payment-method/payment-method.model");
 
 // Relationships BD
 
@@ -47,5 +48,6 @@ module.exports = {
   DocumentType,
   IndicativeNumber,
   Department,
-  Municipality
+  Municipality,
+  PaymentMethod
 };

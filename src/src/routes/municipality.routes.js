@@ -17,7 +17,10 @@ router.post('/', [
     sharedValidators.validateErrorFields,
 ], municipalityController.createMunicipality);
 
-router.get('/', municipalityController.getAllMunicipality);
+router.get('/',[
+    sharedMiddleware.checkJwt(),
+    sharedValidators.validateErrorFields
+],municipalityController.getAllMunicipality);
 
 router.put('/:id', [
     municipalityMiddleware.checkUpdateMunicipality(),

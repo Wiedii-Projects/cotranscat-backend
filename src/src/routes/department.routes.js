@@ -18,7 +18,10 @@ router.post('/', [
     sharedValidators.validateErrorFields,
 ], departmentController.createDepartment);
 
-router.get('/', departmentController.getAllDepartment);
+router.get('/',[
+    sharedMiddleware.checkJwt(),
+    sharedValidators.validateErrorFields
+],departmentController.getAllDepartment);
 
 router.put('/:id', [
     departmentMiddleware.checkUpdateDepartment(),

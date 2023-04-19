@@ -159,6 +159,12 @@
       "message": "Municipality name is required"
     }
   },
+  "paymentMethod":{
+    "nameRequired": {
+      "code": "PYMT001",
+      "message": "Payment method name is required"
+    }
+  },
   "aggregateErrorsApp": {
 
     "__comment_RLLE__": "__ RLLE (RoleModel) These are API acronym comments__",
@@ -283,6 +289,25 @@
     },
     "errorDeleteMunicipality": {
       "code": "MUNC_004",
+      "message": "Something went wrong."
+    },
+
+    "__comment_PYMT__": "__ PYMT (PaymentMethodModel) These are API acronym comments__",
+
+    "errorCreatePaymentMethod": {
+      "code": "PYMT_001",
+      "message": "Something went wrong."
+    },
+    "errorUpdatePaymentMethod": {
+      "code": "PYMT_002",
+      "message": "Something went wrong."
+    },
+    "errorGetPaymentMethod": {
+      "code": "PYMT_003",
+      "message": "Something went wrong."
+    },
+    "errorDeletePaymentMethod": {
+      "code": "PYMT_004",
       "message": "Something went wrong."
     }
   }
