@@ -2,7 +2,7 @@
 const { responseHelpers } = require('../helpers/index.helpers');
 
 // Models - Queries
-const { paymentMethodQuery, unitMeasureQuery } = require('../models/index.queries');
+const { unitMeasureQuery } = require('../models/index.queries');
 
 
 module.exports = {
