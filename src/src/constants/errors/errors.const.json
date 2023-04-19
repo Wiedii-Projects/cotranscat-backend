@@ -165,6 +165,12 @@
       "message": "Payment method name is required"
     }
   },
+  "unitMeasure":{
+    "nameRequired": {
+      "code": "UNMS001",
+      "message": "Unit measure name is required"
+    }
+  },
   "aggregateErrorsApp": {
 
     "__comment_RLLE__": "__ RLLE (RoleModel) These are API acronym comments__",
@@ -253,7 +259,7 @@
       "message": "Something went wrong."
     },
 
-    "__comment_DEPT__": "__ INNU (DepartmentModel) These are API acronym comments__",
+    "__comment_DEPT__": "__ DEPT (DepartmentModel) These are API acronym comments__",
 
     "errorCreateDepartment": {
       "code": "DEPT_001",
@@ -308,6 +314,25 @@
     },
     "errorDeletePaymentMethod": {
       "code": "PYMT_004",
+      "message": "Something went wrong."
+    },
+
+    "__comment_UNMS__": "__ UNMS (UnitMeasureModel) These are API acronym comments__",
+
+    "errorCreateUnitMeasure": {
+      "code": "UNMS_001",
+      "message": "Something went wrong."
+    },
+    "errorUpdateUnitMeasure": {
+      "code": "UNMS_002",
+      "message": "Something went wrong."
+    },
+    "errorGetUnitMeasure": {
+      "code": "UNMS_003",
+      "message": "Something went wrong."
+    },
+    "errorDeleteUnitMeasure": {
+      "code": "UNMS_004",
       "message": "Something went wrong."
     }
   }
