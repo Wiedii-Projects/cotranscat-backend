@@ -7,5 +7,6 @@ module.exports = {
   departmentQuery: require("./department/department.query"),
   municipalityQuery: require("./municipality/municipality.query"),
   paymentMethodQuery: require("./payment-method/payment-method.query"),
-  unitMeasureQuery: require("./unit-measure/unit-measure.query")
+  unitMeasureQuery: require("./unit-measure/unit-measure.query"),
+  shippingTypeQuery: require("./shipping-type/shipping-type.query")
 };

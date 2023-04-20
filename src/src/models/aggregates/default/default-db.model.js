@@ -1,5 +1,5 @@
 //Models - Default Data
-const { defaultRole, defaultIndicativeNumber, defaultAdmin, defaultDocumentType, defaultDepartment, defaultPaymentMethod, defaultMunicipality, defaultUnitMeasure } = require('./default-data.model');
+const { defaultRole, defaultIndicativeNumber, defaultAdmin, defaultDocumentType, defaultDepartment, defaultPaymentMethod, defaultMunicipality, defaultUnitMeasure, defaultShippingType } = require('./default-data.model');
 
 //Models
 const Role = require('../../role/role.model');
@@ -10,6 +10,7 @@ const Department = require('../../department/department.model');
 const PaymentMethod = require('../../payment-method/payment-method.model');
 const Municipality = require('../../municipality/municipality.model');
 const UnitMeasure = require('../../unit-measure/unit-measure.model');
+const ShippingType = require('../../shipping-type/shipping-type.model');
 
 //Helpers
 const { encryptPasswordHelper } = require('../../../helpers/auth.helpers');
@@ -61,6 +62,12 @@ class defaultDataBaseModel {
         return id;
     }
 
+    async getShippingType () {
+        const [{ name }] = defaultShippingType;
+        const { id } = await ShippingType.findOne({ where: { name }});
+        return id;
+    }
+
     async countUser() {
         return await User.count();
     }
@@ -93,6 +100,10 @@ class defaultDataBaseModel {
         return await UnitMeasure.count();
     }
 
+    async countShippingType() {
+        return await ShippingType.count();
+    }
+
     async createDefaultDataBase() {
         await this.countRole() || defaultRole.map( async(element) => await Role.create( element ) );
         await this.countIndicativeNumber() || defaultIndicativeNumber.map(  async(element) => await IndicativeNumber.create( element ) );
@@ -101,6 +112,7 @@ class defaultDataBaseModel {
         await this.countPaymentMethod() || defaultPaymentMethod.map(  async(element) => await PaymentMethod.create( element ) );
         await this.countMunicipality() || defaultMunicipality.map(  async(element) => await Municipality.create( element ) );
         await this.countUnitMeasure() || defaultUnitMeasure.map(  async(element) => await UnitMeasure.create( element ) );
+        await this.countShippingType() || defaultShippingType.map(  async(element) => await ShippingType.create( element ) );
 
         const indicativeNumber = await this.getIndicativeNumber();
         const idRole = await this.getAdminRole();
@@ -110,6 +122,7 @@ class defaultDataBaseModel {
         const idPaymentMethod = await this.getPaymentMethod();
         const idMunicipality = await this.getMunicipality();
         const idUnitMeasure = await this.getUnitMeasure();
+        const idShippingType = await this.getShippingType();
 
         await this.countUser() || 
             await User.create( 
@@ -123,7 +136,8 @@ class defaultDataBaseModel {
                     idDepartment,
                     idPaymentMethod,
                     idMunicipality,
-                    idUnitMeasure
+                    idUnitMeasure,
+                    idShippingType
                 });
     }
 }
