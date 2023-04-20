@@ -171,6 +171,12 @@
       "message": "Unit measure name is required"
     }
   },
+  "shippingType":{
+    "nameRequired": {
+      "code": "STYP001",
+      "message": "Shipping type name is required"
+    }
+  },
   "aggregateErrorsApp": {
 
     "__comment_RLLE__": "__ RLLE (RoleModel) These are API acronym comments__",
@@ -333,6 +339,25 @@
     },
     "errorDeleteUnitMeasure": {
       "code": "UNMS_004",
+      "message": "Something went wrong."
+    },
+
+    "__comment_STYP__": "__ STYP (ShippingTypeModel) These are API acronym comments__",
+
+    "errorCreateShippingType": {
+      "code": "STYP_001",
+      "message": "Something went wrong."
+    },
+    "errorUpdateShippingType": {
+      "code": "STYP_002",
+      "message": "Something went wrong."
+    },
+    "errorGetShippingType": {
+      "code": "STYP_003",
+      "message": "Something went wrong."
+    },
+    "errorDeleteShippingType": {
+      "code": "STYP_004",
       "message": "Something went wrong."
     }
   }

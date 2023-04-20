@@ -130,5 +130,15 @@ module.exports = {
     defaultUnitMeasure:[
         { name : "kg" },
         { name : "gr" }
+    ],
+    defaultShippingType:[
+        {name : "Ropa, zapatos, accesorios"},
+        { name : "Muebles y enseres" },
+        { name : "Aparatos electrónicos ( hogar )" },
+        { name : "Portátiles celulares u otros" },
+        { name : "Insumos médicos" },
+        { name : "Autopartes y repuestos" },
+        { name : "Publicidad, papelería y otros" },
+        { name : "Documentos" }
     ]
 }

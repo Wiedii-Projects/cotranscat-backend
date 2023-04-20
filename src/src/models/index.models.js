@@ -7,6 +7,7 @@ const Department = require("./department/department.model");
 const Municipality = require("./municipality/municipality.model");
 const PaymentMethod = require("./payment-method/payment-method.model");
 const UnitMeasure = require("./unit-measure/unit-measure.model");
+const ShippingType = require("./shipping-type/shipping-type.model");
 
 // Relationships BD
 
@@ -51,5 +52,6 @@ module.exports = {
   Department,
   Municipality,
   PaymentMethod,
-  UnitMeasure
+  UnitMeasure,
+  ShippingType
 };
