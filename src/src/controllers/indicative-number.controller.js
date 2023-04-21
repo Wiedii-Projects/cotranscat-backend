@@ -30,7 +30,7 @@ module.exports = {
         try {
             await indicativeNumberQuery.updateIndicativeNumberQuery(
                 { id: decryptId },
-                { number: `+${number}`, country }
+                { number: number && `+${number}`, country }
             )
             return responseHelpers.responseSuccess(res, null);
         } catch (error) {

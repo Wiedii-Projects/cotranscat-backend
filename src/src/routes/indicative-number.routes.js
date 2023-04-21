@@ -15,24 +15,20 @@ const router = Router();
 
 router.post('/', [
     indicativeNumberMiddleware.checkCreateIndicativeNumber(),
-    sharedValidators.validateErrorFields,
 ], indicativeNumberController.createIndicativeNumber);
 
 router.get('/',[
-    sharedMiddleware.checkJwt(),
-    sharedValidators.validateErrorFields
+    sharedMiddleware.checkJwt()
 ],indicativeNumberController.getAllIndicativeNumber);
 
 router.put('/:id', [
-    sharedMiddleware.checkAdminRole(),
+    indicativeNumberMiddleware.checkUpdateIndicativeNumber(),
     sharedMiddleware.checkId(),
-    sharedValidators.validateErrorFields,
 ], indicativeNumberController.updateIndicativeNumber);
 
 router.delete('/:id', [
     sharedMiddleware.checkAdminRole(),
     sharedMiddleware.checkId(),
-    sharedValidators.validateErrorFields,
 ], indicativeNumberController.deleteIndicativeNumber);
 
 module.exports = router;

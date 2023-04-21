@@ -14,8 +14,9 @@ module.exports = {
     checkCreateDocumentType: () => {
         return [
             ...sharedCheckMiddleware.checkAdminRole(),
-            check('name', new ErrorModel(errorsConst.documentType.nameRequired)).isString(),
-            check('name', new ErrorModel(errorsConst.documentType.lengthName)).isLength({ min: 2 }),
+            check('name')
+            .isString().withMessage(new ErrorModel(errorsConst.documentType.nameRequired))
+            .isLength({min: 2}).withMessage(new ErrorModel(errorsConst.documentType.lengthName))
         ]
     }
 }
