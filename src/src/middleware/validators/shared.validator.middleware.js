@@ -11,5 +11,10 @@ module.exports = {
             return responseHelpers.responseAllError(res, 400, errors.errors[0].msg);
         }
         next();
-    }
+    },
+    validateError: (req, res, next) => {
+        const { errors: [error] } = validationResult(req);
+        if (error) return responseHelpers.responseAllError(res, 400, error.msg);
+        next();
+    } 
 }

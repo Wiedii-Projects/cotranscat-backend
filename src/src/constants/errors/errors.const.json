@@ -176,13 +176,21 @@
     }
   },
   "indicativeNumber":{
-    "numberRequired":{
+    "numberType":{
       "code": "INNU001",
-      "message": "number is required"
+      "message": "the data type is incorrect"
     },
-    "countryRequired":{
+    "numberCharacters":{
       "code": "INNU002",
-      "message": "country is required"
+      "message": "the data must have a minimum of 1 character and a maximum of 10 characters."
+    },
+    "countryType":{
+      "code": "INNU003",
+      "message": "the data type is incorrect"
+    },
+    "countryCharacters":{
+      "code": "INNU004",
+      "message": "the data must have a minimum of 1 character and a maximum of 50 characters."
     },
     "queryErrors": {
       "createError": {
