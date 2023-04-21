@@ -14,16 +14,18 @@ module.exports = {
     checkCreateDepartment: () => {
         return [
             ...sharedCheckMiddleware.checkAdminRole(),
-            check('name', new ErrorModel(errorsConst.department.nameRequired)).isString(),
-            check('name', new ErrorModel(errorsConst.department.lengthName)).isLength({min: 1, max: 30}),
+            check('name')
+            .isString().withMessage(new ErrorModel(errorsConst.department.nameRequired))
+            .isLength({min: 1, max: 30}).withMessage(new ErrorModel(errorsConst.department.lengthName)),
         ]
     },
 
     checkUpdateDepartment: () => {
         return [
             ...sharedCheckMiddleware.checkAdminRole(),
-            check('name', new ErrorModel(errorsConst.department.nameRequired)).isString(),
-            check('name', new ErrorModel(errorsConst.department.lengthName)).isLength({min: 1, max: 30}),
+            check('name')
+            .isString().withMessage(new ErrorModel(errorsConst.department.nameRequired))
+            .isLength({min: 1, max: 30}).withMessage(new ErrorModel(errorsConst.department.lengthName)),
         ]
     }
 }
