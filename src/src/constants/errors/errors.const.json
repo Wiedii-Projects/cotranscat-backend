@@ -157,6 +157,10 @@
     "nameRequired": {
       "code": "MUNC001",
       "message": "Municipality name is required"
+    },
+    "municipalityDoesNotExist": {
+      "code": "MUN002",
+      "message": "the municipality does not exist"
     }
   },
   "paymentMethod":{
@@ -194,10 +198,6 @@
       "code": "VHC004",
       "message": "the municipality is required"
     },
-    "municipalityDoesNotExist": {
-      "code": "VHC005",
-      "message": "the municipality does not exist"
-    },
     "markRequired": {
       "code": "VHC006",
       "message": "The vehicle brand is invalid"
@@ -214,17 +214,9 @@
       "code": "VHC009",
       "message": "The price entered is invalid"
     },
-    "widthRequired": {
-      "code": "VHC010",
-      "message": "vehicle width is required"
-    },
     "widthInvalid": {
       "code": "VHC011",
       "message": "vehicle width is invalid"
-    },
-    "heightRequired": {
-      "code": "VHC012",
-      "message": "vehicle height is required"
     },
     "heightInvalid": {
       "code": "VHC013",

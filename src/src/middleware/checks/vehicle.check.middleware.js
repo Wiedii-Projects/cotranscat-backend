@@ -30,7 +30,7 @@ module.exports = {
             .exists().isString().notEmpty()
             .withMessage(new ErrorModel(errorsConst.vehicle.municipalityRequired))
             .custom(async (value, { req }) => await municipalityValidators.validateMunicipality(req, { where: { id: sharedHelpers.decryptIdDataBase(value) } })),
-        check('idMunicipality', new ErrorModel(errorsConst.vehicle.municipalityDoesNotExist))
+        check('idMunicipality', new ErrorModel(errorsConst.municipality.municipalityDoesNotExist))
             .custom((value) => !!value),
         check('mark', new ErrorModel(errorsConst.vehicle.markRequired)).exists().isString().notEmpty(),
         check('model', new ErrorModel(errorsConst.vehicle.modelRequired)).exists().isString().notEmpty(),
