@@ -43,7 +43,7 @@ module.exports = {
             .custom(([value]) => value?.length > 2).withMessage(new ErrorModel(errorsConst.vehicle.widthInvalid))
     ]),
     checkGetVehicle: () => ([
-        //TODO: implement validation of the coordinator role
+        //TODO: implement validation of the seller role
         check('id').custom(async (value, { req }) => await vehicleValidator.validateVehicle(req, { where: { id:  sharedHelpers.decryptIdDataBase(value) } })),
         check('vehicle', new ErrorModel(errorsConst.vehicle.vehicleDoesNotExist)).custom((value) => value)
     ])
