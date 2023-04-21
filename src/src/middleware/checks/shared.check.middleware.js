@@ -41,5 +41,6 @@ module.exports = {
             check('user', new ErrorModel(errorsConst.userErrors.adminRole))
                 .custom((value) => value.role.role === roleConst.ADMIN_ROLE)
         ]
-    }
+    },
+    //TODO: create validation of the coordinator role
 }
