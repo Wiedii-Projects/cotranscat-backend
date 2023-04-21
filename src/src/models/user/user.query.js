@@ -9,88 +9,84 @@ const { encryptIdDataBase } = require('../../helpers/shared.helpers');
 
 module.exports = {
     findAndCountUserQuery: async (query) => {
+        let {
+            where,
+            attributes = ['id', 'name', 'lastName', 'email', 'phoneNumber', 'state', 'img'],
+            group,
+            limit,
+            offset,
+            order
+        } = query;
         try {
-            let {
-                where, 
-                attributes = [ 'id', 'name', 'lastName', 'email', 'phoneNumber', 'state', 'img', 'google'], 
-                group, 
-                limit, 
-                offset, 
-                order
-            } = query;
-            const { rows, count } = await User.findAndCountAll({
+            return await User.findAndCountAll({
                 where,
                 attributes,
                 raw: true,
                 include: [{
                     model: Role,
-                    as: 'userRole'
-                  }],
+                    as: 'UserRole'
+                }],
+                nest: true,
                 group,
                 order,
                 offset,
                 limit
-            });
-            const users = rows.map( (user) => {
-                user.role = {};
-                user.role['id'] = encryptIdDataBase(user['userRole.id']);
-                user.role['role'] = user['userRole.role'];
-                delete user['userRole.id'];
-                delete user['userRole.role'];
-                user.id = encryptIdDataBase(user.id)
-                return user;
-            });
-            return { users, count }; 
+            }).then(({ rows, count }) => ({
+                users: rows.map(({ UserRole, id, ...user }) => ({
+                    id: encryptIdDataBase(id),
+                    ...user,
+                    role: {
+                        ...UserRole,
+                        id: encryptIdDataBase(UserRole.id),
+                    }
+                })),
+                count
+            }))
         } catch {
-            throw errorsConst.aggregateErrorsApp.errorGetAllUser
+            throw errorsConst.userErrors.queryErrors.findAllError
         }
     },
     findUserQuery: async (query) => {
         try {
             const {
-                where, 
-                attributes = [ 'id', 'name', 'lastName', 'email', 'phoneNumber', 'state', 'img', 'google'], 
-                group, 
-                limit, 
-                offset, 
+                where,
+                attributes = ['id', 'name', 'lastName', 'email', 'phoneNumber', 'state', 'img'],
+                group,
+                limit,
+                offset,
                 order
             } = query;
-            return await User.findAll({ 
-                where, 
-                attributes, 
+            return await User.findAll({
+                where,
+                attributes,
                 raw: true,
                 include: [{
                     model: Role,
-                    as: 'userRole'
-                  }],
+                    as: 'UserRole'
+                }],
+                nest: true,
                 group,
                 order,
-                limit, 
+                limit,
                 offset
-                }).then( users => {
-                    const usersWithRole = users.map( user => {
-                        user.role = {};
-                        user.role['id'] = encryptIdDataBase(user['userRole.id']);
-                        user.role['role'] = user['userRole.role'];
-                        delete user['userRole.id'];
-                        delete user['userRole.role'];
-                        user.id = encryptIdDataBase(user.id)
-                        return user;
-                    });
-                    return usersWithRole;
-                });
+            }).then(users => (users.map(({ UserRole, id, ...user }) => ({
+                id: encryptIdDataBase(id),
+                ...user,
+                role: {
+                    ...UserRole,
+                    id: encryptIdDataBase(UserRole.id),
+                }
+            }))
+            ));
         } catch {
-            throw errorsConst.aggregateErrorsApp.errorGetAllUser
+            throw errorsConst.userErrors.queryErrors.findAllError
         }
     },
-    createNewUserQuery: async (user) => {
-        const { name, lastName, email, phoneNumber, password, role, img } = user;
+    createNewUserQuery: async (where) => {
         try {
-            return await User.findOrCreate({
-                where: { name, lastName, email, password, phoneNumber, role, img }
-            });
+            return await User.findOrCreate({ where });
         } catch {
-            throw errorsConst.aggregateErrorsApp.errorCreateUser
+            throw errorsConst.userErrors.queryErrors.createError
         }
     },
     updateUserQuery: async (where, update) => {
@@ -99,7 +95,7 @@ module.exports = {
                 where
               });
         } catch {
-            throw errorsConst.aggregateErrorsApp.errorUpdateUser
+            throw errorsConst.userErrors.queryErrors.updateError;
         }
     }
 }

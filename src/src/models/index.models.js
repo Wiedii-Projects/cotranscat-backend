@@ -1,16 +1,53 @@
 const User = require("./user/user.model");
 const Role = require("./role/role.model");
 const CodeSms = require("./code-sms/code-sms.model");
+const DocumentType = require("./document-type/document-type.model");
+const IndicativeNumber = require("./indicative-number/indicative-number.model");
+const Department = require("./department/department.model");
+const Municipality = require("./municipality/municipality.model");
+const PaymentMethod = require("./payment-method/payment-method.model");
+const UnitMeasure = require("./unit-measure/unit-measure.model");
+const ShippingType = require("./shipping-type/shipping-type.model");
+const Vehicle = require("./vehicle/vehicle.model");
+const SeatRuler = require("./seat-ruler/seat-ruler.model");
 
 // Relationships BD
 
 // Relationship User-Role
-User.belongsTo(Role, { as: 'userRole', foreignKey: { name: "role", allowNull: false } });
-Role.hasMany(User, { as: 'userRole', foreignKey: { name: "role", allowNull: false } });
+User.belongsTo(Role, { as: 'UserRole', foreignKey: { name: "idRole", allowNull: false } });
+Role.hasMany(User, { as: 'UserRole', foreignKey: { name: "idRole", allowNull: false } });
+
+// Relationship User-DocumentType
+User.belongsTo(DocumentType, { as: 'UserDocumentType', foreignKey: { name: "idDocumentType", allowNull: false } });
+DocumentType.hasMany(User, { as: 'UserDocumentType', foreignKey: { name: "idDocumentType", allowNull: false } });
+
+// Relationship User-IndicativeNumber
+User.belongsTo(IndicativeNumber, { as: 'UserIndicativeNumber', foreignKey: { name: "idIndicativeNumberPhone", allowNull: false } });
+IndicativeNumber.hasMany(User, { as: 'UserIndicativeNumber', foreignKey: { name: "idIndicativeNumberPhone", allowNull: false } });
+
+// Relationship User-WhatsAppIndicativeNumber
+User.belongsTo(IndicativeNumber, { as: 'UserWhatsAppIndicativeNumber', foreignKey: { name: "idIndicativeNumberPhoneWhatsApp", allowNull: false } });
+IndicativeNumber.hasMany(User, { as: 'UserWhatsAppIndicativeNumber', foreignKey: { name: "idIndicativeNumberPhoneWhatsApp", allowNull: false } });
+
+// Relationship User-Municipality
+User.belongsTo(Municipality, { as: 'UserMunicipality', foreignKey: { name: "idMunicipality", allowNull: true } });
+Municipality.hasMany(User, { as: 'UserMunicipality', foreignKey: { name: "idMunicipality", allowNull: true } });
+
+// Relationship Municipality-Department
+Municipality.belongsTo(Department, { as: 'MunicipalityDepartment', foreignKey: { name: "idDepartment", allowNull: false } });
+Department.hasMany(Municipality, { as: 'MunicipalityDepartment', foreignKey: { name: "idDepartment", allowNull: false } });
+
+// Relationship Vehicle-Municipality
+Municipality.hasMany(Vehicle, { as: 'VehicleMunicipality', foreignKey: { name: "idMunicipality", allowNull: false } });
+Vehicle.belongsTo(Municipality, { as: 'VehicleMunicipality', foreignKey: { name: "idMunicipality", allowNull: false } });
+
+// Relationship SeatRuler-Vehicle
+Vehicle.hasMany(SeatRuler, { as: 'SeatRulerVehicle', onDelete: 'CASCADE', foreignKey: { name: "idVehicle", allowNull: false } });
+SeatRuler.belongsTo(Vehicle, { as: 'SeatRulerVehicle', foreignKey: { name: "idVehicle", allowNull: false } });
 
 // Relationship CodeSms-User
-CodeSms.belongsTo(User, { foreignKey: { name: "userCode", allowNull: false } });
-User.hasMany(CodeSms, { foreignKey: { name: "userCode", allowNull: false } });
+CodeSms.belongsTo(User, { foreignKey: { name: "UserCode", allowNull: false } });
+User.hasMany(CodeSms, { foreignKey: { name: "UserCode", allowNull: false } });
 
 module.exports = {
   // Aggregates Models
@@ -20,4 +57,13 @@ module.exports = {
   User,
   Role,
   CodeSms,
+  DocumentType,
+  IndicativeNumber,
+  Department,
+  Municipality,
+  PaymentMethod,
+  UnitMeasure,
+  ShippingType,
+  Vehicle,
+  SeatRuler
 };

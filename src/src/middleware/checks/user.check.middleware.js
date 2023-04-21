@@ -46,6 +46,19 @@ module.exports = {
                 .custom((value) => value ? false: true),
         ];
     },
+    checkCreateClientUser: () => {
+        return [
+            check('idDocumentType', new ErrorModel(errorsConst.userErrors.idDocumentTypeRequired)).isString().isLength({ min: 1 }),
+            check('numberDocument', new ErrorModel(errorsConst.userErrors.numberDocumentRequired)).isString().isLength({ min: 2, max: 20 }),
+            check('name', new ErrorModel(errorsConst.userErrors.nameRequired)).isString().isLength({ min: 2, max: 50 }),
+            check('lastName', new ErrorModel(errorsConst.userErrors.lastNameRequired)).isString().isLength({ min: 2, max: 50 }),
+            check('idIndicativeNumberPhone', new ErrorModel(errorsConst.userErrors.idIndicativeNumberPhoneRequired)).isString().isLength({ min: 1 }),
+            check('phoneNumber', new ErrorModel(errorsConst.userErrors.phoneNumberRequired)).isString().isLength({ min: 6, max: 12 }),
+            check('idIndicativeNumberPhoneWhatsApp', new ErrorModel(errorsConst.userErrors.idIndicativeNumberPhoneWhatsAppRequired)).isString().isLength({ min: 1 }),
+            check('numberPhoneWhatsApp', new ErrorModel(errorsConst.userErrors.numberPhoneWhatsAppRequired)).isString().isLength({ min: 6, max: 12 }),
+            check('address', new ErrorModel(errorsConst.userErrors.addressRequired)).isString().isLength({ min: 5 })
+        ];
+    },
     checkCreateAdminUser: () => {
         return [
             ...sharedMiddleware.checkJwt(),

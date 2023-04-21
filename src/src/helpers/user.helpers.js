@@ -28,5 +28,19 @@ module.exports = {
             role = undefined 
         } = user;
         return { name, lastName, email, phoneNumber, password, img, google, role }
+    },
+    extractUserClientDataHelper: (user) => {
+        const {
+            idDocumentType = undefined,
+            numberDocument = undefined,
+            name = undefined,
+            lastName = undefined,
+            idIndicativeNumberPhone = undefined,
+            phoneNumber = undefined,
+            idIndicativeNumberPhoneWhatsApp = undefined,
+            numberPhoneWhatsApp = undefined,
+            address = undefined
+        } = user;
+        return { idDocumentType, numberDocument, name, lastName, idIndicativeNumberPhone, phoneNumber, idIndicativeNumberPhoneWhatsApp, numberPhoneWhatsApp, address };
     }
 }

@@ -43,6 +43,16 @@
     "tokenInvalid": {
       "code": "AU0011",
       "message": "Token invalid"
+    },
+    "queryErrors": {
+      "generateJWTError": {
+        "code": "AUTH_001",
+        "message": "Something went wrong."
+      },
+      "encryptPasswordError": {
+        "code": "AUTH_002",
+        "message": "Something went wrong."
+      }
     }
   },
   "userErrors": {
@@ -89,56 +99,344 @@
     "userNoDelete": {
       "code": "US0011",
       "message": "Can't delete User."
+    },
+    "idDocumentTypeRequired": {
+      "code": "US0012",
+      "message": "The id document type is required."
+    },
+    "numberDocumentRequired": {
+      "code": "US0013",
+      "message": "The number document is required."
+    },
+    "idIndicativeNumberPhoneRequired": {
+      "code": "US0014",
+      "message": "The id Indicative Number Phone is required."
+    },
+    "idIndicativeNumberPhoneWhatsAppRequired": {
+      "code": "US0015",
+      "message": "The id Indicative Number Phone WhatsApp is required."
+    },
+    "numberPhoneWhatsAppRequired": {
+      "code": "US0016",
+      "message": "The number Phone WhatsApp is required."
+    },
+    "addressRequired": {
+      "code": "US0017",
+      "message": "The address is required."
+    },
+    "queryErrors": {
+      "findAllError": {
+        "code": "USRL_001",
+        "message": "Something went wrong."
+      },
+      "findError": {
+        "code": "USRL_002",
+        "message": "Something went wrong."
+      },
+      "createError": {
+        "code": "USRL_003",
+        "message": "Something went wrong."
+      },
+      "updateError": {
+        "code": "USRL_004",
+        "message": "Something went wrong."
+      }
     }
   },
-  "aggregateErrorsApp": {
-
-    "__comment_RLLE__": "__ RLLE (RoleModel) These are API acronym comments__",
-
-    "errorGetRoleByName": {
-      "code": "RLLE_001",
-      "message": "Something went wrong."
+  "documentType":{
+    "nameRequired": {
+      "code": "DTP0001",
+      "message": "The document type name is required"
     },
-
-    "__comment_AUTH__": "__ AUTH These are API acronym comments__",
-
-    "errorGenerateJWT": {
-      "code": "AUTH_001",
-      "message": "Something went wrong."
+    "lengthName": {
+      "code": "DTP0002",
+      "message": "The document type name must contain at least two characters"
     },
-    "errorEncryptPassword": {
-      "code": "AUTH_002",
-      "message": "Something went wrong."
+    "idRequired": {
+      "code": "DTP0003",
+      "message": "The ID document type is required."
     },
-
-    "__comment_USRL__": "__ USRL (UserModel) These are API acronym comments__",
-
-    "errorGetAllUser": {
-      "code": "USRL_001",
-      "message": "Something went wrong."
+    "queryErrors":{
+      "createError": {
+        "code": "DCMTP_001",
+        "message": "Something went wrong."
+      },
+      "updateError": {
+        "code": "DCMTP_002",
+        "message": "Something went wrong."
+      },
+      "findAllError": {
+        "code": "DCMTP_003",
+        "message": "Something went wrong."
+      },
+      "deleteError": {
+        "code": "DCMTP_004",
+        "message": "Something went wrong."
+      }
+    }
+  },
+  "indicativeNumber":{
+    "numberType":{
+      "code": "INNU001",
+      "message": "the data type is incorrect"
     },
-    "errorGetUser": {
-      "code": "USRL_002",
-      "message": "Something went wrong."
+    "numberCharacters":{
+      "code": "INNU002",
+      "message": "the data must have a minimum of 1 character and a maximum of 10 characters."
     },
-    "errorCreateUser": {
-      "code": "USRL_003",
-      "message": "Something went wrong."
+    "countryType":{
+      "code": "INNU003",
+      "message": "the data type is incorrect"
     },
-    "errorUpdateUser": {
-      "code": "USRL_004",
-      "message": "Something went wrong."
+    "countryCharacters":{
+      "code": "INNU004",
+      "message": "the data must have a minimum of 1 character and a maximum of 50 characters."
     },
-    
-    "__comment_CODD__": "__ CODE (CodeSmsModel) These are API acronym comments__",
-
-    "errorCreateCode": {
-      "code": "CODD_001",
-      "message": "Something went wrong."
+    "queryErrors": {
+      "createError": {
+        "code": "INNU_001",
+        "message": "Something went wrong."
+      },
+      "updateError": {
+        "code": "INNU_002",
+        "message": "Something went wrong."
+      },
+      "findAllError": {
+        "code": "INNU_003",
+        "message": "Something went wrong."
+      },
+      "deleteError": {
+        "code": "INNU_004",
+        "message": "Something went wrong."
+      }
+    }
+  },
+  "department":{
+    "nameRequired": {
+      "code": "DEPT001",
+      "message": "Department name is required"
     },
-    "errorDeleteAllCode": {
-      "code": "CODD_002",
-      "message": "Something went wrong."
+    "lengthName": {
+      "code": "DEPT002",
+      "message": "The department name must have a minimum of 1 character and a maximum of 30 characters"
+    },
+    "idRequired": {
+      "code": "DEPT003",
+      "message": "The ID department is required."
+    },
+    "queryErrors":{
+      "createError": {
+        "code": "DEPT_001",
+        "message": "Something went wrong."
+      },
+      "updateError": {
+        "code": "DEPT_002",
+        "message": "Something went wrong."
+      },
+      "findAllError": {
+        "code": "DEPT_003",
+        "message": "Something went wrong."
+      },
+      "deleteError": {
+        "code": "DEPT_004",
+        "message": "Something went wrong."
+      }
+    }
+  },
+  "municipality":{
+    "nameRequired": {
+      "code": "MUNC001",
+      "message": "Municipality name is required"
+    },
+    "municipalityDoesNotExist": {
+      "code": "MUN002",
+      "message": "the municipality does not exist"
+    },
+    "queryErrors":{
+      "createError": {
+        "code": "MUNC_001",
+        "message": "Something went wrong."
+      },
+      "updateError": {
+        "code": "MUNC_002",
+        "message": "Something went wrong."
+      },
+      "findAllError": {
+        "code": "MUNC_003",
+        "message": "Something went wrong."
+      },
+      "deleteError": {
+        "code": "MUNC_004",
+        "message": "Something went wrong."
+      }
+    }
+  },
+  "paymentMethod":{
+    "nameRequired": {
+      "code": "PYMT001",
+      "message": "Payment method name is required"
+    },
+    "queryErrors":{
+      "createError": {
+        "code": "PYMT_001",
+        "message": "Something went wrong."
+      },
+      "updateError": {
+        "code": "PYMT_002",
+        "message": "Something went wrong."
+      },
+      "findAllError": {
+        "code": "PYMT_003",
+        "message": "Something went wrong."
+      },
+      "deleteError": {
+        "code": "PYMT_004",
+        "message": "Something went wrong."
+      }
+    }
+  },
+  "unitMeasure":{
+    "nameRequired": {
+      "code": "UNMS001",
+      "message": "Unit measure name is required"
+    },
+    "queryErrors":{
+      "errorCreateUnitMeasure": {
+        "code": "UNMS_001",
+        "message": "Something went wrong."
+      },
+      "updateError": {
+        "code": "UNMS_002",
+        "message": "Something went wrong."
+      },
+      "finAllError": {
+        "code": "UNMS_003",
+        "message": "Something went wrong."
+      },
+      "deleteError": {
+        "code": "UNMS_004",
+        "message": "Something went wrong."
+      }
+    }
+  },
+  "shippingType":{
+    "nameRequired": {
+      "code": "STYP001",
+      "message": "Shipping type name is required"
+    },
+    "queryErrors":{
+      "createError": {
+        "code": "STYP_001",
+        "message": "Something went wrong."
+      },
+      "updateError": {
+        "code": "STYP_002",
+        "message": "Something went wrong."
+      },
+      "findAllError": {
+        "code": "STYP_003",
+        "message": "Something went wrong."
+      },
+      "errorError": {
+        "code": "STYP_004",
+        "message": "Something went wrong."
+      }
+    }
+  },
+  "vehicle": {
+    "plateRequired": {
+      "code": "VHC001",
+      "message": "the license plate number of the vehicle is required"
+    },
+    "plateInvalid": {
+      "code": "VHC002",
+      "message": "The vehicle license plate entered is invalid"
+    },
+    "plateAlreadyExists": {
+      "code": "VHC003",
+      "message": "The plate already exists"
+    },
+    "municipalityRequired": {
+      "code": "VHC004",
+      "message": "the municipality is required"
+    },
+    "markRequired": {
+      "code": "VHC006",
+      "message": "The vehicle brand is invalid"
+    },
+    "modelRequired": {
+      "code": "VHC007",
+      "message": "Vehicle model is required"
+    },
+    "priceRequired": {
+      "code": "VHC008",
+      "message": "The default fare is required"
+    },
+    "priceInvalid": {
+      "code": "VHC009",
+      "message": "The price entered is invalid"
+    },
+    "widthInvalid": {
+      "code": "VHC011",
+      "message": "vehicle width is invalid"
+    },
+    "heightInvalid": {
+      "code": "VHC013",
+      "message": "vehicle height is invalid"
+    },
+    "seatingMatrixRequired": {
+      "code": "VHC014",
+      "message": "Vehicle seating matrix is required"
+    },
+    "vehicleDoesNotExist": {
+      "code": "VHC015",
+      "message": "the vehicle does not exist"
+    },
+    "queryErrors": {
+      "createdError": {
+        "code": "VHCL_001",
+        "message": "Something went wrong."
+      },
+      "findError": {
+        "code": "VHCL_002",
+        "message": "Something went wrong."
+      },
+      "deleteError": {
+        "code": "VHCL_003",
+        "message": "Something went wrong."
+      }
+    }
+  },
+  "seatRuler":{
+    "queryErrors": {
+      "createdError": {
+        "code": "STRL_001",
+        "message": "Something went wrong"
+      },
+      "findError": {
+        "code": "STRL_002",
+        "message": "Something went wrong"
+      }
+    }
+  },
+  "codeSms":{
+    "queryErrors":{
+      "createError": {
+        "code": "CODD_001",
+        "message": "Something went wrong."
+      },
+      "deleteError": {
+        "code": "CODD_002",
+        "message": "Something went wrong."
+      }
+    }
+  },
+  "roleErrors": {
+    "queryErrors": {
+      "findByNameError": {
+        "code": "RLLE_001",
+        "message": "Something went wrong."
+      }
     }
   }
 }

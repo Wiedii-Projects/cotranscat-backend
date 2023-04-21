@@ -11,7 +11,7 @@ module.exports = {
             const salt = bcryptjs.genSaltSync();
             return bcryptjs.hashSync(password, salt);
         } catch {
-            throw errorsConst.aggregateErrorsApp.errorEncryptPassword
+            throw errorsConst.authErrors.queryErrors.encryptPasswordError
         }
     },
     generateJWTHelper: async (id = '') => {
@@ -21,7 +21,7 @@ module.exports = {
                 expiresIn: '4h'
             }, (error, token) => {
                 if (error) {
-                    rej(errorsConst.aggregateErrorsApp.errorGenerateJWT)
+                    rej(errorsConst.authErrors.queryErrors.generateJWTError)
                 } else {
                     res(token)
                 }
