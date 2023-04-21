@@ -43,7 +43,7 @@ module.exports = {
                 count
             }))
         } catch {
-            throw errorsConst.aggregateErrorsApp.errorGetAllUser
+            throw errorsConst.userErrors.queryErrors.findAllError
         }
     },
     findUserQuery: async (query) => {
@@ -79,14 +79,14 @@ module.exports = {
             }))
             ));
         } catch {
-            throw errorsConst.aggregateErrorsApp.errorGetAllUser
+            throw errorsConst.userErrors.queryErrors.findAllError
         }
     },
     createNewUserQuery: async (where) => {
         try {
             return await User.findOrCreate({ where });
         } catch {
-            throw errorsConst.aggregateErrorsApp.errorCreateUser
+            throw errorsConst.userErrors.queryErrors.createError
         }
     },
     updateUserQuery: async (where, update) => {
@@ -95,7 +95,7 @@ module.exports = {
                 where
               });
         } catch {
-            throw errorsConst.aggregateErrorsApp.errorUpdateUser
+            throw errorsConst.userErrors.queryErrors.updateError;
         }
     }
 }

@@ -15,7 +15,7 @@ module.exports = {
                 where: { name }
             });
         } catch {
-            throw errorsConst.aggregateErrorsApp.errorCreateDocumentType
+            throw errorsConst.documentType.queryErrors.createError
         }
     },
     findDocumentTypes: async (query = {}) => {
@@ -29,21 +29,21 @@ module.exports = {
                 name
             })))
         } catch (error) {
-            throw errorsConst.aggregateErrorsApp.errorGetDocumentType
+            throw errorsConst.documentType.queryErrors.findAllError
         }
     },
     updateDocumentTypeQuery: async (where, update) => {
         try {
             return await DocumentType.update(update, { where });
         } catch {
-            throw errorsConst.aggregateErrorsApp.errorUpdateDocumentType
+            throw errorsConst.documentType.queryErrors.updateError
         }
     },
     deleteDocumentTypeQuery: async (where) => {
         try {
             return await DocumentType.destroy({ where })
         } catch {
-            throw errorsConst.aggregateErrorsApp.errorDeleteDocumentType
+            throw errorsConst.documentType.queryErrors.deleteError
         }
     }
 }

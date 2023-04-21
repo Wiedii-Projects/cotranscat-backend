@@ -14,7 +14,7 @@ module.exports = {
                 where
             });
         } catch {
-            throw errorsConst.aggregateErrorsApp.errorCreateUnitMeasure
+            throw errorsConst.unitMeasure.queryErrors.createError;
         }
     },
 
@@ -29,7 +29,7 @@ module.exports = {
                 name,
             })))
         } catch {
-            throw errorsConst.aggregateErrorsApp.errorGetUnitMeasure
+            throw errorsConst.unitMeasure.queryErrors.finAllError
         }
     },
 
@@ -37,7 +37,7 @@ module.exports = {
         try {
             return await UnitMeasure.update(update, { where });
         } catch {
-            throw errorsConst.aggregateErrorsApp.errorUpdateUnitMeasure
+            throw errorsConst.unitMeasure.queryErrors.updateError;
         }
     },
 
@@ -45,7 +45,7 @@ module.exports = {
         try {
             return await UnitMeasure.destroy({ where })
         } catch {
-            throw errorsConst.aggregateErrorsApp.errorDeleteUnitMeasure
+            throw errorsConst.unitMeasure.queryErrors.deleteError
         }
     }
 }
