@@ -8,5 +8,6 @@ module.exports = {
     municipalityMiddleware: require('./checks/municipality.check.middleware'),
     paymentMethodMiddleware: require('./checks/payment-method.check.middleware'),
     unitMeasureMiddleware: require('./checks/unit-measure.check.middleware'),
-    shippingTypeMiddleware: require('./checks/shipping-type.check.middleware')
+    shippingTypeMiddleware: require('./checks/shipping-type.check.middleware'),
+    vehicleMiddleware: require('./checks/vehicle.check.middleware')
 }

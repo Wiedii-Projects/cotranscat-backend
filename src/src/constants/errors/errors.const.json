@@ -177,6 +177,94 @@
       "message": "Shipping type name is required"
     }
   },
+  "vehicle": {
+    "plateRequired": {
+      "code": "VHC001",
+      "message": "the license plate number of the vehicle is required"
+    },
+    "plateInvalid": {
+      "code": "VHC002",
+      "message": "The vehicle license plate entered is invalid"
+    },
+    "plateAlreadyExists": {
+      "code": "VHC003",
+      "message": "The plate already exists"
+    },
+    "municipalityRequired": {
+      "code": "VHC004",
+      "message": "the municipality is required"
+    },
+    "municipalityDoesNotExist": {
+      "code": "VHC005",
+      "message": "the municipality does not exist"
+    },
+    "markRequired": {
+      "code": "VHC006",
+      "message": "The vehicle brand is invalid"
+    },
+    "modelRequired": {
+      "code": "VHC007",
+      "message": "Vehicle model is required"
+    },
+    "priceRequired": {
+      "code": "VHC008",
+      "message": "The default fare is required"
+    },
+    "priceInvalid": {
+      "code": "VHC009",
+      "message": "The price entered is invalid"
+    },
+    "widthRequired": {
+      "code": "VHC010",
+      "message": "vehicle width is required"
+    },
+    "widthInvalid": {
+      "code": "VHC011",
+      "message": "vehicle width is invalid"
+    },
+    "heightRequired": {
+      "code": "VHC012",
+      "message": "vehicle height is required"
+    },
+    "heightInvalid": {
+      "code": "VHC013",
+      "message": "vehicle height is invalid"
+    },
+    "seatingMatrixRequired": {
+      "code": "VHC014",
+      "message": "Vehicle seating matrix is required"
+    },
+    "vehicleDoesNotExist": {
+      "code": "VHC015",
+      "message": "the vehicle does not exist"
+    },
+    "queryErrors": {
+      "createdError": {
+        "code": "VHCL_001",
+        "message": "Something went wrong."
+      },
+      "findError": {
+        "code": "VHCL_002",
+        "message": "Something went wrong."
+      },
+      "deleteError": {
+        "code": "VHCL_003",
+        "message": "Something went wrong."
+      }
+    }
+  },
+  "seatRuler":{
+    "queryErrors": {
+      "createdError": {
+        "code": "STRL_001",
+        "message": "Something went wrong"
+      },
+      "findError": {
+        "code": "STRL_002",
+        "message": "Something went wrong"
+      }
+    }
+  },
   "aggregateErrorsApp": {
 
     "__comment_RLLE__": "__ RLLE (RoleModel) These are API acronym comments__",
