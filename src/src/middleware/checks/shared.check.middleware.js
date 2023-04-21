@@ -43,4 +43,5 @@ module.exports = {
         ]
     },
     //TODO: create validation of the coordinator role
+    //TODO: create validation of the seller role
 }

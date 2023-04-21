@@ -30,7 +30,7 @@ module.exports = {
             .exists().isString().notEmpty()
             .withMessage(new ErrorModel(errorsConst.vehicle.municipalityRequired))
             .custom(async (value, { req }) => await municipalityValidators.validateMunicipality(req, { where: { id: sharedHelpers.decryptIdDataBase(value) } })),
-        check('idMunicipality', new ErrorModel(errorsConst.vehicle.municipalityDoesNotExist))
+        check('idMunicipality', new ErrorModel(errorsConst.municipality.municipalityDoesNotExist))
             .custom((value) => !!value),
         check('mark', new ErrorModel(errorsConst.vehicle.markRequired)).exists().isString().notEmpty(),
         check('model', new ErrorModel(errorsConst.vehicle.modelRequired)).exists().isString().notEmpty(),
@@ -43,7 +43,7 @@ module.exports = {
             .custom(([value]) => value?.length > 2).withMessage(new ErrorModel(errorsConst.vehicle.widthInvalid))
     ]),
     checkGetVehicle: () => ([
-        //TODO: implement validation of the coordinator role
+        //TODO: implement validation of the seller role
         check('id').custom(async (value, { req }) => await vehicleValidator.validateVehicle(req, { where: { id:  sharedHelpers.decryptIdDataBase(value) } })),
         check('vehicle', new ErrorModel(errorsConst.vehicle.vehicleDoesNotExist)).custom((value) => value)
     ])

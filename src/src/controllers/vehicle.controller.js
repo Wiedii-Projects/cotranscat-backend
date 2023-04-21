@@ -45,14 +45,14 @@ module.exports = {
         try {
             const vehicleSeatRules = await seatRulerQuery.getSeatRulers({ where: { idVehicle: decryptIdDataBase(id) } });
 
-            const { width, height, ...vehicleData } = vehicle
+            const { width, height, price,...vehicleData } = vehicle
             const seatMap = new Array(height);
             for (let i = 0; i < height; i++) {
                 seatMap[i] = new Array(width).fill(null);
             }
 
             for (const { row, column, ...seat } of vehicleSeatRules) {
-                seatMap[row][column] = { ...seat, price: vehicle.price };
+                seatMap[row][column] = { ...seat, price };
             }
             return responseHelpers.responseSuccess(res, { ...vehicleData, seatMap });
         } catch (error) {
