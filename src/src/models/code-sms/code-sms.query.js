@@ -12,7 +12,7 @@ module.exports = {
     try {
       await CodeSms.create(codeSMS);
     } catch {
-      throw errorsConst.aggregateErrorsApp.errorCreateCode;
+      throw errorsConst.codeSms.queryErrors.createError;
     }
   },
   findCodeQuery: async (query) => {
@@ -39,7 +39,7 @@ module.exports = {
         where,
       });
     } catch {
-      throw errorsConst.aggregateErrorsApp.errorDeleteAllCode;
+      throw errorsConst.codeSms.queryErrors.deleteError;
     }
   },
 };

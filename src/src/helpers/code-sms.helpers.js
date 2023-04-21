@@ -20,7 +20,7 @@ module.exports = {
             }).catch( (error) => console.log(error));
             return code;
         } catch {
-            throw errorsConst.aggregateErrorsApp.errorCreateCode
+            throw errorsConst.codeSms.queryErrors.createError
         }
     }
 }

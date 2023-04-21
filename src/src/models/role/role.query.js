@@ -9,7 +9,7 @@ module.exports = {
         try {
             return await Role.findAll({ where, raw: true });
         } catch {
-            throw new MessageErrors(errorsConst.aggregateErrorsApp.errorGetRoleByName);
+            throw new MessageErrors(errorsConst.roleErrors.queryErrors.findByNameError);
         }
     }
 }

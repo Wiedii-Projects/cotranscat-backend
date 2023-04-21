@@ -14,7 +14,7 @@ module.exports = {
                 where: { name }
             });
         } catch {
-            throw errorsConst.aggregateErrorsApp.errorCreateDepartment
+            throw errorsConst.department.queryErrors.createError
         }
     },
     findDepartment: async (query = {}) => {
@@ -28,21 +28,21 @@ module.exports = {
                 name
             })))
         } catch {
-            throw errorsConst.aggregateErrorsApp.errorGetDepartment
+            throw errorsConst.department.queryErrors.findAllError
         }
     },
     updateDepartmentQuery: async (where, update) => {
         try {
             return await Department.update(update, { where });
         } catch {
-            throw errorsConst.aggregateErrorsApp.errorUpdateDepartment
+            throw errorsConst.department.queryErrors.updateError
         }
     },
     deleteDepartmentQuery: async (where) => {
         try {
             return await Department.destroy({ where })
         } catch {
-            throw errorsConst.aggregateErrorsApp.errorDeleteDepartment
+            throw errorsConst.department.queryErrors.deleteError
         }
     }
 }

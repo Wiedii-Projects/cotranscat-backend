@@ -24,7 +24,7 @@ module.exports = {
 
         return user
             ? responseHelpers.responseSuccess(res, user)
-            :responseHelpers.responseError(res, 500, errorsConst.aggregateErrorsApp.errorGetUser);
+            :responseHelpers.responseError(res, 500, errorsConst.userErrors.queryErrors.findError);
     },
     createUser: async (req, res) => {
         const { password, img = '', state = true  } = req.body;
