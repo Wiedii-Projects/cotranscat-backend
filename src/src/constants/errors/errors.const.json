@@ -159,6 +159,24 @@
       "message": "Municipality name is required"
     }
   },
+  "paymentMethod":{
+    "nameRequired": {
+      "code": "PYMT001",
+      "message": "Payment method name is required"
+    }
+  },
+  "unitMeasure":{
+    "nameRequired": {
+      "code": "UNMS001",
+      "message": "Unit measure name is required"
+    }
+  },
+  "shippingType":{
+    "nameRequired": {
+      "code": "STYP001",
+      "message": "Shipping type name is required"
+    }
+  },
   "vehicle": {
     "plateRequired": {
       "code": "VHC001",
@@ -335,7 +353,7 @@
       "message": "Something went wrong."
     },
 
-    "__comment_DEPT__": "__ INNU (DepartmentModel) These are API acronym comments__",
+    "__comment_DEPT__": "__ DEPT (DepartmentModel) These are API acronym comments__",
 
     "errorCreateDepartment": {
       "code": "DEPT_001",
@@ -371,6 +389,63 @@
     },
     "errorDeleteMunicipality": {
       "code": "MUNC_004",
+      "message": "Something went wrong."
+    },
+
+    "__comment_PYMT__": "__ PYMT (PaymentMethodModel) These are API acronym comments__",
+
+    "errorCreatePaymentMethod": {
+      "code": "PYMT_001",
+      "message": "Something went wrong."
+    },
+    "errorUpdatePaymentMethod": {
+      "code": "PYMT_002",
+      "message": "Something went wrong."
+    },
+    "errorGetPaymentMethod": {
+      "code": "PYMT_003",
+      "message": "Something went wrong."
+    },
+    "errorDeletePaymentMethod": {
+      "code": "PYMT_004",
+      "message": "Something went wrong."
+    },
+
+    "__comment_UNMS__": "__ UNMS (UnitMeasureModel) These are API acronym comments__",
+
+    "errorCreateUnitMeasure": {
+      "code": "UNMS_001",
+      "message": "Something went wrong."
+    },
+    "errorUpdateUnitMeasure": {
+      "code": "UNMS_002",
+      "message": "Something went wrong."
+    },
+    "errorGetUnitMeasure": {
+      "code": "UNMS_003",
+      "message": "Something went wrong."
+    },
+    "errorDeleteUnitMeasure": {
+      "code": "UNMS_004",
+      "message": "Something went wrong."
+    },
+
+    "__comment_STYP__": "__ STYP (ShippingTypeModel) These are API acronym comments__",
+
+    "errorCreateShippingType": {
+      "code": "STYP_001",
+      "message": "Something went wrong."
+    },
+    "errorUpdateShippingType": {
+      "code": "STYP_002",
+      "message": "Something went wrong."
+    },
+    "errorGetShippingType": {
+      "code": "STYP_003",
+      "message": "Something went wrong."
+    },
+    "errorDeleteShippingType": {
+      "code": "STYP_004",
       "message": "Something went wrong."
     }
   }

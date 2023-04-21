@@ -2,35 +2,35 @@
 const { responseHelpers } = require('../helpers/index.helpers');
 
 // Models - Queries
-const { indicativeNumberQuery } = require('../models/index.queries');
+const { unitMeasureQuery } = require('../models/index.queries');
 
 
 module.exports = {
-    createIndicativeNumber: async (req, res) => {
+    createUnitMeasure: async (req, res) => {
         try {
-            const { number, country } = req.body;
-            indicativeNumberQuery.createIndicativeNumberQuery({number: `+${number}`, country})
+            const { name } = req.body;
+            unitMeasureQuery.createUnitMeasureQuery({ name })
             return responseHelpers.responseSuccess(res, null);
         } catch (error) {
             return responseHelpers.responseError(res, 500, error);
         }
     },
 
-    getAllIndicativeNumber: async (req, res) => {
+    getAllUnitMeasure: async (req, res) => {
         try {
-            const resp = await indicativeNumberQuery.findIndicativeNumberQuery()
+            const resp = await unitMeasureQuery.findUnitMeasureQuery()
             return responseHelpers.responseSuccess(res, resp);
         } catch (error) {
             return responseHelpers.responseError(res, 500, error);
         }
     },
     
-    updateIndicativeNumber: async (req, res) => {
-        const { number , country, decryptId } = req.body;
+    updateUnitMeasure: async (req, res) => {
+        const { decryptId , name } = req.body;
         try {
-            await indicativeNumberQuery.updateIndicativeNumberQuery(
+            await unitMeasureQuery.updateUnitMeasureQuery(
                 { id: decryptId },
-                { number: `+${number}`, country }
+                { name }
             )
             return responseHelpers.responseSuccess(res, null);
         } catch (error) {
@@ -38,10 +38,10 @@ module.exports = {
         }
     },
 
-    deleteIndicativeNumber: async (req, res) => {
+    deleteUnitMeasure: async (req, res) => {
         const { decryptId } = req.body;
         try {
-            await indicativeNumberQuery.deleteIndicativeNumberQuery({ id: decryptId });
+            await unitMeasureQuery.deleteUnitMeasureQuery({ id: decryptId });
             return responseHelpers.responseSuccess(res, null);
         } catch (error) {
             return responseHelpers.responseError(res, 500, error);

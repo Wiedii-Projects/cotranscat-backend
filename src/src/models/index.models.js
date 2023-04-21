@@ -5,6 +5,9 @@ const DocumentType = require("./document-type/document-type.model");
 const IndicativeNumber = require("./indicative-number/indicative-number.model");
 const Department = require("./department/department.model");
 const Municipality = require("./municipality/municipality.model");
+const PaymentMethod = require("./payment-method/payment-method.model");
+const UnitMeasure = require("./unit-measure/unit-measure.model");
+const ShippingType = require("./shipping-type/shipping-type.model");
 const Vehicle = require("./vehicle/vehicle.model");
 const SeatRuler = require("./seat-ruler/seat-ruler.model");
 
@@ -58,6 +61,9 @@ module.exports = {
   IndicativeNumber,
   Department,
   Municipality,
+  PaymentMethod,
+  UnitMeasure,
+  ShippingType,
   Vehicle,
   SeatRuler
 };

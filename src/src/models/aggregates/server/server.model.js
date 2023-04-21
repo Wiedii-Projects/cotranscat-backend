@@ -20,6 +20,9 @@ class ServerModel {
             indicativeNumber: '/api/indicativeNumber',
             department: '/api/department',
             municipality:'/api/municipality',
+            paymentMethod: '/api/paymentMethod',
+            unitMeasure: '/api/unitMeasure',
+            shippingType: '/api/shippingType',
             vehicle: '/api/vehicle'
         }
         this.dbHost = coreConfigurationsConst.dbHost;
@@ -47,6 +50,9 @@ class ServerModel {
         this.app.use(this.paths.indicativeNumber, require('../../../routes/indicative-number.routes'));
         this.app.use(this.paths.department, require('../../../routes/department.routes'));
         this.app.use(this.paths.municipality, require('../../../routes/municipality.routes'));
+        this.app.use(this.paths.paymentMethod, require('../../../routes/payment-method.routes'));
+        this.app.use(this.paths.unitMeasure, require('../../../routes/unit-measure.routes'));
+        this.app.use(this.paths.shippingType, require('../../../routes/shipping-type.routes'));
         this.app.use(this.paths.vehicle, require('../../../routes/vehicle.routes'));
     }
 

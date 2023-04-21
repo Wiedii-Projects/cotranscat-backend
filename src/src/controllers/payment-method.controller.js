@@ -2,35 +2,35 @@
 const { responseHelpers } = require('../helpers/index.helpers');
 
 // Models - Queries
-const { indicativeNumberQuery } = require('../models/index.queries');
+const { paymentMethodQuery } = require('../models/index.queries');
 
 
 module.exports = {
-    createIndicativeNumber: async (req, res) => {
+    createPaymentMethod: async (req, res) => {
         try {
-            const { number, country } = req.body;
-            indicativeNumberQuery.createIndicativeNumberQuery({number: `+${number}`, country})
+            const { name } = req.body;
+            paymentMethodQuery.createPaymentMethodQuery({ name })
             return responseHelpers.responseSuccess(res, null);
         } catch (error) {
             return responseHelpers.responseError(res, 500, error);
         }
     },
 
-    getAllIndicativeNumber: async (req, res) => {
+    getAllPaymentMethod: async (req, res) => {
         try {
-            const resp = await indicativeNumberQuery.findIndicativeNumberQuery()
+            const resp = await paymentMethodQuery.findPaymentMethodQuery()
             return responseHelpers.responseSuccess(res, resp);
         } catch (error) {
             return responseHelpers.responseError(res, 500, error);
         }
     },
     
-    updateIndicativeNumber: async (req, res) => {
-        const { number , country, decryptId } = req.body;
+    updatePaymentMethod: async (req, res) => {
+        const { decryptId , name } = req.body;
         try {
-            await indicativeNumberQuery.updateIndicativeNumberQuery(
+            await paymentMethodQuery.updatePaymentMethodQuery(
                 { id: decryptId },
-                { number: `+${number}`, country }
+                { name }
             )
             return responseHelpers.responseSuccess(res, null);
         } catch (error) {
@@ -38,10 +38,10 @@ module.exports = {
         }
     },
 
-    deleteIndicativeNumber: async (req, res) => {
+    deletePaymentMethod: async (req, res) => {
         const { decryptId } = req.body;
         try {
-            await indicativeNumberQuery.deleteIndicativeNumberQuery({ id: decryptId });
+            await paymentMethodQuery.deletePaymentMethodQuery({ id: decryptId });
             return responseHelpers.responseSuccess(res, null);
         } catch (error) {
             return responseHelpers.responseError(res, 500, error);

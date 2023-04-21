@@ -6,6 +6,9 @@ module.exports = {
   indicativeNumberQuery: require("./indicative-number/indicative-number.query"),
   departmentQuery: require("./department/department.query"),
   municipalityQuery: require("./municipality/municipality.query"),
+  paymentMethodQuery: require("./payment-method/payment-method.query"),
+  unitMeasureQuery: require("./unit-measure/unit-measure.query"),
+  shippingTypeQuery: require("./shipping-type/shipping-type.query"),
   vehicleQuery: require("./vehicle/vehicle.query"),
   seatRulerQuery: require("./seat-ruler/seat-ruler.query")
 };

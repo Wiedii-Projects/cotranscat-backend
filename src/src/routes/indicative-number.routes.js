@@ -18,18 +18,20 @@ router.post('/', [
     sharedValidators.validateErrorFields,
 ], indicativeNumberController.createIndicativeNumber);
 
-router.get('/', [
-    sharedMiddleware.checkAdminRole(),
-    sharedValidators.validateErrorFields,
-], indicativeNumberController.getAllIndicativeNumber);
+router.get('/',[
+    sharedMiddleware.checkJwt(),
+    sharedValidators.validateErrorFields
+],indicativeNumberController.getAllIndicativeNumber);
 
 router.put('/:id', [
     sharedMiddleware.checkAdminRole(),
+    sharedMiddleware.checkId(),
     sharedValidators.validateErrorFields,
 ], indicativeNumberController.updateIndicativeNumber);
 
 router.delete('/:id', [
     sharedMiddleware.checkAdminRole(),
+    sharedMiddleware.checkId(),
     sharedValidators.validateErrorFields,
 ], indicativeNumberController.deleteIndicativeNumber);
 

@@ -2,35 +2,35 @@
 const { responseHelpers } = require('../helpers/index.helpers');
 
 // Models - Queries
-const { indicativeNumberQuery } = require('../models/index.queries');
+const { shippingTypeQuery } = require('../models/index.queries');
 
 
 module.exports = {
-    createIndicativeNumber: async (req, res) => {
+    createShippingType: async (req, res) => {
         try {
-            const { number, country } = req.body;
-            indicativeNumberQuery.createIndicativeNumberQuery({number: `+${number}`, country})
+            const { name } = req.body;
+            shippingTypeQuery.createShippingTypeQuery({ name })
             return responseHelpers.responseSuccess(res, null);
         } catch (error) {
             return responseHelpers.responseError(res, 500, error);
         }
     },
 
-    getAllIndicativeNumber: async (req, res) => {
+    getAllShippingType: async (req, res) => {
         try {
-            const resp = await indicativeNumberQuery.findIndicativeNumberQuery()
+            const resp = await shippingTypeQuery.findShippingTypeQuery()
             return responseHelpers.responseSuccess(res, resp);
         } catch (error) {
             return responseHelpers.responseError(res, 500, error);
         }
     },
     
-    updateIndicativeNumber: async (req, res) => {
-        const { number , country, decryptId } = req.body;
+    updateShippingType: async (req, res) => {
+        const { decryptId , name } = req.body;
         try {
-            await indicativeNumberQuery.updateIndicativeNumberQuery(
+            await shippingTypeQuery.updateShippingTypeQuery(
                 { id: decryptId },
-                { number: `+${number}`, country }
+                { name }
             )
             return responseHelpers.responseSuccess(res, null);
         } catch (error) {
@@ -38,10 +38,10 @@ module.exports = {
         }
     },
 
-    deleteIndicativeNumber: async (req, res) => {
+    deleteShippingType: async (req, res) => {
         const { decryptId } = req.body;
         try {
-            await indicativeNumberQuery.deleteIndicativeNumberQuery({ id: decryptId });
+            await shippingTypeQuery.deleteShippingTypeQuery({ id: decryptId });
             return responseHelpers.responseSuccess(res, null);
         } catch (error) {
             return responseHelpers.responseError(res, 500, error);
