@@ -9,5 +9,6 @@ module.exports = {
     unitMeasureController: require('./unit-measure.controller'),
     shippingTypeController: require('./shipping-type.controller'),
     vehicleController: require('./vehicle.controller'),
-    adminController: require('./admin.controller')
+    adminController: require('./admin.controller'),
+    clientController: require('./client.controller'),
 }

@@ -29,5 +29,7 @@ const {
       tableName: "client",
     }
   );
+
+  ClientSchema.removeAttribute('id');
   
   module.exports = ClientSchema;

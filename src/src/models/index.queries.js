@@ -11,5 +11,6 @@ module.exports = {
   shippingTypeQuery: require("./shipping-type/shipping-type.query"),
   vehicleQuery: require("./vehicle/vehicle.query"),
   seatRulerQuery: require("./seat-ruler/seat-ruler.query"),
-  adminQuery: require("./admin/admin.query")
+  adminQuery: require("./admin/admin.query"),
+  clientQuery: require("./client/client.query")
 };

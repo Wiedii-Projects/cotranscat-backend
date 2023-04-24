@@ -56,21 +56,21 @@
     }
   },
   "userErrors": {
-    "emailInUse": {
-      "code": "US0001",
-      "message": "The email is already in use."
-    },
     "nameRequired": {
-      "code": "US0002",
-      "message": "The name is required."
+      "code": "US0001",
+      "message": "the name is required"
     },
-    "emailInvalid": {
+    "nameCharacter": {
+      "code": "US0002",
+      "message": "the name must have a minimum of 1 character and a maximum of 50 characters."
+    },
+    "": {
       "code": "US0003",
-      "message": "The email is invalid."
+      "message": ""
     },
     "idRequired": {
       "code": "US0004",
-      "message": "The ID is required."
+      "message": "the ID is required"
     },
     "noToken": {
       "code": "US0005",
@@ -84,9 +84,17 @@
       "code": "US0007",
       "message": "The last name is required."
     },
+    "lastNameCharacter": {
+      "code": "US0007",
+      "message": "the lastName must have a minimum of 1 character and a maximum of 50 characters."
+    },
     "phoneNumberRequired": {
       "code": "US0008",
       "message": "The phone number is required."
+    },
+    "phoneNumberCharacter": {
+      "code": "US0008",
+      "message": "the lastName must have a minimum of 1 character and a maximum of 12 characters."
     },
     "validatePassword": {
       "code": "US0009",
@@ -102,15 +110,35 @@
     },
     "idDocumentTypeRequired": {
       "code": "US0012",
-      "message": "The id document type is required."
+      "message": "The document type is required."
+    },
+    "idDocumentTypeInvalid": {
+      "code": "US0012",
+      "message": "The document type invalid."
+    },
+    "idRoleRequired": {
+      "code": "US0012",
+      "message": "The rol is required."
+    },
+    "idRoleInvalid": {
+      "code": "US0012",
+      "message": "The rol is invalid."
     },
     "numberDocumentRequired": {
       "code": "US0013",
       "message": "The number document is required."
     },
-    "idIndicativeNumberPhoneRequired": {
+    "numberDocumentCharacter": {
+      "code": "US0013",
+      "message": "the number document must have a minimum of 1 character and a maximum of 20 characters."
+    },
+    "idIndicativePhoneRequired": {
       "code": "US0014",
-      "message": "The id Indicative Number Phone is required."
+      "message": "The indicative number is required."
+    },
+    "idIndicativePhoneInvalid": {
+      "code": "US0014",
+      "message": "The indicative phone invalid."
     },
     "idIndicativeNumberPhoneWhatsAppRequired": {
       "code": "US0015",
@@ -343,7 +371,7 @@
       }
     }
   },
-  "admin":{
+  "admin": {
     "nickNameRequired": {
       "code": "ADMI001",
       "message": "Nick name is required"
@@ -355,6 +383,20 @@
     "passwordRequired":{
       "code": "ADMI003",
       "message": "Password is required"
+    }
+  },
+  "client": {
+    "numberPhoneWhatsappRequired": {
+      "code": "CLIEN001",
+      "message": "Number phone whatsapp is required"
+    },
+    "emailRequired": {
+      "code": "CLIEN002",
+      "message": "Email is required"
+    },
+    "addressRequired": {
+      "code": "CLIEN003",
+      "message": "Address is required"
     }
   },
   "vehicle": {

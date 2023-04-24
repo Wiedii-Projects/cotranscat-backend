@@ -24,7 +24,8 @@ class ServerModel {
             unitMeasure: '/api/unitMeasure',
             shippingType: '/api/shippingType',
             vehicle: '/api/vehicle',
-            admin: '/api/admin'
+            admin: '/api/admin',
+            client: '/api/client',
         }
         this.dbHost = coreConfigurationsConst.dbHost;
         this.db();
@@ -56,6 +57,7 @@ class ServerModel {
         this.app.use(this.paths.shippingType, require('../../../routes/shipping-type.routes'));
         this.app.use(this.paths.vehicle, require('../../../routes/vehicle.routes'));
         this.app.use(this.paths.admin, require('../../../routes/admin.routes'));
+        this.app.use(this.paths.client, require('../../../routes/client.routes'));
     }
 
     listen() {

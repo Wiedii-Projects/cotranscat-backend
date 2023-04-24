@@ -18,10 +18,7 @@ router.post('/', [
     sharedValidators.validateErrorFields,
 ], documentTypeController.createDocumentType);
 
-router.get('/', [
-    sharedMiddleware.checkAdminRole(),
-    sharedValidators.validateErrorFields,
-], documentTypeController.getAllDocumentTypes);
+router.get('/', documentTypeController.getAllDocumentTypes);
 
 router.put('/:id', [
     sharedMiddleware.checkAdminRole(),
