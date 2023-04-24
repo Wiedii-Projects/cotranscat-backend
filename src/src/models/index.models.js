@@ -10,8 +10,21 @@ const UnitMeasure = require("./unit-measure/unit-measure.model");
 const ShippingType = require("./shipping-type/shipping-type.model");
 const Vehicle = require("./vehicle/vehicle.model");
 const SeatRuler = require("./seat-ruler/seat-ruler.model");
+const Admin = require("./admin/admin.model");
+const Coordinator = require("./coordinator/coordinator.model");
+const Driver = require("./driver/driver.model");
+const Seller = require("./seller/seller.model");
+const Client = require("./client/client.model")
 
 // Relationships BD
+
+// Relationship User-Admin
+Admin.belongsTo(User, { foreignKey: { name: 'id', allowNull: false, primaryKey: true } });
+User.hasOne(Admin, { foreignKey: { name: 'id', allowNull: false, primaryKey: true } });
+
+// Relationship User-Seller
+Seller.belongsTo(User, { foreignKey: { name: 'id', allowNull: false, primaryKey: true } });
+User.hasOne(Seller, { foreignKey: { name: 'id', allowNull: false, primaryKey: true } });
 
 // Relationship User-Role
 User.belongsTo(Role, { as: 'UserRole', foreignKey: { name: "idRole", allowNull: false } });
@@ -24,10 +37,6 @@ DocumentType.hasMany(User, { as: 'UserDocumentType', foreignKey: { name: "idDocu
 // Relationship User-IndicativeNumber
 User.belongsTo(IndicativeNumber, { as: 'UserIndicativeNumber', foreignKey: { name: "idIndicativeNumberPhone", allowNull: false } });
 IndicativeNumber.hasMany(User, { as: 'UserIndicativeNumber', foreignKey: { name: "idIndicativeNumberPhone", allowNull: false } });
-
-// Relationship User-WhatsAppIndicativeNumber
-User.belongsTo(IndicativeNumber, { as: 'UserWhatsAppIndicativeNumber', foreignKey: { name: "idIndicativeNumberPhoneWhatsApp", allowNull: false } });
-IndicativeNumber.hasMany(User, { as: 'UserWhatsAppIndicativeNumber', foreignKey: { name: "idIndicativeNumberPhoneWhatsApp", allowNull: false } });
 
 // Relationship User-Municipality
 User.belongsTo(Municipality, { as: 'UserMunicipality', foreignKey: { name: "idMunicipality", allowNull: true } });
@@ -65,5 +74,10 @@ module.exports = {
   UnitMeasure,
   ShippingType,
   Vehicle,
-  SeatRuler
+  SeatRuler,
+  Admin,
+  Coordinator,
+  Driver,
+  Seller,
+  Client
 };

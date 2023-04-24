@@ -9,5 +9,6 @@ module.exports = {
     paymentMethodMiddleware: require('./checks/payment-method.check.middleware'),
     unitMeasureMiddleware: require('./checks/unit-measure.check.middleware'),
     shippingTypeMiddleware: require('./checks/shipping-type.check.middleware'),
-    vehicleMiddleware: require('./checks/vehicle.check.middleware')
+    vehicleMiddleware: require('./checks/vehicle.check.middleware'),
+    adminMiddleware: require('./checks/admin.check.middleware')
 }

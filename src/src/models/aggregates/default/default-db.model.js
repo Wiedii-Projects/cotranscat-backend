@@ -1,9 +1,21 @@
 //Models - Default Data
-const { defaultRole, defaultIndicativeNumber, defaultAdmin, defaultDocumentType, defaultDepartment, defaultPaymentMethod, defaultMunicipality, defaultUnitMeasure, defaultShippingType } = require('./default-data.model');
+const { 
+    defaultRole, 
+    defaultIndicativeNumber, 
+    defaultUser, 
+    defaultDocumentType, 
+    defaultDepartment, 
+    defaultPaymentMethod, 
+    defaultMunicipality, 
+    defaultUnitMeasure, 
+    defaultShippingType,
+    defaultAdmin
+} = require('./default-data.model');
 
 //Models
 const Role = require('../../role/role.model');
 const User = require('../../user/user.model');
+const Admin = require('../../admin/admin.model');
 const IndicativeNumber = require('../../indicative-number/indicative-number.model');
 const DocumentType = require('../../document-type/document-type.model');
 const Department = require('../../department/department.model');
@@ -62,6 +74,10 @@ class defaultDataBaseModel {
         return id;
     }
 
+    async getUserAdmin (where) {
+        return await User.findOne({where, raw:true});
+    }
+
     async getShippingType () {
         const [{ name }] = defaultShippingType;
         const { id } = await ShippingType.findOne({ where: { name }});
@@ -117,18 +133,18 @@ class defaultDataBaseModel {
         const indicativeNumber = await this.getIndicativeNumber();
         const idRole = await this.getAdminRole();
         const idDocumentType = await this.getDocumentType();
-        const password = await encryptPasswordHelper(process.env.PASSWORD_ADMIN_ROOT);
         const idDepartment = await this.getDepartment();
         const idPaymentMethod = await this.getPaymentMethod();
         const idMunicipality = await this.getMunicipality();
         const idUnitMeasure = await this.getUnitMeasure();
         const idShippingType = await this.getShippingType();
-
-        await this.countUser() || 
-            await User.create( 
+        const userCreate = await this.countUser();
+        
+        if( !userCreate ){
+            const password = await encryptPasswordHelper(process.env.PASSWORD_ADMIN_ROOT);
+            const user = await User.create( 
                 { 
-                    ...defaultAdmin, 
-                    password,
+                    ...defaultUser, 
                     idRole, 
                     idDocumentType, 
                     idIndicativeNumberPhone: indicativeNumber, 
@@ -139,6 +155,14 @@ class defaultDataBaseModel {
                     idUnitMeasure,
                     idShippingType
                 });
+                await Admin.create(
+                    {
+                        ...defaultAdmin,
+                        id: user.id,
+                        password
+                    }
+                );
+        };
     }
 }
 

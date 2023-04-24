@@ -343,6 +343,20 @@
       }
     }
   },
+  "admin":{
+    "nickNameRequired": {
+      "code": "ADMI001",
+      "message": "Nick name is required"
+    },
+    "emailRequired":{
+      "code": "ADMI002",
+      "message": "Email is required"
+    },
+    "passwordRequired":{
+      "code": "ADMI003",
+      "message": "Password is required"
+    }
+  },
   "vehicle": {
     "plateRequired": {
       "code": "VHC001",

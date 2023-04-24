@@ -10,5 +10,6 @@ module.exports = {
   unitMeasureQuery: require("./unit-measure/unit-measure.query"),
   shippingTypeQuery: require("./shipping-type/shipping-type.query"),
   vehicleQuery: require("./vehicle/vehicle.query"),
-  seatRulerQuery: require("./seat-ruler/seat-ruler.query")
+  seatRulerQuery: require("./seat-ruler/seat-ruler.query"),
+  adminQuery: require("./admin/admin.query")
 };

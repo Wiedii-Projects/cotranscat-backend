@@ -23,7 +23,8 @@ class ServerModel {
             paymentMethod: '/api/paymentMethod',
             unitMeasure: '/api/unitMeasure',
             shippingType: '/api/shippingType',
-            vehicle: '/api/vehicle'
+            vehicle: '/api/vehicle',
+            admin: '/api/admin'
         }
         this.dbHost = coreConfigurationsConst.dbHost;
         this.db();
@@ -54,6 +55,7 @@ class ServerModel {
         this.app.use(this.paths.unitMeasure, require('../../../routes/unit-measure.routes'));
         this.app.use(this.paths.shippingType, require('../../../routes/shipping-type.routes'));
         this.app.use(this.paths.vehicle, require('../../../routes/vehicle.routes'));
+        this.app.use(this.paths.admin, require('../../../routes/admin.routes'));
     }
 
     listen() {
