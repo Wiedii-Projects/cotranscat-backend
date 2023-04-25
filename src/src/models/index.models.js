@@ -22,6 +22,10 @@ const Client = require("./client/client.model")
 Admin.belongsTo(User, { foreignKey: { name: 'id', allowNull: false, primaryKey: true } });
 User.hasOne(Admin, { foreignKey: { name: 'id', allowNull: false, primaryKey: true } });
 
+// Relationship User-Client
+Client.belongsTo(User, { foreignKey: { name: 'id', allowNull: false, primaryKey: true } });
+User.hasOne(Client, { foreignKey: { name: 'id', allowNull: false, primaryKey: true } });
+
 // Relationship User-Seller
 Seller.belongsTo(User, { foreignKey: { name: 'id', allowNull: false, primaryKey: true } });
 User.hasOne(Seller, { foreignKey: { name: 'id', allowNull: false, primaryKey: true } });

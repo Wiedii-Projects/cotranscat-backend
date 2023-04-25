@@ -13,7 +13,6 @@ const { ErrorModel } = require("../../models/index.models");
 module.exports = {
     checkCreateDocumentType: () => {
         return [
-            ...sharedCheckMiddleware.checkAdminRole(),
             check('name')
             .isString().withMessage(new ErrorModel(errorsConst.documentType.nameRequired))
             .isLength({min: 2}).withMessage(new ErrorModel(errorsConst.documentType.lengthName))
