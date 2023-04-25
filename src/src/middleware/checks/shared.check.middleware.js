@@ -10,6 +10,9 @@ const { ErrorModel } = require("../../models/index.models");
 // Validators - Middleware
 const { authValidators, userValidators, sharedValidators } = require('../index.validators.middleware');
 
+// Helpers
+const sharedHelpers = require('../../helpers/shared.helpers');
+
 const checkJwt = () => {
     return [
         check('x-token')
@@ -29,9 +32,9 @@ module.exports = {
     checkJwt,
     checkId: () => {
         return [
-            check('id')
-                .bail().custom((value, { req }) => req.body.decryptId = sharedHelpers.decryptIdDataBase(value)).withMessage(new ErrorModel(errorsConst.userErrors.idRequired))
-                .bail().custom((_, { req }) => req.body.decryptId ? true : false).withMessage(new ErrorModel(errorsConst.userErrors.idRequired)),
+            check('id', new ErrorModel(errorsConst.userErrors.idRequired))
+                .custom((value, { req }) => req.body.decryptId = sharedHelpers.decryptIdDataBase(value)).bail()
+                .custom((_, { req }) => !!req.body.decryptId).bail(),
             sharedValidators.validateError
         ];
     },

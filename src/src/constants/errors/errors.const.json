@@ -424,9 +424,21 @@
       "code": "DRV006",
       "message": "Password is invalid"
     },
+    "driverNotExist":{
+      "code": "DRV007",
+      "message": "driver does not exist"
+    },
     "queryErrors": {
       "create": {
         "code": "DRVR_001",
+        "message": "Something went wrong"
+      },
+      "findError": {
+        "code": "DRVR_002",
+        "message": "Something went wrong"
+      },
+      "updateError": {
+        "code": "DRVR_003",
         "message": "Something went wrong"
       }
     }
