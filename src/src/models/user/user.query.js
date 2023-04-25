@@ -82,9 +82,12 @@ module.exports = {
             throw errorsConst.userErrors.queryErrors.findAllError
         }
     },
-    createNewUserQuery: async (where) => {
+    createNewUserQuery: async (where, transaction) => {
         try {
-            return await User.findOrCreate({ where });
+            return await User.findOrCreate({
+                where,
+                transaction
+            });
         } catch {
             throw errorsConst.userErrors.queryErrors.createError
         }

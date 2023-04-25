@@ -12,7 +12,7 @@ module.exports = {
                 ? sharedHelpers.decryptIdDataBase(municipality.id)
                 : false
         } catch (error) {
-            req.body.municipalityExists = false;
+            req.body.idMunicipality = false;
         }
     }
 }

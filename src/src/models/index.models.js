@@ -26,6 +26,14 @@ User.hasOne(Admin, { foreignKey: { name: 'id', allowNull: false, primaryKey: tru
 Client.belongsTo(User, { foreignKey: { name: 'id', allowNull: false, primaryKey: true } });
 User.hasOne(Client, { foreignKey: { name: 'id', allowNull: false, primaryKey: true } });
 
+// Relationship User-Driver
+Driver.belongsTo(User, { foreignKey: { name: 'id', allowNull: false, primaryKey: true } });
+User.hasOne(Driver, { foreignKey: { name: 'id', allowNull: false, primaryKey: true } });
+
+// Relationship User-Driver
+Driver.belongsToMany(Vehicle, {through: 'driverVehicle'});
+Vehicle.belongsToMany(Driver, {through: 'driverVehicle'});
+
 // Relationship User-Seller
 Seller.belongsTo(User, { foreignKey: { name: 'id', allowNull: false, primaryKey: true } });
 User.hasOne(Seller, { foreignKey: { name: 'id', allowNull: false, primaryKey: true } });
@@ -39,8 +47,8 @@ User.belongsTo(DocumentType, { as: 'UserDocumentType', foreignKey: { name: "idDo
 DocumentType.hasMany(User, { as: 'UserDocumentType', foreignKey: { name: "idDocumentType", allowNull: false } });
 
 // Relationship User-IndicativeNumber
-User.belongsTo(IndicativeNumber, { as: 'UserIndicativeNumber', foreignKey: { name: "idIndicativeNumberPhone", allowNull: false } });
-IndicativeNumber.hasMany(User, { as: 'UserIndicativeNumber', foreignKey: { name: "idIndicativeNumberPhone", allowNull: false } });
+User.belongsTo(IndicativeNumber, { as: 'UserIndicativeNumber', foreignKey: { name: "idIndicativePhone", allowNull: false } });
+IndicativeNumber.hasMany(User, { as: 'UserIndicativeNumber', foreignKey: { name: "idIndicativePhone", allowNull: false } });
 
 // Relationship User-Municipality
 User.belongsTo(Municipality, { as: 'UserMunicipality', foreignKey: { name: "idMunicipality", allowNull: true } });

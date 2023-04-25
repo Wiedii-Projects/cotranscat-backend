@@ -12,5 +12,6 @@ module.exports = {
   vehicleQuery: require("./vehicle/vehicle.query"),
   seatRulerQuery: require("./seat-ruler/seat-ruler.query"),
   adminQuery: require("./admin/admin.query"),
-  clientQuery: require("./client/client.query")
+  clientQuery: require("./client/client.query"),
+  driverQuery: require("./driver/driver.query"),
 };
