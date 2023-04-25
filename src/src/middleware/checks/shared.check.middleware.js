@@ -16,14 +16,14 @@ const sharedHelpers = require('../../helpers/shared.helpers');
 const checkJwt = () => {
     return [
         check('x-token')
-            .bail().isString().withMessage(new ErrorModel(errorsConst.userErrors.noToken))
-            .bail().custom((value, { req }) => authValidators.validateJWT(value, req)),
+            .isString().withMessage(new ErrorModel(errorsConst.userErrors.noToken)).bail()
+            .custom((value, { req }) => authValidators.validateJWT(value, req)).bail(),
         sharedValidators.validateError,
         check('isValidToken')
-            .bail().custom((value) => value ? true : false).withMessage(new ErrorModel(errorsConst.authErrors.tokenInvalid)),
+            .custom((value) => value ? true : false).withMessage(new ErrorModel(errorsConst.authErrors.tokenInvalid)).bail(),
         sharedValidators.validateError,
         check('user')
-            .bail().custom((value) => value.state ? true : false).withMessage( new ErrorModel(errorsConst.userErrors.userNotExist)),
+            .custom((value) => value.state ? true : false).withMessage( new ErrorModel(errorsConst.userErrors.userNotExist)).bail(),
         sharedValidators.validateError
     ];
 }
@@ -42,7 +42,7 @@ module.exports = {
         return [
             ...checkJwt(),
             check('user')
-                .bail().custom((value) => value.role.role === roleConst.ADMIN_ROLE).withMessage(new ErrorModel(errorsConst.userErrors.adminRole)),
+                .custom((value) => value.role.role === roleConst.ADMIN_ROLE).withMessage(new ErrorModel(errorsConst.userErrors.adminRole)).bail(),
             sharedValidators.validateError
         ]
     },
