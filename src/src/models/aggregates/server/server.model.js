@@ -26,7 +26,8 @@ class ServerModel {
             vehicle: '/api/vehicle',
             admin: '/api/admin',
             client: '/api/client',
-            driver: '/api/driver'
+            driver: '/api/driver',
+            coordinator: '/api/coordinator'
         }
         this.dbHost = coreConfigurationsConst.dbHost;
         this.db();
@@ -58,7 +59,7 @@ class ServerModel {
         this.app.use(this.paths.shippingType, require('../../../routes/shipping-type.routes'));
         this.app.use(this.paths.vehicle, require('../../../routes/vehicle.routes'));
         this.app.use(this.paths.admin, require('../../../routes/admin.routes'));
-        this.app.use(this.paths.client, require('../../../routes/client.routes'));
+        this.app.use(this.paths.coordinator, require('../../../routes/coordinator.routes'));
         this.app.use(this.paths.driver, require('../../../routes/driver.routes'));
     }
 

@@ -14,4 +14,5 @@ module.exports = {
   adminQuery: require("./admin/admin.query"),
   clientQuery: require("./client/client.query"),
   driverQuery: require("./driver/driver.query"),
+  coordinatorQuery: require("./coordinator/coordinator.query")
 };

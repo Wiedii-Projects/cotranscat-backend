@@ -1,5 +1,5 @@
 // Queries
-const { userQuery } = require('./../models/index.queries')
+const { userQuery } = require('./../models/index.queries');
 
 module.exports = {
     createUserModelUserHelper: async (data) => {
@@ -16,18 +16,24 @@ module.exports = {
             offset: (/^[0-9]+$/).test(offsetDefault)? parseInt(offsetDefault): 0
         }
     },
-    extractUserDataHelper: (user) => {
-        const { 
+    extractUserDataHelper: (data) => {
+        const {
+            idDocumentType = undefined,
+            numberDocument = undefined,
             name = undefined, 
             lastName = undefined, 
-            email = undefined, 
-            phoneNumber = undefined, 
-            password = undefined, 
-            img = undefined, 
-            google = false, 
-            role = undefined 
-        } = user;
-        return { name, lastName, email, phoneNumber, password, img, google, role }
+            idIndicativePhone = undefined, 
+            numberPhone = undefined, 
+        } = data;
+        return { idDocumentType, numberDocument, name, lastName, idIndicativePhone, numberPhone }
+    },
+    extractCoordinatorDataHelper: (data) => {
+        const { 
+            nickName = undefined,
+            email = undefined,
+            password = undefined,
+        } = data;
+        return { nickName, email, password  }
     },
     extractUserClientDataHelper: (user) => {
         const {

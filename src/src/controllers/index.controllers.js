@@ -11,5 +11,6 @@ module.exports = {
     vehicleController: require('./vehicle.controller'),
     adminController: require('./admin.controller'),
     clientController: require('./client.controller'),
-    driverController: require('./driver.controller')
+    driverController: require('./driver.controller'),
+    coordinatorController: require('./coordinator.controller')
 }
