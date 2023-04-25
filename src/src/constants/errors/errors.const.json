@@ -399,6 +399,50 @@
       "message": "Address is required"
     }
   },
+  "driver":{
+    "nickNameRequired": {
+      "code": "DRV001",
+      "message": "Nick name is required"
+    },
+    "emailRequired":{
+      "code": "DRV002",
+      "message": "Email is required"
+    },
+    "passwordRequired":{
+      "code": "DRV003",
+      "message": "Password is required"
+    },
+    "nickNameInvalid": {
+      "code": "DRV004",
+      "message": "Nick name is invalid"
+    },
+    "emailInvalid":{
+      "code": "DRV005",
+      "message": "Email is invalid"
+    },
+    "passwordInvalid":{
+      "code": "DRV006",
+      "message": "Password is invalid"
+    },
+    "driverNotExist":{
+      "code": "DRV007",
+      "message": "driver does not exist"
+    },
+    "queryErrors": {
+      "create": {
+        "code": "DRVR_001",
+        "message": "Something went wrong"
+      },
+      "findError": {
+        "code": "DRVR_002",
+        "message": "Something went wrong"
+      },
+      "updateError": {
+        "code": "DRVR_003",
+        "message": "Something went wrong"
+      }
+    }
+  },
   "vehicle": {
     "plateRequired": {
       "code": "VHC001",

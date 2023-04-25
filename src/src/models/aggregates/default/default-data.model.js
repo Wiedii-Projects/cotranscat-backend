@@ -11,6 +11,9 @@ module.exports = {
         }, 
         { 
             role: "CLIENT_ROLE" 
+        }, 
+        { 
+            role: "DRIVER_ROLE" 
         } 
     ],
     defaultDocumentType: [ 
