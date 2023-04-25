@@ -14,7 +14,10 @@ module.exports = {
         }, 
         { 
             role: "DRIVER_ROLE" 
-        } 
+        },
+        {
+            role: "COORDINATOR_ROLE"
+        }
     ],
     defaultDocumentType: [ 
         { 

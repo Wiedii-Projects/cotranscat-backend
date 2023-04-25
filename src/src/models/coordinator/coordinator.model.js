@@ -20,7 +20,7 @@ const {
         allowNull: false
       },
       password: {
-        type: DataTypes.STRING(50),
+        type: DataTypes.STRING(75),
         field: "password",
         allowNull: false
       }
@@ -29,5 +29,7 @@ const {
       tableName: "coordinator",
     }
   );
+
+  CoordinatorSchema.removeAttribute('id');
   
   module.exports = CoordinatorSchema;

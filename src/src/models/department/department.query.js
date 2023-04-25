@@ -37,12 +37,5 @@ module.exports = {
         } catch {
             throw errorsConst.department.queryErrors.updateError
         }
-    },
-    deleteDepartmentQuery: async (where) => {
-        try {
-            return await Department.destroy({ where })
-        } catch {
-            throw errorsConst.department.queryErrors.deleteError
-        }
     }
 }
