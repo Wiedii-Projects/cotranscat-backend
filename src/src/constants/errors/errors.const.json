@@ -578,5 +578,33 @@
         "message": "Something went wrong."
       }
     }
+  },
+  "functionalityErrors": {
+    "nameRequired": {
+      "code": "FNCT001",
+      "message": "the name is required."
+    },
+    "nameInvalid": {
+      "code": "FNCT002",
+      "message": "the name is invalid."
+    },
+    "queryErrors": {
+      "createError": {
+        "code": "FNCT_001",
+        "message": "Something went wrong."
+      },
+      "findAllError": {
+        "code": "FNCT_002",
+        "message": "Something went wrong."
+      },
+      "updateError": {
+        "code": "FNCT_003",
+        "message": "Something went wrong."
+      },
+      "deleteError": {
+        "code": "FNCT_004",
+        "message": "Something went wrong."
+      }
+    }
   }
 }
