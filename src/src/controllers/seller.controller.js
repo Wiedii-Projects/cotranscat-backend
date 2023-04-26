@@ -4,22 +4,22 @@ const indexHelpers = require('../helpers/index.helpers');
 const { responseHelpers } = require('../helpers/index.helpers');
 
 // Models - Queries
-const { adminQuery, roleQuery, userQuery } = require('../models/index.queries');
+const { roleQuery, userQuery, sellerQuery } = require('../models/index.queries');
 
 
 module.exports = {
-    createAdmin: async (req, res) => {
+    createSeller: async (req, res) => {
         const userExtract = indexHelpers.userHelpers.extractUserDataHelper(req.body)
-        const {password, ...admin} = indexHelpers.userHelpers.extractAdminDataHelper(req.body)
+        const {password, ...seller} = indexHelpers.userHelpers.extractSellerDataHelper(req.body)
         let transaction;
         try {
             transaction = await dbConnectionOptions.transaction();
             //TODO Adjust Role
-            const [role] = await roleQuery.findRoleQuery({role: "ADMIN_ROLE"})
+            const [role] = await roleQuery.findRoleQuery({role: "SELLER_ROLE"})
             const [user] = await userQuery.createNewUserQuery( {...userExtract, idRole: role.id}, transaction)
-            await adminQuery.createAdminQuery(
+            await sellerQuery.createSellerQuery(
               {
-                ...admin,
+                ...seller,
                 password: await indexHelpers.authHelpers.encryptPasswordHelper(password),
                 id: user.id,
               },
@@ -33,33 +33,20 @@ module.exports = {
         }
     },
 
-    getAllAdmin: async (req, res) => {
+    getAllSeller: async (req, res) => {
         try {
-            const resp = await adminQuery.findAdminQuery()
+            const resp = await sellerQuery.findSellerQuery()
             return responseHelpers.responseSuccess(res, resp);
         } catch (error) {
             return responseHelpers.responseError(res, 500, error);
         }
     },
 
-    getAdmin: async (req, res) => {
+    getSeller: async (req, res) => {
         const { decryptId } = req.body;
         try {
-            const resp = await adminQuery.findAdminQuery(decryptId)
+            const resp = await sellerQuery.findSellerQuery(decryptId)
             return responseHelpers.responseSuccess(res, resp);
-        } catch (error) {
-            return responseHelpers.responseError(res, 500, error);
-        }
-    },
-    
-    updateAdmin: async (req, res) => {
-        const { decryptId , name } = req.body;
-        try {
-            await adminQuery.updateAdminQuery(
-                { id: decryptId },
-                { name }
-            )
-            return responseHelpers.responseSuccess(res, null);
         } catch (error) {
             return responseHelpers.responseError(res, 500, error);
         }

@@ -1,27 +1,26 @@
 // Constants
 const { errorsConst } = require('../../constants/index.constants');
 
-//Helpers
+// Models
+const { User, IndicativeNumber, DocumentType, Seller } = require('../index.models');
+
+// Helpers
 const sharedHelpers = require('../../helpers/shared.helpers');
 
-// Models
-const { Admin, IndicativeNumber, User, DocumentType } = require('../index.models');
-
 module.exports = {
-    createAdminQuery: async (where, transaction) => {
+    createSellerQuery: async (where,transaction) => {
         try {
-            return await Admin.findOrCreate({
+            return await Seller.findOrCreate({
                 where,
                 transaction
             });
         } catch {
-            throw errorsConst.admin.queryErrors.createError
+            throw errorsConst.seller.queryErrors.createError
         }
     },
-
-    findAdminQuery: async (where) => {
+    findSellerQuery: async (where) => {
         try {
-            return await Admin.findAll({
+            return await Seller.findAll({
               where,
               attributes : ["id","nickName","email"],
               include: [
@@ -37,24 +36,15 @@ module.exports = {
               ],
               raw: true,
               nest:true
-            }).then(admin => admin.map(({User : { UserDocumentType , UserIndicativeNumber, ...user}, id, ...admin })=>({
+            }).then(seller => seller.map(({User : { UserDocumentType , UserIndicativeNumber, ...user}, id, ...seller })=>({
                 id: sharedHelpers.encryptIdDataBase(id),
-                ...admin,
+                ...seller,
                 ...user,
                 documentType: UserDocumentType.name,
                 indicativeNumber: UserIndicativeNumber.number
             })))
         } catch {
-            throw errorsConst.admin.queryErrors.findError
+            throw errorsConst.seller.queryErrors.findError
         }
     },
-
-    updateAdminQuery: async (where, update) => {
-        try {
-            return await Admin.update(update, { where });
-        } catch {
-            throw errorsConst.admin.queryErrors.updateError
-        }
-    },
-
 }

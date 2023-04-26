@@ -16,35 +16,14 @@ module.exports = {
             offset: (/^[0-9]+$/).test(offsetDefault)? parseInt(offsetDefault): 0
         }
     },
-    extractUserDataHelper: (data) => {
-        const {
-            idDocumentType = undefined,
-            numberDocument = undefined,
-            name = undefined, 
-            lastName = undefined, 
-            idIndicativePhone = undefined, 
-            numberPhone = undefined, 
-        } = data;
-        return { idDocumentType, numberDocument, name, lastName, idIndicativePhone, numberPhone }
-    },
-    extractClientDataHelper: (data) => {
-        const {
-            email = undefined, 
-            address = undefined, 
-            idIndicativePhoneWhatsApp = undefined, 
-            numberPhoneWhatsapp = undefined,
-            idMunicipality = undefined
-        } = data;
-        return { email, address, idIndicativePhoneWhatsApp, numberPhoneWhatsapp, idMunicipality };
-    },
-    extractCoordinatorDataHelper: (data) => {
-        const { 
-            nickName = undefined,
-            email = undefined,
-            password = undefined,
-        } = data;
-        return { nickName, email, password  }
-    },
+    extractUserDataHelper: ({
+        idDocumentType,
+        numberDocument,
+        name,
+        lastName,
+        idIndicativePhone,
+        numberPhone,
+    }) => ({ idDocumentType, numberDocument, name, lastName, idIndicativePhone, numberPhone }),
     extractUserClientDataHelper: (user) => {
         const {
             idDocumentType = undefined,
@@ -58,5 +37,9 @@ module.exports = {
             address = undefined
         } = user;
         return { idDocumentType, numberDocument, name, lastName, idIndicativeNumberPhone, phoneNumber, idIndicativeNumberPhoneWhatsApp, numberPhoneWhatsApp, address };
-    }
+    },
+    extractDriverDataHelper: ({ nickName, email, password }) => ({ nickName, email, password }),
+    extractCoordinatorDataHelper: ({ nickName, email, password }) => ({ nickName, email, password }),
+    extractAdminDataHelper: ({ nickName, email, password }) => ({ nickName, email, password }),
+    extractSellerDataHelper: ({ nickName, email, password }) => ({ nickName, email, password }),
 }

@@ -380,13 +380,39 @@
       "code": "ADMI001",
       "message": "Nick name is required"
     },
-    "emailRequired":{
+    "lengthNickName": {
       "code": "ADMI002",
+      "message": "The admin name must have a minimum of 1 character and a maximum of 100 characters"
+    },
+    "emailRequired":{
+      "code": "ADMI003",
       "message": "Email is required"
     },
+    "emailInvalid":{
+      "code": "ADMI004",
+      "message": "Email is invalid"
+    },
     "passwordRequired":{
-      "code": "ADMI003",
+      "code": "ADMI005",
       "message": "Password is required"
+    },
+    "passwordInvalid":{
+      "code": "ADMI006",
+      "message": "Password is invalid"
+    },
+    "queryErrors": {
+      "createError": {
+        "code": "ADMI_001",
+        "message": "Something went wrong."
+      },
+      "updateError": {
+        "code": "ADMI_002",
+        "message": "Something went wrong."
+      },
+      "findError": {
+        "code": "ADMI_003",
+        "message": "Something went wrong."
+      }
     }
   },
   "client": {
@@ -488,7 +514,7 @@
     },
     "lengthNickName": {
       "code": "COOR002",
-      "message": "The department name must have a minimum of 1 character and a maximum of 30 characters"
+      "message": "The coordinator name must have a minimum of 1 character and a maximum of 100 characters"
     },
     "emailRequired":{
       "code": "COOR003",
@@ -499,24 +525,64 @@
       "message": "Email is invalid"
     },
     "passwordRequired":{
-      "code": "COOR004",
+      "code": "COOR005",
       "message": "Password is required"
     },
     "passwordInvalid":{
-      "code": "COOR005",
+      "code": "COOR006",
       "message": "Password is invalid"
     },
     "queryErrors": {
       "createError": {
-        "code": "STYP_001",
+        "code": "COOR_001",
         "message": "Something went wrong."
       },
       "updateError": {
-        "code": "STYP_002",
+        "code": "COOR_002",
         "message": "Something went wrong."
       },
       "findError": {
-        "code": "STYP_003",
+        "code": "COOR_003",
+        "message": "Something went wrong."
+      }
+    }
+  },
+  "seller": {
+    "nickNameRequired": {
+      "code": "SELL001",
+      "message": "Nick name is required"
+    },
+    "lengthNickName": {
+      "code": "SELL002",
+      "message": "The seller name must have a minimum of 1 character and a maximum of 100 characters"
+    },
+    "emailRequired":{
+      "code": "SELL003",
+      "message": "Email is required"
+    },
+    "emailInvalid":{
+      "code": "SELL004",
+      "message": "Email is invalid"
+    },
+    "passwordRequired":{
+      "code": "SELL005",
+      "message": "Password is required"
+    },
+    "passwordInvalid":{
+      "code": "SELL006",
+      "message": "Password is invalid"
+    },
+    "queryErrors": {
+      "createError": {
+        "code": "SELL_001",
+        "message": "Something went wrong."
+      },
+      "updateError": {
+        "code": "SELL_002",
+        "message": "Something went wrong."
+      },
+      "findError": {
+        "code": "SELL_003",
         "message": "Something went wrong."
       }
     }
@@ -613,6 +679,34 @@
     "queryErrors": {
       "findByNameError": {
         "code": "RLLE_001",
+        "message": "Something went wrong."
+      }
+    }
+  },
+  "functionalityErrors": {
+    "nameRequired": {
+      "code": "FNCT001",
+      "message": "the name is required."
+    },
+    "nameInvalid": {
+      "code": "FNCT002",
+      "message": "the name is invalid."
+    },
+    "queryErrors": {
+      "createError": {
+        "code": "FNCT_001",
+        "message": "Something went wrong."
+      },
+      "findAllError": {
+        "code": "FNCT_002",
+        "message": "Something went wrong."
+      },
+      "updateError": {
+        "code": "FNCT_003",
+        "message": "Something went wrong."
+      },
+      "deleteError": {
+        "code": "FNCT_004",
         "message": "Something went wrong."
       }
     }

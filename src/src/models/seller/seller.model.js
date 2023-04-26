@@ -5,8 +5,6 @@ const {
   
   // Libraries
   const { DataTypes } = require("sequelize");
-const UserSchema = require("../user/user.model");
-
   
   const SellerSchema = dbConnectionOptions.define(
     "seller",
@@ -22,7 +20,7 @@ const UserSchema = require("../user/user.model");
         allowNull: false
       },
       password: {
-        type: DataTypes.STRING(50),
+        type: DataTypes.STRING(75),
         field: "password",
         allowNull: false
       }
