@@ -17,6 +17,9 @@ module.exports = {
         },
         {
             role: "COORDINATOR_ROLE"
+        },
+        {
+            role: "SELLER_ROLE"
         }
     ],
     defaultDocumentType: [ 

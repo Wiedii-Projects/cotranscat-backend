@@ -16,4 +16,5 @@ module.exports = {
   driverQuery: require("./driver/driver.query"),
   coordinatorQuery: require("./coordinator/coordinator.query"),
   functionalityQuery: require("./functionality/functionality.query"),
+  sellerQuery: require("./seller/seller.query"),
 };
