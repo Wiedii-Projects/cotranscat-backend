@@ -37,4 +37,6 @@ module.exports = {
     }) => ({ idDocumentType, numberDocument, name, lastName, idIndicativeNumberPhone, phoneNumber, idIndicativeNumberPhoneWhatsApp, numberPhoneWhatsApp, address }),
     extractDriverDataHelper: ({ nickName, email, password }) => ({ nickName, email, password }),
     extractCoordinatorDataHelper: ({ nickName, email, password }) => ({ nickName, email, password }),
+    extractAdminDataHelper: ({ nickName, email, password }) => ({ nickName, email, password }),
+    extractSellerDataHelper: ({ nickName, email, password }) => ({ nickName, email, password }),
 }
