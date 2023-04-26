@@ -9,10 +9,11 @@ const { DataTypes } = require("sequelize");
 const RoleSchema = dbConnectionOptions.define(
   "Role",
   {
-    role: {
-      type: DataTypes.STRING,
-      field: "role",
-      required: [true, "The role is obligatory"],
+    type: {
+      type: DataTypes.TINYINT.UNSIGNED,
+      allowNull: false,
+      unique: true,
+      field: "type",
     },
   },
   {
