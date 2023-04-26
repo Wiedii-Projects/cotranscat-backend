@@ -5,33 +5,47 @@ const { errorsConst } = require('../../constants/index.constants');
 const sharedHelpers = require('../../helpers/shared.helpers');
 
 // Models
-const { Admin } = require('../index.models');
+const { Admin, IndicativeNumber, User, DocumentType } = require('../index.models');
 
 module.exports = {
-    createAdminQuery: async (where) => {
+    createAdminQuery: async (where, transaction) => {
         try {
             return await Admin.findOrCreate({
-                where
+                where,
+                transaction
             });
         } catch {
-            throw errorsConst.aggregateErrorsApp.errorCreateAdmin
+            throw errorsConst.admin.queryErrors.createError
         }
     },
 
-    findAdminQuery: async (query = {}) => {
+    findAdminQuery: async (where) => {
         try {
-            const { where } = query;
             return await Admin.findAll({
-                where,
-                raw: true
-            }).then(admin => admin.map(({ id, nickName, email, password }) => ({
+              where,
+              attributes : ["id","nickName","email"],
+              include: [
+                { 
+                    model:  User,
+                    attributes : ["numberDocument","name","lastName","numberPhone"],
+                    include : [
+                        {model: DocumentType, as: "UserDocumentType"},
+                        {model: IndicativeNumber, as: "UserIndicativeNumber"},
+                    ]
+                },
+                
+              ],
+              raw: true,
+              nest:true
+            }).then(admin => admin.map(({User : { UserDocumentType , UserIndicativeNumber, ...user}, id, ...admin })=>({
                 id: sharedHelpers.encryptIdDataBase(id),
-                nickName,
-                email,
-                password: sharedHelpers.encryptIdDataBase(password)
+                ...admin,
+                ...user,
+                documentType: UserDocumentType.name,
+                indicativeNumber: UserIndicativeNumber.number
             })))
         } catch {
-            throw errorsConst.aggregateErrorsApp.errorGetAdmin
+            throw errorsConst.admin.queryErrors.findError
         }
     },
 
@@ -39,15 +53,8 @@ module.exports = {
         try {
             return await Admin.update(update, { where });
         } catch {
-            throw errorsConst.aggregateErrorsApp.errorUpdateAdmin
+            throw errorsConst.admin.queryErrors.updateError
         }
     },
 
-    deleteAdminQuery: async (where) => {
-        try {
-            // return await Admin.destroy({ where })
-        } catch {
-            throw errorsConst.aggregateErrorsApp.errorDeleteAdmin
-        }
-    }
 }

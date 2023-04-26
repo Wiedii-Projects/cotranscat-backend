@@ -14,24 +14,16 @@ const router = Router();
 
 router.post('/', [
     adminMiddleware.checkCreateAdmin(),
-    sharedValidators.validateErrorFields,
 ], adminController.createAdmin);
 
-router.get('/', [
-    sharedMiddleware.checkAdminRole(),
-    sharedValidators.validateErrorFields,
-], adminController.getAllAdmin);
+router.get('/', adminController.getAllAdmin);
+
+router.get('/:id', [sharedMiddleware.checkId()], adminController.getAdmin);
 
 router.put('/:id', [
     adminMiddleware.checkUpdateAdmin(),
     sharedMiddleware.checkId(),
     sharedValidators.validateErrorFields,
 ], adminController.updateAdmin);
-
-router.delete('/:id', [
-    sharedMiddleware.checkAdminRole(),
-    sharedMiddleware.checkId(),
-    sharedValidators.validateErrorFields,
-], adminController.deleteAdmin);
 
 module.exports = router;
