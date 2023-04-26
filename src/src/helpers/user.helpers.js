@@ -27,6 +27,16 @@ module.exports = {
         } = data;
         return { idDocumentType, numberDocument, name, lastName, idIndicativePhone, numberPhone }
     },
+    extractClientDataHelper: (data) => {
+        const {
+            email = undefined, 
+            address = undefined, 
+            idIndicativePhoneWhatsApp = undefined, 
+            numberPhoneWhatsapp = undefined,
+            idMunicipality = undefined
+        } = data;
+        return { email, address, idIndicativePhoneWhatsApp, numberPhoneWhatsapp, idMunicipality };
+    },
     extractCoordinatorDataHelper: (data) => {
         const { 
             nickName = undefined,

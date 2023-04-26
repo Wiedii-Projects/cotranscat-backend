@@ -19,15 +19,4 @@ router.post('/', [
 
 router.get('/', clientController.getAllClient);
 
-router.put('/:id', [
-    clientMiddleware.checkUpdateClient(),
-    sharedMiddleware.checkId(),
-    sharedValidators.validateErrorFields,
-], clientController.updateClient);
-
-router.delete('/:id', [
-    sharedMiddleware.checkId(),
-    sharedValidators.validateErrorFields,
-], clientController.deleteClient);
-
 module.exports = router;

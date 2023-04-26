@@ -50,7 +50,7 @@ module.exports = {
         try {
             const {
                 where,
-                attributes = ['id', 'idDocumentType','numberDocument', 'name', 'lastName','idIndicativePhone', 'state', 'idRole'],
+                attributes = ['id', 'numberDocument', 'name', 'lastName', 'numberPhone', 'state'],
                 group,
                 limit,
                 offset,
@@ -89,7 +89,7 @@ module.exports = {
                 transaction
             });
         } catch {
-            throw errorsConst.userErrors.queryErrors.createError
+            throw errorsConst.client.queryErrors.createError;
         }
     },
     updateUserQuery: async (where, update) => {

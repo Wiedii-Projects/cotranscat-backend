@@ -11,7 +11,7 @@ const { ErrorModel } = require("../../models/index.models");
 const { authValidators, userValidators, sharedValidators } = require('../index.validators.middleware');
 
 // Helpers
-const sharedHelpers = require('../../helpers/shared.helpers');
+const { sharedHelpers } = require('../../helpers/index.helpers');
 
 const checkJwt = () => {
     return [

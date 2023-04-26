@@ -5,31 +5,73 @@ const { errorsConst } = require('../../constants/index.constants');
 const sharedHelpers = require('../../helpers/shared.helpers');
 
 // Models
-const { Client } = require('../index.models');
+const { Client, User, DocumentType, IndicativeNumber, Municipality } = require('../index.models');
 
 module.exports = {
-    createClientQuery: async (where) => {
+    createClientQuery: async (where, transaction) => {
         try {
-            return await Client.findOrCreate({
-                where
-            });
-        } catch {
-            throw errorsConst.aggregateErrorsApp.errorCreateClient
+            return await Client.findOrCreate({ where, transaction });
+        } catch (e){
+            throw errorsConst.userErrors.queryErrors.createError
         }
     },
 
-    findClientQuery: async (query = {}) => {
+    findClientQuery: (query = {}) => {
         try {
             const { where } = query;
-            return await Client.findAll({
+            return Client.findAll({
                 where,
-                raw: true
-            }).then(client => client.map(({ id, nickName, email, password }) => ({
-                id: sharedHelpers.encryptIdDataBase(id),
-                nickName,
-                email,
-                password: sharedHelpers.encryptIdDataBase(password)
-            })))
+                raw: true,
+                nest: true,
+                attributes: [ 'numberPhoneWhatsapp', 'email', 'address', 'id' ], 
+                include: [{
+                    model: User,
+                    as: 'UserClient',
+                    attributes: [ 'numberDocument', 'name', 'lastName', 'numberPhone', 'state' ],
+                    include : [{
+                        model: DocumentType, 
+                        as: "UserDocumentType"
+                    }, 
+                    {
+                        model: IndicativeNumber, 
+                        as: "UserIndicativePhone"
+                    },
+                    {
+                        model: IndicativeNumber, 
+                        as: "UserIndicativePhone"
+                    }]
+                },
+                {
+                    model: IndicativeNumber, 
+                    as: "ClientIndicativeNumberWhatsApp"
+                },
+                {
+                    model: Municipality, 
+                    as: "ClientMunicipality"
+                }
+            ]}).then(clients => clients.map( ({UserClient : {UserDocumentType, UserIndicativePhone, ...user}, ClientIndicativeNumberWhatsApp, ClientMunicipality, id, ...client}) => {
+                return {
+                    id: sharedHelpers.encryptIdDataBase(id),
+                    ...client,
+                    ...user,
+                    indicativeNumberWhatsApp: {
+                        ...ClientIndicativeNumberWhatsApp,
+                        id: sharedHelpers.encryptIdDataBase(ClientIndicativeNumberWhatsApp.id)
+                    },
+                    municipality: ClientMunicipality.id? {
+                        ...ClientMunicipality,
+                        id: sharedHelpers.encryptIdDataBase(ClientMunicipality.id)
+                    } : null,
+                    documentType: {
+                        ...UserDocumentType,
+                        id: sharedHelpers.encryptIdDataBase(UserDocumentType.id)
+                    },
+                    indicativePhone: {
+                        ...UserIndicativePhone,
+                        id: sharedHelpers.encryptIdDataBase(UserIndicativePhone.id)
+                    }
+                }
+            }))
         } catch {
             throw errorsConst.aggregateErrorsApp.errorGetClient
         }
