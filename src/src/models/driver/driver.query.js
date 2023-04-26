@@ -39,9 +39,9 @@ module.exports = {
             throw errorsConst.driver.queryErrors.findError;
         }
     },
-    updateDriver: async () => {
+    updateDriver: async (values, where, transaction) => {
         try {
-            
+            await Driver.update(values, {where, transaction})
         } catch {
             throw errorsConst.driver.queryErrors.updateError;
         }

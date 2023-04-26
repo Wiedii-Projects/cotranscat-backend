@@ -26,16 +26,9 @@ router.get('/:id', [
     driverMiddleware.checkDriverExist()
 ], driverController.getDriver);
 
-// router.put('/:id', [
-//     adminMiddleware.checkUpdateAdmin(),
-//     sharedMiddleware.checkId(),
-//     sharedValidators.validateErrorFields,
-// ], adminController.updateAdmin);
-
-// router.delete('/:id', [
-//     sharedMiddleware.checkAdminRole(),
-//     sharedMiddleware.checkId(),
-//     sharedValidators.validateErrorFields,
-// ], adminController.deleteAdmin);
+router.put('/:id', [
+    //TODO: implementation of role permission validation
+    driverMiddleware.checkUpdateDriver(),
+], driverController.updateDriver);
 
 module.exports = router;

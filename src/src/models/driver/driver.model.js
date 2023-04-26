@@ -11,11 +11,13 @@ const {
     {
       nickName: {
         type: DataTypes.STRING(100),
+        unique: true,
         field: "nickName",
         allowNull: false
       },
       email: {
         type: DataTypes.STRING(100),
+        unique: true,
         field: "email",
         allowNull: false
       },

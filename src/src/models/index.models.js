@@ -14,7 +14,8 @@ const Admin = require("./admin/admin.model");
 const Coordinator = require("./coordinator/coordinator.model");
 const Driver = require("./driver/driver.model");
 const Seller = require("./seller/seller.model");
-const Client = require("./client/client.model")
+const Client = require("./client/client.model");
+const Functionality = require("./functionality/functionality.model");
 
 // Relationships BD
 
@@ -99,5 +100,6 @@ module.exports = {
   Coordinator,
   Driver,
   Seller,
-  Client
+  Client,
+  Functionality
 };

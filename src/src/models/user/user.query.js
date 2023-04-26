@@ -92,11 +92,12 @@ module.exports = {
             throw errorsConst.userErrors.queryErrors.createError
         }
     },
-    updateUserQuery: async (where, update) => {
+    updateUserQuery: async (where, update, transaction) => {
         try {
             return await User.update(update, {
                 where,
-              });
+                transaction,
+            });
         } catch {
             throw errorsConst.userErrors.queryErrors.updateError;
         }
