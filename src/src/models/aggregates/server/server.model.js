@@ -27,7 +27,8 @@ class ServerModel {
             admin: '/api/admin',
             client: '/api/client',
             driver: '/api/driver',
-            coordinator: '/api/coordinator'
+            coordinator: '/api/coordinator',
+            functionality: '/api/functionality'
         }
         this.dbHost = coreConfigurationsConst.dbHost;
         this.db();
@@ -61,6 +62,7 @@ class ServerModel {
         this.app.use(this.paths.admin, require('../../../routes/admin.routes'));
         this.app.use(this.paths.coordinator, require('../../../routes/coordinator.routes'));
         this.app.use(this.paths.driver, require('../../../routes/driver.routes'));
+        this.app.use(this.paths.functionality, require('../../../routes/functionality.routes'))
     }
 
     listen() {

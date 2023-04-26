@@ -13,5 +13,6 @@ module.exports = {
     adminMiddleware: require('./checks/admin.check.middleware'),
     clientMiddleware: require('./checks/client.check.middleware'),
     driverMiddleware: require('./checks/driver.check.middleware'),
-    coordinatorMiddleware: require('./checks/coordinator.check.middleware')
+    coordinatorMiddleware: require('./checks/coordinator.check.middleware'),
+    functionalityMiddleware: require('./checks/functionality.check.middleware'),
 }
