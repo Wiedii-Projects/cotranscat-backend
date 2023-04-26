@@ -54,6 +54,14 @@ IndicativeNumber.hasMany(User, { as: 'UserIndicativeNumber', foreignKey: { name:
 User.belongsTo(Municipality, { as: 'UserMunicipality', foreignKey: { name: "idMunicipality", allowNull: true } });
 Municipality.hasMany(User, { as: 'UserMunicipality', foreignKey: { name: "idMunicipality", allowNull: true } });
 
+// Relationship User-Coordinator
+Coordinator.belongsTo(User, { foreignKey: { name: 'id', allowNull: false, primaryKey: true } });
+User.hasOne(Coordinator, { foreignKey: { name: 'id', allowNull: false, primaryKey: true } });
+
+// Relationship User-Seller
+Seller.belongsTo(User, { foreignKey: { name: 'id', allowNull: false, primaryKey: true } });
+User.hasOne(Seller, { foreignKey: { name: 'id', allowNull: false, primaryKey: true } });
+
 // Relationship Municipality-Department
 Municipality.belongsTo(Department, { as: 'MunicipalityDepartment', foreignKey: { name: "idDepartment", allowNull: false } });
 Department.hasMany(Municipality, { as: 'MunicipalityDepartment', foreignKey: { name: "idDepartment", allowNull: false } });

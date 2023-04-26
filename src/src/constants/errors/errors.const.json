@@ -424,10 +424,62 @@
       "code": "DRV006",
       "message": "Password is invalid"
     },
+    "driverNotExist":{
+      "code": "DRV007",
+      "message": "driver does not exist"
+    },
     "queryErrors": {
       "create": {
         "code": "DRVR_001",
         "message": "Something went wrong"
+      },
+      "findError": {
+        "code": "DRVR_002",
+        "message": "Something went wrong"
+      },
+      "updateError": {
+        "code": "DRVR_003",
+        "message": "Something went wrong"
+      }
+    }
+  },
+  "coordinator":{
+    "nickNameRequired": {
+      "code": "COOR001",
+      "message": "Nick name is required"
+    },
+    "lengthNickName": {
+      "code": "COOR002",
+      "message": "The department name must have a minimum of 1 character and a maximum of 30 characters"
+    },
+    "emailRequired":{
+      "code": "COOR003",
+      "message": "Email is required"
+    },
+    "emailInvalid":{
+      "code": "COOR004",
+      "message": "Email is invalid"
+    },
+    "passwordRequired":{
+      "code": "COOR004",
+      "message": "Password is required"
+    },
+    "passwordInvalid":{
+      "code": "COOR005",
+      "message": "Password is invalid"
+    },
+    "queryErrors": {
+      "createError": {
+        "code": "STYP_001",
+        "message": "Something went wrong."
+      },
+      "updateError": {
+        "code": "STYP_002",
+        "message": "Something went wrong."
+      },
+      "findError": {
+        "code": "STYP_003",
+        "message": "Something went wrong."
       }
     }
   },

@@ -10,17 +10,20 @@ const { ErrorModel } = require("../../models/index.models");
 // Validators - Middleware
 const { authValidators, userValidators, sharedValidators } = require('../index.validators.middleware');
 
+// Helpers
+const sharedHelpers = require('../../helpers/shared.helpers');
+
 const checkJwt = () => {
     return [
         check('x-token')
-            .bail().isString().withMessage(new ErrorModel(errorsConst.userErrors.noToken))
-            .bail().custom((value, { req }) => authValidators.validateJWT(value, req)),
+            .isString().withMessage(new ErrorModel(errorsConst.userErrors.noToken)).bail()
+            .custom((value, { req }) => authValidators.validateJWT(value, req)).bail(),
         sharedValidators.validateError,
         check('isValidToken')
-            .bail().custom((value) => value ? true : false).withMessage(new ErrorModel(errorsConst.authErrors.tokenInvalid)),
+            .custom((value) => value ? true : false).withMessage(new ErrorModel(errorsConst.authErrors.tokenInvalid)).bail(),
         sharedValidators.validateError,
         check('user')
-            .bail().custom((value) => value.state ? true : false).withMessage( new ErrorModel(errorsConst.userErrors.userNotExist)),
+            .custom((value) => value.state ? true : false).withMessage( new ErrorModel(errorsConst.userErrors.userNotExist)).bail(),
         sharedValidators.validateError
     ];
 }
@@ -29,9 +32,9 @@ module.exports = {
     checkJwt,
     checkId: () => {
         return [
-            check('id')
-                .bail().custom((value, { req }) => req.body.decryptId = sharedHelpers.decryptIdDataBase(value)).withMessage(new ErrorModel(errorsConst.userErrors.idRequired))
-                .bail().custom((_, { req }) => req.body.decryptId ? true : false).withMessage(new ErrorModel(errorsConst.userErrors.idRequired)),
+            check('id', new ErrorModel(errorsConst.userErrors.idRequired))
+                .custom((value, { req }) => req.body.decryptId = sharedHelpers.decryptIdDataBase(value)).bail()
+                .custom((_, { req }) => !!req.body.decryptId).bail(),
             sharedValidators.validateError
         ];
     },
@@ -39,7 +42,7 @@ module.exports = {
         return [
             ...checkJwt(),
             check('user')
-                .bail().custom((value) => value.role.role === roleConst.ADMIN_ROLE).withMessage(new ErrorModel(errorsConst.userErrors.adminRole)),
+                .custom((value) => value.role.role === roleConst.ADMIN_ROLE).withMessage(new ErrorModel(errorsConst.userErrors.adminRole)).bail(),
             sharedValidators.validateError
         ]
     },
