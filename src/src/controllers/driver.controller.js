@@ -3,6 +3,7 @@ const { dbConnectionOptions } = require('../constants/core/core-configurations.c
 
 // Helpers
 const { responseHelpers, authHelpers } = require('../helpers/index.helpers');
+const { extractUserDataHelper, extractDriverDataHelper } = require('../helpers/user.helpers');
 
 // Models - Queries
 const { userQuery, roleQuery, driverQuery } = require('../models/index.queries');
@@ -10,11 +11,8 @@ const { userQuery, roleQuery, driverQuery } = require('../models/index.queries')
 
 module.exports = {
     createDriver: async (req, res) => {
-        const {
-            documentType, indicativePhone, isValid,
-            nickName, email, password,
-            ...userData
-        } = req.body;
+        const userData = extractUserDataHelper(req.body);
+        const { password, ...driverData } = extractDriverDataHelper(req.body);
         let transaction;
         try {
             transaction = await dbConnectionOptions.transaction();
@@ -23,10 +21,9 @@ module.exports = {
             const [user] = await userQuery.createNewUserQuery({ ...userData, idRole: role.id }, transaction);
             await driverQuery.createDriver(
                 {
-                    nickName,
-                    email,
+                    id: user.id,
                     password: await authHelpers.encryptPasswordHelper(password),
-                    id: user.id
+                    ...driverData
                 },
                 transaction
             )
@@ -55,19 +52,28 @@ module.exports = {
             return responseHelpers.responseError(res, 500, error);
         }
     },
-    
-    updateDriver: async (req, res) => {
-        try {
-            return responseHelpers.responseSuccess(res, null);
-        } catch (error) {
-            return responseHelpers.responseError(res, 500, error);
-        }
-    },
 
-    deleteDriver: async (req, res) => {
+    updateDriver: async (req, res) => {
+        const { decryptId: id } = req.body;
+        const userData = extractUserDataHelper(req.body);
+        const { password, ...driverData } = extractDriverDataHelper(req.body);
+        console.log({ id, password, ...driverData })
+        let transaction;
         try {
+            transaction = await dbConnectionOptions.transaction();
+
+            await Promise.all([
+                userQuery.updateUserQuery({ id }, userData, transaction),
+                driverQuery.updateDriver({
+                    ...driverData,
+                    password: password ? await authHelpers.encryptPasswordHelper(password) : undefined,
+                }, { id }, transaction)
+            ])
+
+            await transaction.commit();
             return responseHelpers.responseSuccess(res, null);
         } catch (error) {
+            if (transaction) await transaction.rollback();
             return responseHelpers.responseError(res, 500, error);
         }
     }
