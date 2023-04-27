@@ -16,4 +16,5 @@ module.exports = {
     coordinatorMiddleware: require('./checks/coordinator.check.middleware'),
     functionalityMiddleware: require('./checks/functionality.check.middleware'),
     sellerMiddleware: require('./checks/seller.check.middleware'),
+    roleMiddleware: require('./checks/role.check.middleware'),
 }

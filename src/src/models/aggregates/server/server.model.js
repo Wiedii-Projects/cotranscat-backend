@@ -29,7 +29,8 @@ class ServerModel {
             driver: '/api/driver',
             coordinator: '/api/coordinator',
             functionality: '/api/functionality',
-            seller: '/api/seller'
+            seller: '/api/seller',
+            role: '/api/role'
         }
         this.dbHost = coreConfigurationsConst.dbHost;
         this.db();
@@ -65,6 +66,7 @@ class ServerModel {
         this.app.use(this.paths.driver, require('../../../routes/driver.routes'));
         this.app.use(this.paths.functionality, require('../../../routes/functionality.routes'));
         this.app.use(this.paths.seller, require('../../../routes/seller.routes'));
+        this.app.use(this.paths.role, require('../../../routes/role.routes'));
     }
 
     listen() {

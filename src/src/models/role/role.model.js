@@ -1,7 +1,5 @@
 // DB Connections
-const {
-  dbConnectionOptions,
-} = require("../../constants/core/core-configurations.const");
+const { dbConnectionOptions } = require("../../constants/core/core-configurations.const");
 
 // Libraries
 const { DataTypes } = require("sequelize");

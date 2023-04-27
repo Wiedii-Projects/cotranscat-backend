@@ -41,7 +41,7 @@ module.exports = {
     deleteFunctionality: async (req, res) => {
         const { name, decryptId: id } = req.body;
         try {
-            await functionalityQuery.deleteFunctionalQuery(
+            await functionalityQuery.deleteFunctionalityQuery(
                 { id },
                 { name }
             );

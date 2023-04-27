@@ -15,4 +15,5 @@ module.exports = {
     coordinatorController: require('./coordinator.controller'),
     functionalityController: require('./functionality.controller'),
     sellerController: require('./seller.controller'),
+    roleController: require('./role.controller'),
 }
