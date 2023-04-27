@@ -79,6 +79,46 @@ module.exports = {
                 .isLength({min: 1, max: 12}).withMessage(new ErrorModel(errorsConst.userErrors.phoneNumberCharacter)).bail(),
             sharedValidators.validateError,
         ];
+    },
+    checkUpdateUser: () => {
+        return [
+            check('documentType')
+                .isString().withMessage(new ErrorModel(errorsConst.userErrors.idDocumentTypeRequired)).bail()
+                .custom((value, {req}) => userValidators.decryptId(value, "idDocumentType", req))
+                .custom((_, { req }) => req.body.idDocumentType ? true : false).withMessage(new ErrorModel(errorsConst.userErrors.idDocumentTypeRequired)).bail()
+                .custom(async(_, {req}) => await userValidators.validateIdDocumentType({ where: { id: req.body.idDocumentType }}, req))
+                .custom((_, { req }) => req.body.isValid ? true : false).withMessage(new ErrorModel(errorsConst.userErrors.idDocumentTypeInvalid)).bail()
+                .optional({checkFalsy: false}),
+            sharedValidators.validateError,
+            check('numberDocument')
+                .isString().withMessage(new ErrorModel(errorsConst.userErrors.numberDocumentRequired)).bail()
+                .isLength({min: 1, max: 20}).withMessage(new ErrorModel(errorsConst.userErrors.numberDocumentCharacter)).bail()
+                .optional({checkFalsy: false}),
+            sharedValidators.validateError,
+            check('name')
+                .isString().withMessage(new ErrorModel(errorsConst.userErrors.nameRequired)).bail()
+                .isLength({min: 1, max: 50}).withMessage(new ErrorModel(errorsConst.userErrors.nameCharacter)).bail()
+                .optional({checkFalsy: false}),
+            sharedValidators.validateError,
+            check('lastName')
+                .isString().withMessage(new ErrorModel(errorsConst.userErrors.lastNameRequired)).bail()
+                .isLength({min: 1, max: 50}).withMessage(new ErrorModel(errorsConst.userErrors.lastNameCharacter)).bail()
+                .optional({checkFalsy: false}),
+            sharedValidators.validateError,
+            check('indicativePhone')
+                .isString().withMessage(new ErrorModel(errorsConst.userErrors.idIndicativePhoneRequired)).bail()
+                .custom((value, {req}) => userValidators.decryptId(value, "idIndicativePhone", req))
+                .custom((_, { req }) => req.body.idIndicativePhone ? true : false).withMessage(new ErrorModel(errorsConst.userErrors.idIndicativePhoneRequired)).bail()
+                .custom(async(_, {req}) => await userValidators.validateIdIndicativeNumber({ where: { id: req.body.idIndicativePhone }}, req))
+                .custom((_, { req }) => req.body.isValid  ? true: false).withMessage(new ErrorModel(errorsConst.userErrors.idIndicativePhoneInvalid)).bail()
+                .optional({checkFalsy: false}),
+            sharedValidators.validateError,
+            check('numberPhone')
+                .isString().withMessage(new ErrorModel(errorsConst.userErrors.phoneNumberRequired)).bail()
+                .isLength({min: 1, max: 12}).withMessage(new ErrorModel(errorsConst.userErrors.phoneNumberCharacter)).bail()
+                .optional({checkFalsy: false}),
+            sharedValidators.validateError,
+        ];
     }
     //TODO: create validation of the coordinator role
     //TODO: create validation of the seller role

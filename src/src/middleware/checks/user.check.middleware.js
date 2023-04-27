@@ -14,30 +14,6 @@ const { ErrorModel } = require("../../models/index.models");
 const { userValidators } = require('../index.validators.middleware');
 
 module.exports = {
-    checkAllGetUser: () => {
-        return [
-        ];
-    },
-    checkGetUser: () => {
-        return [
-        ];
-    },
-    checkCreateUser: () => {
-        return [
-        ];
-    },
-    checkCreateClientUser: () => {
-        return [
-        ];
-    },
-    checkCreateAdminUser: () => {
-        return [
-        ];
-    },
-    checkUpdateUser: () => {
-        return [
-        ];
-    },
     checkDeleteUser: () => {
         return [
         ]
