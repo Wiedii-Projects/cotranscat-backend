@@ -666,6 +666,10 @@
       "code": "FNCT002",
       "message": "the name is invalid."
     },
+    "nameAlreadyExists": {
+      "code": "FNCT003",
+      "message": "The name already exists."
+    },
     "queryErrors": {
       "createError": {
         "code": "FNCT_001",
