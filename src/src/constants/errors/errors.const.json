@@ -632,5 +632,13 @@
         "message": "Something went wrong."
       }
     }
+  },
+  "driverVehicleErrors":{
+    "queryErrors":{
+      "createError":{
+        "code": "DVVH_001",
+        "message": "Something went wrong."
+      }
+    }
   }
 }

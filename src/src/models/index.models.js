@@ -16,6 +16,7 @@ const Driver = require("./driver/driver.model");
 const Seller = require("./seller/seller.model");
 const Client = require("./client/client.model");
 const Functionality = require("./functionality/functionality.model");
+const DriverVehicleSchema = require("./driver-vehicle/driver-vehicle.model");
 
 // Relationships BD
 
@@ -31,9 +32,9 @@ User.hasOne(Client, { foreignKey: { name: 'id', allowNull: false, primaryKey: tr
 Driver.belongsTo(User, { foreignKey: { name: 'id', allowNull: false, primaryKey: true } });
 User.hasOne(Driver, { foreignKey: { name: 'id', allowNull: false, primaryKey: true } });
 
-// Relationship User-Driver
-Driver.belongsToMany(Vehicle, {through: 'driverVehicle'});
-Vehicle.belongsToMany(Driver, {through: 'driverVehicle'});
+// Relationship Driver-Vehicle
+Driver.belongsToMany(Vehicle, {through: DriverVehicleSchema, foreignKey: 'idDriver', otherKey: 'idVehicle'});
+Vehicle.belongsToMany(Driver, {through: DriverVehicleSchema, foreignKey: 'idVehicle', otherKey: 'idDriver'});
 
 // Relationship User-Seller
 Seller.belongsTo(User, { foreignKey: { name: 'id', allowNull: false, primaryKey: true } });
@@ -99,6 +100,7 @@ module.exports = {
   Admin,
   Coordinator,
   Driver,
+  DriverVehicleSchema,
   Seller,
   Client,
   Functionality
