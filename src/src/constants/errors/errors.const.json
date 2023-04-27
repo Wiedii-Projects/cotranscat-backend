@@ -509,6 +509,46 @@
       }
     }
   },
+  "seller": {
+    "nickNameRequired": {
+      "code": "SELL001",
+      "message": "Nick name is required"
+    },
+    "lengthNickName": {
+      "code": "SELL002",
+      "message": "The seller name must have a minimum of 1 character and a maximum of 100 characters"
+    },
+    "emailRequired":{
+      "code": "SELL003",
+      "message": "Email is required"
+    },
+    "emailInvalid":{
+      "code": "SELL004",
+      "message": "Email is invalid"
+    },
+    "passwordRequired":{
+      "code": "SELL005",
+      "message": "Password is required"
+    },
+    "passwordInvalid":{
+      "code": "SELL006",
+      "message": "Password is invalid"
+    },
+    "queryErrors": {
+      "createError": {
+        "code": "SELL_001",
+        "message": "Something went wrong."
+      },
+      "updateError": {
+        "code": "SELL_002",
+        "message": "Something went wrong."
+      },
+      "findError": {
+        "code": "SELL_003",
+        "message": "Something went wrong."
+      }
+    }
+  },
   "vehicle": {
     "plateRequired": {
       "code": "VHC001",
@@ -598,9 +638,21 @@
     }
   },
   "roleErrors": {
+    "roleTypeInvalid": {
+      "code": "ROLE001",
+      "message": "the role type is invalid."
+    },
+    "roleTypeAlreadyExists": {
+      "code": "ROLE002",
+      "message": "The role type already exists."
+    },
     "queryErrors": {
-      "findByNameError": {
-        "code": "RLLE_001",
+      "createError": {
+        "code": "ROLE_001",
+        "message": "Something went wrong."
+      },
+      "findAllError": {
+        "code": "ROLE_002",
         "message": "Something went wrong."
       }
     }

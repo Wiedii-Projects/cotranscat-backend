@@ -1,6 +1,5 @@
 //Models - Default Data
-const { 
-    defaultRole, 
+const {
     defaultIndicativeNumber, 
     defaultUser, 
     defaultDocumentType, 
@@ -11,6 +10,9 @@ const {
     defaultShippingType,
     defaultAdmin
 } = require('./default-data.model');
+
+//Const
+const { roleConst } = require('../../../constants/index.constants')
 
 //Models
 const Role = require('../../role/role.model');
@@ -33,8 +35,8 @@ class defaultDataBaseModel {
     }
 
     async getAdminRole(){
-        const [{ role }] = defaultRole;
-        const { id } = await Role.findOne({ where: { role }});
+        const { ADMIN_ROLE: type } = roleConst;
+        const { id } = await Role.findOne({ where: { type }});
         return id;
     }
 
@@ -121,7 +123,7 @@ class defaultDataBaseModel {
     }
 
     async createDefaultDataBase() {
-        await this.countRole() || defaultRole.map( async(element) => await Role.create( element ) );
+        await this.countRole() || Object.values(roleConst).map(async (element) => {await Role.create({type: element})});
         await this.countIndicativeNumber() || defaultIndicativeNumber.map(  async(element) => await IndicativeNumber.create( element ) );
         await this.countDocumentType() || defaultDocumentType.map(  async(element) => await DocumentType.create( element ) );
         await this.countDepartment() || defaultDepartment.map(  async(element) => await Department.create( element ) );

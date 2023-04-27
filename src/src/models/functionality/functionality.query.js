@@ -39,7 +39,7 @@ module.exports = {
         }
     },
 
-    deleteFunctionalQuery: async (where) => {
+    deleteFunctionalityQuery: async (where) => {
         try {
             return await Functionality.destroy({ where });
         } catch {

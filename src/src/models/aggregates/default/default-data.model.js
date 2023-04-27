@@ -2,23 +2,6 @@ const { encryptPasswordHelper } = require("../../../helpers/auth.helpers");
 
 
 module.exports = {
-    defaultRole: [ 
-        { 
-            role: "ADMIN_ROLE"
-        }, 
-        { 
-            role: "USER_ROLE" 
-        }, 
-        { 
-            role: "CLIENT_ROLE" 
-        }, 
-        { 
-            role: "DRIVER_ROLE" 
-        },
-        {
-            role: "COORDINATOR_ROLE"
-        }
-    ],
     defaultDocumentType: [ 
         { 
             name: "C.C." 
