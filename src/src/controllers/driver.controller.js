@@ -57,7 +57,6 @@ module.exports = {
         const { decryptId: id } = req.body;
         const userData = extractUserDataHelper(req.body);
         const { password, ...driverData } = extractDriverDataHelper(req.body);
-        console.log({ id, password, ...driverData })
         let transaction;
         try {
             transaction = await dbConnectionOptions.transaction();

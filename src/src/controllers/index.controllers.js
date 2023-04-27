@@ -14,4 +14,5 @@ module.exports = {
     driverController: require('./driver.controller'),
     coordinatorController: require('./coordinator.controller'),
     functionalityController: require('./functionality.controller'),
+    travelController: require('./travel.controller'),
 }
