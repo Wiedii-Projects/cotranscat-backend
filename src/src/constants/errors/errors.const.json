@@ -676,9 +676,21 @@
     }
   },
   "roleErrors": {
+    "roleTypeInvalid": {
+      "code": "ROLE001",
+      "message": "the role type is invalid."
+    },
+    "roleTypeAlreadyExists": {
+      "code": "ROLE002",
+      "message": "The role type already exists."
+    },
     "queryErrors": {
-      "findByNameError": {
-        "code": "RLLE_001",
+      "createError": {
+        "code": "ROLE_001",
+        "message": "Something went wrong."
+      },
+      "findAllError": {
+        "code": "ROLE_002",
         "message": "Something went wrong."
       }
     }
