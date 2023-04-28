@@ -18,6 +18,7 @@ const Client = require("./client/client.model");
 const Functionality = require("./functionality/functionality.model");
 const DriverVehicle = require("./driver-vehicle/driver-vehicle.model");
 const Travel = require("./travel/travel.model");
+const Route = require("./route/route.model");
 
 // Relationships BD
 
@@ -89,6 +90,14 @@ SeatRuler.belongsTo(Vehicle, { as: 'SeatRulerVehicle', foreignKey: { name: "idVe
 CodeSms.belongsTo(User, { foreignKey: { name: "UserCode", allowNull: false } });
 User.hasMany(CodeSms, { foreignKey: { name: "UserCode", allowNull: false } });
 
+// Relationship Route-MunicipalityDepart
+Route.belongsTo(Municipality, { as: 'MunicipalityDepart', foreignKey: { name: 'idMunicipalityDepart', allowNull: false} });
+Municipality.hasMany(Route, { foreignKey: { name: "idMunicipalityDepart", allowNull: false } });
+
+// Relationship Route-MunicipalityArrive
+Route.belongsTo(Municipality, { as: 'MunicipalityArrive', foreignKey: { name: 'idMunicipalityArrive', allowNull: false} });
+Municipality.hasMany(Route, { foreignKey: { name: "idMunicipalityArrive", allowNull: false } });
+
 module.exports = {
   // Aggregates Models
   ServerModel: require("./aggregates/server/server.model"),
@@ -113,5 +122,6 @@ module.exports = {
   Client,
   Functionality,
   DriverVehicle,
-  Travel
+  Travel,
+  Route
 };
