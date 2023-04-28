@@ -748,5 +748,33 @@
         "message": "Something went wrong."
       }
     }
+  },
+  "routeErrors":{
+    "municipalityDepartRequired":{
+      "code": "ROUT001",
+      "message": "The id municipality depart is required."
+    },
+    "municipalityDepartEqual":{
+      "code": "ROUT002",
+      "message": "The id municipality depart is equal municipality arrive"
+    },
+    "municipalityDoesNotExist":{
+      "code": "ROUT003",
+      "message": "The municipality does not exist"
+    },
+    "municipalityArriveRequired":{
+      "code": "ROUT004",
+      "message": "The id municipality arrive is required."
+    },
+    "queryErrors": {
+      "createError": {
+        "code": "ROUT_001",
+        "message": "Something went wrong."
+      },
+      "findAllError": {
+        "code": "ROUT_002",
+        "message": "Something went wrong."
+      }
+    }
   }
 }
