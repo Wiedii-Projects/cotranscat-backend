@@ -27,8 +27,7 @@ module.exports = {
                 id: encryptIdDataBase(id),
                 type
             })));
-        } catch (error) {
-            console.log(error)
+        } catch {
             throw errorsConst.roleErrors.queryErrors.findAllError;
         }
     }
