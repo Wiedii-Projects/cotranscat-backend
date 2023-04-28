@@ -688,5 +688,65 @@
         "message": "Something went wrong."
       }
     }
+  },
+  "driverVehicleErrors":{
+    "queryErrors":{
+      "createError":{
+        "code": "DVVH_001",
+        "message": "Something went wrong."
+      }
+    }
+  },
+  "travelErrors":{
+    "idDriverRequired": {
+      "code": "TRVL001",
+      "message": "the ID driver is required"
+    },
+    "idDriverInvalid": {
+      "code": "TRVL002",
+      "message": "the ID driver is invalid"
+    },
+    "idVehicleRequired": {
+      "code": "TRVL003",
+      "message": "the ID vehicle is required"
+    },
+    "idVehicleInvalid": {
+      "code": "TRVL004",
+      "message": "the ID vehicle is invalid"
+    },
+    "invalidDate": {
+      "code": "TRVL005",
+      "message": "the date is invalid"
+    },
+    "invalidTime": {
+      "code": "TRVL006",
+      "message": "the time is invalid"
+    },
+    "idTravelInvalid": {
+      "code": "TRVL007",
+      "message": "the ID travel is invalid"
+    },
+    "travelDoesNotExist": {
+      "code": "TRVL008",
+      "message": "the travel does not exist"
+    },
+    "queryErrors":{
+      "createError":{
+        "code": "TRVL_001",
+        "message": "Something went wrong."
+      },
+      "findError":{
+        "code": "TRVL_002",
+        "message": "Something went wrong."
+      },
+      "updateError":{
+        "code": "TRVL_003",
+        "message": "Something went wrong."
+      },
+      "deleteError":{
+        "code": "TRVL_004",
+        "message": "Something went wrong."
+      }
+    }
   }
 }

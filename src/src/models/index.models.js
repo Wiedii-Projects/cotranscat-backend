@@ -16,6 +16,8 @@ const Driver = require("./driver/driver.model");
 const Seller = require("./seller/seller.model");
 const Client = require("./client/client.model");
 const Functionality = require("./functionality/functionality.model");
+const DriverVehicle = require("./driver-vehicle/driver-vehicle.model");
+const Travel = require("./travel/travel.model");
 
 // Relationships BD
 
@@ -31,9 +33,17 @@ User.hasOne(Client, { foreignKey: { name: 'id', allowNull: false, primaryKey: tr
 Driver.belongsTo(User, { foreignKey: { name: 'id', allowNull: false, primaryKey: true } });
 User.hasOne(Driver, { foreignKey: { name: 'id', allowNull: false, primaryKey: true } });
 
-// Relationship User-Driver
-Driver.belongsToMany(Vehicle, {through: 'driverVehicle'});
-Vehicle.belongsToMany(Driver, {through: 'driverVehicle'});
+// Relationship Vehicle-DriverVehicle
+Vehicle.hasMany(DriverVehicle, { as: 'Vehicle', foreignKey: { name: 'idVehicle', allowNull: false, primaryKey: true } });
+DriverVehicle.belongsTo(Vehicle, { as: 'Vehicle', foreignKey: { name: 'idVehicle', allowNull: false, primaryKey: true } });
+
+// Relationship Driver-DriverVehicle
+Driver.hasMany(DriverVehicle, { as: 'Driver', foreignKey: { name: 'idDriver', allowNull: false, primaryKey: true } });
+DriverVehicle.belongsTo(Driver, { as: 'Driver', foreignKey: { name: 'idDriver', allowNull: false, primaryKey: true } });
+
+// Relationship DriverVehicle-Travel
+DriverVehicle.hasMany(Travel, { as: 'TravelDriverVehicle', foreignKey: { name: "idDriverVehicle", allowNull: false } });
+Travel.belongsTo(DriverVehicle, { as: 'TravelDriverVehicle', foreignKey: { name: "idDriverVehicle", allowNull: false }});
 
 // Relationship User-Seller
 Seller.belongsTo(User, { foreignKey: { name: 'id', allowNull: false, primaryKey: true } });
@@ -101,5 +111,7 @@ module.exports = {
   Driver,
   Seller,
   Client,
-  Functionality
+  Functionality,
+  DriverVehicle,
+  Travel
 };
