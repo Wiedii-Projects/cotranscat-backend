@@ -10,7 +10,7 @@ const { check } = require('express-validator');
 const sharedHelpers = require('../../helpers/shared.helpers');
 
 // Validators - middleware
-const { sharedValidators, driverValidator, vehicleValidator, travelValidator } = require('../index.validators.middleware');
+const { sharedValidators, driverValidator, vehicleValidator, travelValidator, routeValidator } = require('../index.validators.middleware');
 
 // Models
 const { ErrorModel } = require("../../models/index.models");
@@ -37,7 +37,16 @@ module.exports = {
         check('vehicle', new ErrorModel(errorsConst.vehicle.vehicleDoesNotExist))
             .custom((value) => !!value),
         sharedValidators.validateError,
-        //TODO: implement check routes
+        check('route')
+            .isString().withMessage(new ErrorModel(errorsConst.travelErrors.idVehicleRequired)).bail()
+            .custom((id, { req }) => req.body.idRoute = sharedHelpers.decryptIdDataBase(id)).withMessage(new ErrorModel(errorsConst.travelErrors.idVehicleInvalid)),
+        sharedValidators.validateError,
+        check('idRoute', new ErrorModel(errorsConst.vehicle.vehicleDoesNotExist))
+            .custom((id, { req }) => routeValidator.validateRoute(req, { where: { id } })),
+        sharedValidators.validateError,
+        check('route', new ErrorModel(errorsConst.vehicle.vehicleDoesNotExist))
+            .custom((value) => !!value),
+        sharedValidators.validateError,
         check('date', new ErrorModel(errorsConst.travelErrors.invalidDate))
             .isDate(),
         sharedValidators.validateError,
@@ -79,7 +88,16 @@ module.exports = {
         check('vehicle', new ErrorModel(errorsConst.vehicle.vehicleDoesNotExist)).optional()
             .custom((value) => !!value),
         sharedValidators.validateError,
-        //TODO: implement check routes
+        check('route').optional({checkFalsy:false})
+            .isString().withMessage(new ErrorModel(errorsConst.travelErrors.idVehicleRequired)).bail()
+            .custom((id, { req }) => req.body.idRoute = sharedHelpers.decryptIdDataBase(id)).withMessage(new ErrorModel(errorsConst.travelErrors.idVehicleInvalid)),
+        sharedValidators.validateError,
+        check('idRoute', new ErrorModel(errorsConst.vehicle.vehicleDoesNotExist)).optional({checkFalsy:false})
+            .custom((id, { req }) => routeValidator.validateRoute(req, { where: { id } })),
+        sharedValidators.validateError,
+        check('route', new ErrorModel(errorsConst.vehicle.vehicleDoesNotExist)).optional({checkFalsy:false})
+            .custom((value) => !!value),
+        sharedValidators.validateError,
         check('date', new ErrorModel(errorsConst.travelErrors.invalidDate)).optional()
             .isDate(),
         sharedValidators.validateError,

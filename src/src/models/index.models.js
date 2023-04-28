@@ -98,6 +98,10 @@ Municipality.hasMany(Route, { foreignKey: { name: "idMunicipalityDepart", allowN
 Route.belongsTo(Municipality, { as: 'MunicipalityArrive', foreignKey: { name: 'idMunicipalityArrive', allowNull: false} });
 Municipality.hasMany(Route, { foreignKey: { name: "idMunicipalityArrive", allowNull: false } });
 
+// Relationship Travel-Route
+Travel.belongsTo(Route, { foreignKey: { name: 'idRoute', allowNull: false} });
+Route.hasMany(Travel, { foreignKey: { name: "idRoute", allowNull: false } });
+
 module.exports = {
   // Aggregates Models
   ServerModel: require("./aggregates/server/server.model"),

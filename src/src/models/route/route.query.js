@@ -13,7 +13,8 @@ module.exports = {
             throw errorsConst.routeErrors.queryErrors.createError
         }
     },
-    findRouteQuery: async (where) => {
+    findRouteQuery: async (query = {}) => {
+        const { where } = query;
         try {
             return await Route.findAll({
                 where,

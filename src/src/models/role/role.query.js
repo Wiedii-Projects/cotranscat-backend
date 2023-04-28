@@ -28,6 +28,7 @@ module.exports = {
                 type
             })));
         } catch (error) {
+            console.log(error)
             throw errorsConst.roleErrors.queryErrors.findAllError;
         }
     }

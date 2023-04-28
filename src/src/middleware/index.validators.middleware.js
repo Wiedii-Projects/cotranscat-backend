@@ -8,5 +8,6 @@ module.exports = {
     municipalityValidators: require('./validators/municipality.validator.middleware'),
     driverValidator: require('./validators/driver.validator.middleware'),
     travelValidator: require('./validators/travel.validator.middleware'),
-    functionalityValidators: require('./validators/functionality.validator.middleware')
+    functionalityValidators: require('./validators/functionality.validator.middleware'),
+    routeValidator: require('./validators/route.validator.middleware'),
 }
