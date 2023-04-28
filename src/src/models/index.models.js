@@ -33,9 +33,13 @@ User.hasOne(Client, { foreignKey: { name: 'id', allowNull: false, primaryKey: tr
 Driver.belongsTo(User, { foreignKey: { name: 'id', allowNull: false, primaryKey: true } });
 User.hasOne(Driver, { foreignKey: { name: 'id', allowNull: false, primaryKey: true } });
 
-// Relationship Driver-Vehicle
-Driver.belongsToMany(Vehicle, {through: DriverVehicle, foreignKey: 'idDriver', otherKey: 'idVehicle'});
-Vehicle.belongsToMany(Driver, {through: DriverVehicle, foreignKey: 'idVehicle', otherKey: 'idDriver'});
+// Relationship Vehicle-DriverVehicle
+Vehicle.hasMany(DriverVehicle, { as: 'Vehicle', foreignKey: { name: 'idVehicle', allowNull: false, primaryKey: true } });
+DriverVehicle.belongsTo(Vehicle, { as: 'Vehicle', foreignKey: { name: 'idVehicle', allowNull: false, primaryKey: true } });
+
+// Relationship Driver-DriverVehicle
+Driver.hasMany(DriverVehicle, { as: 'Driver', foreignKey: { name: 'idDriver', allowNull: false, primaryKey: true } });
+DriverVehicle.belongsTo(Driver, { as: 'Driver', foreignKey: { name: 'idDriver', allowNull: false, primaryKey: true } });
 
 // Relationship DriverVehicle-Travel
 DriverVehicle.hasMany(Travel, { as: 'TravelDriverVehicle', foreignKey: { name: "idDriverVehicle", allowNull: false } });

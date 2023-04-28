@@ -718,6 +718,14 @@
       "code": "TRVL006",
       "message": "the time is invalid"
     },
+    "idTravelInvalid": {
+      "code": "TRVL007",
+      "message": "the ID travel is invalid"
+    },
+    "travelDoesNotExist": {
+      "code": "TRVL008",
+      "message": "the travel does not exist"
+    },
     "queryErrors":{
       "createError":{
         "code": "TRVL_001",

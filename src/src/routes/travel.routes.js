@@ -1,11 +1,9 @@
 // Controllers
-const { travelController } = require('../controllers/index.controllers')
+const { travelController } = require('../controllers/index.controllers');
 
 // Checks - middleware
 const { travelMiddleware } = require('../middleware/index.checks.middleware');
-
-// Validators - middleware
-const { sharedValidators } = require('../middleware/index.validators.middleware');
+const sharedCheckMiddleware = require('../middleware/checks/shared.check.middleware');
 
 // Libraries
 const { Router } = require("express");
@@ -13,22 +11,29 @@ const { Router } = require("express");
 const router = Router();
 
 router.post('/', [
-    travelMiddleware.checkCreateDriver()
+    //TODO: implementation of role permission validation
+    travelMiddleware.checkCreateTravel()
 ], travelController.createTravel);
 
-// router.get('/', [
-//     //TODO: implementation of role permission validation
-//     sharedValidators.validateErrorFields,
-// ], driverController.getAllDrivers);
+router.get('/', [
+    //TODO: implementation of role permission validation
+], travelController.getAllTravels);
 
-// router.get('/:id', [
-//     //TODO: implementation of role permission validation
-//     driverMiddleware.checkDriverExist()
-// ], driverController.getDriver);
+router.get('/:id', [
+    //TODO: implementation of role permission validation
+    sharedCheckMiddleware.checkId(),
+    travelMiddleware.checkTravelExist()
+], travelController.getTravel);
 
-// router.put('/:id', [
-//     //TODO: implementation of role permission validation
-//     driverMiddleware.checkUpdateDriver(),
-// ], driverController.updateDriver);
+router.put('/:id', [
+    //TODO: implementation of role permission validation
+    sharedCheckMiddleware.checkId(),
+    travelMiddleware.checkUpdateTravel()
+], travelController.updateTravel);
+
+router.delete('/:id', [
+    //TODO: implementation of role permission validation
+    sharedCheckMiddleware.checkId()
+], travelController.deleteTravel);
 
 module.exports = router;

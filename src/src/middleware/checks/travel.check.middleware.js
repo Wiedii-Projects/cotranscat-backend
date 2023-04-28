@@ -10,14 +10,13 @@ const { check } = require('express-validator');
 const sharedHelpers = require('../../helpers/shared.helpers');
 
 // Validators - middleware
-const { sharedValidators, driverValidator, vehicleValidator } = require('../index.validators.middleware');
+const { sharedValidators, driverValidator, vehicleValidator, travelValidator } = require('../index.validators.middleware');
 
 // Models
 const { ErrorModel } = require("../../models/index.models");
 
 module.exports = {
-    checkCreateDriver: () => [
-        // TODO: validate role,
+    checkCreateTravel: () => [
         check('driver')
             .isString().withMessage(new ErrorModel(errorsConst.travelErrors.idDriverRequired)).bail()
             .custom((id, { req }) => req.body.idDriver = sharedHelpers.decryptIdDataBase(id)).withMessage(new ErrorModel(errorsConst.travelErrors.idDriverInvalid)),
@@ -43,6 +42,48 @@ module.exports = {
             .isDate(),
         sharedValidators.validateError,
         check('time', new ErrorModel(errorsConst.travelErrors.invalidTime))
+            .isTime({
+                hourFormat: 'hour24',
+                mode: 'withSeconds'
+            }),
+        sharedValidators.validateError,
+    ],
+    checkTravelExist: () => [
+        // TODO: validate role,
+        check('decryptId', new ErrorModel(errorsConst.travelErrors.idTravelInvalid))
+            .custom((id, { req }) => travelValidator.validateTravel(req, { id })),
+        sharedValidators.validateError,
+        check('travel', new ErrorModel(errorsConst.travelErrors.travelDoesNotExist))
+            .custom((value) => !!value),
+        sharedValidators.validateError,
+    ],
+    checkUpdateTravel: () => [
+        // TODO: validate role,
+        check('driver').optional()
+            .isString().withMessage(new ErrorModel(errorsConst.travelErrors.idDriverRequired)).bail()
+            .custom((id, { req }) => req.body.idDriver = sharedHelpers.decryptIdDataBase(id)).withMessage(new ErrorModel(errorsConst.travelErrors.idDriverInvalid)),
+        sharedValidators.validateError,
+        check('idDriver', new ErrorModel(errorsConst.driver.driverNotExist)).optional()
+            .custom((id, { req }) => driverValidator.validateDriver(req, { id })),
+        sharedValidators.validateError,
+        check('driver', new ErrorModel(errorsConst.driver.driverNotExist)).optional()
+            .custom((value) => !!value),
+        sharedValidators.validateError,
+        check('vehicle').optional()
+            .isString().withMessage(new ErrorModel(errorsConst.travelErrors.idVehicleRequired)).bail()
+            .custom((id, { req }) => req.body.idVehicle = sharedHelpers.decryptIdDataBase(id)).withMessage(new ErrorModel(errorsConst.travelErrors.idVehicleInvalid)),
+        sharedValidators.validateError,
+        check('idVehicle', new ErrorModel(errorsConst.vehicle.vehicleDoesNotExist)).optional()
+            .custom((id, { req }) => vehicleValidator.validateVehicle(req, { where: { id } })),
+        sharedValidators.validateError,
+        check('vehicle', new ErrorModel(errorsConst.vehicle.vehicleDoesNotExist)).optional()
+            .custom((value) => !!value),
+        sharedValidators.validateError,
+        //TODO: implement check routes
+        check('date', new ErrorModel(errorsConst.travelErrors.invalidDate)).optional()
+            .isDate(),
+        sharedValidators.validateError,
+        check('time', new ErrorModel(errorsConst.travelErrors.invalidTime)).optional()
             .isTime({
                 hourFormat: 'hour24',
                 mode: 'withSeconds'
