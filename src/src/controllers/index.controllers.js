@@ -17,4 +17,5 @@ module.exports = {
     travelController: require('./travel.controller'),
     sellerController: require('./seller.controller'),
     roleController: require('./role.controller'),
+    routeController: require('./route.controller'),
 }

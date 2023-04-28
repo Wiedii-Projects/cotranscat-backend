@@ -10,18 +10,17 @@ const { travelQuery, driverVehicleQuery, driverQuery } = require('../models/inde
 
 module.exports = {
     createTravel: async (req, res) => {
-        const { idDriver, idVehicle, date, time } = req.body;
+        const { idDriver, idVehicle, date, time, idRoute } = req.body;
         let transaction;
         try {
             transaction = await dbConnectionOptions.transaction();
-
             const [driverVehicle] = await driverVehicleQuery.createDriverVehicle({ idDriver, idVehicle }, transaction)
             
             await travelQuery.createTravel({
                 idDriverVehicle: driverVehicle.id,
                 date,
                 time,
-                //TODO: route id
+                idRoute
             }, transaction);
 
             await transaction.commit();
@@ -48,9 +47,9 @@ module.exports = {
         }
     },
     updateTravel: async(req, res) => {
-        const { decryptId: id, date, time, idDriver, idVehicle} = req.body;
+        const { decryptId: id, date, time, idDriver, idVehicle, idRoute} = req.body;
         try {
-            await travelQuery.updateTravel({date, time, idDriver, idVehicle}, {id});
+            await travelQuery.updateTravel({date, time, idDriver, idVehicle, idRoute}, {id});
             return responseHelpers.responseSuccess(res, null);
         } catch (error) {
             return responseHelpers.responseError(res, 500, error);

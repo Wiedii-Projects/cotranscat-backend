@@ -19,4 +19,5 @@ module.exports = {
   driverVehicleQuery: require("./driver-vehicle/driver-vehicle.query"),
   travelQuery: require("./travel/travel.query"),
   sellerQuery: require("./seller/seller.query"),
+  routeQuery: require("./route/route.query"),
 };
