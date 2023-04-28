@@ -38,13 +38,13 @@ module.exports = {
             .custom((value) => !!value),
         sharedValidators.validateError,
         check('route')
-            .isString().withMessage(new ErrorModel(errorsConst.travelErrors.idVehicleRequired)).bail()
-            .custom((id, { req }) => req.body.idRoute = sharedHelpers.decryptIdDataBase(id)).withMessage(new ErrorModel(errorsConst.travelErrors.idVehicleInvalid)),
+            .isString().withMessage(new ErrorModel(errorsConst.travelErrors.idRouteRequired)).bail()
+            .custom((id, { req }) => req.body.idRoute = sharedHelpers.decryptIdDataBase(id)).withMessage(new ErrorModel(errorsConst.travelErrors.idRouteInvalid)),
         sharedValidators.validateError,
-        check('idRoute', new ErrorModel(errorsConst.vehicle.vehicleDoesNotExist))
+        check('idRoute', new ErrorModel(errorsConst.routeErrors.routeDoesNotExist))
             .custom((id, { req }) => routeValidator.validateRoute(req, { where: { id } })),
         sharedValidators.validateError,
-        check('route', new ErrorModel(errorsConst.vehicle.vehicleDoesNotExist))
+        check('route', new ErrorModel(errorsConst.routeErrors.routeDoesNotExist))
             .custom((value) => !!value),
         sharedValidators.validateError,
         check('date', new ErrorModel(errorsConst.travelErrors.invalidDate))

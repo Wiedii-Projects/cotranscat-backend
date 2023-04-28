@@ -10,7 +10,7 @@ module.exports = {
         try {
             return await Travel.findOrCreate({ where, transaction })
         } catch {
-            throw errorsConst.travelErrors.queryErrors.create;
+            throw errorsConst.travelErrors.queryErrors.createError;
         }
     },
     findTravels: async (where, attributes = ['id', 'time', 'date']) => {
