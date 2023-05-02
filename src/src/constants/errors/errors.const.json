@@ -730,6 +730,14 @@
       "code": "TRVL008",
       "message": "the travel does not exist"
     },
+    "idRouteRequired": {
+      "code": "TRVL009",
+      "message": "the ID route is required"
+    },
+    "idRouteInvalid": {
+      "code": "TRVL010",
+      "message": "the ID route is invalid"
+    },
     "queryErrors":{
       "createError":{
         "code": "TRVL_001",
@@ -765,6 +773,10 @@
     "municipalityArriveRequired":{
       "code": "ROUT004",
       "message": "The id municipality arrive is required."
+    },
+    "routeDoesNotExist":{
+      "code": "ROUT005",
+      "message": "The route does not exist"
     },
     "queryErrors": {
       "createError": {
