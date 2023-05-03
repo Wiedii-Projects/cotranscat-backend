@@ -15,6 +15,8 @@ module.exports = {
     driverMiddleware: require('./checks/driver.check.middleware'),
     coordinatorMiddleware: require('./checks/coordinator.check.middleware'),
     functionalityMiddleware: require('./checks/functionality.check.middleware'),
+    travelMiddleware: require('./checks/travel.check.middleware'),
     sellerMiddleware: require('./checks/seller.check.middleware'),
     roleMiddleware: require('./checks/role.check.middleware'),
+    routeMiddleware: require('./checks/route.check.middleware')
 }

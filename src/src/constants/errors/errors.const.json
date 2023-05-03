@@ -704,6 +704,10 @@
       "code": "FNCT002",
       "message": "the name is invalid."
     },
+    "nameAlreadyExists": {
+      "code": "FNCT003",
+      "message": "The name already exists."
+    },
     "queryErrors": {
       "createError": {
         "code": "FNCT_001",
@@ -719,6 +723,106 @@
       },
       "deleteError": {
         "code": "FNCT_004",
+        "message": "Something went wrong."
+      }
+    }
+  },
+  "driverVehicleErrors":{
+    "queryErrors":{
+      "createError":{
+        "code": "DVVH_001",
+        "message": "Something went wrong."
+      }
+    }
+  },
+  "travelErrors":{
+    "idDriverRequired": {
+      "code": "TRVL001",
+      "message": "the ID driver is required"
+    },
+    "idDriverInvalid": {
+      "code": "TRVL002",
+      "message": "the ID driver is invalid"
+    },
+    "idVehicleRequired": {
+      "code": "TRVL003",
+      "message": "the ID vehicle is required"
+    },
+    "idVehicleInvalid": {
+      "code": "TRVL004",
+      "message": "the ID vehicle is invalid"
+    },
+    "invalidDate": {
+      "code": "TRVL005",
+      "message": "the date is invalid"
+    },
+    "invalidTime": {
+      "code": "TRVL006",
+      "message": "the time is invalid"
+    },
+    "idTravelInvalid": {
+      "code": "TRVL007",
+      "message": "the ID travel is invalid"
+    },
+    "travelDoesNotExist": {
+      "code": "TRVL008",
+      "message": "the travel does not exist"
+    },
+    "idRouteRequired": {
+      "code": "TRVL009",
+      "message": "the ID route is required"
+    },
+    "idRouteInvalid": {
+      "code": "TRVL010",
+      "message": "the ID route is invalid"
+    },
+    "queryErrors":{
+      "createError":{
+        "code": "TRVL_001",
+        "message": "Something went wrong."
+      },
+      "findError":{
+        "code": "TRVL_002",
+        "message": "Something went wrong."
+      },
+      "updateError":{
+        "code": "TRVL_003",
+        "message": "Something went wrong."
+      },
+      "deleteError":{
+        "code": "TRVL_004",
+        "message": "Something went wrong."
+      }
+    }
+  },
+  "routeErrors":{
+    "municipalityDepartRequired":{
+      "code": "ROUT001",
+      "message": "The id municipality depart is required."
+    },
+    "municipalityDepartEqual":{
+      "code": "ROUT002",
+      "message": "The id municipality depart is equal municipality arrive"
+    },
+    "municipalityDoesNotExist":{
+      "code": "ROUT003",
+      "message": "The municipality does not exist"
+    },
+    "municipalityArriveRequired":{
+      "code": "ROUT004",
+      "message": "The id municipality arrive is required."
+    },
+    "routeDoesNotExist":{
+      "code": "ROUT005",
+      "message": "The route does not exist"
+    },
+    "queryErrors": {
+      "createError": {
+        "code": "ROUT_001",
+        "message": "Something went wrong."
+      },
+      "findAllError": {
+        "code": "ROUT_002",
         "message": "Something went wrong."
       }
     }
