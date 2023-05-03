@@ -14,7 +14,7 @@ module.exports = {
                 where
             });
         } catch {
-            throw errorsConst.paymentMethod.queryErrors.createError
+            throw errorsConst.paymentMethodErrors.queryErrors.createError
         }
     },
 
@@ -29,7 +29,7 @@ module.exports = {
                 name,
             })))
         } catch {
-            throw errorsConst.paymentMethod.queryErrors.findAllError
+            throw errorsConst.paymentMethodErrors.queryErrors.findAllError
         }
     },
 
@@ -37,7 +37,7 @@ module.exports = {
         try {
             return await PaymentMethod.update(update, { where });
         } catch {
-            throw errorsConst.paymentMethod.queryErrors.updateError
+            throw errorsConst.paymentMethodErrors.queryErrors.updateError
         }
     },
 
@@ -45,7 +45,7 @@ module.exports = {
         try {
             return await PaymentMethod.destroy({ where })
         } catch {
-            throw errorsConst.paymentMethod.queryErrors.deleteError
+            throw errorsConst.paymentMethodErrors.queryErrors.deleteError
         }
     }
 }

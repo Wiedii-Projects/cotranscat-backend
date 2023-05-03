@@ -14,7 +14,7 @@ module.exports = {
                 where
             });
         } catch {
-            throw errorsConst.municipality.queryErrors.createError
+            throw errorsConst.municipalityErrors.queryErrors.createError
         }
     },
 
@@ -30,7 +30,7 @@ module.exports = {
                 idDepartment: sharedHelpers.encryptIdDataBase(idDepartment)
             })))
         } catch {
-            throw errorsConst.municipality.queryErrors.findAllError
+            throw errorsConst.municipalityErrors.queryErrors.findAllError
         }
     },
 
@@ -38,7 +38,7 @@ module.exports = {
         try {
             return await Municipality.update(update, { where });
         } catch {
-            throw errorsConst.municipality.queryErrors.updateError
+            throw errorsConst.municipalityErrors.queryErrors.updateError
         }
     },
 
@@ -46,7 +46,7 @@ module.exports = {
         try {
             return await Municipality.destroy({ where })
         } catch {
-            throw errorsConst.municipality.queryErrors.deleteError
+            throw errorsConst.municipalityErrors.queryErrors.deleteError
         }
     }
 }

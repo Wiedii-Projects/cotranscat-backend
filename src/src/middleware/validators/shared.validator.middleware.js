@@ -13,6 +13,9 @@ module.exports = {
         next();
     },
     validateError: (req, res, next) => {
+        console.log('********************************************************************')
+        console.log(validationResult(req));
+        console.log('********************************************************************')
         const { errors: [error] } = validationResult(req);
         if (error) return responseHelpers.responseAllError(res, 400, error.msg);
         next();

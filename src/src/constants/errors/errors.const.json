@@ -171,7 +171,7 @@
       }
     }
   },
-  "documentType":{
+  "documentTypeErrors":{
     "nameRequired": {
       "code": "DTP0001",
       "message": "The document type name is required"
@@ -203,22 +203,22 @@
       }
     }
   },
-  "indicativeNumber":{
-    "numberType":{
+  "indicativeNumberErrors":{
+    "numberTypeRequired":{
       "code": "INNU001",
-      "message": "the data type is incorrect"
+      "message": "The code number is required"
     },
-    "numberCharacters":{
+    "lengthNumber":{
       "code": "INNU002",
-      "message": "the data must have a minimum of 1 character and a maximum of 10 characters."
+      "message": "The code number must have a minimum length of 1 character and a maximum length of 10 character"
     },
-    "countryType":{
+    "countryTypeRequired":{
       "code": "INNU003",
-      "message": "the data type is incorrect"
+      "message": "The country is required"
     },
-    "countryCharacters":{
+    "lengthCountry":{
       "code": "INNU004",
-      "message": "the data must have a minimum of 1 character and a maximum of 50 characters."
+      "message": "The country must have a minimum length of 1 character and a maximum length of 50 characters"
     },
     "queryErrors": {
       "createError": {
@@ -239,7 +239,7 @@
       }
     }
   },
-  "department":{
+  "departmentErrors":{
     "nameRequired": {
       "code": "DEPT001",
       "message": "Department name is required"
@@ -271,13 +271,21 @@
       }
     }
   },
-  "municipality":{
+  "municipalityErrors":{
     "nameRequired": {
       "code": "MUNC001",
       "message": "Municipality name is required"
     },
+    "nameInvalid": {
+      "code": "MUNC002",
+      "message": "Municipality name is invalid"
+    },
+    "lengthName": {
+      "code": "MUNC003",
+      "message": "The municipality must have a minimum length of 1 character and a maximum length of 50 characters"
+    },
     "municipalityDoesNotExist": {
-      "code": "MUN002",
+      "code": "MUN004",
       "message": "the municipality does not exist"
     },
     "queryErrors":{
@@ -299,10 +307,18 @@
       }
     }
   },
-  "paymentMethod":{
+  "paymentMethodErrors":{
     "nameRequired": {
       "code": "PYMT001",
       "message": "Payment method name is required"
+    },
+    "nameInvalid": {
+      "code": "PYMT002",
+      "message": "Payment method name is invalid"
+    },
+    "lengthName": {
+      "code": "PYMT003",
+      "message": "The Payment method name must have a minimum length of 1 character and a maximum length of 50 characters"
     },
     "queryErrors":{
       "createError": {
@@ -323,10 +339,18 @@
       }
     }
   },
-  "unitMeasure":{
+  "unitMeasureErrors":{
     "nameRequired": {
       "code": "UNMS001",
       "message": "Unit measure name is required"
+    },
+    "nameInvalid": {
+      "code": "UNMS002",
+      "message": "Unit measure name is invalid"
+    },
+    "lengthName": {
+      "code": "UNMS003",
+      "message": "The unit measure name must have a minimum length of 1 character and a maximum length of 100 characters"
     },
     "queryErrors":{
       "errorCreateUnitMeasure": {
@@ -347,10 +371,18 @@
       }
     }
   },
-  "shippingType":{
+  "shippingTypeErrors":{
     "nameRequired": {
       "code": "STYP001",
       "message": "Shipping type name is required"
+    },
+    "nameInvalid": {
+      "code": "STYP002",
+      "message": "Shipping type name is invalid"
+    },
+    "lengthName": {
+      "code": "STYP003",
+      "message": "The Shipment Type name must have a minimum length of 1 character and a maximum length of 100 characters"
     },
     "queryErrors":{
       "createError": {
@@ -425,7 +457,7 @@
       "message": "Address is required"
     }
   },
-  "driver":{
+  "driverErrors":{
     "nickNameRequired": {
       "code": "DRV001",
       "message": "Nick name is required"
@@ -438,17 +470,17 @@
       "code": "DRV003",
       "message": "Password is required"
     },
-    "nickNameInvalid": {
+    "lengthNickName": {
       "code": "DRV004",
-      "message": "Nick name is invalid"
+      "message": "The nickName must have a minimum length of 1 character and a maximum length of 100 characters"
     },
     "emailInvalid":{
       "code": "DRV005",
       "message": "Email is invalid"
     },
-    "passwordInvalid":{
+    "lengthPassword":{
       "code": "DRV006",
-      "message": "Password is invalid"
+      "message": "The password must have a minimum length of 6 characters and a maximum length of 10 characters"
     },
     "driverNotExist":{
       "code": "DRV007",
@@ -509,7 +541,7 @@
       }
     }
   },
-  "seller": {
+  "sellerErrors": {
     "nickNameRequired": {
       "code": "SELL001",
       "message": "Nick name is required"
@@ -526,13 +558,17 @@
       "code": "SELL004",
       "message": "Email is invalid"
     },
-    "passwordRequired":{
+    "lengthEmail": {
       "code": "SELL005",
+      "message": "The email must have a minimum length of 1 character and a maximum length of 100 characters"
+    },
+    "passwordRequired":{
+      "code": "SELL006",
       "message": "Password is required"
     },
-    "passwordInvalid":{
-      "code": "SELL006",
-      "message": "Password is invalid"
+    "lengthPassword": {
+      "code": "SELL007",
+      "message": "The password must have a minimum length of 6 character and a maximum length of 10 characters"
     },
     "queryErrors": {
       "createError": {
@@ -549,14 +585,14 @@
       }
     }
   },
-  "vehicle": {
+  "vehicleErrors": {
     "plateRequired": {
       "code": "VHC001",
       "message": "the license plate number of the vehicle is required"
     },
-    "plateInvalid": {
+    "lengthPlate": {
       "code": "VHC002",
-      "message": "The vehicle license plate entered is invalid"
+      "message": "The vehicle license plate entered must have a minimum length of 4 characters and a maximum length of 6 characters"
     },
     "plateAlreadyExists": {
       "code": "VHC003",
@@ -662,9 +698,9 @@
       "code": "FNCT001",
       "message": "the name is required."
     },
-    "nameInvalid": {
+    "lengthName": {
       "code": "FNCT002",
-      "message": "the name is invalid."
+      "message": "The functionality name must have a length of at least 1 character and a maximum of 10 characters."
     },
     "nameAlreadyExists": {
       "code": "FNCT003",

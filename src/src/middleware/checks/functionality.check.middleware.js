@@ -18,7 +18,7 @@ module.exports = {
         // TODO: validate role,
         check('name')
             .isString().withMessage(new ErrorModel(errorsConst.functionalityErrors.nameRequired)).bail()
-            .isLength({ min: 1, max: 10 }).withMessage(new ErrorModel(errorsConst.functionalityErrors.nameInvalid))
+            .isLength({ min: 1, max: 10 }).withMessage(new ErrorModel(errorsConst.functionalityErrors.lengthName)).bail()
             .custom((name, { req }) => functionalityValidators.validateFunctionality({ name }, req)),
         sharedValidators.validateError,
         check('functionality', new ErrorModel(errorsConst.functionalityErrors.nameAlreadyExists)).custom((value) => !value),
@@ -28,9 +28,9 @@ module.exports = {
     checkUpdateFunctionality: () => [
         //TODO: role validator functionality.
         ...sharedCheckMiddleware.checkId(),
-        check('name').optional()
+        check('name').optional({checkFalsy: false})
             .isString().withMessage(new ErrorModel(errorsConst.functionalityErrors.nameRequired)).bail()
-            .isLength({ min: 1, max: 10 }).withMessage(new ErrorModel(errorsConst.functionalityErrors.nameInvalid)).bail()
+            .isLength({ min: 1, max: 10 }).withMessage(new ErrorModel(errorsConst.functionalityErrors.lengthName)).bail()
             .custom((name, { req }) => functionalityValidators.validateFunctionality({ name }, req)),
         sharedValidators.validateError,
         check('functionality', new ErrorModel(errorsConst.functionalityErrors.nameAlreadyExists)).custom((value) => !value),
