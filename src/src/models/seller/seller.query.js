@@ -15,7 +15,7 @@ module.exports = {
                 transaction
             });
         } catch {
-            throw errorsConst.seller.queryErrors.createError
+            throw errorsConst.sellerErrors.queryErrors.createError
         }
     },
     findSellerQuery: async (where) => {
@@ -44,7 +44,7 @@ module.exports = {
                 indicativeNumber: UserIndicativeNumber.number
             })))
         } catch {
-            throw errorsConst.seller.queryErrors.findError
+            throw errorsConst.sellerErrors.queryErrors.findError
         }
     },
 }

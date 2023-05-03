@@ -10,9 +10,13 @@ const { ErrorModel } = require("../../models/index.models");
 //Validators
 const { sharedValidators } = require('../index.validators.middleware');
 
+// Middleware
+const sharedCheckMiddleware = require('./shared.check.middleware');
+
 module.exports = {
     checkCreateAdmin: () => {
         return [
+            ...sharedCheckMiddleware.checkCreateUser(),
             check('nickName')
                 .isString().withMessage(new ErrorModel(errorsConst.admin.nickNameRequired)).bail()
                 .isLength({ min:1, max: 100 }).withMessage(new ErrorModel(errorsConst.admin.lengthNickName)).bail(),

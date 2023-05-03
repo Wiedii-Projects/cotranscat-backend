@@ -89,7 +89,7 @@ module.exports = {
                 transaction
             });
         } catch {
-            throw errorsConst.client.queryErrors.createError;
+            throw errorsConst.userErrors.queryErrors.createError
         }
     },
     updateUserQuery: async (where, update, transaction) => {

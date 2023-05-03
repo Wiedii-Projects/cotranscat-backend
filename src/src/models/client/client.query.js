@@ -11,8 +11,8 @@ module.exports = {
     createClientQuery: async (where, transaction) => {
         try {
             return await Client.findOrCreate({ where, transaction });
-        } catch (e){
-            throw errorsConst.userErrors.queryErrors.createError
+        } catch {
+            throw errorsConst.client.queryErrors.createError;
         }
     },
 

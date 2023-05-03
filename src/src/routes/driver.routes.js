@@ -18,7 +18,6 @@ router.post('/', [
 
 router.get('/', [
     //TODO: implementation of role permission validation
-    sharedValidators.validateErrorFields,
 ], driverController.getAllDrivers);
 
 router.get('/:id', [

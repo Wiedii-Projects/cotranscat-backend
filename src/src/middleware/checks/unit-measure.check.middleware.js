@@ -5,7 +5,7 @@ const { errorsConst } = require('../../constants/index.constants');
 const { check } = require('express-validator');
 
 // Middleware
-const sharedCheckMiddleware = require('./shared.check.middleware');
+const { sharedValidators } = require('../index.validators.middleware');
 
 // Models
 const { ErrorModel } = require("../../models/index.models");
@@ -13,14 +13,18 @@ const { ErrorModel } = require("../../models/index.models");
 module.exports = {
     checkCreateUnitMeasure: () => {
         return [
-            ...sharedCheckMiddleware.checkAdminRole(),
-            check('name', new ErrorModel(errorsConst.unitMeasure.nameRequired)).isString().isLength({ min:1, max: 100 }),
+            check('name')
+                .isString().withMessage(new ErrorModel(errorsConst.unitMeasureErrors.nameRequired)).bail()
+                .isLength({ min: 1, max: 100 }).withMessage(new ErrorModel(errorsConst.unitMeasureErrors.lengthName)),
+            sharedValidators.validateError,
         ]
     },
     checkUpdateUnitMeasure: () => {
         return [
-            ...sharedCheckMiddleware.checkAdminRole(),
-            check('name', new ErrorModel(errorsConst.unitMeasure.nameRequired)).isString().isLength({ min:1, max: 100 }),
+            check('name').optional({ checkFalsy: false })
+                .isString().withMessage(new ErrorModel(errorsConst.unitMeasureErrors.nameInvalid)).bail()
+                .isLength({ min: 1, max: 100 }).withMessage(new ErrorModel(errorsConst.unitMeasureErrors.lengthName)),
+            sharedValidators.validateError,
         ]
     },
 }
