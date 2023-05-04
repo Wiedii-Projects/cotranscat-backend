@@ -2,19 +2,15 @@
 const { clientController } = require('../controllers/index.controllers')
 
 // Checks - middleware
-const { sharedMiddleware, clientMiddleware } = require('../middleware/index.checks.middleware');
+const { clientMiddleware } = require('../middleware/index.checks.middleware');
 
 // Libraries
 const { Router } = require("express");
 
-// Validators - middleware
-const { sharedValidators } = require('../middleware/index.validators.middleware');
-
 const router = Router();
 
 router.post('/', [
-    clientMiddleware.checkCreateClient(),
-    sharedValidators.validateErrorFields,
+    clientMiddleware.checkCreateClient()
 ], clientController.createClient);
 
 router.get('/', clientController.getAllClient);

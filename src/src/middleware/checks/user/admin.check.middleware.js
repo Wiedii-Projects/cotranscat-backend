@@ -45,6 +45,7 @@ module.exports = {
         .bail(),
       sharedValidators.validateError,
       ...sharedCheckMiddleware.checkEmailOrNickNameExist(),
+      sharedValidators.validateError,
     ];
   },
 
@@ -81,6 +82,7 @@ module.exports = {
         .optional({ checkFalsy: false }),
       sharedValidators.validateError,
       ...sharedCheckMiddleware.checkEmailOrNickNameExist(),
+      sharedValidators.validateError,
     ];
   },
 };

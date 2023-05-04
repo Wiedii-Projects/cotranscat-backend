@@ -41,6 +41,8 @@ module.exports = {
       .isLength({ min: 6, max: 10 })
       .withMessage(new ErrorModel(errorsConst.driverErrors.lengthPassword)),
     sharedValidators.validateError,
+    ...sharedCheckMiddleware.checkEmailOrNickNameExist(),
+    sharedValidators.validateError,
   ],
   checkDriverExist: () => [
     ...sharedCheckMiddleware.checkId(),
@@ -77,6 +79,8 @@ module.exports = {
       .bail()
       .isLength({ min: 6, max: 10 })
       .withMessage(new ErrorModel(errorsConst.driverErrors.lengthPassword)),
+    sharedValidators.validateError,
+    ...sharedCheckMiddleware.checkEmailOrNickNameExist(),
     sharedValidators.validateError,
   ],
 };

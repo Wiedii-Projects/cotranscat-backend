@@ -10,6 +10,9 @@ const { ErrorModel } = require("../../../models/index.models");
 // Validator
 const { sharedValidators } = require("../../index.validators.middleware");
 
+// Middleware
+const sharedCheckMiddleware = require("../shared.check.middleware");
+
 module.exports = {
   checkCreateSeller: () => {
     return [
@@ -36,6 +39,8 @@ module.exports = {
         .bail()
         .isLength({ min: 6, max: 10 })
         .withMessage(new ErrorModel(errorsConst.sellerErrors.lengthPassword)),
+      sharedValidators.validateError,
+      ...sharedCheckMiddleware.checkEmailOrNickNameExist(),
       sharedValidators.validateError,
     ];
   },
@@ -68,6 +73,8 @@ module.exports = {
         .bail()
         .isLength({ min: 6, max: 10 })
         .withMessage(new ErrorModel(errorsConst.sellerErrors.lengthPassword)),
+      sharedValidators.validateError,
+      ...sharedCheckMiddleware.checkEmailOrNickNameExist(),
       sharedValidators.validateError,
     ];
   },
