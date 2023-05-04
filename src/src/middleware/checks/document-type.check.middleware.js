@@ -5,7 +5,6 @@ const { errorsConst } = require('../../constants/index.constants');
 const { check } = require('express-validator');
 
 // Middleware
-const sharedCheckMiddleware = require('./shared.check.middleware');
 
 // Models
 const { ErrorModel } = require("../../models/index.models");
@@ -18,7 +17,7 @@ module.exports = {
         return [
             check('name')
                 .isString().withMessage(new ErrorModel(errorsConst.documentTypeErrors.nameRequired)).bail()
-                .isLength({ min: 2 }).withMessage(new ErrorModel(errorsConst.documentTypeErrors.lengthName)),
+                .isLength({ min: 2 }).withMessage(new ErrorModel(errorsConst.documentTypeErrors.nameSize)),
             sharedValidators.validateError,
         ]
     },
@@ -27,7 +26,7 @@ module.exports = {
         return [
             check('name').optional({checkFalsy: false})
                 .isString().withMessage(new ErrorModel(errorsConst.documentTypeErrors.nameRequired)).bail()
-                .isLength({ min: 2 }).withMessage(new ErrorModel(errorsConst.documentTypeErrors.lengthName)),
+                .isLength({ min: 2 }).withMessage(new ErrorModel(errorsConst.documentTypeErrors.nameSize)),
             sharedValidators.validateError,
         ]
     }

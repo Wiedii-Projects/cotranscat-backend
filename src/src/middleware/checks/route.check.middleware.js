@@ -18,11 +18,11 @@ module.exports = {
         return [
             check('idMunicipalityDepart')
                 .isString().withMessage( new ErrorModel(errorsConst.routeErrors.municipalityDepartRequired)).bail()
-                .custom((value,{req})=> value !== req.body.idMunicipalityArrive).withMessage( new ErrorModel(errorsConst.routeErrors.municipalityDepartEqual)).bail()
+                .custom((value,{req})=> value !== req.body.idMunicipalityArrive).withMessage( new ErrorModel(errorsConst.routeErrors.sameMunicipalityOfArrival)).bail()
                 .custom(async (value, { req }) => await municipalityValidators.validateMunicipality(req, { where: { id: sharedHelpers.decryptIdDataBase(value) } })),
             sharedValidators.validateError,
 
-            check('idMunicipality',  new ErrorModel(errorsConst.routeErrors.municipalityDoesNotExist)).custom((value)=> !!value),
+            check('idMunicipality',  new ErrorModel(errorsConst.routeErrors.municipalityDepartDoesNotExist)).custom((value)=> !!value),
             sharedValidators.validateError,
 
             check('idMunicipalityArrive')
@@ -30,7 +30,7 @@ module.exports = {
                 .custom(async (value, { req }) => await municipalityValidators.validateMunicipality(req, { where: { id: sharedHelpers.decryptIdDataBase(value) } })),
             sharedValidators.validateError,
 
-            check('idMunicipality',  new ErrorModel(errorsConst.routeErrors.municipalityDoesNotExist)).custom((value)=> !!value),
+            check('idMunicipality',  new ErrorModel(errorsConst.routeErrors.municipalityArriveDoesNotExist)).custom((value)=> !!value),
             sharedValidators.validateError,
         ]
     },

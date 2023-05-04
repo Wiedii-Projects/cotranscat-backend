@@ -15,16 +15,16 @@ module.exports = {
         return [
             check('nickName')
                 .isString().withMessage(new ErrorModel(errorsConst.sellerErrors.nickNameRequired)).bail()
-                .isLength({ min: 1, max: 100 }).withMessage(new ErrorModel(errorsConst.sellerErrors.lengthNickName)),
+                .isLength({ min: 1, max: 100 }).withMessage(new ErrorModel(errorsConst.sellerErrors.nickNameSize)),
             sharedValidators.validateError,
             check('email')
                 .isString().withMessage(new ErrorModel(errorsConst.sellerErrors.emailRequired)).bail()
                 .isEmail().withMessage(new ErrorModel(errorsConst.sellerErrors.emailInvalid)).bail()
-                .isLength({ min: 1, max: 100 }).withMessage(new ErrorModel(errorsConst.sellerErrors.lengthEmail)),
+                .isLength({ min: 1, max: 100 }).withMessage(new ErrorModel(errorsConst.sellerErrors.emailSize)),
             sharedValidators.validateError,
             check('password')
                 .isString().withMessage(new ErrorModel(errorsConst.sellerErrors.passwordRequired)).bail()
-                .isLength({ min: 6, max: 10 }).withMessage(new ErrorModel(errorsConst.sellerErrors.lengthPassword)),
+                .isLength({ min: 6, max: 10 }).withMessage(new ErrorModel(errorsConst.sellerErrors.passwordSize)),
             sharedValidators.validateError,
         ]
     },
@@ -33,16 +33,16 @@ module.exports = {
         return [
             check('nickName').optional({ checkFalsy: false })
                 .isString().withMessage(new ErrorModel(errorsConst.sellerErrors.nickNameRequired)).bail()
-                .isLength({ min: 1, max: 100 }).withMessage(new ErrorModel(errorsConst.sellerErrors.lengthNickName)),
+                .isLength({ min: 1, max: 100 }).withMessage(new ErrorModel(errorsConst.sellerErrors.nickNameSize)),
             sharedValidators.validateError,
             check('email').optional({ checkFalsy: false })
                 .isString().withMessage(new ErrorModel(errorsConst.sellerErrors.emailRequired)).bail()
                 .isEmail().withMessage(new ErrorModel(errorsConst.sellerErrors.emailInvalid)).bail()
-                .isLength({ min: 1, max: 100 }).withMessage(new ErrorModel(errorsConst.sellerErrors.lengthEmail)),
+                .isLength({ min: 1, max: 100 }).withMessage(new ErrorModel(errorsConst.sellerErrors.emailSize)),
             sharedValidators.validateError,
             check('password').optional({ checkFalsy: false })
                 .isString().withMessage(new ErrorModel(errorsConst.sellerErrors.passwordRequired)).bail()
-                .isLength({ min: 6, max: 10 }).withMessage(new ErrorModel(errorsConst.sellerErrors.lengthPassword)),
+                .isLength({ min: 6, max: 10 }).withMessage(new ErrorModel(errorsConst.sellerErrors.passwordSize)),
             sharedValidators.validateError,
         ]
     }

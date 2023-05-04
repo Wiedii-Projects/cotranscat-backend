@@ -15,7 +15,7 @@ module.exports = {
         return [
             check('name')
                 .isString().withMessage(new ErrorModel(errorsConst.municipalityErrors.nameRequired)).bail()
-                .isLength({ min: 1, max: 50 }).withMessage(new ErrorModel(errorsConst.municipalityErrors.lengthName)),
+                .isLength({ min: 1, max: 50 }).withMessage(new ErrorModel(errorsConst.municipalityErrors.nameSize)),
             sharedValidators.validateError,
         ]
     },
@@ -23,8 +23,8 @@ module.exports = {
     checkUpdateMunicipality: () => {
         return [
             check('name').optional({ checkFalsy: false })
-                .isString().withMessage(new ErrorModel(errorsConst.municipalityErrors.nameInvalid)).bail()
-                .isLength({ min: 1, max: 50 }).withMessage(new ErrorModel(errorsConst.municipalityErrors.lengthName)),
+                .isString().withMessage(new ErrorModel(errorsConst.municipalityErrors.nameRequired)).bail()
+                .isLength({ min: 1, max: 50 }).withMessage(new ErrorModel(errorsConst.municipalityErrors.nameSize)),
             sharedValidators.validateError,
         ]
     },

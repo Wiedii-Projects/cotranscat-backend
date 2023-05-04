@@ -15,25 +15,25 @@ module.exports = {
     checkCreateIndicativeNumber: () => {
         return [
             check('number')
-                .isString().withMessage(new ErrorModel(errorsConst.indicativeNumberErrors.numberTypeRequired)).bail()
-                .isLength({ min:1, max: 10 }).withMessage(new ErrorModel(errorsConst.indicativeNumberErrors.lengthNumber)),
+                .isString().withMessage(new ErrorModel(errorsConst.indicativeNumberErrors.numberRequired)).bail()
+                .isLength({ min: 1, max: 10 }).withMessage(new ErrorModel(errorsConst.indicativeNumberErrors.numberSize)),
             sharedValidators.validateError,
             check('country')
-                .isString().withMessage(new ErrorModel(errorsConst.indicativeNumberErrors.countryTypeRequired)).bail()
-                .isLength({ min:1, max: 50 }).withMessage(new ErrorModel(errorsConst.indicativeNumberErrors.lengthCountry)),
+                .isString().withMessage(new ErrorModel(errorsConst.indicativeNumberErrors.countryRequired)).bail()
+                .isLength({ min: 1, max: 50 }).withMessage(new ErrorModel(errorsConst.indicativeNumberErrors.countrySize)),
             sharedValidators.validateError,
         ]
     },
 
     checkUpdateIndicativeNumber: () => {
         return [
-            check('number').optional({checkFalsy: false})
-                .isString().withMessage(new ErrorModel(errorsConst.indicativeNumberErrors.numberTypeRequired)).bail()
-                .isLength({ min:1, max: 10 }).withMessage(new ErrorModel(errorsConst.indicativeNumberErrors.lengthNumber)),
+            check('number').optional({ checkFalsy: false })
+                .isString().withMessage(new ErrorModel(errorsConst.indicativeNumberErrors.numberRequired)).bail()
+                .isLength({ min: 1, max: 10 }).withMessage(new ErrorModel(errorsConst.indicativeNumberErrors.numberSize)),
             sharedValidators.validateError,
-            check('country').optional({checkFalsy: false})
-                .isString().withMessage(new ErrorModel(errorsConst.indicativeNumberErrors.countryTypeRequired)).bail()
-                .isLength({ min:1, max: 50 }).withMessage(new ErrorModel(errorsConst.indicativeNumberErrors.lengthCountry)),
+            check('country').optional({ checkFalsy: false })
+                .isString().withMessage(new ErrorModel(errorsConst.indicativeNumberErrors.countryRequired)).bail()
+                .isLength({ min: 1, max: 50 }).withMessage(new ErrorModel(errorsConst.indicativeNumberErrors.countrySize)),
             sharedValidators.validateError,
         ]
     }

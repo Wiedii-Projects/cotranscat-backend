@@ -15,7 +15,7 @@ module.exports = {
         return [
             check('name')
                 .isString().withMessage(new ErrorModel(errorsConst.paymentMethodErrors.nameRequired)).bail()
-                .isLength({ min: 1, max: 100 }).withMessage(new ErrorModel(errorsConst.paymentMethodErrors.lengthName)),
+                .isLength({ min: 1, max: 100 }).withMessage(new ErrorModel(errorsConst.paymentMethodErrors.nameSize)),
             sharedValidators.validateError,
         ]
     },
@@ -23,8 +23,8 @@ module.exports = {
     checkUpdatePaymentMethod: () => {
         return [
             check('name').optional({ checkFalsy: false })
-                .isString().withMessage(new ErrorModel(errorsConst.paymentMethodErrors.nameInvalid)).bail()
-                .isLength({ min: 1, max: 100 }).withMessage(new ErrorModel(errorsConst.paymentMethodErrors.lengthName)),
+                .isString().withMessage(new ErrorModel(errorsConst.paymentMethodErrors.nameRequired)).bail()
+                .isLength({ min: 1, max: 100 }).withMessage(new ErrorModel(errorsConst.paymentMethodErrors.nameSize)),
             sharedValidators.validateError,
         ]
     },
