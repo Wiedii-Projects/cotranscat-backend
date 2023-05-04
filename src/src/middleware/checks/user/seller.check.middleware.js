@@ -22,7 +22,7 @@ module.exports = {
         .withMessage(new ErrorModel(errorsConst.sellerErrors.nickNameRequired))
         .bail()
         .isLength({ min: 1, max: 100 })
-        .withMessage(new ErrorModel(errorsConst.sellerErrors.lengthNickName)),
+        .withMessage(new ErrorModel(errorsConst.sellerErrors.nickNameSize)),
       sharedValidators.validateError,
       check("email")
         .isString()
@@ -32,14 +32,14 @@ module.exports = {
         .withMessage(new ErrorModel(errorsConst.sellerErrors.emailInvalid))
         .bail()
         .isLength({ min: 1, max: 100 })
-        .withMessage(new ErrorModel(errorsConst.sellerErrors.lengthEmail)),
+        .withMessage(new ErrorModel(errorsConst.sellerErrors.emailSize)),
       sharedValidators.validateError,
       check("password")
         .isString()
         .withMessage(new ErrorModel(errorsConst.sellerErrors.passwordRequired))
         .bail()
         .isLength({ min: 6, max: 10 })
-        .withMessage(new ErrorModel(errorsConst.sellerErrors.lengthPassword)),
+        .withMessage(new ErrorModel(errorsConst.sellerErrors.passwordSize)),
       sharedValidators.validateError,
       ...sharedCheckMiddleware.checkEmailOrNickNameExist(),
       sharedValidators.validateError,
@@ -55,7 +55,7 @@ module.exports = {
         .withMessage(new ErrorModel(errorsConst.sellerErrors.nickNameRequired))
         .bail()
         .isLength({ min: 1, max: 100 })
-        .withMessage(new ErrorModel(errorsConst.sellerErrors.lengthNickName)),
+        .withMessage(new ErrorModel(errorsConst.sellerErrors.nickNameSize)),
       sharedValidators.validateError,
       check("email")
         .optional({ checkFalsy: false })
@@ -66,7 +66,7 @@ module.exports = {
         .withMessage(new ErrorModel(errorsConst.sellerErrors.emailInvalid))
         .bail()
         .isLength({ min: 1, max: 100 })
-        .withMessage(new ErrorModel(errorsConst.sellerErrors.lengthEmail)),
+        .withMessage(new ErrorModel(errorsConst.sellerErrors.emailSize)),
       sharedValidators.validateError,
       check("password")
         .optional({ checkFalsy: false })
@@ -74,7 +74,7 @@ module.exports = {
         .withMessage(new ErrorModel(errorsConst.sellerErrors.passwordRequired))
         .bail()
         .isLength({ min: 6, max: 10 })
-        .withMessage(new ErrorModel(errorsConst.sellerErrors.lengthPassword)),
+        .withMessage(new ErrorModel(errorsConst.sellerErrors.passwordSize)),
       sharedValidators.validateError,
       ...sharedCheckMiddleware.checkEmailOrNickNameExist(),
       sharedValidators.validateError,

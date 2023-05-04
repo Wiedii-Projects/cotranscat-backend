@@ -15,15 +15,15 @@ module.exports = {
         return [
             check('name')
                 .isString().withMessage(new ErrorModel(errorsConst.shippingTypeErrors.nameRequired)).bail()
-                .isLength({ min: 1, max: 100 }).withMessage(new ErrorModel(errorsConst.shippingTypeErrors.lengthName)),
+                .isLength({ min: 1, max: 100 }).withMessage(new ErrorModel(errorsConst.shippingTypeErrors.nameSize)),
             sharedValidators.validateError,
         ]
     },
     checkUpdateShippingType: () => {
         return [
             check('name').optional({ checkFalsy: false })
-                .isString().withMessage(new ErrorModel(errorsConst.shippingTypeErrors.nameInvalid)).bail()
-                .isLength({ min: 1, max: 100 }).withMessage(new ErrorModel(errorsConst.shippingTypeErrors.lengthName)),
+                .isString().withMessage(new ErrorModel(errorsConst.shippingTypeErrors.nameRequired)).bail()
+                .isLength({ min: 1, max: 100 }).withMessage(new ErrorModel(errorsConst.shippingTypeErrors.nameSize)),
             sharedValidators.validateError,
         ]
     },

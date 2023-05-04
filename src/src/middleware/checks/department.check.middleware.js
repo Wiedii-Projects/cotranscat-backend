@@ -15,7 +15,7 @@ module.exports = {
         return [
             check('name')
                 .isString().withMessage(new ErrorModel(errorsConst.departmentErrors.nameRequired)).bail()
-                .isLength({ min: 1, max: 30 }).withMessage(new ErrorModel(errorsConst.departmentErrors.lengthName)),
+                .isLength({ min: 1, max: 30 }).withMessage(new ErrorModel(errorsConst.departmentErrors.nameSize)),
             sharedValidators.validateError,
         ]
     },
@@ -24,7 +24,7 @@ module.exports = {
         return [
             check('name').optional({checkFalsy: false})
                 .isString().withMessage(new ErrorModel(errorsConst.departmentErrors.nameRequired)).bail()
-                .isLength({ min: 1, max: 30 }).withMessage(new ErrorModel(errorsConst.departmentErrors.lengthName)),
+                .isLength({ min: 1, max: 30 }).withMessage(new ErrorModel(errorsConst.departmentErrors.nameSize)),
             sharedValidators.validateError,
         ]
     }
