@@ -2,3 +2,6 @@ node_modules/
 local.env
 .yarn.lock
 package-lock.json
+
+# misc
+*.DS_Store
