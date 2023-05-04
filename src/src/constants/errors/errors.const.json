@@ -116,6 +116,10 @@
       "code": "US0012",
       "message": "The document type invalid."
     },
+    "idMunicipalityInvalid": {
+      "code": "US0012",
+      "message": "The municipality invalid."
+    },
     "idRoleRequired": {
       "code": "US0012",
       "message": "The rol is required."
@@ -151,6 +155,10 @@
     "addressRequired": {
       "code": "US0017",
       "message": "The address is required."
+    },
+    "emailOrNickNameAlreadyExist": {
+      "code": "US0018",
+      "message": "The nickName or email already exist"
     },
     "queryErrors": {
       "findAllError": {
@@ -427,6 +435,40 @@
     "addressRequired": {
       "code": "CLIEN003",
       "message": "Address is required"
+    },
+    "idIndicativePhoneWhatsAppRequired": {
+      "code": "CLIEN004",
+      "message": "The indicative number WhatsApp is required."
+    },
+    "idIndicativePhoneWhatsAppInvalid": {
+      "code": "CLIEN005",
+      "message": "The indicative number WhatsApp invalid."
+    },
+    "idMunicipalityRequired": {
+      "code": "CLIEN006",
+      "message": "The municipality is required."
+    },
+    "idMunicipalityInvalid": {
+      "code": "CLIEN007",
+      "message": "The municipality invalid."
+    },
+    "queryErrors": {
+      "findAllError": {
+        "code": "CLIEN_001",
+        "message": "Something went wrong."
+      },
+      "findError": {
+        "code": "CLIEN_002",
+        "message": "Something went wrong."
+      },
+      "createError": {
+        "code": "CLIEN_003",
+        "message": "Something went wrong."
+      },
+      "updateError": {
+        "code": "CLIEN_004",
+        "message": "Something went wrong."
+      }
     }
   },
   "driverErrors":{

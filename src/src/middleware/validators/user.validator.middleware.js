@@ -1,6 +1,6 @@
 // Queries
 const { decryptIdDataBase } = require('../../helpers/shared.helpers');
-const { userQuery, documentTypeQuery, indicativeNumberQuery, roleQuery } = require('./../../models/index.queries')
+const { userQuery, documentTypeQuery, indicativeNumberQuery, roleQuery, municipalityQuery } = require('./../../models/index.queries')
 
 module.exports = {
     validateGetUser: async (value, req) => {
@@ -32,6 +32,14 @@ module.exports = {
     validateIdIndicativeNumber: async (value, req) => {
         try {
             const [isValid] = await indicativeNumberQuery.findIndicativeNumberQuery(value);
+            req.body.isValid = isValid;
+        } catch {
+            req.body.isValid = false;
+        }
+    },
+    validateIdMunicipality: async (value, req) => {
+        try {
+            const [isValid] = await municipalityQuery.findMunicipalityQuery(value);
             req.body.isValid = isValid;
         } catch {
             req.body.isValid = false;

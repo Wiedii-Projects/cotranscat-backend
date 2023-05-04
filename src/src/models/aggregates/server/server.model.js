@@ -66,6 +66,7 @@ class ServerModel {
         this.app.use(this.paths.admin, require('../../../routes/admin.routes'));
         this.app.use(this.paths.coordinator, require('../../../routes/coordinator.routes'));
         this.app.use(this.paths.driver, require('../../../routes/driver.routes'));
+        this.app.use(this.paths.client, require('../../../routes/client.routes'));
         this.app.use(this.paths.functionality, require('../../../routes/functionality.routes'));
         this.app.use(this.paths.seller, require('../../../routes/seller.routes'));
         this.app.use(this.paths.role, require('../../../routes/role.routes'));

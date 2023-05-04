@@ -150,10 +150,8 @@ class defaultDataBaseModel {
                     idRole, 
                     idDocumentType, 
                     idIndicativePhone: indicativeNumber, 
-                    idIndicativeNumberPhoneWhatsApp: indicativeNumber,
                     idDepartment,
                     idPaymentMethod,
-                    idMunicipality,
                     idUnitMeasure,
                     idShippingType
                 });

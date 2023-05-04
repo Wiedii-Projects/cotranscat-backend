@@ -1,50 +1,87 @@
 // Constants
-const { errorsConst } = require('../../constants/index.constants');
+const { errorsConst } = require("../../constants/index.constants");
 
 // Models
-const { User, IndicativeNumber, DocumentType, Seller } = require('../index.models');
+const {
+  User,
+  IndicativeNumber,
+  DocumentType,
+  Seller,
+} = require("../index.models");
 
 // Helpers
-const sharedHelpers = require('../../helpers/shared.helpers');
+const sharedHelpers = require("../../helpers/shared.helpers");
 
 module.exports = {
-    createSellerQuery: async (where,transaction) => {
-        try {
-            return await Seller.findOrCreate({
-                where,
-                transaction
-            });
-        } catch {
-            throw errorsConst.sellerErrors.queryErrors.createError
-        }
-    },
-    findSellerQuery: async (where) => {
-        try {
-            return await Seller.findAll({
-              where,
-              attributes : ["id","nickName","email"],
-              include: [
-                { 
-                    model:  User,
-                    attributes : ["numberDocument","name","lastName","numberPhone"],
-                    include : [
-                        {model: DocumentType, as: "UserDocumentType"},
-                        {model: IndicativeNumber, as: "UserIndicativeNumber"},
-                    ]
-                },
-                
-              ],
-              raw: true,
-              nest:true
-            }).then(seller => seller.map(({User : { UserDocumentType , UserIndicativeNumber, ...user}, id, ...seller })=>({
-                id: sharedHelpers.encryptIdDataBase(id),
-                ...seller,
-                ...user,
-                documentType: UserDocumentType.name,
-                indicativeNumber: UserIndicativeNumber.number
-            })))
-        } catch {
-            throw errorsConst.sellerErrors.queryErrors.findError
-        }
-    },
-}
+  createSellerQuery: async (where, transaction) => {
+    try {
+      return await Seller.findOrCreate({
+        where,
+        transaction,
+      });
+    } catch {
+      throw errorsConst.sellerErrors.queryErrors.createError;
+    }
+  },
+  findSellerQuery: async (where) => {
+    try {
+      return await Seller.findAll({
+        where,
+        attributes: ["id", "nickName", "email"],
+        raw: true,
+        nest: true,
+        include: [
+          {
+            model: User,
+            as: "UserSeller",
+            attributes: [
+              "numberDocument",
+              "name",
+              "lastName",
+              "numberPhone",
+              "state",
+            ],
+            include: [
+              {
+                model: DocumentType,
+                as: "UserDocumentType",
+              },
+              {
+                model: IndicativeNumber,
+                as: "UserIndicativePhone",
+              },
+              {
+                model: IndicativeNumber,
+                as: "UserIndicativePhone",
+              },
+            ],
+          },
+        ],
+      }).then((sellers) =>
+        sellers.map(
+          ({
+            UserSeller: { UserDocumentType, UserIndicativePhone, ...user },
+            id,
+            ...seller
+          }) => {
+            return {
+              id: sharedHelpers.encryptIdDataBase(id),
+              ...seller,
+              ...user,
+              documentType: {
+                ...UserDocumentType,
+                id: sharedHelpers.encryptIdDataBase(UserDocumentType.id),
+              },
+              indicativePhone: {
+                ...UserIndicativePhone,
+                id: sharedHelpers.encryptIdDataBase(UserIndicativePhone.id),
+              },
+            };
+          }
+        )
+      );
+    } catch {
+      throw errorsConst.sellerErrors.queryErrors.findError;
+    }
+  },
+};

@@ -7,9 +7,6 @@ const { sharedMiddleware, shippingTypeMiddleware } = require('../middleware/inde
 // Libraries
 const { Router } = require("express");
 
-// Validators - middleware
-const { sharedValidators } = require('../middleware/index.validators.middleware');
-
 const router = Router();
 
 router.post('/', [

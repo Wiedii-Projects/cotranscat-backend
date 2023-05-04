@@ -50,7 +50,7 @@ module.exports = {
         try {
             const {
                 where,
-                attributes = ['id', 'idDocumentType','numberDocument', 'name', 'lastName','idIndicativePhone', 'state', 'idRole'],
+                attributes = ['id', 'numberDocument', 'name', 'lastName', 'numberPhone', 'state'],
                 group,
                 limit,
                 offset,

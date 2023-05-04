@@ -7,9 +7,6 @@ const { sharedMiddleware, adminMiddleware } = require('../middleware/index.check
 // Libraries
 const { Router } = require("express");
 
-// Validators - middleware
-const { sharedValidators } = require('../middleware/index.validators.middleware');
-
 const router = Router();
 
 router.post('/', [
@@ -22,8 +19,7 @@ router.get('/:id', [sharedMiddleware.checkId()], adminController.getAdmin);
 
 router.put('/:id', [
     adminMiddleware.checkUpdateAdmin(),
-    sharedMiddleware.checkId(),
-    sharedValidators.validateErrorFields,
+    sharedMiddleware.checkId()
 ], adminController.updateAdmin);
 
 module.exports = router;

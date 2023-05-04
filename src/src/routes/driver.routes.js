@@ -17,16 +17,13 @@ router.post('/', [
 ], driverController.createDriver);
 
 router.get('/', [
-    //TODO: implementation of role permission validation
 ], driverController.getAllDrivers);
 
 router.get('/:id', [
-    //TODO: implementation of role permission validation
     driverMiddleware.checkDriverExist()
 ], driverController.getDriver);
 
 router.put('/:id', [
-    //TODO: implementation of role permission validation
     driverMiddleware.checkUpdateDriver(),
 ], driverController.updateDriver);
 
