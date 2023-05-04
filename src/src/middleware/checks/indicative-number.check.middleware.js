@@ -6,7 +6,6 @@ const { check } = require('express-validator');
 
 // Middleware
 const { sharedValidators } = require('../index.validators.middleware');
-const sharedCheckMiddleware = require('./shared.check.middleware');
 
 // Models
 const { ErrorModel } = require("../../models/index.models");
@@ -15,30 +14,26 @@ const { ErrorModel } = require("../../models/index.models");
 module.exports = {
     checkCreateIndicativeNumber: () => {
         return [
-            ...sharedCheckMiddleware.checkAdminRole(),
             check('number')
-                .bail().isString().withMessage(new ErrorModel(errorsConst.indicativeNumber.numberType))
-                .bail().isLength({ min:1, max: 10 }).withMessage(new ErrorModel(errorsConst.indicativeNumber.numberCharacters)),
+                .isString().withMessage(new ErrorModel(errorsConst.indicativeNumberErrors.numberRequired)).bail()
+                .isLength({ min: 1, max: 10 }).withMessage(new ErrorModel(errorsConst.indicativeNumberErrors.numberSize)),
             sharedValidators.validateError,
             check('country')
-                .bail().isString().withMessage(new ErrorModel(errorsConst.indicativeNumber.countryType))
-                .bail().isLength({ min:1, max: 50 }).withMessage(new ErrorModel(errorsConst.indicativeNumber.countryCharacters)),
+                .isString().withMessage(new ErrorModel(errorsConst.indicativeNumberErrors.countryRequired)).bail()
+                .isLength({ min: 1, max: 50 }).withMessage(new ErrorModel(errorsConst.indicativeNumberErrors.countrySize)),
             sharedValidators.validateError,
         ]
     },
 
     checkUpdateIndicativeNumber: () => {
         return [
-            ...sharedCheckMiddleware.checkAdminRole(),
-            check('number')
-                .bail().isString().withMessage(new ErrorModel(errorsConst.indicativeNumber.numberType))
-                .bail().isLength({ min:1, max: 10 }).withMessage(new ErrorModel(errorsConst.indicativeNumber.numberCharacters))
-                .optional({checkFalsy: false}),
+            check('number').optional({ checkFalsy: false })
+                .isString().withMessage(new ErrorModel(errorsConst.indicativeNumberErrors.numberRequired)).bail()
+                .isLength({ min: 1, max: 10 }).withMessage(new ErrorModel(errorsConst.indicativeNumberErrors.numberSize)),
             sharedValidators.validateError,
-            check('country')
-                .bail().isString().withMessage(new ErrorModel(errorsConst.indicativeNumber.countryType))
-                .bail().isLength({ min:1, max: 50 }).withMessage(new ErrorModel(errorsConst.indicativeNumber.countryCharacters))
-                .optional({checkFalsy: false}),
+            check('country').optional({ checkFalsy: false })
+                .isString().withMessage(new ErrorModel(errorsConst.indicativeNumberErrors.countryRequired)).bail()
+                .isLength({ min: 1, max: 50 }).withMessage(new ErrorModel(errorsConst.indicativeNumberErrors.countrySize)),
             sharedValidators.validateError,
         ]
     }

@@ -1,6 +1,5 @@
 const User = require("./user/user.model");
 const Role = require("./role/role.model");
-const CodeSms = require("./code-sms/code-sms.model");
 const DocumentType = require("./document-type/document-type.model");
 const IndicativeNumber = require("./indicative-number/indicative-number.model");
 const Department = require("./department/department.model");
@@ -86,10 +85,6 @@ Vehicle.belongsTo(Municipality, { as: 'VehicleMunicipality', foreignKey: { name:
 Vehicle.hasMany(SeatRuler, { as: 'SeatRulerVehicle', onDelete: 'CASCADE', foreignKey: { name: "idVehicle", allowNull: false } });
 SeatRuler.belongsTo(Vehicle, { as: 'SeatRulerVehicle', foreignKey: { name: "idVehicle", allowNull: false } });
 
-// Relationship CodeSms-User
-CodeSms.belongsTo(User, { foreignKey: { name: "UserCode", allowNull: false } });
-User.hasMany(CodeSms, { foreignKey: { name: "UserCode", allowNull: false } });
-
 // Relationship Route-MunicipalityDepart
 Route.belongsTo(Municipality, { as: 'MunicipalityDepart', foreignKey: { name: 'idMunicipalityDepart', allowNull: false} });
 Municipality.hasMany(Route, { foreignKey: { name: "idMunicipalityDepart", allowNull: false } });
@@ -109,7 +104,6 @@ module.exports = {
   // Models
   User,
   Role,
-  CodeSms,
   DocumentType,
   IndicativeNumber,
   Department,

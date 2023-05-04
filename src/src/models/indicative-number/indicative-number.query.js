@@ -14,7 +14,7 @@ module.exports = {
                 where
             });
         } catch {
-            throw errorsConst.indicativeNumber.queryErrors.createError
+            throw errorsConst.indicativeNumberErrors.queryErrors.createError
         }
     },
     findIndicativeNumberQuery: async(query = {}) => {
@@ -29,21 +29,21 @@ module.exports = {
                 country
             })))
         } catch {
-            throw errorsConst.indicativeNumber.queryErrors.findAllError
+            throw errorsConst.indicativeNumberErrors.queryErrors.findAllError
         }
     },
     updateIndicativeNumberQuery: async (where, update) => {
         try {
             return await IndicativeNumber.update(update, { where });
         } catch {
-            throw errorsConst.indicativeNumber.queryErrors.updateError
+            throw errorsConst.indicativeNumberErrors.queryErrors.updateError
         }
     },
     deleteIndicativeNumberQuery: async (where) => {
         try {
             return await IndicativeNumber.destroy({ where })
         } catch {
-            throw errorsConst.indicativeNumber.queryErrors.deleteError
+            throw errorsConst.indicativeNumberErrors.queryErrors.deleteError
         }
     }
 }

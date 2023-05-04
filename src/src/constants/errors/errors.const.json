@@ -171,18 +171,14 @@
       }
     }
   },
-  "documentType":{
+  "documentTypeErrors":{
     "nameRequired": {
       "code": "DTP0001",
       "message": "The document type name is required"
     },
-    "lengthName": {
+    "nameSize": {
       "code": "DTP0002",
-      "message": "The document type name must contain at least two characters"
-    },
-    "idRequired": {
-      "code": "DTP0003",
-      "message": "The ID document type is required."
+      "message": "The document type name must be at least 2 characters long"
     },
     "queryErrors":{
       "createError": {
@@ -203,22 +199,22 @@
       }
     }
   },
-  "indicativeNumber":{
-    "numberType":{
+  "indicativeNumberErrors":{
+    "numberRequired":{
       "code": "INNU001",
-      "message": "the data type is incorrect"
+      "message": "The code number is required"
     },
-    "numberCharacters":{
+    "numberSize":{
       "code": "INNU002",
-      "message": "the data must have a minimum of 1 character and a maximum of 10 characters."
+      "message": "The code number must have a minimum length of 1 character and a maximum length of 10 character"
     },
-    "countryType":{
+    "countryRequired":{
       "code": "INNU003",
-      "message": "the data type is incorrect"
+      "message": "The country is required"
     },
-    "countryCharacters":{
+    "countrySize":{
       "code": "INNU004",
-      "message": "the data must have a minimum of 1 character and a maximum of 50 characters."
+      "message": "The country must have a minimum length of 1 character and a maximum length of 50 characters"
     },
     "queryErrors": {
       "createError": {
@@ -239,18 +235,14 @@
       }
     }
   },
-  "department":{
+  "departmentErrors":{
     "nameRequired": {
       "code": "DEPT001",
       "message": "Department name is required"
     },
-    "lengthName": {
+    "nameSize": {
       "code": "DEPT002",
       "message": "The department name must have a minimum of 1 character and a maximum of 30 characters"
-    },
-    "idRequired": {
-      "code": "DEPT003",
-      "message": "The ID department is required."
     },
     "queryErrors":{
       "createError": {
@@ -271,14 +263,14 @@
       }
     }
   },
-  "municipality":{
+  "municipalityErrors":{
     "nameRequired": {
       "code": "MUNC001",
       "message": "Municipality name is required"
     },
-    "municipalityDoesNotExist": {
-      "code": "MUN002",
-      "message": "the municipality does not exist"
+    "nameSize": {
+      "code": "MUNC002",
+      "message": "The municipality must have a minimum length of 1 character and a maximum length of 50 characters"
     },
     "queryErrors":{
       "createError": {
@@ -299,10 +291,14 @@
       }
     }
   },
-  "paymentMethod":{
+  "paymentMethodErrors":{
     "nameRequired": {
       "code": "PYMT001",
       "message": "Payment method name is required"
+    },
+    "nameSize": {
+      "code": "PYMT003",
+      "message": "The Payment method name must have a minimum length of 1 character and a maximum length of 100 characters"
     },
     "queryErrors":{
       "createError": {
@@ -323,10 +319,14 @@
       }
     }
   },
-  "unitMeasure":{
+  "unitMeasureErrors":{
     "nameRequired": {
       "code": "UNMS001",
       "message": "Unit measure name is required"
+    },
+    "nameSize": {
+      "code": "UNMS002",
+      "message": "The unit measure name must have a minimum length of 1 character and a maximum length of 100 characters"
     },
     "queryErrors":{
       "errorCreateUnitMeasure": {
@@ -347,10 +347,14 @@
       }
     }
   },
-  "shippingType":{
+  "shippingTypeErrors":{
     "nameRequired": {
       "code": "STYP001",
       "message": "Shipping type name is required"
+    },
+    "nameSize": {
+      "code": "STYP003",
+      "message": "The Shipment Type name must have a minimum length of 1 character and a maximum length of 100 characters"
     },
     "queryErrors":{
       "createError": {
@@ -425,7 +429,7 @@
       "message": "Address is required"
     }
   },
-  "driver":{
+  "driverErrors":{
     "nickNameRequired": {
       "code": "DRV001",
       "message": "Nick name is required"
@@ -438,17 +442,17 @@
       "code": "DRV003",
       "message": "Password is required"
     },
-    "nickNameInvalid": {
+    "lengthNickName": {
       "code": "DRV004",
-      "message": "Nick name is invalid"
+      "message": "The nickName must have a minimum length of 1 character and a maximum length of 100 characters"
     },
     "emailInvalid":{
       "code": "DRV005",
       "message": "Email is invalid"
     },
-    "passwordInvalid":{
+    "lengthPassword":{
       "code": "DRV006",
-      "message": "Password is invalid"
+      "message": "The password must have a minimum length of 6 characters and a maximum length of 10 characters"
     },
     "driverNotExist":{
       "code": "DRV007",
@@ -509,12 +513,12 @@
       }
     }
   },
-  "seller": {
+  "sellerErrors": {
     "nickNameRequired": {
       "code": "SELL001",
       "message": "Nick name is required"
     },
-    "lengthNickName": {
+    "nickNameSize": {
       "code": "SELL002",
       "message": "The seller name must have a minimum of 1 character and a maximum of 100 characters"
     },
@@ -526,13 +530,17 @@
       "code": "SELL004",
       "message": "Email is invalid"
     },
-    "passwordRequired":{
+    "emailSize": {
       "code": "SELL005",
+      "message": "The email must have a minimum length of 6 character and a maximum length of 100 characters"
+    },
+    "passwordRequired":{
+      "code": "SELL006",
       "message": "Password is required"
     },
-    "passwordInvalid":{
-      "code": "SELL006",
-      "message": "Password is invalid"
+    "passwordSize": {
+      "code": "SELL007",
+      "message": "The password must have a minimum length of 6 character and a maximum length of 10 characters"
     },
     "queryErrors": {
       "createError": {
@@ -549,14 +557,14 @@
       }
     }
   },
-  "vehicle": {
+  "vehicleErrors": {
     "plateRequired": {
       "code": "VHC001",
-      "message": "the license plate number of the vehicle is required"
+      "message": "The license plate number of the vehicle is required"
     },
-    "plateInvalid": {
+    "plateSize": {
       "code": "VHC002",
-      "message": "The vehicle license plate entered is invalid"
+      "message": "The vehicle license plate entered must have a minimum length of 4 characters and a maximum length of 6 characters"
     },
     "plateAlreadyExists": {
       "code": "VHC003",
@@ -564,7 +572,11 @@
     },
     "municipalityRequired": {
       "code": "VHC004",
-      "message": "the municipality is required"
+      "message": "The municipality is required"
+    },
+    "municipalityDoesNotExist": {
+      "code": "VHC005",
+      "message": "The municipality does not exist"
     },
     "markRequired": {
       "code": "VHC006",
@@ -582,20 +594,20 @@
       "code": "VHC009",
       "message": "The price entered is invalid"
     },
-    "widthInvalid": {
-      "code": "VHC011",
-      "message": "vehicle width is invalid"
-    },
-    "heightInvalid": {
-      "code": "VHC013",
-      "message": "vehicle height is invalid"
-    },
     "seatingMatrixRequired": {
-      "code": "VHC014",
+      "code": "VHC010",
       "message": "Vehicle seating matrix is required"
     },
+    "heightInvalid": {
+      "code": "VHC011",
+      "message": "Vehicle height is invalid"
+    },
+    "widthInvalid": {
+      "code": "VHC012",
+      "message": "Vehicle width is invalid"
+    },
     "vehicleDoesNotExist": {
-      "code": "VHC015",
+      "code": "VHC013",
       "message": "the vehicle does not exist"
     },
     "queryErrors": {
@@ -625,24 +637,12 @@
       }
     }
   },
-  "codeSms":{
-    "queryErrors":{
-      "createError": {
-        "code": "CODD_001",
-        "message": "Something went wrong."
-      },
-      "deleteError": {
-        "code": "CODD_002",
-        "message": "Something went wrong."
-      }
-    }
-  },
   "roleErrors": {
-    "roleTypeInvalid": {
+    "typeSize": {
       "code": "ROLE001",
-      "message": "the role type is invalid."
+      "message": "The value of the type field must be an integer in the range 0 to 255"
     },
-    "roleTypeAlreadyExists": {
+    "roleAlreadyExists": {
       "code": "ROLE002",
       "message": "The role type already exists."
     },
@@ -662,9 +662,9 @@
       "code": "FNCT001",
       "message": "the name is required."
     },
-    "nameInvalid": {
+    "nameSize": {
       "code": "FNCT002",
-      "message": "the name is invalid."
+      "message": "The functionality name must have a length of at least 1 character and a maximum of 10 characters."
     },
     "nameAlreadyExists": {
       "code": "FNCT003",
@@ -700,43 +700,55 @@
   "travelErrors":{
     "idDriverRequired": {
       "code": "TRVL001",
-      "message": "the ID driver is required"
+      "message": "The driver is required"
     },
     "idDriverInvalid": {
       "code": "TRVL002",
-      "message": "the ID driver is invalid"
+      "message": "The driver is invalid"
+    },
+    "driverNotExist":{
+      "code": "TRVL003",
+      "message": "driver does not exist"
     },
     "idVehicleRequired": {
-      "code": "TRVL003",
-      "message": "the ID vehicle is required"
+      "code": "TRVL004",
+      "message": "The vehicle is required"
     },
     "idVehicleInvalid": {
-      "code": "TRVL004",
-      "message": "the ID vehicle is invalid"
-    },
-    "invalidDate": {
       "code": "TRVL005",
-      "message": "the date is invalid"
+      "message": "The vehicle is invalid"
     },
-    "invalidTime": {
+    "vehicleDoesNotExist": {
       "code": "TRVL006",
-      "message": "the time is invalid"
-    },
-    "idTravelInvalid": {
-      "code": "TRVL007",
-      "message": "the ID travel is invalid"
-    },
-    "travelDoesNotExist": {
-      "code": "TRVL008",
-      "message": "the travel does not exist"
+      "message": "The vehicle does not exist"
     },
     "idRouteRequired": {
-      "code": "TRVL009",
-      "message": "the ID route is required"
+      "code": "TRVL007",
+      "message": "The route is required"
     },
     "idRouteInvalid": {
+      "code": "TRVL008",
+      "message": "The route is invalid"
+    },
+    "routeDoesNotExist": {
+      "code": "TRVL009",
+      "message": "The route does not exist"
+    },
+    "invalidDate": {
       "code": "TRVL010",
-      "message": "the ID route is invalid"
+      "message": "The date is invalid"
+    },
+    "invalidTime": {
+      "code": "TRVL011",
+      "message": "The time is invalid"
+    },
+    "idTravelInvalid": {
+      "code": "TRVL012",
+      "message": "The travel is invalid"
+    },
+    "travelDoesNotExist": {
+      "code": "TRVL013",
+      "message": "The travel does not exist"
     },
     "queryErrors":{
       "createError":{
@@ -760,23 +772,23 @@
   "routeErrors":{
     "municipalityDepartRequired":{
       "code": "ROUT001",
-      "message": "The id municipality depart is required."
+      "message": "The municipality depart is required."
     },
-    "municipalityDepartEqual":{
+    "sameMunicipalityOfArrival":{
       "code": "ROUT002",
-      "message": "The id municipality depart is equal municipality arrive"
+      "message": "The municipality of departure must not be the same as the municipality of arrival."
     },
-    "municipalityDoesNotExist":{
+    "municipalityDepartDoesNotExist":{
       "code": "ROUT003",
-      "message": "The municipality does not exist"
+      "message": "The outgoing municipality does not exist"
     },
     "municipalityArriveRequired":{
       "code": "ROUT004",
-      "message": "The id municipality arrive is required."
+      "message": "The municipality of arrival is required."
     },
-    "routeDoesNotExist":{
-      "code": "ROUT005",
-      "message": "The route does not exist"
+    "municipalityArriveDoesNotExist":{
+      "code": "ROUT003",
+      "message": "The municipality of arrival does not exist"
     },
     "queryErrors": {
       "createError": {

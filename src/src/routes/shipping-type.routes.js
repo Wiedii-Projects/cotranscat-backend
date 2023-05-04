@@ -14,24 +14,18 @@ const router = Router();
 
 router.post('/', [
     shippingTypeMiddleware.checkCreateShippingType(),
-    sharedValidators.validateErrorFields,
 ], shippingTypeController.createShippingType);
 
 router.get('/', [
-    sharedMiddleware.checkAdminRole(),
-    sharedValidators.validateErrorFields,
 ], shippingTypeController.getAllShippingType);
 
 router.put('/:id', [
     shippingTypeMiddleware.checkUpdateShippingType(),
     sharedMiddleware.checkId(),
-    sharedValidators.validateErrorFields,
 ], shippingTypeController.updateShippingType);
 
 router.delete('/:id', [
-    sharedMiddleware.checkAdminRole(),
     sharedMiddleware.checkId(),
-    sharedValidators.validateErrorFields,
 ], shippingTypeController.deleteShippingType);
 
 module.exports = router;

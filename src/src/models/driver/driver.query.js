@@ -10,7 +10,7 @@ module.exports = {
         try {
             return await Driver.findOrCreate({where, transaction})
         } catch {
-            throw errorsConst.driver.queryErrors.create;
+            throw errorsConst.driverErrors.queryErrors.create;
         }
     },
     findDrivers: async (where) => {
@@ -36,14 +36,14 @@ module.exports = {
                 indicativeNumber: UserIndicativeNumber.number
             })))
         } catch {
-            throw errorsConst.driver.queryErrors.findError;
+            throw errorsConst.driverErrors.queryErrors.findError;
         }
     },
     updateDriver: async (values, where, transaction) => {
         try {
             await Driver.update(values, {where, transaction})
         } catch {
-            throw errorsConst.driver.queryErrors.updateError;
+            throw errorsConst.driverErrors.queryErrors.updateError;
         }
     }
 }

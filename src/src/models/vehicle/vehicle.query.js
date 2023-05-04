@@ -12,7 +12,7 @@ module.exports = {
         try {
             return await Vehicle.create(values, options)
         } catch {
-            throw errorsConst.vehicle.queryErrors.createdError;
+            throw errorsConst.vehicleErrors.queryErrors.createdError;
         }
     },
     findVehicles: async (query = {}) => {
@@ -30,14 +30,14 @@ module.exports = {
                 ...vehicle
             })))
         } catch {
-            throw errorsConst.vehicle.queryErrors.findError
+            throw errorsConst.vehicleErrors.queryErrors.findError
         }
     },
     deleteVehicle: async (where) => {
         try {
             return await Vehicle.destroy({ where })
         } catch {
-            throw errorsConst.vehicle.queryErrors.deleteError
+            throw errorsConst.vehicleErrors.queryErrors.deleteError
         }
     }
 }

@@ -14,24 +14,18 @@ const router = Router();
 
 router.post('/', [
     unitMeasureMiddleware.checkCreateUnitMeasure(),
-    sharedValidators.validateErrorFields,
 ], unitMeasureController.createUnitMeasure);
 
 router.get('/', [
-    sharedMiddleware.checkAdminRole(),
-    sharedValidators.validateErrorFields,
 ], unitMeasureController.getAllUnitMeasure);
 
 router.put('/:id', [
     unitMeasureMiddleware.checkUpdateUnitMeasure(),
     sharedMiddleware.checkId(),
-    sharedValidators.validateErrorFields,
 ], unitMeasureController.updateUnitMeasure);
 
 router.delete('/:id', [
-    sharedMiddleware.checkAdminRole(),
     sharedMiddleware.checkId(),
-    sharedValidators.validateErrorFields,
 ], unitMeasureController.deleteUnitMeasure);
 
 module.exports = router;
