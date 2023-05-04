@@ -77,8 +77,7 @@ module.exports = {
         }
       )
     );
-    } catch (e){
-        console.log(e)
+    } catch {
       throw errorsConst.driverErrors.queryErrors.findError;
     }
   },

@@ -24,7 +24,7 @@ module.exports = {
     let transaction;
     try {
       const [{ id: role }] = await roleQuery.findRoleTypeQuery({
-        role: roleModelConst.ADMIN_ROLE,
+        where: { type: roleModelConst.ADMIN_ROLE }
       });
       const idRole = sharedHelpers.decryptIdDataBase(role);
       const [userAlreadyExists] = await userQuery.findUserQuery({
