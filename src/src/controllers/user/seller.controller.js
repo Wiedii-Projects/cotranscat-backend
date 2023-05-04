@@ -1,9 +1,10 @@
 // Helpers
 const {
-  dbConnectionOptions,
-} = require("../../constants/core/core-configurations.const");
-const indexHelpers = require("../../helpers/index.helpers");
-const { responseHelpers } = require("../../helpers/index.helpers");
+  userHelpers,
+  sharedHelpers,
+  authHelpers,
+  responseHelpers
+} = require("../../helpers/index.helpers");
 
 // Models - Queries
 const {
@@ -12,33 +13,47 @@ const {
   sellerQuery,
 } = require("../../models/index.queries");
 
+// Constants
+const roleModelConst = require("../../constants/model/role.model.const");
+
 module.exports = {
   createSeller: async (req, res) => {
-    const userExtract = indexHelpers.userHelpers.extractUserDataHelper(
+    const extractUser = userHelpers.extractUserDataHelper(req.body);
+    const { password, ...seller } = userHelpers.extractSellerDataHelper(
       req.body
     );
-    const { password, ...seller } =
-      indexHelpers.userHelpers.extractSellerDataHelper(req.body);
     let transaction;
     try {
-      transaction = await dbConnectionOptions.transaction();
-      //TODO Adjust Role
-      const [role] = await roleQuery.findRoleQuery({ role: "SELLER_ROLE" });
-      const [user] = await userQuery.createNewUserQuery(
-        { ...userExtract, idRole: role.id },
-        transaction
-      );
-      await sellerQuery.createSellerQuery(
-        {
-          ...seller,
-          password: await indexHelpers.authHelpers.encryptPasswordHelper(
-            password
-          ),
-          id: user.id,
+      const [{ id: role }] = await roleQuery.findRoleTypeQuery({
+        role: roleModelConst.ADMIN_ROLE,
+      });
+      const idRole = sharedHelpers.decryptIdDataBase(role);
+      const [userAlreadyExists] = await userQuery.findUserQuery({
+        where: {
+          idDocumentType: extractUser.idDocumentType,
+          numberDocument: extractUser.numberDocument,
+          idRole,
         },
-        transaction
-      );
-      await transaction.commit();
+      });
+      if (!userAlreadyExists?.id) {
+        transaction = await sharedHelpers.initTransaction();
+        const [user] = await userQuery.createNewUserQuery(
+          { ...extractUser, idRole },
+          transaction
+        );
+        await sellerQuery.createSellerQuery(
+          {
+            ...seller,
+            password: await authHelpers.encryptPasswordHelper(
+              password
+            ),
+            id: user.id,
+          },
+          transaction
+        );
+        await transaction.commit();
+      }
+
       return responseHelpers.responseSuccess(res, null);
     } catch (error) {
       if (transaction) await transaction.rollback();

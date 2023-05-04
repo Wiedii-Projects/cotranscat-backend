@@ -20,7 +20,7 @@ module.exports = {
   createAdmin: async (req, res) => {
     const extractUser = userHelpers.extractUserDataHelper(req.body);
     const { password, ...extractAdmin } =
-      userHelpers.extractAdminDataHelper(req.body);
+    userHelpers.extractAdminDataHelper(req.body);
     let transaction;
     try {
       const [{ id: role }] = await roleQuery.findRoleTypeQuery({

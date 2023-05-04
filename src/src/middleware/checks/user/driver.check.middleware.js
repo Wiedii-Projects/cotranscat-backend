@@ -18,7 +18,6 @@ const { ErrorModel } = require("../../../models/index.models");
 
 module.exports = {
   checkCreateDriver: () => [
-    // TODO: validate role,
     ...sharedCheckMiddleware.checkCreateUser(),
     check("nickName")
       .isString()
@@ -54,7 +53,6 @@ module.exports = {
     sharedValidators.validateError,
   ],
   checkUpdateDriver: () => [
-    // TODO: validate role,
     ...sharedCheckMiddleware.checkId(),
     check("nickName")
       .optional({ checkFalsy: false })

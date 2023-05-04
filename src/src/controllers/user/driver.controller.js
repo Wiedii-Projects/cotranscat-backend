@@ -4,11 +4,12 @@ const {
 } = require("../../constants/core/core-configurations.const");
 
 // Helpers
-const { responseHelpers, authHelpers } = require("../../helpers/index.helpers");
 const {
-  extractUserDataHelper,
-  extractDriverDataHelper,
-} = require("../../helpers/user.helpers");
+  responseHelpers,
+  authHelpers,
+  userHelpers,
+  sharedHelpers,
+} = require("../../helpers/index.helpers");
 
 // Models - Queries
 const {
@@ -17,28 +18,44 @@ const {
   driverQuery,
 } = require("../../models/index.queries");
 
+// Constants
+const roleModelConst = require("../../constants/model/role.model.const");
+
 module.exports = {
   createDriver: async (req, res) => {
-    const userData = extractUserDataHelper(req.body);
-    const { password, ...driverData } = extractDriverDataHelper(req.body);
+    const extractUser = userHelpers.extractUserDataHelper(req.body);
+    const { password, ...driverData } = userHelpers.extractDriverDataHelper(
+      req.body
+    );
     let transaction;
     try {
-      transaction = await dbConnectionOptions.transaction();
-      //TODO: User role process flow adjustment
-      const [role] = await roleQuery.findRoleQuery({ role: "DRIVER_ROLE" });
-      const [user] = await userQuery.createNewUserQuery(
-        { ...userData, idRole: role.id },
-        transaction
-      );
-      await driverQuery.createDriver(
-        {
-          id: user.id,
-          password: await authHelpers.encryptPasswordHelper(password),
-          ...driverData,
+      const [{ id: role }] = await roleQuery.findRoleTypeQuery({
+        role: roleModelConst.DRIVER_ROLE,
+      });
+      const idRole = sharedHelpers.decryptIdDataBase(role);
+      const [userAlreadyExists] = await userQuery.findUserQuery({
+        where: {
+          idDocumentType: extractUser.idDocumentType,
+          numberDocument: extractUser.numberDocument,
+          idRole,
         },
-        transaction
-      );
-      await transaction.commit();
+      });
+      if (!userAlreadyExists?.id) {
+        transaction = await sharedHelpers.initTransaction();
+        const [user] = await userQuery.createNewUserQuery(
+          { ...extractUser, idRole },
+          transaction
+        );
+        await driverQuery.createDriver(
+          {
+            id: user.id,
+            password: await authHelpers.encryptPasswordHelper(password),
+            ...driverData,
+          },
+          transaction
+        );
+        await transaction.commit();
+      }
       return responseHelpers.responseSuccess(res, null);
     } catch (error) {
       if (transaction) await transaction.rollback();

@@ -1,11 +1,10 @@
-// Constants
-const {
-  dbConnectionOptions,
-} = require("../../constants/core/core-configurations.const");
-
 // Helpers
 const indexHelpers = require("../../helpers/index.helpers");
-const { responseHelpers } = require("../../helpers/index.helpers");
+const {
+  responseHelpers,
+  userHelpers,
+  sharedHelpers,
+} = require("../../helpers/index.helpers");
 
 // Models - Queries
 const {
@@ -14,35 +13,45 @@ const {
   roleQuery,
 } = require("../../models/index.queries");
 
+// Constants
+const roleModelConst = require("../../constants/model/role.model.const");
+
 module.exports = {
   createCoordinator: async (req, res) => {
-    const userExtract = indexHelpers.userHelpers.extractUserDataHelper(
-      req.body
-    );
+    const extractUser = userHelpers.extractUserDataHelper(req.body);
     const { password, ...coordinator } =
       indexHelpers.userHelpers.extractCoordinatorDataHelper(req.body);
     let transaction;
     try {
-      transaction = await dbConnectionOptions.transaction();
-      //TODO Adjust Role
-      const [role] = await roleQuery.findRoleQuery({
-        role: "COORDINATOR_ROLE",
+      const [{ id: role }] = await roleQuery.findRoleTypeQuery({
+        role: roleModelConst.COORDINATOR_ROLE,
       });
-      const [user] = await userQuery.createNewUserQuery(
-        { ...userExtract, idRole: role.id },
-        transaction
-      );
-      await coordinatorQuery.createCoordinatorQuery(
-        {
-          ...coordinator,
-          password: await indexHelpers.authHelpers.encryptPasswordHelper(
-            password
-          ),
-          id: user.id,
+      const idRole = sharedHelpers.decryptIdDataBase(role);
+      const [userAlreadyExists] = await userQuery.findUserQuery({
+        where: {
+          idDocumentType: extractUser.idDocumentType,
+          numberDocument: extractUser.numberDocument,
+          idRole,
         },
-        transaction
-      );
-      await transaction.commit();
+      });
+      if (!userAlreadyExists?.id) {
+        transaction = await sharedHelpers.initTransaction();
+        const [user] = await userQuery.createNewUserQuery(
+          { ...extractUser, idRole },
+          transaction
+        );
+        await coordinatorQuery.createCoordinatorQuery(
+          {
+            ...coordinator,
+            password: await indexHelpers.authHelpers.encryptPasswordHelper(
+              password
+            ),
+            id: user.id,
+          },
+          transaction
+        );
+        await transaction.commit();
+      }
       return responseHelpers.responseSuccess(res, null);
     } catch (error) {
       if (transaction) await transaction.rollback();

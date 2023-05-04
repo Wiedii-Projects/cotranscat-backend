@@ -16,6 +16,7 @@ const sharedCheckMiddleware = require("../shared.check.middleware");
 module.exports = {
   checkCreateSeller: () => {
     return [
+      ...sharedCheckMiddleware.checkCreateUser(),
       check("nickName")
         .isString()
         .withMessage(new ErrorModel(errorsConst.sellerErrors.nickNameRequired))
@@ -47,6 +48,7 @@ module.exports = {
 
   checkUpdateSeller: () => {
     return [
+      ...sharedCheckMiddleware.checkUpdateUser(),
       check("nickName")
         .optional({ checkFalsy: false })
         .isString()

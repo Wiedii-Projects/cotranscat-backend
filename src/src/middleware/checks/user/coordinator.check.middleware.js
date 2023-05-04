@@ -16,6 +16,7 @@ const sharedCheckMiddleware = require("../shared.check.middleware");
 module.exports = {
   checkCreateCoordinator: () => {
     return [
+      ...sharedCheckMiddleware.checkCreateUser(),
       check("nickName")
         .isString()
         .withMessage(new ErrorModel(errorsConst.coordinator.nickNameRequired))
@@ -50,6 +51,7 @@ module.exports = {
 
   checkUpdateCoordinator: () => {
     return [
+      ...sharedCheckMiddleware.checkUpdateUser(),
       check("nickName")
         .isString()
         .withMessage(new ErrorModel(errorsConst.coordinator.nickNameRequired))
