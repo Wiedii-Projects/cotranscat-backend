@@ -1,7 +1,6 @@
 module.exports = {
   userQuery: require("./user/user.query"),
   documentTypeQuery: require("./document-type/document-type.query"),
-  codeSMSQuery: require("./code-sms/code-sms.query"),
   roleQuery: require("./role/role.query"),
   indicativeNumberQuery: require("./indicative-number/indicative-number.query"),
   departmentQuery: require("./department/department.query"),
@@ -10,5 +9,14 @@ module.exports = {
   unitMeasureQuery: require("./unit-measure/unit-measure.query"),
   shippingTypeQuery: require("./shipping-type/shipping-type.query"),
   vehicleQuery: require("./vehicle/vehicle.query"),
-  seatRulerQuery: require("./seat-ruler/seat-ruler.query")
+  seatRulerQuery: require("./seat-ruler/seat-ruler.query"),
+  adminQuery: require("./admin/admin.query"),
+  clientQuery: require("./client/client.query"),
+  driverQuery: require("./driver/driver.query"),
+  coordinatorQuery: require("./coordinator/coordinator.query"),
+  functionalityQuery: require("./functionality/functionality.query"),
+  driverVehicleQuery: require("./driver-vehicle/driver-vehicle.query"),
+  travelQuery: require("./travel/travel.query"),
+  sellerQuery: require("./seller/seller.query"),
+  routeQuery: require("./route/route.query"),
 };

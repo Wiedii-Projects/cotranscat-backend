@@ -26,14 +26,4 @@ router.post('/changePassword', [
     sharedValidators.validateErrorFields
 ], authController.changePassword);
 
-router.post('/createCode', [
-    authMiddleware.checkCreateCode(),
-    sharedValidators.validateErrorFields
-], authController.createCode);
-
-router.post('/validateCode', [
-    authMiddleware.checkValidateCode(),
-    sharedValidators.validateErrorFields
-], authController.validateCode);
-
 module.exports = router;

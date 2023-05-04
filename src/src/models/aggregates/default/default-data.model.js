@@ -2,17 +2,6 @@ const { encryptPasswordHelper } = require("../../../helpers/auth.helpers");
 
 
 module.exports = {
-    defaultRole: [ 
-        { 
-            role: "ADMIN_ROLE"
-        }, 
-        { 
-            role: "USER_ROLE" 
-        }, 
-        { 
-            role: "CLIENT_ROLE" 
-        } 
-    ],
     defaultDocumentType: [ 
         { 
             name: "C.C." 
@@ -55,12 +44,15 @@ module.exports = {
           country: "Canadá"
         }
     ],
-    defaultAdmin: { 
-            numberDocument: "0000000000", 
+    defaultUser: {
+            numberDocument: "0000000000",
             name: "ADMIN", 
-            lastName: "USER", 
-            phoneNumber: "3052627084",
-            email: "admi@admin.co"
+            lastName: "USER",
+            numberPhone: "3052627084",
+    },
+    defaultAdmin: {
+            email: 'admi@admin.co',
+            nickName: 'userAdmin'
     },
     defaultDepartment : [
         { name: 'Amazonas' },

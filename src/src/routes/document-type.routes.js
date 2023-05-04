@@ -7,30 +7,21 @@ const { Router } = require("express");
 // Checks - middleware
 const { documentTypeMiddleware, sharedMiddleware } = require('../middleware/index.checks.middleware');
 
-// Validators - middleware
-const { sharedValidators } = require('../middleware/index.validators.middleware');
-
-
 const router = Router();
 
 router.post('/', [
-    documentTypeMiddleware.checkCreateDocumentType(),
-    sharedValidators.validateErrorFields,
+    documentTypeMiddleware.checkCreateDocumentType()
 ], documentTypeController.createDocumentType);
 
-router.get('/', [
-    sharedMiddleware.checkAdminRole(),
-    sharedValidators.validateErrorFields,
-], documentTypeController.getAllDocumentTypes);
+router.get('/', documentTypeController.getAllDocumentTypes);
 
 router.put('/:id', [
-    sharedMiddleware.checkAdminRole(),
-    sharedValidators.validateErrorFields,
+    documentTypeMiddleware.checkUpdateDocumentType(),
+    sharedMiddleware.checkId()
 ], documentTypeController.updateDocumentType);
 
 router.delete('/:id', [
-    sharedMiddleware.checkAdminRole(),
-    sharedValidators.validateErrorFields,
+    sharedMiddleware.checkId()
 ], documentTypeController.deleteDocumentType);
 
 module.exports = router;

@@ -11,7 +11,7 @@ module.exports = {
     findAndCountUserQuery: async (query) => {
         let {
             where,
-            attributes = ['id', 'name', 'lastName', 'email', 'phoneNumber', 'state', 'img'],
+            attributes = ['id', 'idDocumentType','numberDocument', 'name', 'lastName','idIndicativePhone', 'state', 'idRole'],
             group,
             limit,
             offset,
@@ -50,7 +50,7 @@ module.exports = {
         try {
             const {
                 where,
-                attributes = ['id', 'name', 'lastName', 'email', 'phoneNumber', 'state', 'img'],
+                attributes = ['id', 'numberDocument', 'name', 'lastName', 'numberPhone', 'state'],
                 group,
                 limit,
                 offset,
@@ -82,18 +82,22 @@ module.exports = {
             throw errorsConst.userErrors.queryErrors.findAllError
         }
     },
-    createNewUserQuery: async (where) => {
+    createNewUserQuery: async (where, transaction) => {
         try {
-            return await User.findOrCreate({ where });
+            return await User.findOrCreate({
+                where,
+                transaction
+            });
         } catch {
             throw errorsConst.userErrors.queryErrors.createError
         }
     },
-    updateUserQuery: async (where, update) => {
+    updateUserQuery: async (where, update, transaction) => {
         try {
             return await User.update(update, {
-                where
-              });
+                where,
+                transaction,
+            });
         } catch {
             throw errorsConst.userErrors.queryErrors.updateError;
         }

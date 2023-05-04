@@ -1,4 +1,5 @@
 // Constants
+const { dbConnectionOptions } = require("../constants/core/core-configurations.const");
 const {
   coreConfigurationsConst
 } = require("../constants/index.constants");
@@ -31,5 +32,8 @@ module.exports = {
         let encrypted = cipher.update(value.toString(), 'utf8', 'hex');
         encrypted += cipher.final('hex');
         return encrypted;
+    },
+    initTransaction: async() => {
+      return await dbConnectionOptions.transaction();
     }
 }

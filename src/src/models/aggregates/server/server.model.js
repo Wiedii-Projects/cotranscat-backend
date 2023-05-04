@@ -23,7 +23,16 @@ class ServerModel {
             paymentMethod: '/api/paymentMethod',
             unitMeasure: '/api/unitMeasure',
             shippingType: '/api/shippingType',
-            vehicle: '/api/vehicle'
+            vehicle: '/api/vehicle',
+            admin: '/api/admin',
+            client: '/api/client',
+            driver: '/api/driver',
+            coordinator: '/api/coordinator',
+            functionality: '/api/functionality',
+            travel: '/api/travel',
+            seller: '/api/seller',
+            role: '/api/role',
+            route: '/api/route',
         }
         this.dbHost = coreConfigurationsConst.dbHost;
         this.db();
@@ -54,6 +63,15 @@ class ServerModel {
         this.app.use(this.paths.unitMeasure, require('../../../routes/unit-measure.routes'));
         this.app.use(this.paths.shippingType, require('../../../routes/shipping-type.routes'));
         this.app.use(this.paths.vehicle, require('../../../routes/vehicle.routes'));
+        this.app.use(this.paths.admin, require('../../../routes/admin.routes'));
+        this.app.use(this.paths.coordinator, require('../../../routes/coordinator.routes'));
+        this.app.use(this.paths.driver, require('../../../routes/driver.routes'));
+        this.app.use(this.paths.client, require('../../../routes/client.routes'));
+        this.app.use(this.paths.functionality, require('../../../routes/functionality.routes'));
+        this.app.use(this.paths.seller, require('../../../routes/seller.routes'));
+        this.app.use(this.paths.role, require('../../../routes/role.routes'));
+        this.app.use(this.paths.travel, require('../../../routes/travel.routes'))
+        this.app.use(this.paths.route, require('../../../routes/route.routes'));
     }
 
     listen() {

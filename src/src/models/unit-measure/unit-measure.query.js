@@ -14,7 +14,7 @@ module.exports = {
                 where
             });
         } catch {
-            throw errorsConst.unitMeasure.queryErrors.createError;
+            throw errorsConst.unitMeasureErrors.queryErrors.createError;
         }
     },
 
@@ -29,7 +29,7 @@ module.exports = {
                 name,
             })))
         } catch {
-            throw errorsConst.unitMeasure.queryErrors.finAllError
+            throw errorsConst.unitMeasureErrors.queryErrors.finAllError
         }
     },
 
@@ -37,7 +37,7 @@ module.exports = {
         try {
             return await UnitMeasure.update(update, { where });
         } catch {
-            throw errorsConst.unitMeasure.queryErrors.updateError;
+            throw errorsConst.unitMeasureErrors.queryErrors.updateError;
         }
     },
 
@@ -45,7 +45,7 @@ module.exports = {
         try {
             return await UnitMeasure.destroy({ where })
         } catch {
-            throw errorsConst.unitMeasure.queryErrors.deleteError
+            throw errorsConst.unitMeasureErrors.queryErrors.deleteError
         }
     }
 }

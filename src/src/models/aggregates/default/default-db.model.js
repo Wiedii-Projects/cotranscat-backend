@@ -1,9 +1,23 @@
 //Models - Default Data
-const { defaultRole, defaultIndicativeNumber, defaultAdmin, defaultDocumentType, defaultDepartment, defaultPaymentMethod, defaultMunicipality, defaultUnitMeasure, defaultShippingType } = require('./default-data.model');
+const {
+    defaultIndicativeNumber, 
+    defaultUser, 
+    defaultDocumentType, 
+    defaultDepartment, 
+    defaultPaymentMethod, 
+    defaultMunicipality, 
+    defaultUnitMeasure, 
+    defaultShippingType,
+    defaultAdmin
+} = require('./default-data.model');
+
+//Const
+const { roleConst } = require('../../../constants/index.constants')
 
 //Models
 const Role = require('../../role/role.model');
 const User = require('../../user/user.model');
+const Admin = require('../../admin/admin.model');
 const IndicativeNumber = require('../../indicative-number/indicative-number.model');
 const DocumentType = require('../../document-type/document-type.model');
 const Department = require('../../department/department.model');
@@ -21,8 +35,8 @@ class defaultDataBaseModel {
     }
 
     async getAdminRole(){
-        const [{ role }] = defaultRole;
-        const { id } = await Role.findOne({ where: { role }});
+        const { ADMIN_ROLE: type } = roleConst;
+        const { id } = await Role.findOne({ where: { type }});
         return id;
     }
 
@@ -60,6 +74,10 @@ class defaultDataBaseModel {
         const [{ name }] = defaultUnitMeasure;
         const { id } = await UnitMeasure.findOne({ where: { name }});
         return id;
+    }
+
+    async getUserAdmin (where) {
+        return await User.findOne({where, raw:true});
     }
 
     async getShippingType () {
@@ -105,7 +123,7 @@ class defaultDataBaseModel {
     }
 
     async createDefaultDataBase() {
-        await this.countRole() || defaultRole.map( async(element) => await Role.create( element ) );
+        await this.countRole() || Object.values(roleConst).map(async (element) => {await Role.create({type: element})});
         await this.countIndicativeNumber() || defaultIndicativeNumber.map(  async(element) => await IndicativeNumber.create( element ) );
         await this.countDocumentType() || defaultDocumentType.map(  async(element) => await DocumentType.create( element ) );
         await this.countDepartment() || defaultDepartment.map(  async(element) => await Department.create( element ) );
@@ -117,28 +135,34 @@ class defaultDataBaseModel {
         const indicativeNumber = await this.getIndicativeNumber();
         const idRole = await this.getAdminRole();
         const idDocumentType = await this.getDocumentType();
-        const password = await encryptPasswordHelper(process.env.PASSWORD_ADMIN_ROOT);
         const idDepartment = await this.getDepartment();
         const idPaymentMethod = await this.getPaymentMethod();
         const idMunicipality = await this.getMunicipality();
         const idUnitMeasure = await this.getUnitMeasure();
         const idShippingType = await this.getShippingType();
-
-        await this.countUser() || 
-            await User.create( 
+        const userCreate = await this.countUser();
+        
+        if( !userCreate ){
+            const password = await encryptPasswordHelper(process.env.PASSWORD_ADMIN_ROOT);
+            const user = await User.create( 
                 { 
-                    ...defaultAdmin, 
-                    password,
+                    ...defaultUser, 
                     idRole, 
                     idDocumentType, 
-                    idIndicativeNumberPhone: indicativeNumber, 
-                    idIndicativeNumberPhoneWhatsApp: indicativeNumber,
+                    idIndicativePhone: indicativeNumber, 
                     idDepartment,
                     idPaymentMethod,
-                    idMunicipality,
                     idUnitMeasure,
                     idShippingType
                 });
+                await Admin.create(
+                    {
+                        ...defaultAdmin,
+                        id: user.id,
+                        password
+                    }
+                );
+        };
     }
 }
 
