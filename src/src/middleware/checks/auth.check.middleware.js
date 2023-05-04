@@ -11,7 +11,7 @@ const { check } = require('express-validator');
 const { ErrorModel } = require("../../models/index.models");
 
 // Validators - middleware
-const { userValidators, authValidators, sharedValidators, codeValidators } = require('../index.validators.middleware')
+const { userValidators, authValidators, sharedValidators } = require('../index.validators.middleware')
 
 module.exports = {
     checkLogin: () => {
@@ -58,24 +58,5 @@ module.exports = {
             
         ];
     },
-    checkCreateCode: () => {
-        return [
-            check('email', new ErrorModel(errorsConst.authErrors.emailRequired)).isEmail(),
-            check('email')
-                .custom((value, { req }) => userValidators.validateGetUser({ where: { email: value, state: true }}, req)),
-            check('user', new ErrorModel(errorsConst.userErrors.userNotExist))
-                .custom((value) => value? true : false),
-        ];
-    },
-    checkValidateCode: () => {
-        return [
-            check('code', new ErrorModel(errorsConst.authErrors.codeRequired)).isInt(),
-            ...sharedMiddleware.checkId(),
-            check('decryptId', new ErrorModel(errorsConst.userErrors.idRequired)).isInt(),
-            check('code')
-                .custom((value, { req }) => codeValidators.validateCode({ code: value, userCode: req.body.decryptId }, req)),
-            check('validCode', new ErrorModel(errorsConst.authErrors.codeNotValid))
-                .custom((value) => value ? true : false)
-        ];
-    }
+
 }

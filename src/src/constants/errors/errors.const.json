@@ -637,18 +637,6 @@
       }
     }
   },
-  "codeSms":{
-    "queryErrors":{
-      "createError": {
-        "code": "CODD_001",
-        "message": "Something went wrong."
-      },
-      "deleteError": {
-        "code": "CODD_002",
-        "message": "Something went wrong."
-      }
-    }
-  },
   "roleErrors": {
     "typeSize": {
       "code": "ROLE001",
