@@ -13,8 +13,7 @@ const { sharedValidators } = require('../middleware/index.validators.middleware'
 const router = Router();
 
 router.post('/login', [
-    authMiddleware.checkLogin(),
-    sharedValidators.validateErrorFields
+    // TODO: Implement login check validation
 ], authController.login);
 
 router.post('/validateEmail', [
