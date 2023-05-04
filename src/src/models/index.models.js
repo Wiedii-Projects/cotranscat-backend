@@ -23,16 +23,16 @@ const Route = require("./route/route.model");
 // Relationships BD
 
 // Relationship User-Admin
-Admin.belongsTo(User, { foreignKey: { name: 'id', allowNull: false, primaryKey: true } });
-User.hasOne(Admin, { foreignKey: { name: 'id', allowNull: false, primaryKey: true } });
+Admin.belongsTo(User, { as: 'UserAdmin', foreignKey: { name: 'id', allowNull: false, primaryKey: true } });
+User.hasOne(Admin, { as: 'UserAdmin', foreignKey: { name: 'id', allowNull: false, primaryKey: true } });
 
 // Relationship User-Client
 Client.belongsTo(User, { as: 'UserClient', foreignKey: { name: 'id', allowNull: false, primaryKey: true } });
 User.hasOne(Client, { as: 'UserClient', foreignKey: { name: 'id', allowNull: false, primaryKey: true } });
 
 // Relationship User-Driver
-Driver.belongsTo(User, { foreignKey: { name: 'id', allowNull: false, primaryKey: true } });
-User.hasOne(Driver, { foreignKey: { name: 'id', allowNull: false, primaryKey: true } });
+Driver.belongsTo(User, { as: 'UserDriver', foreignKey: { name: 'id', allowNull: false, primaryKey: true } });
+User.hasOne(Driver, { as: 'UserDriver', foreignKey: { name: 'id', allowNull: false, primaryKey: true } });
 
 // Relationship Vehicle-DriverVehicle
 Vehicle.hasMany(DriverVehicle, { as: 'Vehicle', foreignKey: { name: 'idVehicle', allowNull: false, primaryKey: true } });
@@ -55,8 +55,8 @@ Client.belongsTo(Municipality, { as: 'ClientMunicipality', foreignKey: { name: "
 Municipality.hasMany(Client, { as: 'ClientMunicipality', foreignKey: { name: "idMunicipality", allowNull: true } });
 
 // Relationship User-Seller
-Seller.belongsTo(User, { foreignKey: { name: 'id', allowNull: false, primaryKey: true } });
-User.hasOne(Seller, { foreignKey: { name: 'id', allowNull: false, primaryKey: true } });
+Seller.belongsTo(User, { as: 'UserSeller', foreignKey: { name: 'id', allowNull: false, primaryKey: true } });
+User.hasOne(Seller, { as: 'UserSeller', foreignKey: { name: 'id', allowNull: false, primaryKey: true } });
 
 // Relationship User-Role
 User.belongsTo(Role, { as: 'UserRole', foreignKey: { name: "idRole", allowNull: false } });
@@ -71,8 +71,8 @@ User.belongsTo(IndicativeNumber, { as: 'UserIndicativePhone', foreignKey: { name
 IndicativeNumber.hasMany(User, { as: 'UserIndicativePhone', foreignKey: { name: "idIndicativePhone", allowNull: false } });
 
 // Relationship User-Coordinator
-Coordinator.belongsTo(User, { foreignKey: { name: 'id', allowNull: false, primaryKey: true } });
-User.hasOne(Coordinator, { foreignKey: { name: 'id', allowNull: false, primaryKey: true } });
+Coordinator.belongsTo(User, { as: 'UserCoordinator', foreignKey: { name: 'id', allowNull: false, primaryKey: true } });
+User.hasOne(Coordinator, { as: 'UserCoordinator', foreignKey: { name: 'id', allowNull: false, primaryKey: true } });
 
 // Relationship User-Seller
 Seller.belongsTo(User, { foreignKey: { name: 'id', allowNull: false, primaryKey: true } });

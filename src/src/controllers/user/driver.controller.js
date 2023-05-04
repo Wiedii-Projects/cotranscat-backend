@@ -48,7 +48,7 @@ module.exports = {
 
   getAllDrivers: async (req, res) => {
     try {
-      const drivers = await driverQuery.findDrivers();
+      const drivers = await driverQuery.findDriverQuery();
       return responseHelpers.responseSuccess(res, drivers);
     } catch (error) {
       return responseHelpers.responseError(res, 500, error);

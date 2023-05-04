@@ -156,6 +156,10 @@
       "code": "US0017",
       "message": "The address is required."
     },
+    "emailOrNickNameAlreadyExist": {
+      "code": "US0018",
+      "message": "The nickName or email already exist"
+    },
     "queryErrors": {
       "findAllError": {
         "code": "USRL_001",
