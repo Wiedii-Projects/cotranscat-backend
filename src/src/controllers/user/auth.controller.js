@@ -14,12 +14,18 @@ const { codeSMSQuery, userQuery } = require("../../models/index.queries");
 
 module.exports = {
   login: async (req, res) => {
-    const { user } = req.body;
-
     try {
-      delete user.password;
-      const token = await authHelpers.generateJWTHelper(user.id);
-      return responseHelpers.responseSuccess(res, { ...user, token });
+      // TODO: Implement work flow login
+      // delete user.password;
+      const token = await authHelpers.generateJWTHelper(
+        "b663b33970219efab378dcfc92167144"
+      );
+      return responseHelpers.responseSuccess(res, {
+        token: token,
+        role: {
+          name: 0,
+        },
+      });
     } catch (error) {
       return responseHelpers.responseError(res, 500, error);
     }
@@ -39,5 +45,5 @@ module.exports = {
     } catch (error) {
       return responseHelpers.responseError(res, 500, error);
     }
-  }
+  },
 };
