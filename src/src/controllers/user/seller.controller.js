@@ -19,7 +19,7 @@ const roleModelConst = require("../../constants/model/role.model.const");
 module.exports = {
   createSeller: async (req, res) => {
     const extractUser = userHelpers.extractUserDataHelper(req.body);
-    const { password, ...seller } = userHelpers.extractSellerDataHelper(
+    const extractSeller = userHelpers.extractSellerDataHelper(
       req.body
     );
     let transaction;
@@ -43,10 +43,7 @@ module.exports = {
         );
         await sellerQuery.createSellerQuery(
           {
-            ...seller,
-            password: await authHelpers.encryptPasswordHelper(
-              password
-            ),
+            ...extractSeller,
             id: user.id,
           },
           transaction

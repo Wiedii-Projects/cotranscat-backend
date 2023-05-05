@@ -5,7 +5,6 @@ const { errorsConst } = require("../../constants/index.constants");
 const {
   authHelpers,
   responseHelpers,
-  codeSmsHelpers,
   sharedHelpers,
 } = require("../../helpers/index.helpers");
 
@@ -39,8 +38,7 @@ module.exports = {
 
     try {
       const id = sharedHelpers.decryptIdDataBase(user.id);
-      const passwordEncrypt = await authHelpers.encryptPasswordHelper(password);
-      await userQuery.updateUserQuery({ id }, { password: passwordEncrypt });
+      await userQuery.updateUserQuery({ id }, { password });
       return responseHelpers.responseSuccess(res, null);
     } catch (error) {
       return responseHelpers.responseError(res, 500, error);

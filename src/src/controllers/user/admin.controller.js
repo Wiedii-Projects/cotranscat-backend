@@ -1,10 +1,10 @@
 // Helpers
 const {
-    responseHelpers,
-    userHelpers,
-    sharedHelpers,
-    authHelpers
-  } = require("../../helpers/index.helpers");
+  responseHelpers,
+  userHelpers,
+  sharedHelpers,
+  authHelpers,
+} = require("../../helpers/index.helpers");
 
 // Models - Queries
 const {
@@ -19,12 +19,11 @@ const roleModelConst = require("../../constants/model/role.model.const");
 module.exports = {
   createAdmin: async (req, res) => {
     const extractUser = userHelpers.extractUserDataHelper(req.body);
-    const { password, ...extractAdmin } =
-    userHelpers.extractAdminDataHelper(req.body);
+    const extractAdmin = userHelpers.extractAdminDataHelper(req.body);
     let transaction;
     try {
       const [{ id: role }] = await roleQuery.findRoleTypeQuery({
-        where: { type: roleModelConst.ADMIN_ROLE }
+        where: { type: roleModelConst.ADMIN_ROLE },
       });
       const idRole = sharedHelpers.decryptIdDataBase(role);
       const [userAlreadyExists] = await userQuery.findUserQuery({
@@ -43,9 +42,6 @@ module.exports = {
         await adminQuery.createAdminQuery(
           {
             ...extractAdmin,
-            password: await authHelpers.encryptPasswordHelper(
-              password
-            ),
             id: user.id,
           },
           transaction
