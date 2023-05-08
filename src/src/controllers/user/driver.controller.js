@@ -24,13 +24,11 @@ const roleModelConst = require("../../constants/model/role.model.const");
 module.exports = {
   createDriver: async (req, res) => {
     const extractUser = userHelpers.extractUserDataHelper(req.body);
-    const { password, ...driverData } = userHelpers.extractDriverDataHelper(
-      req.body
-    );
+    const extractDriver = userHelpers.extractDriverDataHelper(req.body);
     let transaction;
     try {
       const [{ id: role }] = await roleQuery.findRoleTypeQuery({
-        where: { type: roleModelConst.DRIVER_ROLE }
+        where: { type: roleModelConst.DRIVER_ROLE },
       });
       const idRole = sharedHelpers.decryptIdDataBase(role);
       const [userAlreadyExists] = await userQuery.findUserQuery({
@@ -49,8 +47,7 @@ module.exports = {
         await driverQuery.createDriver(
           {
             id: user.id,
-            password: await authHelpers.encryptPasswordHelper(password),
-            ...driverData,
+            ...extractDriver,
           },
           transaction
         );
@@ -91,16 +88,7 @@ module.exports = {
 
       await Promise.all([
         userQuery.updateUserQuery({ id }, userData, transaction),
-        driverQuery.updateDriver(
-          {
-            ...driverData,
-            password: password
-              ? await authHelpers.encryptPasswordHelper(password)
-              : undefined,
-          },
-          { id },
-          transaction
-        ),
+        driverQuery.updateDriver(driverData, { id }, transaction),
       ]);
 
       await transaction.commit();
