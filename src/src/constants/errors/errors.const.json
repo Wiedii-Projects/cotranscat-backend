@@ -181,64 +181,64 @@
   },
   "documentTypeErrors":{
     "nameRequired": {
-      "code": "DTP0001",
+      "code": "DOCT001",
       "message": "The document type name is required"
     },
     "nameSize": {
-      "code": "DTP0002",
+      "code": "DOCT002",
       "message": "The document type name must be at least 2 characters long"
     },
     "queryErrors":{
       "createError": {
-        "code": "DCMTP_001",
+        "code": "DOCT_001",
         "message": "Something went wrong."
       },
       "updateError": {
-        "code": "DCMTP_002",
+        "code": "DOCT_002",
         "message": "Something went wrong."
       },
       "findAllError": {
-        "code": "DCMTP_003",
+        "code": "DOCT_003",
         "message": "Something went wrong."
       },
       "deleteError": {
-        "code": "DCMTP_004",
+        "code": "DOCT_004",
         "message": "Something went wrong."
       }
     }
   },
   "indicativeNumberErrors":{
     "numberRequired":{
-      "code": "INNU001",
+      "code": "INDN001",
       "message": "The code number is required"
     },
     "numberSize":{
-      "code": "INNU002",
+      "code": "INDN002",
       "message": "The code number must have a minimum length of 1 character and a maximum length of 10 character"
     },
     "countryRequired":{
-      "code": "INNU003",
+      "code": "INDN003",
       "message": "The country is required"
     },
     "countrySize":{
-      "code": "INNU004",
+      "code": "INDN004",
       "message": "The country must have a minimum length of 1 character and a maximum length of 50 characters"
     },
     "queryErrors": {
       "createError": {
-        "code": "INNU_001",
+        "code": "INDN_001",
         "message": "Something went wrong."
       },
       "updateError": {
-        "code": "INNU_002",
+        "code": "INDN_002",
         "message": "Something went wrong."
       },
       "findAllError": {
-        "code": "INNU_003",
+        "code": "INDN_003",
         "message": "Something went wrong."
       },
       "deleteError": {
-        "code": "INNU_004",
+        "code": "INDN_004",
         "message": "Something went wrong."
       }
     }
@@ -273,56 +273,56 @@
   },
   "municipalityErrors":{
     "nameRequired": {
-      "code": "MUNC001",
+      "code": "MUNI001",
       "message": "Municipality name is required"
     },
     "nameSize": {
-      "code": "MUNC002",
+      "code": "MUNI002",
       "message": "The municipality must have a minimum length of 1 character and a maximum length of 50 characters"
     },
     "queryErrors":{
       "createError": {
-        "code": "MUNC_001",
+        "code": "MUNI_001",
         "message": "Something went wrong."
       },
       "updateError": {
-        "code": "MUNC_002",
+        "code": "MUNI_002",
         "message": "Something went wrong."
       },
       "findAllError": {
-        "code": "MUNC_003",
+        "code": "MUNI_003",
         "message": "Something went wrong."
       },
       "deleteError": {
-        "code": "MUNC_004",
+        "code": "MUNI_004",
         "message": "Something went wrong."
       }
     }
   },
   "paymentMethodErrors":{
     "nameRequired": {
-      "code": "PYMT001",
+      "code": "PAYM001",
       "message": "Payment method name is required"
     },
     "nameSize": {
-      "code": "PYMT003",
+      "code": "PAYM002",
       "message": "The Payment method name must have a minimum length of 1 character and a maximum length of 100 characters"
     },
     "queryErrors":{
       "createError": {
-        "code": "PYMT_001",
+        "code": "PAYM_001",
         "message": "Something went wrong."
       },
       "updateError": {
-        "code": "PYMT_002",
+        "code": "PAYM_002",
         "message": "Something went wrong."
       },
       "findAllError": {
-        "code": "PYMT_003",
+        "code": "PAYM_003",
         "message": "Something went wrong."
       },
       "deleteError": {
-        "code": "PYMT_004",
+        "code": "PAYM_004",
         "message": "Something went wrong."
       }
     }
@@ -357,40 +357,40 @@
   },
   "shippingTypeErrors":{
     "nameRequired": {
-      "code": "STYP001",
+      "code": "SHPT001",
       "message": "Shipping type name is required"
     },
     "nameSize": {
-      "code": "STYP003",
+      "code": "SHPT002",
       "message": "The Shipment Type name must have a minimum length of 1 character and a maximum length of 100 characters"
     },
     "queryErrors":{
       "createError": {
-        "code": "STYP_001",
+        "code": "SHPT_001",
         "message": "Something went wrong."
       },
       "updateError": {
-        "code": "STYP_002",
+        "code": "SHPT_002",
         "message": "Something went wrong."
       },
       "findAllError": {
-        "code": "STYP_003",
+        "code": "SHPT_003",
         "message": "Something went wrong."
       },
       "errorError": {
-        "code": "STYP_004",
+        "code": "SHPT_004",
         "message": "Something went wrong."
       }
     }
   },
-  "admin": {
+  "adminErrors": {
     "nickNameRequired": {
       "code": "ADMI001",
       "message": "Nick name is required"
     },
-    "lengthNickName": {
+    "nickNameSize": {
       "code": "ADMI002",
-      "message": "The admin name must have a minimum of 1 character and a maximum of 100 characters"
+      "message": "The administrator's name must have a minimum length of 1 character and a maximum length of 100 characters."
     },
     "emailRequired":{
       "code": "ADMI003",
@@ -400,13 +400,17 @@
       "code": "ADMI004",
       "message": "Email is invalid"
     },
-    "passwordRequired":{
+    "emailSize":{
       "code": "ADMI005",
+      "message": "The email must have a minimum length of 6 character and a maximum length of 100 characters"
+    },
+    "passwordRequired":{
+      "code": "ADMI006",
       "message": "Password is required"
     },
-    "passwordInvalid":{
-      "code": "ADMI006",
-      "message": "Password is invalid"
+    "passwordSize":{
+      "code": "ADMI007",
+      "message": "The password must have a minimum length of 6 character and a maximum length of 10 characters"
     },
     "queryErrors": {
       "createError": {
@@ -423,7 +427,7 @@
       }
     }
   },
-  "client": {
+  "clientErrors": {
     "numberPhoneWhatsappRequired": {
       "code": "CLIEN001",
       "message": "Number phone whatsapp is required"
@@ -601,68 +605,68 @@
   },
   "vehicleErrors": {
     "plateRequired": {
-      "code": "VHC001",
+      "code": "VEHI001",
       "message": "The license plate number of the vehicle is required"
     },
     "plateSize": {
-      "code": "VHC002",
+      "code": "VEHI002",
       "message": "The vehicle license plate entered must have a minimum length of 4 characters and a maximum length of 6 characters"
     },
     "plateAlreadyExists": {
-      "code": "VHC003",
+      "code": "VEHI003",
       "message": "The plate already exists"
     },
     "municipalityRequired": {
-      "code": "VHC004",
+      "code": "VEHI004",
       "message": "The municipality is required"
     },
     "municipalityDoesNotExist": {
-      "code": "VHC005",
+      "code": "VEHI005",
       "message": "The municipality does not exist"
     },
     "markRequired": {
-      "code": "VHC006",
+      "code": "VEHI006",
       "message": "The vehicle brand is invalid"
     },
     "modelRequired": {
-      "code": "VHC007",
+      "code": "VEHI007",
       "message": "Vehicle model is required"
     },
     "priceRequired": {
-      "code": "VHC008",
+      "code": "VEHI008",
       "message": "The default fare is required"
     },
     "priceInvalid": {
-      "code": "VHC009",
+      "code": "VEHI009",
       "message": "The price entered is invalid"
     },
     "seatingMatrixRequired": {
-      "code": "VHC010",
+      "code": "VEHI010",
       "message": "Vehicle seating matrix is required"
     },
     "heightInvalid": {
-      "code": "VHC011",
+      "code": "VEHI011",
       "message": "Vehicle height is invalid"
     },
     "widthInvalid": {
-      "code": "VHC012",
+      "code": "VEHI012",
       "message": "Vehicle width is invalid"
     },
     "vehicleDoesNotExist": {
-      "code": "VHC013",
-      "message": "the vehicle does not exist"
+      "code": "VEHI013",
+      "message": "The vehicle does not exist"
     },
     "queryErrors": {
       "createdError": {
-        "code": "VHCL_001",
+        "code": "VEHI_001",
         "message": "Something went wrong."
       },
       "findError": {
-        "code": "VHCL_002",
+        "code": "VEHI_002",
         "message": "Something went wrong."
       },
       "deleteError": {
-        "code": "VHCL_003",
+        "code": "VEHI_003",
         "message": "Something went wrong."
       }
     }
@@ -750,7 +754,7 @@
     },
     "driverNotExist":{
       "code": "TRVL003",
-      "message": "driver does not exist"
+      "message": "Driver does not exist"
     },
     "idVehicleRequired": {
       "code": "TRVL004",
@@ -829,7 +833,7 @@
       "message": "The municipality of arrival is required."
     },
     "municipalityArriveDoesNotExist":{
-      "code": "ROUT003",
+      "code": "ROUT005",
       "message": "The municipality of arrival does not exist"
     },
     "queryErrors": {
