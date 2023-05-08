@@ -1,6 +1,3 @@
-const { encryptPasswordHelper } = require("../../../helpers/auth.helpers");
-
-
 module.exports = {
     defaultDocumentType: [ 
         { 
@@ -52,7 +49,8 @@ module.exports = {
     },
     defaultAdmin: {
             email: 'admi@admin.co',
-            nickName: 'userAdmin'
+            nickName: 'userAdmin',
+            password: process.env.PASSWORD_ADMIN_ROOT
     },
     defaultDepartment : [
         { name: 'Amazonas' },

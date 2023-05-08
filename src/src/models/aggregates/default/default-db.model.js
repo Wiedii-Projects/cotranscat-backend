@@ -26,9 +26,6 @@ const Municipality = require('../../municipality/municipality.model');
 const UnitMeasure = require('../../unit-measure/unit-measure.model');
 const ShippingType = require('../../shipping-type/shipping-type.model');
 
-//Helpers
-const { encryptPasswordHelper } = require('../../../helpers/auth.helpers');
-
 class defaultDataBaseModel {
     constructor() {
         this.createDefaultDataBase();
@@ -137,13 +134,11 @@ class defaultDataBaseModel {
         const idDocumentType = await this.getDocumentType();
         const idDepartment = await this.getDepartment();
         const idPaymentMethod = await this.getPaymentMethod();
-        const idMunicipality = await this.getMunicipality();
         const idUnitMeasure = await this.getUnitMeasure();
         const idShippingType = await this.getShippingType();
         const userCreate = await this.countUser();
         
         if( !userCreate ){
-            const password = await encryptPasswordHelper(process.env.PASSWORD_ADMIN_ROOT);
             const user = await User.create( 
                 { 
                     ...defaultUser, 
@@ -158,8 +153,7 @@ class defaultDataBaseModel {
                 await Admin.create(
                     {
                         ...defaultAdmin,
-                        id: user.id,
-                        password
+                        id: user.id
                     }
                 );
         };

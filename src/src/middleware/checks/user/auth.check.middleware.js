@@ -20,52 +20,7 @@ const {
 
 module.exports = {
   checkLogin: () => {
-    return [
-      check(
-        "email",
-        new ErrorModel(errorsConst.authErrors.emailRequired)
-      ).isEmail(),
-      check(
-        "password",
-        new ErrorModel(errorsConst.authErrors.passwordRequired)
-      ).isString(),
-      check("password").custom((value, { req }) =>
-        userValidators.validatePasswordRules(value, req)
-      ),
-      check(
-        "isValidPassword",
-        new ErrorModel(errorsConst.authErrors.validatePassword)
-      ).custom((value) => (value ? true : false)),
-      sharedValidators.validateErrorFields,
-      check("email").custom((value, { req }) =>
-        userValidators.validateGetUser(
-          {
-            where: { email: value, state: true },
-            attributes: [
-              "id",
-              "name",
-              "lastName",
-              "email",
-              "phoneNumber",
-              "state",
-              "img",
-              "password",
-            ],
-          },
-          req
-        )
-      ),
-      check("user", new ErrorModel(errorsConst.userErrors.userNotExist)).custom(
-        (value) => (value ? true : false)
-      ),
-      check("password").custom((value, { req }) =>
-        authValidators.validatePassword(value, req.body.user.password, req)
-      ),
-      check(
-        "validPassword",
-        new ErrorModel(errorsConst.authErrors.incorrectCredentials)
-      ).custom((value) => (value ? true : false)),
-    ];
+    return [];
   },
   checkValidateEmail: () => {
     return [
