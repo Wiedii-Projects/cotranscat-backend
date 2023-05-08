@@ -1,6 +1,7 @@
 // DB Connections
 const {
   dbConnectionOptions,
+  saltBcrypt
 } = require("../../constants/core/core-configurations.const");
 
 // Libraries
@@ -28,8 +29,7 @@ const AdminSchema = dbConnectionOptions.define(
       allowNull: false,
       set(value) {
         // Hash to automatically store encrypted passwords in the database
-        const salt = bcryptjs.genSaltSync();
-        this.setDataValue("password", bcryptjs.hashSync(value, salt));
+        this.setDataValue("password", bcryptjs.hashSync(value, saltBcrypt));
       },
     },
   },
