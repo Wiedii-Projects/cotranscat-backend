@@ -676,6 +676,10 @@
     }
   },
   "seatRuler":{
+    "vehicleHasNoAssignedSeats": {
+      "code": "STRL001",
+      "message": "The selected vehicle has no assigned seats"
+    },
     "queryErrors": {
       "createdError": {
         "code": "STRL_001",
@@ -847,6 +851,14 @@
       },
       "findAllError": {
         "code": "ROUT_002",
+        "message": "Something went wrong."
+      }
+    }
+  },
+  "seatErrors":{
+    "queryErrors": {
+      "createError": {
+        "code": "SSTT_001",
         "message": "Something went wrong."
       }
     }

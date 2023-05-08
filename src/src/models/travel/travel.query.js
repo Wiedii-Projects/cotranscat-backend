@@ -8,7 +8,8 @@ const { Travel, DriverVehicle, Driver, Vehicle } = require('../index.models');
 module.exports = {
     createTravel: async (where, transaction) => {
         try {
-            return await Travel.findOrCreate({ where, transaction })
+            const [travel, isCreated] = await Travel.findOrCreate({ where, transaction })
+            return [travel.get(), isCreated]
         } catch {
             throw errorsConst.travelErrors.queryErrors.createError;
         }
