@@ -15,7 +15,9 @@ router.post('/', [
 
 router.get('/', adminController.getAllAdmin);
 
-router.get('/:id', [sharedMiddleware.checkId()], adminController.getAdmin);
+router.get('/:id', [
+    sharedMiddleware.checkId()
+], adminController.getAdmin);
 
 router.put('/:id', [
     adminMiddleware.checkUpdateAdmin(),

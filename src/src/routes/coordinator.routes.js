@@ -15,7 +15,9 @@ router.post('/', [
 
 router.get('/',coordinatorController.getAllCoordinator);
 
-router.get('/:id',[sharedMiddleware.checkId()],coordinatorController.getCoordinator);
+router.get('/:id',[
+    sharedMiddleware.checkId()
+],coordinatorController.getCoordinator);
 
 router.put('/:id', [
     coordinatorMiddleware.checkUpdateCoordinator(),

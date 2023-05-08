@@ -20,7 +20,7 @@ module.exports = {
         transaction,
       });
     } catch {
-      throw errorsConst.admin.queryErrors.createError;
+      throw errorsConst.adminErrors.queryErrors.createError;
     }
   },
 
@@ -82,7 +82,7 @@ module.exports = {
         )
       );
     } catch {
-      throw errorsConst.admin.queryErrors.findError;
+      throw errorsConst.adminErrors.queryErrors.findError;
     }
   },
 
@@ -90,7 +90,7 @@ module.exports = {
     try {
       return await Admin.update(update, { where });
     } catch {
-      throw errorsConst.admin.queryErrors.updateError;
+      throw errorsConst.adminErrors.queryErrors.updateError;
     }
   },
 };

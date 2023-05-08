@@ -8,7 +8,6 @@ const { Router } = require("express");
 const { authMiddleware } = require('./../middleware/index.checks.middleware')
 
 // Validators - middleware
-const { sharedValidators } = require('../middleware/index.validators.middleware')
 
 const router = Router();
 
@@ -17,13 +16,11 @@ router.post('/login', [
 ], authController.login);
 
 router.post('/validateEmail', [
-    authMiddleware.checkValidateEmail(),
-    sharedValidators.validateErrorFields
+    authMiddleware.checkValidateEmail()
 ], authController.validateEmail);
 
 router.post('/changePassword', [
-    authMiddleware.checkChangePassword(),
-    sharedValidators.validateErrorFields
+    authMiddleware.checkChangePassword()
 ], authController.changePassword);
 
 module.exports = router;

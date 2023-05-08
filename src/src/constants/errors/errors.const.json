@@ -477,49 +477,49 @@
   },
   "driverErrors":{
     "nickNameRequired": {
-      "code": "DRV001",
+      "code": "DRIV001",
       "message": "Nick name is required"
     },
     "emailRequired":{
-      "code": "DRV002",
+      "code": "DRIV002",
       "message": "Email is required"
     },
     "passwordRequired":{
-      "code": "DRV003",
+      "code": "DRIV003",
       "message": "Password is required"
     },
     "lengthNickName": {
-      "code": "DRV004",
+      "code": "DRIV004",
       "message": "The nickName must have a minimum length of 1 character and a maximum length of 100 characters"
     },
     "emailInvalid":{
-      "code": "DRV005",
+      "code": "DRIV005",
       "message": "Email is invalid"
     },
     "lengthPassword":{
-      "code": "DRV006",
+      "code": "DRIV006",
       "message": "The password must have a minimum length of 6 characters and a maximum length of 10 characters"
     },
     "driverNotExist":{
-      "code": "DRV007",
+      "code": "DRIV007",
       "message": "driver does not exist"
     },
     "queryErrors": {
       "create": {
-        "code": "DRVR_001",
+        "code": "DRIV_001",
         "message": "Something went wrong"
       },
       "findError": {
-        "code": "DRVR_002",
+        "code": "DRIV_002",
         "message": "Something went wrong"
       },
       "updateError": {
-        "code": "DRVR_003",
+        "code": "DRIV_003",
         "message": "Something went wrong"
       }
     }
   },
-  "coordinator":{
+  "coordinatorErrors":{
     "nickNameRequired": {
       "code": "COOR001",
       "message": "Nick name is required"

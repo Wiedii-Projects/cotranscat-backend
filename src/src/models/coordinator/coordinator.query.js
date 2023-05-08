@@ -20,7 +20,7 @@ module.exports = {
         transaction,
       });
     } catch {
-      throw errorsConst.coordinator.queryErrors.createError;
+      throw errorsConst.coordinatorErrors.queryErrors.createError;
     }
   },
   findCoordinatorQuery: async (where) => {
@@ -81,14 +81,14 @@ module.exports = {
       )
     );
     } catch {
-      throw errorsConst.coordinator.queryErrors.findError;
+      throw errorsConst.coordinatorErrors.queryErrors.findError;
     }
   },
   updateCoordinatorQuery: async (where, update) => {
     try {
       return await Coordinator.update(update, { where });
     } catch {
-      throw errorsConst.coordinator.queryErrors.updateError;
+      throw errorsConst.coordinatorErrors.queryErrors.updateError;
     }
   },
 };
