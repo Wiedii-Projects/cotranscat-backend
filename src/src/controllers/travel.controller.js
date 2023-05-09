@@ -1,3 +1,6 @@
+// Constants
+const { errorsConst } = require('../constants/index.constants');
+
 // DB Connections
 const { dbConnectionOptions } = require('../constants/core/core-configurations.const');
 
@@ -5,23 +8,34 @@ const { dbConnectionOptions } = require('../constants/core/core-configurations.c
 const { responseHelpers } = require('../helpers/index.helpers');
 
 // Models - Queries
-const { travelQuery, driverVehicleQuery, driverQuery } = require('../models/index.queries');
+const { travelQuery, driverVehicleQuery, seatRulerQuery, seatQuery } = require('../models/index.queries');
 
 
 module.exports = {
     createTravel: async (req, res) => {
-        const { idDriver, idVehicle, date, time, idRoute } = req.body;
+        const { idDriver, idVehicle, date, time, idRoute, vehicle } = req.body;
         let transaction;
         try {
             transaction = await dbConnectionOptions.transaction();
             const [driverVehicle] = await driverVehicleQuery.createDriverVehicle({ idDriver, idVehicle }, transaction)
             
-            await travelQuery.createTravel({
-                idDriverVehicle: driverVehicle.id,
-                date,
-                time,
-                idRoute
+            const [travel] = await travelQuery.createTravel({
+                idDriverVehicle: driverVehicle.id, date, time, idRoute
             }, transaction);
+
+            const vehicleSeatRules = await seatRulerQuery.getSeatRulers({ where: { idVehicle: idVehicle } });
+
+            if (vehicleSeatRules.length === 0) throw errorsConst.seatRuler.vehicleHasNoAssignedSeats
+
+            for (let indexSeatRule = 0; indexSeatRule < vehicleSeatRules.length; indexSeatRule++) {
+                const seatRule = vehicleSeatRules[indexSeatRule];
+                await seatQuery.createSeat({
+                    idTravel: travel.id,
+                    column: seatRule.column,
+                    row: seatRule.row,
+                    price: vehicle.price
+                }, transaction)
+            }
 
             await transaction.commit();
             return responseHelpers.responseSuccess(res, null);

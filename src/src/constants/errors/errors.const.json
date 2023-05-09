@@ -300,6 +300,14 @@
       "code": "MUNC002",
       "message": "The municipality must have a minimum length of 1 character and a maximum length of 50 characters"
     },
+    "departmentRequired":{
+      "code": "MUNC003",
+      "message": "Department is required"
+    },
+    "departmentAlreadyExist": {
+      "code": "MUNC004",
+      "message": "The department already exist"
+    },
     "queryErrors":{
       "createError": {
         "code": "MUNC_001",
@@ -688,6 +696,10 @@
     }
   },
   "seatRuler":{
+    "vehicleHasNoAssignedSeats": {
+      "code": "STRL001",
+      "message": "The selected vehicle has no assigned seats"
+    },
     "queryErrors": {
       "createdError": {
         "code": "STRL_001",
@@ -859,6 +871,14 @@
       },
       "findAllError": {
         "code": "ROUT_002",
+        "message": "Something went wrong."
+      }
+    }
+  },
+  "seatErrors":{
+    "queryErrors": {
+      "createError": {
+        "code": "SSTT_001",
         "message": "Something went wrong."
       }
     }

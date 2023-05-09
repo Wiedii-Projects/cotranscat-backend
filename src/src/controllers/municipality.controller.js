@@ -16,11 +16,13 @@ module.exports = {
         }
     },
 
-    getAllMunicipality: async (req, res) => {
+    getMunicipality: async (req, res) => {
+        const { idDepartment } = req.body;
+        const where = idDepartment ? { idDepartment } : undefined
         try {
-            const resp = await municipalityQuery.findMunicipalityQuery()
+            const resp = await municipalityQuery.findMunicipalityQuery({where})
             return responseHelpers.responseSuccess(res, resp);
-        } catch (error) {
+        } catch {
             return responseHelpers.responseError(res, 500, error);
         }
     },

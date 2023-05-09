@@ -1,3 +1,6 @@
+// Constants
+const { errorsConst } = require("../constants/index.constants");
+
 // DB Connections
 const { dbConnectionOptions } = require("../constants/core/core-configurations.const");
 
@@ -44,6 +47,8 @@ module.exports = {
         const [{ id }, { vehicle }] = [req.params, req.body]
         try {
             const vehicleSeatRules = await seatRulerQuery.getSeatRulers({ where: { idVehicle: decryptIdDataBase(id) } });
+            
+            if (vehicleSeatRules.length === 0) throw errorsConst.seatRuler.vehicleHasNoAssignedSeats
 
             const { width, height, price,...vehicleData } = vehicle
             const seatMap = new Array(height);
