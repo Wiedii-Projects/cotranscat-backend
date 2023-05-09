@@ -10,7 +10,7 @@ const { authMiddleware } = require('./../middleware/index.checks.middleware')
 const router = Router();
 
 router.post('/login', [
-    // TODO: Implement login check validation
+    authMiddleware.checkLogin()
 ], authController.login);
 
 router.post('/validateEmail', [

@@ -1,5 +1,5 @@
 // Constants
-const { errorsConst, roleConst } = require("../../constants/index.constants");
+const { errorsConst } = require("../../constants/index.constants");
 
 // Libraries
 const { check } = require("express-validator");
@@ -56,9 +56,21 @@ module.exports = {
   },
   checkEmailOrNickNameExist: () => {
     return [
-      check("nickName").custom((value, { req }) =>
-        sharedValidators.userLoginAlreadyExist(value, req.body.email)
-      ),
+      check("nickName", new ErrorModel(errorsConst.userErrors.emailOrNickNameAlreadyExist))
+        .custom((value, { req }) =>
+          sharedValidators.emailOrNickNameExist(value, req.body.email, req)
+        )
+        .custom((_, { req }) => !req.body.user),
+      sharedValidators.validateError,
+    ];
+  },
+  checkUserLogin: () => {
+    return [
+      check("nickName", new ErrorModel(errorsConst.authErrors.userNotExist))
+        .custom((value, { req }) =>
+          sharedValidators.emailOrNickNameExist(value, req.body.email, req)
+        )
+        .custom((_, { req }) => !!req.body.user),
       sharedValidators.validateError,
     ];
   },
