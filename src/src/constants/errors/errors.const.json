@@ -44,6 +44,26 @@
       "code": "AU0011",
       "message": "Token invalid"
     },
+    "nickNameRequired": {
+      "code": "AU0012",
+      "message": "The nickName is required"
+    },
+    "nickNameSize": {
+      "code": "AU0012",
+      "message": "The nickName must have a maximum of 100 characters"
+    },
+    "emailOrNickNameRequired": {
+      "code": "AU0013",
+      "message": "Email or nickName is required"
+    },
+    "passwordCharacter": {
+      "code": "AU0014",
+      "message": "the password must have a minimum of 8 character and a maximum of 30 characters."
+    },
+    "passwordIncorrect": {
+      "code": "AU0006",
+      "message": "Incorrect password."
+    },
     "queryErrors": {
       "generateJWTError": {
         "code": "AUTH_001",

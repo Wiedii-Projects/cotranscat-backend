@@ -10,7 +10,6 @@ const { userQuery } = require('./../../models/index.queries');
 
 //Helpers
 const { sharedHelpers } = require('../../helpers/index.helpers');
-
 module.exports = {
     validateJWT: async (value, req) => {
 
@@ -29,7 +28,7 @@ module.exports = {
             req.body.isValidToken = false;
         }
     },
-    validatePassword: async (value, password, req) => {
-        req.body.validPassword = await bcryptjs.compareSync(value, password);
+    validatePassword: async(value, password, req) => {
+        req.body.passwordCompare = await bcryptjs.compareSync(value, password);
     }
 }

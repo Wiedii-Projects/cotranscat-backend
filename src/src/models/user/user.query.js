@@ -54,7 +54,35 @@ module.exports = {
         order,
         limit,
         offset,
-      });
+      }).then((users) =>
+        users.map(
+          ({
+            id,
+            UserDriver,
+            UserAdmin,
+            UserCoordinator,
+            UserSeller,
+            UserRole,
+            UserDocumentType,
+            UserIndicativePhone,
+            ...user
+          }) => ({
+            id: encryptIdDataBase(id),
+            role: {
+              id: encryptIdDataBase(UserRole.id),
+            },
+            documentType: {
+              ...UserDocumentType,
+              id: encryptIdDataBase(UserDocumentType.id),
+            },
+            indicativeNumber: {
+              ...UserIndicativePhone,
+              id: encryptIdDataBase(UserIndicativePhone.id),
+            },
+            ...user,
+          })
+        )
+      );
     } catch {
       throw errorsConst.userErrors.queryErrors.findAllError;
     }
