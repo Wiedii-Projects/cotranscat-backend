@@ -8,8 +8,7 @@ module.exports = {
     createSeat: async (data, transaction) => {
         try {
             return await Seat.create(data, {transaction})
-        } catch (err) {
-            console.log(err)
+        } catch {
             throw errorsConst.seatErrors.queryErrors.createError;
         }
     },
