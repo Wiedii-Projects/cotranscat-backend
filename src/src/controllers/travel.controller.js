@@ -130,7 +130,7 @@ module.exports = {
                 const travel = travelFoundDataCleaned[indexTravelFound];
 
                 const responseSeat = await seatQuery.findSeat({
-                    where: { idTravel: travel.id, state: 0 },
+                    where: { idTravel: sharedHelpers.decryptIdDataBase(travel.id), state: 0 },
                     include: []
                 })
 
