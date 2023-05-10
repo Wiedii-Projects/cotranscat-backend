@@ -824,6 +824,14 @@
       "code": "TRVL013",
       "message": "The travel does not exist"
     },
+    "dateRequired": {
+      "code": "TRVL004",
+      "message": "The date is required"
+    },
+    "hourRequired": {
+      "code": "TRVL004",
+      "message": "The hour is required"
+    },
     "queryErrors":{
       "createError":{
         "code": "TRVL_001",

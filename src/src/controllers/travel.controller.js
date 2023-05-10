@@ -113,6 +113,7 @@ module.exports = {
                     })
                 return responseHelpers.responseSuccess(res, vehiclesAvailable);
             }
+            return responseHelpers.responseSuccess(res, []);
         } catch (error) {
             return responseHelpers.responseError(res, 500, error);
         }
