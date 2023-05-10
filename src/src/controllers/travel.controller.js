@@ -5,7 +5,7 @@ const { errorsConst } = require('../constants/index.constants');
 const { dbConnectionOptions } = require('../constants/core/core-configurations.const');
 
 // Helpers
-const { responseHelpers } = require('../helpers/index.helpers');
+const { responseHelpers, sharedHelpers } = require('../helpers/index.helpers');
 
 // Models - Queries
 const { travelQuery, driverVehicleQuery, seatRulerQuery, seatQuery } = require('../models/index.queries');
@@ -75,6 +75,44 @@ module.exports = {
         try {
             await travelQuery.deleteTravel({id});
             return responseHelpers.responseSuccess(res, null);
+        } catch (error) {
+            return responseHelpers.responseError(res, 500, error);
+        }
+    },
+    getVehiclesAvailableToTravel: async (req, res) => {
+        const { date, time } = req.body;
+        try {
+
+            let vehiclesAvailable = []
+            const travelFound = await travelQuery.findTravels({ date, time, idRoute: 1 });
+
+            for (let indexTravelFound = 0; indexTravelFound < travelFound.length; indexTravelFound++) {
+                const travel = travelFound[indexTravelFound];
+
+                const responseSeat = await seatQuery.findSeat({
+                    where: { idTravel: sharedHelpers.decryptIdDataBase(travel.id), state: 0 },
+                    include: []
+                })
+
+                const cleanSeatAvailableDataResponse = responseSeat.map(({ id, ...seat }) => ({
+                    id: sharedHelpers.encryptIdDataBase(id),
+                    ...seat
+                }))
+                const { vehicle } = travel
+
+                vehiclesAvailable.push(
+                    {
+                        vehicle: {
+                            id: vehicle.id,
+                            plate: vehicle.plate,
+                            mark: vehicle.mark,
+                            model: vehicle.model
+                        },
+                        totalSeatsAvailable: cleanSeatAvailableDataResponse.length,
+                        travel: travel.id
+                    })
+                return responseHelpers.responseSuccess(res, vehiclesAvailable);
+            }
         } catch (error) {
             return responseHelpers.responseError(res, 500, error);
         }

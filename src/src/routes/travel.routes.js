@@ -10,6 +10,8 @@ const { Router } = require("express");
 
 const router = Router();
 
+router.get('/vehiclesAvailableToTravel', travelController.getVehiclesAvailableToTravel);
+
 router.post('/', [
     //TODO: implementation of role permission validation
     travelMiddleware.checkCreateTravel()
