@@ -115,20 +115,25 @@ module.exports = {
         try {
 
             let vehiclesAvailable = []
-            const travelFound = await travelQuery.findTravels({ date, time, idRoute: 1 });
+            const travelFound = await travelQuery.findTravels({ where: { date, time, idRoute: 1 } });
 
-            for (let indexTravelFound = 0; indexTravelFound < travelFound.length; indexTravelFound++) {
-                const travel = travelFound[indexTravelFound];
+            const travelFoundDataCleaned = travelFound.map(({ id, TravelDriverVehicle: { Vehicle }, ...travel }) => ({
+                id: sharedHelpers.encryptIdDataBase(id),
+                ...travel,
+                vehicle: {
+                    ...Vehicle,
+                    id: sharedHelpers.encryptIdDataBase(Vehicle.id)
+                }
+            }))
+
+            for (let indexTravelFound = 0; indexTravelFound < travelFoundDataCleaned.length; indexTravelFound++) {
+                const travel = travelFoundDataCleaned[indexTravelFound];
 
                 const responseSeat = await seatQuery.findSeat({
-                    where: { idTravel: sharedHelpers.decryptIdDataBase(travel.id), state: 0 },
+                    where: { idTravel: travel.id, state: 0 },
                     include: []
                 })
 
-                const cleanSeatAvailableDataResponse = responseSeat.map(({ id, ...seat }) => ({
-                    id: sharedHelpers.encryptIdDataBase(id),
-                    ...seat
-                }))
                 const { vehicle } = travel
 
                 vehiclesAvailable.push(
@@ -139,7 +144,7 @@ module.exports = {
                             mark: vehicle.mark,
                             model: vehicle.model
                         },
-                        totalSeatsAvailable: cleanSeatAvailableDataResponse.length,
+                        totalSeatsAvailable: responseSeat.length,
                         travel: travel.id
                     })
                 return responseHelpers.responseSuccess(res, vehiclesAvailable);
