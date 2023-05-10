@@ -5,11 +5,10 @@ const { errorsConst } = require('../constants/index.constants');
 const { dbConnectionOptions } = require('../constants/core/core-configurations.const');
 
 // Helpers
-const { responseHelpers } = require('../helpers/index.helpers');
+const { responseHelpers, sharedHelpers } = require('../helpers/index.helpers');
 
 // Models - Queries
-const { travelQuery, driverVehicleQuery, seatRulerQuery, seatQuery } = require('../models/index.queries');
-
+const { travelQuery, driverVehicleQuery, seatRulerQuery, seatQuery, userQuery } = require('../models/index.queries');
 
 module.exports = {
     createTravel: async (req, res) => {
@@ -47,8 +46,40 @@ module.exports = {
     },
     getAllTravels: async(req, res) => {
         try {
-            const travels = await travelQuery.findTravels()
-            return responseHelpers.responseSuccess(res, travels);
+            const travels = await travelQuery.findTravels();
+            const travel = travels.map(({ id, TravelDriverVehicle: { Vehicle, Driver }, ...travel }) => ({
+                id: sharedHelpers.encryptIdDataBase(id),
+                ...travel,
+                driver: {
+                    ...Driver,
+                    id: sharedHelpers.encryptIdDataBase(Driver.id)
+                },
+                vehicle: {
+                    ...Vehicle,
+                    id: sharedHelpers.encryptIdDataBase(Vehicle.id)
+                }
+            }))
+            return responseHelpers.responseSuccess(res, travel);
+        } catch (error) {
+            return responseHelpers.responseError(res, 500, error);
+        }
+    },
+    getDriverVehicleTravel: async(req, res) => {
+    
+        const { travelExist: { driver: { id }, vehicle: { VehicleMunicipality, plate }}, } = req.body;
+
+        try {
+            const [{ name, lastName}] = await userQuery.findUserQuery({ where: { id } });
+            return responseHelpers.responseSuccess(res, {
+                driver: {
+                    name: name,
+                    lastName: lastName
+                },
+                vehicle: {
+                    plate: plate,
+                    municipality: VehicleMunicipality.name
+                }
+            });
         } catch (error) {
             return responseHelpers.responseError(res, 500, error);
         }
