@@ -892,10 +892,6 @@
       "findAllError": {
         "code": "SEAT_002",
         "message": "Something went wrong."
-      },
-      "findError": {
-        "code": "SEAT_003",
-        "message": "Something went wrong."
       }
     }
   }
