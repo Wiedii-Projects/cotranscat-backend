@@ -33,7 +33,8 @@ module.exports = {
                     idTravel: travel.id,
                     column: seatRule.column,
                     row: seatRule.row,
-                    price: vehicle.price
+                    price: vehicle.price,
+                    state: 0
                 }, transaction)
             }
 

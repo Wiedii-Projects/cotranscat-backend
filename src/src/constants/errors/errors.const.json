@@ -878,7 +878,11 @@
   "seatErrors":{
     "queryErrors": {
       "createError": {
-        "code": "SSTT_001",
+        "code": "SEAT_001",
+        "message": "Something went wrong."
+      },
+      "findAllError": {
+        "code": "SEAT_002",
         "message": "Something went wrong."
       }
     }
