@@ -58,6 +58,14 @@ module.exports = {
         sharedValidators.validateError,
     ],
 
+    checkGetDriverVehicleTravel: () => [
+        check('travel')
+            .isString().withMessage(new ErrorModel(errorsConst.travelErrors.idTravelInvalid)).bail()
+            .custom((value, {req}) => travelValidator.validateTravelDriverVehicle(sharedHelpers.decryptIdDataBase(value), req))
+            .custom((_, {req}) => !!req.body.travelExist).withMessage(new ErrorModel(errorsConst.travelErrors.travelDoesNotExist)),
+        sharedValidators.validateError,
+    ],
+
     checkTravelExist: () => [
         // TODO: validate role,
         check('decryptId', new ErrorModel(errorsConst.travelErrors.idTravelInvalid))
