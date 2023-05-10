@@ -24,6 +24,10 @@ router.get('/', [
     //TODO: implementation of role permission validation
 ], travelController.getAllTravels);
 
+router.get('/getDriverVehicleTravel', [
+    travelMiddleware.checkGetDriverVehicleTravel()
+], travelController.getDriverVehicleTravel);
+
 router.get('/:id', [
     //TODO: implementation of role permission validation
     sharedCheckMiddleware.checkId(),
