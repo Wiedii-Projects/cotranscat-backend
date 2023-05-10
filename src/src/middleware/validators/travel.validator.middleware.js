@@ -9,5 +9,14 @@ module.exports = {
         } catch (error) {
             req.body.travel = false;
         }
+    },
+    validateTravelId: async (id, req) => {
+        try {
+            const [travel] = await travelQuery.findTravels({ id });
+            req.body.travelExist = travel;
+            req.body.idTravel = id;
+        } catch {
+            req.body.travelExist = false;
+        }
     }
 }
