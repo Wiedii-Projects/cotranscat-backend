@@ -111,11 +111,11 @@ module.exports = {
         }
     },
     getVehiclesAvailableToTravel: async (req, res) => {
-        const { date, time } = req.body;
+        const { date, time, route } = req.body;
         try {
 
             let vehiclesAvailable = []
-            const travelFound = await travelQuery.findTravels({ where: { date, time, idRoute: 1 } });
+            const travelFound = await travelQuery.findTravels({ where: { date, time, idRoute: sharedHelpers.decryptIdDataBase(route.id) } });
 
             const travelFoundDataCleaned = travelFound.map(({ id, TravelDriverVehicle: { Vehicle }, ...travel }) => ({
                 id: sharedHelpers.encryptIdDataBase(id),
