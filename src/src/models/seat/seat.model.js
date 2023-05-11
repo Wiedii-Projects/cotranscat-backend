@@ -31,13 +31,7 @@ const SeatSchema = dbConnectionOptions.define(
     },
   },
   {
-    tableName: "seat",
-    indexes: [
-      {
-        unique: true,
-        fields: ["date", "time", "idDriverVehicle"],
-      },
-    ],
+    tableName: "seat"
   }
 );
 
