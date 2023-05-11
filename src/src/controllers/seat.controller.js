@@ -26,5 +26,13 @@ module.exports = {
     } catch (error){
       return responseHelpers.responseError(res, 500, error);
     }
+  },
+  changeStateNotAvailable: async (req, res) => {
+    try {
+      await seatQuery.updateSeat({ id: req.body.seatExist.id }, { state: 1 });
+      return responseHelpers.responseSuccess(res, null);
+    } catch (error) {
+      return responseHelpers.responseError(res, 500, error);
+    }
   }
 };

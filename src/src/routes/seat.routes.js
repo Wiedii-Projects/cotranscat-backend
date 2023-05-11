@@ -15,6 +15,10 @@ router.get('/', [
 
 router.post('/changeStateToStandBy', [
     seatMiddleware.checkChangeStateToStandBy()
-], seatController.changeStateToStandBy)
+], seatController.changeStateToStandBy);
+
+router.post('/changeStateNotAvailable', [
+    seatMiddleware.checkChangeStateNotAvailable()
+], seatController.changeStateNotAvailable);
 
 module.exports = router;
