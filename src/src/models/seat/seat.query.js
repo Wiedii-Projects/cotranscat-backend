@@ -21,23 +21,25 @@ module.exports = {
     },
     findSeat: async (query = {}) => {
         try {
-            const { 
-                where,
+            const {  
+                where, 
+                attributes = ['id', 'row', 'column', 'price', 'state'],
                 include = [
                     { 
                         model: Client, 
-                        as: 'SeatClient'
-                    },
+                        as: 'seatClient'
+                    }
                 ]
             } = query;
             return await Seat.findAll({
                 where,
+                attributes,
                 include,
                 raw: true,
                 nest: true
-            });
+            })
         } catch {
             throw errorsConst.seatErrors.queryErrors.findAllError;
         }
-    },
+    }
 }

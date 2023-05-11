@@ -117,5 +117,36 @@ module.exports = {
                 mode: 'withSeconds'
             }),
         sharedValidators.validateError,
+    ],
+    checkVehiclesAvailableToTravel: () => [
+        check('route')
+            .isString().withMessage(new ErrorModel(errorsConst.travelErrors.idRouteRequired)).bail()
+            .custom((id, { req }) => req.body.idRoute = sharedHelpers.decryptIdDataBase(id))
+            .withMessage(new ErrorModel(errorsConst.travelErrors.idRouteInvalid)),
+        sharedValidators.validateError,
+        check('idRoute', new ErrorModel(errorsConst.travelErrors.routeDoesNotExist))
+            .custom((id, { req }) => routeValidator.validateRoute(req, { where: { id } })),
+        sharedValidators.validateError,
+        check('route', new ErrorModel(errorsConst.travelErrors.routeDoesNotExist))
+            .custom((value) => !!value),
+        sharedValidators.validateError,
+        check('date')
+            .notEmpty()
+            .withMessage(new ErrorModel(errorsConst.travelErrors.dateRequired))
+            .bail(),
+        sharedValidators.validateError,
+        check('date')
+            .isDate()
+            .withMessage(new ErrorModel(errorsConst.travelErrors.invalidDate)),
+        check('time')
+            .notEmpty()
+            .withMessage(new ErrorModel(errorsConst.travelErrors.hourRequired))
+            .bail(),
+        sharedValidators.validateError,
+        check('time')
+            .matches(/^([01][0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9]$/)
+            .withMessage(new ErrorModel(errorsConst.travelErrors.invalidTime))
+            .bail(),
+        sharedValidators.validateError
     ]
 }

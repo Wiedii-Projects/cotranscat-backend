@@ -109,5 +109,49 @@ module.exports = {
         } catch (error) {
             return responseHelpers.responseError(res, 500, error);
         }
+    },
+    getVehiclesAvailableToTravel: async (req, res) => {
+        const { date, time, route } = req.body;
+        try {
+
+            let vehiclesAvailable = []
+            const travelFound = await travelQuery.findTravels({ where: { date, time, idRoute: sharedHelpers.decryptIdDataBase(route.id) } });
+
+            const travelFoundDataCleaned = travelFound.map(({ id, TravelDriverVehicle: { Vehicle }, ...travel }) => ({
+                id: sharedHelpers.encryptIdDataBase(id),
+                ...travel,
+                vehicle: {
+                    ...Vehicle,
+                    id: sharedHelpers.encryptIdDataBase(Vehicle.id)
+                }
+            }))
+
+            for (let indexTravelFound = 0; indexTravelFound < travelFoundDataCleaned.length; indexTravelFound++) {
+                const travel = travelFoundDataCleaned[indexTravelFound];
+
+                const responseSeat = await seatQuery.findSeat({
+                    where: { idTravel: sharedHelpers.decryptIdDataBase(travel.id), state: 0 },
+                    include: []
+                })
+
+                const { vehicle } = travel
+
+                vehiclesAvailable.push(
+                    {
+                        vehicle: {
+                            id: vehicle.id,
+                            plate: vehicle.plate,
+                            mark: vehicle.mark,
+                            model: vehicle.model
+                        },
+                        totalSeatsAvailable: responseSeat.length,
+                        travel: travel.id
+                    })
+                return responseHelpers.responseSuccess(res, vehiclesAvailable);
+            }
+            return responseHelpers.responseSuccess(res, []);
+        } catch (error) {
+            return responseHelpers.responseError(res, 500, error);
+        }
     }
 }
