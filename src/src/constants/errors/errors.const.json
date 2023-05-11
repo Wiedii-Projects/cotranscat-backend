@@ -880,6 +880,10 @@
       "code": "SEAT002",
       "message": "The seat does not exist"
     },
+    "seatNotAvailable": {
+      "code": "SEAT003",
+      "message": "the seat is no longer available"
+    },
     "queryErrors": {
       "createError": {
         "code": "SEAT_001",
