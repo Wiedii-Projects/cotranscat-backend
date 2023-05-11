@@ -12,9 +12,16 @@ module.exports = {
             throw errorsConst.seatErrors.queryErrors.createError;
         }
     },
+    updateSeat: async (where, update) => {
+        try {
+            return await Seat.update(update, { where });
+        } catch {
+            throw errorsConst.seatErrors.queryErrors.updateError
+        }
+    },
     findSeat: async (query = {}) => {
         try {
-            const { 
+            const {  
                 where, 
                 attributes = ['id', 'row', 'column', 'price', 'state'],
                 include = [
@@ -24,7 +31,6 @@ module.exports = {
                     }
                 ]
             } = query;
-            
             return await Seat.findAll({
                 where,
                 attributes,

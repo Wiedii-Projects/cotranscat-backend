@@ -68,10 +68,6 @@
       "generateJWTError": {
         "code": "AUTH_001",
         "message": "Something went wrong."
-      },
-      "encryptPasswordError": {
-        "code": "AUTH_002",
-        "message": "Something went wrong."
       }
     }
   },
@@ -884,6 +880,18 @@
     }
   },
   "seatErrors":{
+    "idSeatInvalid": {
+      "code": "SEAT001",
+      "message": "The seat is invalid"
+    },
+    "seatDoesNotExist": {
+      "code": "SEAT002",
+      "message": "The seat does not exist"
+    },
+    "seatNotAvailable": {
+      "code": "SEAT003",
+      "message": "the seat is no longer available"
+    },
     "queryErrors": {
       "createError": {
         "code": "SEAT_001",
@@ -891,6 +899,10 @@
       },
       "findAllError": {
         "code": "SEAT_002",
+        "message": "Something went wrong."
+      },
+      "updateError": {
+        "code": "SEAT_003",
         "message": "Something went wrong."
       }
     }

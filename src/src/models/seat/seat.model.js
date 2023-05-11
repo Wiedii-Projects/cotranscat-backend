@@ -26,7 +26,7 @@ const SeatSchema = dbConnectionOptions.define(
     },
     state: {
       type: DataTypes.TINYINT.UNSIGNED,
-      field: "column",
+      field: "state",
       allowNull: false,
     },
   },
