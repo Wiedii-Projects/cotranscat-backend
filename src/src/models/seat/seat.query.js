@@ -12,17 +12,27 @@ module.exports = {
             throw errorsConst.seatErrors.queryErrors.createError;
         }
     },
+    updateSeat: async (where, update) => {
+        try {
+            return await Seat.update(update, { where });
+        } catch {
+            throw errorsConst.seatErrors.queryErrors.updateError
+        }
+    },
     findSeat: async (query = {}) => {
         try {
-            const { where } = query;
-            return await Seat.findAll({
+            const { 
                 where,
-                include: [
+                include = [
                     { 
                         model: Client, 
                         as: 'SeatClient'
                     },
-                ],
+                ]
+            } = query;
+            return await Seat.findAll({
+                where,
+                include,
                 raw: true,
                 nest: true
             });

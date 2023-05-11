@@ -11,7 +11,7 @@ const { check } = require('express-validator');
 const { ErrorModel } = require("../../models/index.models");
 
 //Validators
-const { sharedValidators, travelValidator } = require('../index.validators.middleware');
+const { sharedValidators, travelValidator, seatValidators } = require('../index.validators.middleware');
 
 module.exports = {
     checkGetAllSeat: () => ([
@@ -20,5 +20,12 @@ module.exports = {
             .custom((value, {req}) => travelValidator.validateTravelId(sharedHelpers.decryptIdDataBase(value), req))
             .custom((_, {req}) => !!req.body.travelExist).withMessage(new ErrorModel(errorsConst.travelErrors.travelDoesNotExist)),
         sharedValidators.validateError,
-    ])
+    ]),
+    checkChangeStateToStandBy: () => ([
+        check('seat')
+        .isString().withMessage(new ErrorModel(errorsConst.seatErrors.idSeatInvalid)).bail()
+        .custom((value, {req}) => seatValidators.validateSeat(sharedHelpers.decryptIdDataBase(value), req))
+        .custom((_, {req}) => !!req.body.seatExist).withMessage(new ErrorModel(errorsConst.seatErrors.seatDoesNotExist)),
+    sharedValidators.validateError,
+    ])  
 }

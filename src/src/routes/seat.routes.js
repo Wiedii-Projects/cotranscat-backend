@@ -13,4 +13,8 @@ router.get('/', [
     seatMiddleware.checkGetAllSeat(),
 ], seatController.getAllSeatTravel);
 
+router.post('/changeStateToStandBy', [
+    seatMiddleware.checkChangeStateToStandBy()
+], seatController.changeStateToStandBy)
+
 module.exports = router;
