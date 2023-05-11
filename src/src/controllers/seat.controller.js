@@ -9,14 +9,22 @@ module.exports = {
   getAllSeatTravel: async (req, res) => {
     const { idTravel } = req.body;
     try {
-      const seat = await seatQuery.findSeat({ where: { idTravel } });
-      const test = seat.map(({ id, SeatClient, idTravel, idClient, ...seat }) => ({
+      const allSeat = await seatQuery.findSeat({ where: { idTravel } });
+      const seats = allSeat.map(({ id, SeatClient, idTravel, idClient, ...seat }) => ({
         id: sharedHelpers.encryptIdDataBase(id),
         ...seat,
       }));
-      return responseHelpers.responseSuccess(res, test);
+      return responseHelpers.responseSuccess(res, seats);
     } catch (error) {
       return responseHelpers.responseError(res, 500, error);
     }
   },
+  changeStateToStandBy: async (req, res) => {
+    try {
+      await seatQuery.updateSeat({ id: req.body.seatExist.id }, { state: 2 });
+      return responseHelpers.responseSuccess(res, null);
+    } catch (error){
+      return responseHelpers.responseError(res, 500, error);
+    }
+  }
 };
