@@ -17,7 +17,7 @@ module.exports = {
             throw errorsConst.departmentErrors.queryErrors.createError
         }
     },
-    findDepartment: async (query = {}) => {
+    findDepartmentQuery: async (query = {}) => {
         try {
             const { where } = query;
             return await Department.findAll({

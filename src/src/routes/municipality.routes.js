@@ -15,7 +15,9 @@ router.post('/', [
     municipalityMiddleware.checkCreateMunicipality(),
 ], municipalityController.createMunicipality);
 
-router.get('/',municipalityController.getAllMunicipality);
+router.get('/',[
+    municipalityMiddleware.checkGetMunicipality()
+],municipalityController.getMunicipality);
 
 router.put('/:id', [
     municipalityMiddleware.checkUpdateMunicipality(),

@@ -17,7 +17,7 @@ module.exports = {
     },
     getAllDepartment: async (req, res) => {
         try {
-            const resp = await departmentQuery.findDepartment();
+            const resp = await departmentQuery.findDepartmentQuery();
             return responseHelpers.responseSuccess(res, resp);
         } catch (error) {
             return responseHelpers.responseError(res, 500, error);

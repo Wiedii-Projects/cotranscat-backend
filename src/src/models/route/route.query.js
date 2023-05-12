@@ -26,8 +26,7 @@ module.exports = {
                 nest:true
             }).then(route => route.map(({ id, MunicipalityDepart, MunicipalityArrive  }) => ({
                 id: sharedHelpers.encryptIdDataBase(id),
-                municipalityDepart : MunicipalityDepart.name,
-                municipalityArrive : MunicipalityArrive.name,
+                name : `${MunicipalityDepart.name} - ${MunicipalityArrive.name}`
             })))
         } catch {
             throw errorsConst.routeErrors.queryErrors.findAllError

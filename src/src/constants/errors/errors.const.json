@@ -44,13 +44,29 @@
       "code": "AU0011",
       "message": "Token invalid"
     },
+    "nickNameRequired": {
+      "code": "AU0012",
+      "message": "The nickName is required"
+    },
+    "nickNameSize": {
+      "code": "AU0012",
+      "message": "The nickName must have a maximum of 100 characters"
+    },
+    "emailOrNickNameRequired": {
+      "code": "AU0013",
+      "message": "Email or nickName is required"
+    },
+    "passwordCharacter": {
+      "code": "AU0014",
+      "message": "the password must have a minimum of 8 character and a maximum of 30 characters."
+    },
+    "passwordIncorrect": {
+      "code": "AU0006",
+      "message": "Incorrect password."
+    },
     "queryErrors": {
       "generateJWTError": {
         "code": "AUTH_001",
-        "message": "Something went wrong."
-      },
-      "encryptPasswordError": {
-        "code": "AUTH_002",
         "message": "Something went wrong."
       }
     }
@@ -279,6 +295,14 @@
     "nameSize": {
       "code": "MUNI002",
       "message": "The municipality must have a minimum length of 1 character and a maximum length of 50 characters"
+    },
+    "departmentRequired":{
+      "code": "MUNC003",
+      "message": "Department is required"
+    },
+    "departmentAlreadyExist": {
+      "code": "MUNC004",
+      "message": "The department already exist"
     },
     "queryErrors":{
       "createError": {
@@ -672,6 +696,10 @@
     }
   },
   "seatRuler":{
+    "vehicleHasNoAssignedSeats": {
+      "code": "STRL001",
+      "message": "The selected vehicle has no assigned seats"
+    },
     "queryErrors": {
       "createdError": {
         "code": "STRL_001",
@@ -796,6 +824,14 @@
       "code": "TRVL013",
       "message": "The travel does not exist"
     },
+    "dateRequired": {
+      "code": "TRVL014",
+      "message": "The date is required"
+    },
+    "hourRequired": {
+      "code": "TRVL015",
+        "message": "The hour is required"
+    },
     "queryErrors":{
       "createError":{
         "code": "TRVL_001",
@@ -843,6 +879,34 @@
       },
       "findAllError": {
         "code": "ROUT_002",
+        "message": "Something went wrong."
+      }
+    }
+  },
+  "seatErrors":{
+    "idSeatInvalid": {
+      "code": "SEAT001",
+      "message": "The seat is invalid"
+    },
+    "seatDoesNotExist": {
+      "code": "SEAT002",
+      "message": "The seat does not exist"
+    },
+    "seatNotAvailable": {
+      "code": "SEAT003",
+      "message": "the seat is no longer available"
+    },
+    "queryErrors": {
+      "createError": {
+        "code": "SEAT_001",
+        "message": "Something went wrong."
+      },
+      "findAllError": {
+        "code": "SEAT_002",
+        "message": "Something went wrong."
+      },
+      "updateError": {
+        "code": "SEAT_003",
         "message": "Something went wrong."
       }
     }

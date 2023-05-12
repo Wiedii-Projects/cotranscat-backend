@@ -13,58 +13,50 @@ const { ErrorModel } = require("../../../models/index.models");
 // Validators - middleware
 const {
   userValidators,
-  authValidators,
   sharedValidators,
-  codeValidators,
+  authValidators,
 } = require("../../index.validators.middleware");
 
 module.exports = {
   checkLogin: () => {
     return [
-      check(
-        "email",
-        new ErrorModel(errorsConst.authErrors.emailRequired)
-      ).isEmail(),
-      check(
-        "password",
-        new ErrorModel(errorsConst.authErrors.passwordRequired)
-      ).isString(),
-      check("password").custom((value, { req }) =>
-        userValidators.validatePasswordRules(value, req)
-      ),
-      check(
-        "isValidPassword",
-        new ErrorModel(errorsConst.authErrors.validatePassword)
-      ).custom((value) => (value ? true : false)),
-      sharedValidators.validateErrorFields,
-      check("email").custom((value, { req }) =>
-        userValidators.validateGetUser(
-          {
-            where: { email: value, state: true },
-            attributes: [
-              "id",
-              "name",
-              "lastName",
-              "email",
-              "phoneNumber",
-              "state",
-              "img",
-              "password",
-            ],
-          },
-          req
+      check("email")
+        .isEmail()
+        .withMessage(new ErrorModel(errorsConst.authErrors.emailRequired))
+        .optional({ checkFalsy: false }),
+      sharedValidators.validateError,
+      check("nickName")
+        .isString()
+        .withMessage(new ErrorModel(errorsConst.authErrors.nickNameRequired))
+        .bail()
+        .isLength({ min: 1, max: 100 })
+        .withMessage(new ErrorModel(errorsConst.authErrors.nickNameSize))
+        .optional({ checkFalsy: false }),
+      sharedValidators.validateError,
+      check("password")
+        .isString()
+        .withMessage(new ErrorModel(errorsConst.authErrors.passwordRequired))
+        .isLength({ min: 1, max: 30 })
+        .withMessage(new ErrorModel(errorsConst.authErrors.passwordCharacter)),
+      sharedValidators.validateError,
+      check("email")
+        .custom((value, { req }) => (value || req.body.nickName ? true : false))
+        .withMessage(
+          new ErrorModel(errorsConst.authErrors.emailOrNickNameRequired)
+        ),
+      sharedValidators.validateError,
+      ...sharedMiddleware.checkUserLogin(),
+      check("user")
+        .custom((value, { req }) =>
+          authValidators.validatePassword(
+            req.body.password,
+            value.password,
+            req
+          )
         )
-      ),
-      check("user", new ErrorModel(errorsConst.userErrors.userNotExist)).custom(
-        (value) => (value ? true : false)
-      ),
-      check("password").custom((value, { req }) =>
-        authValidators.validatePassword(value, req.body.user.password, req)
-      ),
-      check(
-        "validPassword",
-        new ErrorModel(errorsConst.authErrors.incorrectCredentials)
-      ).custom((value) => (value ? true : false)),
+        .custom((_, { req }) => req.body.passwordCompare)
+        .withMessage(new ErrorModel(errorsConst.authErrors.passwordIncorrect)),
+      sharedValidators.validateError,
     ];
   },
   checkValidateEmail: () => {
@@ -104,5 +96,5 @@ module.exports = {
         new ErrorModel(errorsConst.authErrors.validatePassword)
       ).custom((value) => (value ? true : false)),
     ];
-  }
+  },
 };

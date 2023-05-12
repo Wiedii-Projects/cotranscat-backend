@@ -4,6 +4,7 @@ const { appConst } = require("./app.const");
 // Libraries
 const dotenv = require("dotenv");
 const path = require("path");
+const bcryptjs = require("bcryptjs");
 const { Sequelize } = require("sequelize");
 
 const envFound = dotenv.config({
@@ -34,6 +35,8 @@ const twilioNumber = process.env.TWILIO_NUMBER;
 const algorithmEncrypt = process.env.ALGORITHM_ENCRYPT;
 const keyEncrypt = process.env.KEY_ENCRYPT;
 const ivEncrypt = process.env.IV_ENCRYPT;
+
+const saltBcrypt = bcryptjs.genSaltSync();
 
 const option = {
   host: dbHost,
@@ -70,5 +73,6 @@ module.exports = {
   twilioNumber,
   algorithmEncrypt,
   keyEncrypt,
-  ivEncrypt
+  ivEncrypt,
+  saltBcrypt
 };

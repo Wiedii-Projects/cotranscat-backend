@@ -9,4 +9,6 @@ module.exports = {
     travelValidator: require('./validators/travel.validator.middleware'),
     functionalityValidators: require('./validators/functionality.validator.middleware'),
     routeValidator: require('./validators/route.validator.middleware'),
+    departmentValidators: require('./validators/department.validator.middleware'),
+    seatValidators: require('./validators/seat.validator.middleware')
 }

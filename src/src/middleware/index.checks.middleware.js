@@ -19,4 +19,5 @@ module.exports = {
   sellerMiddleware: require("./checks/user/seller.check.middleware"),
   roleMiddleware: require("./checks/role.check.middleware"),
   routeMiddleware: require("./checks/route.check.middleware"),
+  seatMiddleware: require("./checks/seat.check.middleware")
 };

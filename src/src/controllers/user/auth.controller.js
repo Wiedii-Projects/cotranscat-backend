@@ -5,26 +5,20 @@ const { errorsConst } = require("../../constants/index.constants");
 const {
   authHelpers,
   responseHelpers,
-  codeSmsHelpers,
   sharedHelpers,
 } = require("../../helpers/index.helpers");
 
 // Models - Queries
-const { codeSMSQuery, userQuery } = require("../../models/index.queries");
+const { userQuery } = require("../../models/index.queries");
 
 module.exports = {
   login: async (req, res) => {
+    const { user: { password, ...user} } = req.body;
     try {
-      // TODO: Implement work flow login
-      // delete user.password;
-      const token = await authHelpers.generateJWTHelper(
-        "b663b33970219efab378dcfc92167144"
-      );
+      const token = await authHelpers.generateJWTHelper(user.id);
       return responseHelpers.responseSuccess(res, {
         token: token,
-        role: {
-          name: 0,
-        },
+        user
       });
     } catch (error) {
       return responseHelpers.responseError(res, 500, error);
@@ -39,8 +33,7 @@ module.exports = {
 
     try {
       const id = sharedHelpers.decryptIdDataBase(user.id);
-      const passwordEncrypt = await authHelpers.encryptPasswordHelper(password);
-      await userQuery.updateUserQuery({ id }, { password: passwordEncrypt });
+      await userQuery.updateUserQuery({ id }, { password });
       return responseHelpers.responseSuccess(res, null);
     } catch (error) {
       return responseHelpers.responseError(res, 500, error);

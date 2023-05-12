@@ -8,17 +8,18 @@ const { Travel, DriverVehicle, Driver, Vehicle } = require('../index.models');
 module.exports = {
     createTravel: async (where, transaction) => {
         try {
-            return await Travel.findOrCreate({ where, transaction })
+            const [travel, isCreated] = await Travel.findOrCreate({ where, transaction })
+            return [travel.get(), isCreated]
         } catch {
             throw errorsConst.travelErrors.queryErrors.createError;
         }
     },
-    findTravels: async (where, attributes = ['id', 'time', 'date']) => {
+    findTravels: async (query = {}) => {
         try {
-            const travels = await Travel.findAll({
+            const {
                 where,
-                attributes,
-                include: [
+                attributes = ['id', 'time', 'date'],
+                include = [
                     {
                         model: DriverVehicle,
                         as: 'TravelDriverVehicle',
@@ -37,22 +38,14 @@ module.exports = {
                         ]
                     },
                 ],
+            } = query;
+            return await Travel.findAll({
                 raw: true,
-                nest: true
-            })
-
-            return travels.map(({ id, TravelDriverVehicle: { Vehicle, Driver }, ...travel }) => ({
-                id: sharedHelpers.encryptIdDataBase(id),
-                ...travel,
-                driver: {
-                    ...Driver,
-                    id: sharedHelpers.encryptIdDataBase(Driver.id)
-                },
-                vehicle: {
-                    ...Vehicle,
-                    id: sharedHelpers.encryptIdDataBase(Vehicle.id)
-                }
-            }))
+                nest: true,
+                where,
+                attributes,
+                include
+            });
         } catch {
             throw errorsConst.travelErrors.queryErrors.findError;
         }

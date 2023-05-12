@@ -10,6 +10,11 @@ const { Router } = require("express");
 
 const router = Router();
 
+router.get('/vehiclesAvailableToTravel',[
+    //TODO: implementation of role permission validation
+    travelMiddleware.checkVehiclesAvailableToTravel()
+], travelController.getVehiclesAvailableToTravel);
+
 router.post('/', [
     //TODO: implementation of role permission validation
     travelMiddleware.checkCreateTravel()
@@ -18,6 +23,10 @@ router.post('/', [
 router.get('/', [
     //TODO: implementation of role permission validation
 ], travelController.getAllTravels);
+
+router.get('/getDriverVehicleTravel', [
+    travelMiddleware.checkGetDriverVehicleTravel()
+], travelController.getDriverVehicleTravel);
 
 router.get('/:id', [
     //TODO: implementation of role permission validation

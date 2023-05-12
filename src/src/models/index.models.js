@@ -18,6 +18,7 @@ const Functionality = require("./functionality/functionality.model");
 const DriverVehicle = require("./driver-vehicle/driver-vehicle.model");
 const Travel = require("./travel/travel.model");
 const Route = require("./route/route.model");
+const Seat = require("./seat/seat.model");
 
 // Relationships BD
 
@@ -42,8 +43,8 @@ Driver.hasMany(DriverVehicle, { as: 'Driver', foreignKey: { name: 'idDriver', al
 DriverVehicle.belongsTo(Driver, { as: 'Driver', foreignKey: { name: 'idDriver', allowNull: false, primaryKey: true } });
 
 // Relationship DriverVehicle-Travel
+Travel.belongsTo(DriverVehicle, { as: 'TravelDriverVehicle', foreignKey: { name: "idDriverVehicle", allowNull: false } });
 DriverVehicle.hasMany(Travel, { as: 'TravelDriverVehicle', foreignKey: { name: "idDriverVehicle", allowNull: false } });
-Travel.belongsTo(DriverVehicle, { as: 'TravelDriverVehicle', foreignKey: { name: "idDriverVehicle", allowNull: false }});
 
 // Relationship Client-idIndicativePhoneWhatsApp
 Client.belongsTo(IndicativeNumber, { as: 'ClientIndicativeNumberWhatsApp', foreignKey: { name: "idIndicativePhoneWhatsApp", allowNull: false } });
@@ -101,6 +102,14 @@ Municipality.hasMany(Route, { foreignKey: { name: "idMunicipalityArrive", allowN
 Travel.belongsTo(Route, { foreignKey: { name: 'idRoute', allowNull: false} });
 Route.hasMany(Travel, { foreignKey: { name: "idRoute", allowNull: false } });
 
+// Relationship Travel-Seat
+Seat.belongsTo(Travel, { as: 'TravelSeat', foreignKey: { name: 'idTravel', allowNull: false} });
+Travel.hasMany(Seat, { foreignKey: { name: "idTravel", allowNull: false } });
+
+// Relationship Seat-Client
+Seat.belongsTo(Client, { as: 'SeatClient', foreignKey: { name: 'idClient'} });
+Client.hasMany(Seat, { foreignKey: { name: "idClient" } });
+
 module.exports = {
   // Aggregates Models
   ServerModel: require("./aggregates/server/server.model"),
@@ -125,5 +134,6 @@ module.exports = {
   Functionality,
   DriverVehicle,
   Travel,
-  Route
+  Route,
+  Seat
 };

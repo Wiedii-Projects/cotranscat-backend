@@ -18,4 +18,5 @@ module.exports = {
   sellerController: require("./user/seller.controller"),
   roleController: require("./role.controller"),
   routeController: require("./route.controller"),
+  seatController: require("./seat.controller")
 };

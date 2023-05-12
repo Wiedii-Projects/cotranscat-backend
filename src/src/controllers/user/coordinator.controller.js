@@ -19,8 +19,7 @@ const roleModelConst = require("../../constants/model/role.model.const");
 module.exports = {
   createCoordinator: async (req, res) => {
     const extractUser = userHelpers.extractUserDataHelper(req.body);
-    const { password, ...coordinator } =
-      indexHelpers.userHelpers.extractCoordinatorDataHelper(req.body);
+    const extractCoordinator = userHelpers.extractCoordinatorDataHelper(req.body);
     let transaction;
     try {
       const [{ id: role }] = await roleQuery.findRoleTypeQuery({
@@ -42,10 +41,7 @@ module.exports = {
         );
         await coordinatorQuery.createCoordinatorQuery(
           {
-            ...coordinator,
-            password: await indexHelpers.authHelpers.encryptPasswordHelper(
-              password
-            ),
+            ...extractCoordinator,
             id: user.id,
           },
           transaction
