@@ -6,7 +6,6 @@ const {
 // Helpers
 const {
   responseHelpers,
-  authHelpers,
   userHelpers,
   sharedHelpers,
 } = require("../../helpers/index.helpers");

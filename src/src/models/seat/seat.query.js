@@ -27,7 +27,7 @@ module.exports = {
                 include = [
                     { 
                         model: Client, 
-                        as: 'seatClient'
+                        as: 'SeatClient'
                     }
                 ]
             } = query;

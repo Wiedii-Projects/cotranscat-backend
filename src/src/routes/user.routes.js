@@ -15,4 +15,7 @@ router.delete('/', [
     userMiddleware.checkDeleteUser(),
 ], userController.deleteUser);
 
+router.get('/filterUsers', [
+    userMiddleware.checkFilterUsers(),
+], userController.searchUsers);
 module.exports = router

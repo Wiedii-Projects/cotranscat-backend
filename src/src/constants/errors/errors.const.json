@@ -74,15 +74,15 @@
   "userErrors": {
     "nameRequired": {
       "code": "US0001",
-      "message": "the name is required"
+      "message": "The name is required"
     },
     "nameCharacter": {
       "code": "US0002",
       "message": "the name must have a minimum of 1 character and a maximum of 50 characters."
     },
-    "": {
+    "numberDocumentIsEmpty": {
       "code": "US0003",
-      "message": ""
+      "message": "The number document is empty"
     },
     "idRequired": {
       "code": "US0004",
@@ -98,7 +98,7 @@
     },
     "lastNameRequired": {
       "code": "US0007",
-      "message": "The last name is required."
+      "message": "The last name is required"
     },
     "lastNameCharacter": {
       "code": "US0007",
@@ -146,7 +146,7 @@
     },
     "numberDocumentRequired": {
       "code": "US0013",
-      "message": "The number document is required."
+      "message": "The number document is required"
     },
     "numberDocumentCharacter": {
       "code": "US0013",
@@ -175,6 +175,14 @@
     "emailOrNickNameAlreadyExist": {
       "code": "US0018",
       "message": "The nickName or email already exist"
+    },
+    "nameIsEmpty": {
+      "code": "US0019",
+      "message": "The name is empty"
+    },
+    "lastNameIsEmpty": {
+      "code": "US0020",
+      "message": "The last name is empty"
     },
     "queryErrors": {
       "findAllError": {

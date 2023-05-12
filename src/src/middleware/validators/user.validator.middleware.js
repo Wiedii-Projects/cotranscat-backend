@@ -1,12 +1,42 @@
+// Helpers
+const { sharedHelpers } = require('../../helpers/index.helpers');
+
 // Queries
-const { decryptIdDataBase } = require('../../helpers/shared.helpers');
 const { userQuery, documentTypeQuery, indicativeNumberQuery, roleQuery, municipalityQuery } = require('./../../models/index.queries')
 
 module.exports = {
     validateGetUser: async (value, req) => {
         try {
             const [user] = await userQuery.findUserQuery(value);
-            req.body.user = user;
+            const {
+                id,
+                UserDriver,
+                UserAdmin,
+                UserCoordinator,
+                UserSeller,
+                UserRole,
+                UserDocumentType, 
+                UserIndicativePhone,
+                ...userData
+              } = user
+
+              const userAllData = {
+                id: sharedHelpers.encryptIdDataBase(id),
+                role: {
+                  id: sharedHelpers.encryptIdDataBase(UserRole.id),
+                },
+                documentType: {
+                  ...UserDocumentType,
+                  id: sharedHelpers.encryptIdDataBase(UserDocumentType.id),
+                },
+                indicativeNumber: {
+                  ...UserIndicativePhone,
+                  id: sharedHelpers.encryptIdDataBase(UserIndicativePhone.id),
+                },
+                ...userData
+              }
+
+            req.body.user = userAllData;
         } catch {
             req.body.user = false;
         }
@@ -24,7 +54,7 @@ module.exports = {
     },
     decryptId: async (value, data, req) => {
         try {
-            req.body[data] = decryptIdDataBase(value);
+            req.body[data] = sharedHelpers.decryptIdDataBase(value);
         } catch {
             req.body[data] = false;
         }

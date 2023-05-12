@@ -10,6 +10,7 @@ const { userQuery } = require('./../../models/index.queries');
 
 //Helpers
 const { sharedHelpers } = require('../../helpers/index.helpers');
+
 module.exports = {
     validateJWT: async (value, req) => {
 
@@ -20,8 +21,37 @@ module.exports = {
                 const [ validateUser ] = await userQuery.findUserQuery({
                     where: { id, state: true }
                 });
-                req.body.user = validateUser;  
-                req.body.isValidToken = validateUser? true:false;
+
+                const {
+                    id,
+                    UserDriver,
+                    UserAdmin,
+                    UserCoordinator,
+                    UserSeller,
+                    UserRole,
+                    UserDocumentType, 
+                    UserIndicativePhone,
+                    ...userData
+                  } = validateUser
+            
+                  const userAllData = {
+                    id: sharedHelpers.encryptIdDataBase(id),
+                    role: {
+                      id: sharedHelpers.encryptIdDataBase(UserRole.id),
+                    },
+                    documentType: {
+                      ...UserDocumentType,
+                      id: sharedHelpers.encryptIdDataBase(UserDocumentType.id),
+                    },
+                    indicativeNumber: {
+                      ...UserIndicativePhone,
+                      id: sharedHelpers.encryptIdDataBase(UserIndicativePhone.id),
+                    },
+                    ...userData
+                  }
+
+                req.body.user = userAllData;  
+                req.body.isValidToken = userAllData? true:false;
             }
         } catch {
             req.body.user = false;
