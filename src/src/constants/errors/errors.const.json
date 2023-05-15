@@ -1,67 +1,67 @@
 {
   "authErrors": {
     "incorrectCredentials": {
-      "code": "AU0001",
+      "code": "AUTH001",
       "message": "Incorrect email or password."
     },
     "emailRequired": {
-      "code": "AU0002",
+      "code": "AUTH002",
       "message": "Email is required."
     },
     "passwordRequired": {
-      "code": "AU0003",
+      "code": "AUTH003",
       "message": "Password is required."
     },
     "userNotExist": {
-      "code": "AU0004",
+      "code": "AUTH004",
       "message": "User does not exist."
     },
     "passwordConfirmRequired": {
-      "code": "AU0005",
+      "code": "AUTH005",
       "message": "Password confirm is required."
     },
     "passwordNotMatch": {
-      "code": "AU0006",
+      "code": "AUTH006",
       "message": "Password does not match."
     },
     "codeNotValid": {
-      "code": "AU0007",
+      "code": "AUTH007",
       "message": "Code is not valid."
     },
     "validatePassword": {
-      "code": "AU0008",
+      "code": "AUTH008",
       "message": "The password is not secure."
     },
     "codeRequired": {
-      "code": "AU0009",
+      "code": "AUTH009",
       "message": "Code is required."
     },
     "idRequired": {
-      "code": "AU0010",
+      "code": "AUTH010",
       "message": "ID is required."
     },
     "tokenInvalid": {
-      "code": "AU0011",
+      "code": "AUTH011",
       "message": "Token invalid"
     },
     "nickNameRequired": {
-      "code": "AU0012",
+      "code": "AUTH012",
       "message": "The nickName is required"
     },
     "nickNameSize": {
-      "code": "AU0012",
+      "code": "AUTH013",
       "message": "The nickName must have a maximum of 100 characters"
     },
     "emailOrNickNameRequired": {
-      "code": "AU0013",
+      "code": "AUTH014",
       "message": "Email or nickName is required"
     },
     "passwordCharacter": {
-      "code": "AU0014",
+      "code": "AUTH015",
       "message": "the password must have a minimum of 8 character and a maximum of 30 characters."
     },
     "passwordIncorrect": {
-      "code": "AU0006",
+      "code": "AUTH016",
       "message": "Incorrect password."
     },
     "queryErrors": {
@@ -73,7 +73,7 @@
   },
   "userErrors": {
     "nameRequired": {
-      "code": "US0001",
+      "code": "USRL001",
       "message": "the name is required"
     },
     "nameCharacter": {
@@ -81,99 +81,99 @@
       "message": "the name must have a minimum of 1 character and a maximum of 50 characters."
     },
     "": {
-      "code": "US0003",
+      "code": "USRL003",
       "message": ""
     },
     "idRequired": {
-      "code": "US0004",
+      "code": "USRL004",
       "message": "the ID is required"
     },
     "noToken": {
-      "code": "US0005",
+      "code": "USRL005",
       "message": "The token is missing from the request."
     },
     "userNotExist": {
-      "code": "US0006",
+      "code": "USRL006",
       "message": "User does not exist."
     },
     "lastNameRequired": {
-      "code": "US0007",
+      "code": "USRL007",
       "message": "The last name is required."
     },
     "lastNameCharacter": {
-      "code": "US0007",
+      "code": "USRL008",
       "message": "the lastName must have a minimum of 1 character and a maximum of 50 characters."
     },
     "phoneNumberRequired": {
-      "code": "US0008",
+      "code": "USRL009",
       "message": "The phone number is required."
     },
     "phoneNumberCharacter": {
-      "code": "US0008",
-      "message": "the lastName must have a minimum of 1 character and a maximum of 12 characters."
+      "code": "USRL010",
+      "message": "the phone number must have a minimum of 1 character and a maximum of 12 characters."
     },
     "validatePassword": {
-      "code": "US0009",
+      "code": "USRL011",
       "message": "The password is not secure."
     },
     "adminRole": {
-      "code": "US0010",
+      "code": "USRL012",
       "message": "This action can only be performed by administrator users."
     },
     "userNoDelete": {
-      "code": "US0011",
+      "code": "USRL013",
       "message": "Can't delete User."
     },
     "idDocumentTypeRequired": {
-      "code": "US0012",
+      "code": "USRL013",
       "message": "The document type is required."
     },
     "idDocumentTypeInvalid": {
-      "code": "US0012",
+      "code": "USRL014",
       "message": "The document type invalid."
     },
     "idMunicipalityInvalid": {
-      "code": "US0012",
+      "code": "USRL015",
       "message": "The municipality invalid."
     },
     "idRoleRequired": {
-      "code": "US0012",
+      "code": "USRL016",
       "message": "The rol is required."
     },
     "idRoleInvalid": {
-      "code": "US0012",
+      "code": "USRL017",
       "message": "The rol is invalid."
     },
     "numberDocumentRequired": {
-      "code": "US0013",
+      "code": "USRL018",
       "message": "The number document is required."
     },
     "numberDocumentCharacter": {
-      "code": "US0013",
+      "code": "USRL019",
       "message": "the number document must have a minimum of 1 character and a maximum of 20 characters."
     },
     "idIndicativePhoneRequired": {
-      "code": "US0014",
+      "code": "USRL020",
       "message": "The indicative number is required."
     },
     "idIndicativePhoneInvalid": {
-      "code": "US0014",
+      "code": "USRL021",
       "message": "The indicative phone invalid."
     },
     "idIndicativeNumberPhoneWhatsAppRequired": {
-      "code": "US0015",
+      "code": "USRL022",
       "message": "The id Indicative Number Phone WhatsApp is required."
     },
     "numberPhoneWhatsAppRequired": {
-      "code": "US0016",
+      "code": "USRL023",
       "message": "The number Phone WhatsApp is required."
     },
     "addressRequired": {
-      "code": "US0017",
+      "code": "USRL024",
       "message": "The address is required."
     },
     "emailOrNickNameAlreadyExist": {
-      "code": "US0018",
+      "code": "USRL025",
       "message": "The nickName or email already exist"
     },
     "queryErrors": {
@@ -297,11 +297,11 @@
       "message": "The municipality must have a minimum length of 1 character and a maximum length of 50 characters"
     },
     "departmentRequired":{
-      "code": "MUNC003",
+      "code": "MUNI003",
       "message": "Department is required"
     },
     "departmentAlreadyExist": {
-      "code": "MUNC004",
+      "code": "MUNI004",
       "message": "The department already exist"
     },
     "queryErrors":{
