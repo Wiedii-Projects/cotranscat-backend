@@ -1,5 +1,5 @@
 // Helpers
-const { responseHelpers } = require("../../helpers/index.helpers");
+const { responseHelpers, sharedHelpers } = require("../../helpers/index.helpers");
 
 // Libraries
 const { validationResult } = require("express-validator");
@@ -133,6 +133,38 @@ module.exports = {
         },
       ],
     });
-    req.body.user = user;
+
+    let userAllData
+
+    if (user) {
+      const {
+        id,
+        UserDriver,
+        UserAdmin,
+        UserCoordinator,
+        UserSeller,
+        UserRole,
+        UserDocumentType, 
+        UserIndicativePhone,
+        ...userData
+      } = user
+
+      userAllData = {
+        id: sharedHelpers.encryptIdDataBase(id),
+        role: {
+          id: sharedHelpers.encryptIdDataBase(UserRole.id),
+        },
+        documentType: {
+          ...UserDocumentType,
+          id: sharedHelpers.encryptIdDataBase(UserDocumentType.id),
+        },
+        indicativeNumber: {
+          ...UserIndicativePhone,
+          id: sharedHelpers.encryptIdDataBase(UserIndicativePhone.id),
+        },
+        ...userData
+      } 
+    }
+    req.body.user = userAllData;
   },
 };

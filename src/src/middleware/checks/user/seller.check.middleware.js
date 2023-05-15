@@ -34,7 +34,7 @@ module.exports = {
       sharedValidators.validateError,
     ];
   },
-
+// TODO: This Check is not documented and is not being used in the project.
   checkUpdateSeller: () => {
     return [
       ...sharedCheckMiddleware.checkUpdateUser(),

@@ -19,6 +19,7 @@ router.get('/:id',[
     sharedMiddleware.checkId()
 ],coordinatorController.getCoordinator);
 
+// TODO: This endpoint is not documented and is not being used in the project.
 router.put('/:id', [
     coordinatorMiddleware.checkUpdateCoordinator(),
     sharedMiddleware.checkId(),

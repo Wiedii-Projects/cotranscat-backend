@@ -1,23 +1,47 @@
 // Constants
 const {
-  errorsConst,
-  roleConst,
+  errorsConst
 } = require("../../../constants/index.constants");
 
 // Libraries
 const { check } = require("express-validator");
 
-// Middleware
-const sharedMiddleware = require("../shared.check.middleware");
-
 // Models
 const { ErrorModel } = require("../../../models/index.models");
 
 // Validators - Middleware
-const { userValidators } = require("../../index.validators.middleware");
+const { sharedValidators } = require("../../index.validators.middleware");
 
 module.exports = {
   checkDeleteUser: () => {
     return [];
+  },
+  checkFilterUsers: () => {
+    return [
+      check('name')
+        .optional({checkFalsy: false})
+        .isString()
+        .withMessage(new ErrorModel(errorsConst.userErrors.nameRequired))
+        .bail()
+        .isLength({ min: 1 })
+        .withMessage(new ErrorModel(errorsConst.userErrors.nameIsEmpty)),
+        sharedValidators.validateError,
+      check('lastName')
+        .optional({checkFalsy: false})
+        .isString()
+        .withMessage(new ErrorModel(errorsConst.userErrors.lastNameRequired))
+        .bail()
+        .isLength({ min: 1 })
+        .withMessage(new ErrorModel(errorsConst.userErrors.lastNameIsEmpty)),
+        sharedValidators.validateError,
+      check('numberDocument')
+        .optional({checkFalsy: false})
+        .isString()
+        .withMessage(new ErrorModel(errorsConst.userErrors.numberDocumentRequired))
+        .bail()
+        .isLength({ min: 1 })
+        .withMessage(new ErrorModel(errorsConst.userErrors.numberDocumentIsEmpty)),
+        sharedValidators.validateError,
+    ]
   },
 };
