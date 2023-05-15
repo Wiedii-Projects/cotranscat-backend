@@ -7,6 +7,8 @@ const { Router } = require("express");
 // Checks - middleware
 const { authMiddleware } = require('./../middleware/index.checks.middleware')
 
+// Validators - middleware
+
 const router = Router();
 
 router.post('/login', [

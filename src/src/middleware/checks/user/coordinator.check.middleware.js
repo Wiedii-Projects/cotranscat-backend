@@ -18,31 +18,17 @@ module.exports = {
     return [
       ...sharedCheckMiddleware.checkCreateUser(),
       check("nickName")
-        .isString()
-        .withMessage(new ErrorModel(errorsConst.coordinator.nickNameRequired))
-        .bail()
-        .isLength({ min: 1, max: 100 })
-        .withMessage(new ErrorModel(errorsConst.coordinator.lengthNickName))
-        .bail(),
+        .isString().withMessage(new ErrorModel(errorsConst.coordinatorErrors.nickNameRequired)).bail()
+        .isLength({ min: 1, max: 100 }).withMessage(new ErrorModel(errorsConst.coordinatorErrors.lengthNickName)),
       sharedValidators.validateError,
       check("email")
-        .isString()
-        .withMessage(new ErrorModel(errorsConst.coordinator.emailRequired))
-        .bail()
-        .isEmail()
-        .withMessage(new ErrorModel(errorsConst.coordinator.emailInvalid))
-        .bail()
-        .isLength({ min: 1, max: 100 })
-        .withMessage(new ErrorModel(errorsConst.coordinator.emailInvalid))
-        .bail(),
+        .isString().withMessage(new ErrorModel(errorsConst.coordinatorErrors.emailRequired)).bail()
+        .isEmail().withMessage(new ErrorModel(errorsConst.coordinatorErrors.emailInvalid)).bail()
+        .isLength({ min: 1, max: 100 }).withMessage(new ErrorModel(errorsConst.coordinatorErrors.emailInvalid)),
       sharedValidators.validateError,
       check("password")
-        .isString()
-        .withMessage(new ErrorModel(errorsConst.coordinator.passwordRequired))
-        .bail()
-        .isLength({ min: 6, max: 10 })
-        .withMessage(new ErrorModel(errorsConst.coordinator.passwordInvalid))
-        .bail(),
+        .isString().withMessage(new ErrorModel(errorsConst.coordinatorErrors.passwordRequired)).bail()
+        .isLength({ min: 6, max: 10 }).withMessage(new ErrorModel(errorsConst.coordinatorErrors.passwordInvalid)),
       sharedValidators.validateError,
       ...sharedCheckMiddleware.checkEmailOrNickNameExist(),
       sharedValidators.validateError,
@@ -52,35 +38,18 @@ module.exports = {
   checkUpdateCoordinator: () => {
     return [
       ...sharedCheckMiddleware.checkUpdateUser(),
-      check("nickName")
-        .isString()
-        .withMessage(new ErrorModel(errorsConst.coordinator.nickNameRequired))
-        .bail()
-        .isLength({ min: 1, max: 100 })
-        .withMessage(new ErrorModel(errorsConst.coordinator.lengthNickName))
-        .bail()
-        .optional({ checkFalsy: false }),
+      check("nickName").optional({ checkFalsy: false })
+        .isString().withMessage(new ErrorModel(errorsConst.coordinatorErrors.nickNameRequired)).bail()
+        .isLength({ min: 1, max: 100 }).withMessage(new ErrorModel(errorsConst.coordinatorErrors.lengthNickName)),
       sharedValidators.validateError,
-      check("email")
-        .isString()
-        .withMessage(new ErrorModel(errorsConst.coordinator.emailRequired))
-        .bail()
-        .isEmail()
-        .withMessage(new ErrorModel(errorsConst.coordinator.emailInvalid))
-        .bail()
-        .isLength({ min: 1, max: 100 })
-        .withMessage(new ErrorModel(errorsConst.coordinator.emailInvalid))
-        .bail()
-        .optional({ checkFalsy: false }),
+      check("email").optional({ checkFalsy: false })
+        .isString().withMessage(new ErrorModel(errorsConst.coordinatorErrors.emailRequired)).bail()
+        .isEmail().withMessage(new ErrorModel(errorsConst.coordinatorErrors.emailInvalid)).bail()
+        .isLength({ min: 1, max: 100 }).withMessage(new ErrorModel(errorsConst.coordinatorErrors.emailInvalid)),
       sharedValidators.validateError,
-      check("password")
-        .isString()
-        .withMessage(new ErrorModel(errorsConst.coordinator.passwordRequired))
-        .bail()
-        .isLength({ min: 6, max: 10 })
-        .withMessage(new ErrorModel(errorsConst.coordinator.passwordInvalid))
-        .bail()
-        .optional({ checkFalsy: false }),
+      check("password").optional({ checkFalsy: false })
+        .isString().withMessage(new ErrorModel(errorsConst.coordinatorErrors.passwordRequired)).bail()
+        .isLength({ min: 6, max: 10 }).withMessage(new ErrorModel(errorsConst.coordinatorErrors.passwordInvalid)),
       sharedValidators.validateError,
       ...sharedCheckMiddleware.checkEmailOrNickNameExist(),
       sharedValidators.validateError,

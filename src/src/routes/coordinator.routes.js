@@ -15,7 +15,9 @@ router.post('/', [
 
 router.get('/',coordinatorController.getAllCoordinator);
 
-router.get('/:id',[sharedMiddleware.checkId()],coordinatorController.getCoordinator);
+router.get('/:id',[
+    sharedMiddleware.checkId()
+],coordinatorController.getCoordinator);
 
 // TODO: This endpoint is not documented and is not being used in the project.
 router.put('/:id', [

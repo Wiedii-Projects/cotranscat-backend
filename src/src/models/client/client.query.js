@@ -12,7 +12,7 @@ module.exports = {
         try {
             return await Client.findOrCreate({ where, transaction });
         } catch {
-            throw errorsConst.client.queryErrors.createError;
+            throw errorsConst.clientErrors.queryErrors.createError;
         }
     },
 

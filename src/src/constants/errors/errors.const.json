@@ -1,269 +1,269 @@
 {
   "authErrors": {
     "incorrectCredentials": {
-      "code": "AU0001",
-      "message": "Incorrect email or password."
+      "code": "AUTH001",
+      "message": "Incorrect email or password"
     },
     "emailRequired": {
-      "code": "AU0002",
-      "message": "Email is required."
+      "code": "AUTH002",
+      "message": "Email is required"
     },
     "passwordRequired": {
-      "code": "AU0003",
-      "message": "Password is required."
+      "code": "AUTH003",
+      "message": "Password is required"
     },
     "userNotExist": {
-      "code": "AU0004",
-      "message": "User does not exist."
+      "code": "AUTH004",
+      "message": "User does not exist"
     },
     "passwordConfirmRequired": {
-      "code": "AU0005",
-      "message": "Password confirm is required."
+      "code": "AUTH005",
+      "message": "Password confirm is required"
     },
     "passwordNotMatch": {
-      "code": "AU0006",
-      "message": "Password does not match."
+      "code": "AUTH006",
+      "message": "Password does not match"
     },
     "codeNotValid": {
-      "code": "AU0007",
-      "message": "Code is not valid."
+      "code": "AUTH007",
+      "message": "Code is not valid"
     },
     "validatePassword": {
-      "code": "AU0008",
-      "message": "The password is not secure."
+      "code": "AUTH008",
+      "message": "The password is not secure"
     },
     "codeRequired": {
-      "code": "AU0009",
-      "message": "Code is required."
+      "code": "AUTH009",
+      "message": "Code is required"
     },
     "idRequired": {
-      "code": "AU0010",
-      "message": "ID is required."
+      "code": "AUTH010",
+      "message": "ID is required"
     },
     "tokenInvalid": {
-      "code": "AU0011",
+      "code": "AUTH011",
       "message": "Token invalid"
     },
     "nickNameRequired": {
-      "code": "AU0012",
+      "code": "AUTH012",
       "message": "The nickName is required"
     },
     "nickNameSize": {
-      "code": "AU0012",
+      "code": "AUTH013",
       "message": "The nickName must have a maximum of 100 characters"
     },
     "emailOrNickNameRequired": {
-      "code": "AU0013",
+      "code": "AUTH014",
       "message": "Email or nickName is required"
     },
     "passwordCharacter": {
-      "code": "AU0014",
-      "message": "the password must have a minimum of 8 character and a maximum of 30 characters."
+      "code": "AUTH015",
+      "message": "The password must have a minimum of 8 character and a maximum of 30 characters"
     },
     "passwordIncorrect": {
-      "code": "AU0006",
-      "message": "Incorrect password."
+      "code": "AUTH016",
+      "message": "Incorrect password"
     },
     "queryErrors": {
       "generateJWTError": {
         "code": "AUTH_001",
-        "message": "Something went wrong."
+        "message": "Something went wrong"
       }
     }
   },
   "userErrors": {
     "nameRequired": {
-      "code": "US0001",
+      "code": "USRL001",
       "message": "The name is required"
     },
     "nameCharacter": {
-      "code": "US0002",
-      "message": "the name must have a minimum of 1 character and a maximum of 50 characters."
+      "code": "USRL002",
+      "message": "The name must have a minimum of 1 character and a maximum of 50 characters"
     },
     "numberDocumentIsEmpty": {
-      "code": "US0003",
+      "code": "USRL003",
       "message": "The number document is empty"
     },
     "idRequired": {
-      "code": "US0004",
+      "code": "USRL004",
       "message": "the ID is required"
     },
     "noToken": {
-      "code": "US0005",
-      "message": "The token is missing from the request."
+      "code": "USRL005",
+      "message": "The token is missing from the request"
     },
     "userNotExist": {
-      "code": "US0006",
-      "message": "User does not exist."
+      "code": "USRL006",
+      "message": "User does not exist"
     },
     "lastNameRequired": {
-      "code": "US0007",
+      "code": "USRL007",
       "message": "The last name is required"
     },
     "lastNameCharacter": {
-      "code": "US0007",
-      "message": "the lastName must have a minimum of 1 character and a maximum of 50 characters."
+      "code": "USRL008",
+      "message": "The lastName must have a minimum of 1 character and a maximum of 50 characters"
     },
     "phoneNumberRequired": {
-      "code": "US0008",
-      "message": "The phone number is required."
+      "code": "USRL009",
+      "message": "The phone number is required"
     },
     "phoneNumberCharacter": {
-      "code": "US0008",
-      "message": "the lastName must have a minimum of 1 character and a maximum of 12 characters."
+      "code": "USRL010",
+      "message": "The phone number must have a minimum of 1 character and a maximum of 12 characters"
     },
     "validatePassword": {
-      "code": "US0009",
-      "message": "The password is not secure."
+      "code": "USRL011",
+      "message": "The password is not secure"
     },
     "adminRole": {
-      "code": "US0010",
-      "message": "This action can only be performed by administrator users."
+      "code": "USRL012",
+      "message": "This action can only be performed by administrator users"
     },
     "userNoDelete": {
-      "code": "US0011",
-      "message": "Can't delete User."
+      "code": "USRL013",
+      "message": "Can't delete User"
     },
     "idDocumentTypeRequired": {
-      "code": "US0012",
-      "message": "The document type is required."
+      "code": "USRL013",
+      "message": "The document type is required"
     },
     "idDocumentTypeInvalid": {
-      "code": "US0012",
-      "message": "The document type invalid."
+      "code": "USRL014",
+      "message": "The document type invalid"
     },
     "idMunicipalityInvalid": {
-      "code": "US0012",
-      "message": "The municipality invalid."
+      "code": "USRL015",
+      "message": "The municipality invalid"
     },
     "idRoleRequired": {
-      "code": "US0012",
-      "message": "The rol is required."
+      "code": "USRL016",
+      "message": "The rol is required"
     },
     "idRoleInvalid": {
-      "code": "US0012",
-      "message": "The rol is invalid."
+      "code": "USRL017",
+      "message": "The rol is invalid"
     },
     "numberDocumentRequired": {
-      "code": "US0013",
+      "code": "USRL018",
       "message": "The number document is required"
     },
     "numberDocumentCharacter": {
-      "code": "US0013",
-      "message": "the number document must have a minimum of 1 character and a maximum of 20 characters."
+      "code": "USRL019",
+      "message": "The number document must have a minimum of 1 character and a maximum of 20 characters"
     },
     "idIndicativePhoneRequired": {
-      "code": "US0014",
-      "message": "The indicative number is required."
+      "code": "USRL020",
+      "message": "The indicative number is required"
     },
     "idIndicativePhoneInvalid": {
-      "code": "US0014",
-      "message": "The indicative phone invalid."
+      "code": "USRL021",
+      "message": "The indicative phone invalid"
     },
     "idIndicativeNumberPhoneWhatsAppRequired": {
-      "code": "US0015",
-      "message": "The id Indicative Number Phone WhatsApp is required."
+      "code": "USRL022",
+      "message": "The id Indicative Number Phone WhatsApp is required"
     },
     "numberPhoneWhatsAppRequired": {
-      "code": "US0016",
-      "message": "The number Phone WhatsApp is required."
+      "code": "USRL023",
+      "message": "The number Phone WhatsApp is required"
     },
     "addressRequired": {
-      "code": "US0017",
-      "message": "The address is required."
+      "code": "USRL024",
+      "message": "The address is required"
     },
     "emailOrNickNameAlreadyExist": {
-      "code": "US0018",
+      "code": "USRL025",
       "message": "The nickName or email already exist"
     },
     "nameIsEmpty": {
-      "code": "US0019",
+      "code": "USRL026",
       "message": "The name is empty"
     },
     "lastNameIsEmpty": {
-      "code": "US0020",
+      "code": "USRL027",
       "message": "The last name is empty"
     },
     "queryErrors": {
       "findAllError": {
         "code": "USRL_001",
-        "message": "Something went wrong."
+        "message": "Something went wrong"
       },
       "findError": {
         "code": "USRL_002",
-        "message": "Something went wrong."
+        "message": "Something went wrong"
       },
       "createError": {
         "code": "USRL_003",
-        "message": "Something went wrong."
+        "message": "Something went wrong"
       },
       "updateError": {
         "code": "USRL_004",
-        "message": "Something went wrong."
+        "message": "Something went wrong"
       }
     }
   },
   "documentTypeErrors":{
     "nameRequired": {
-      "code": "DTP0001",
+      "code": "DOCT001",
       "message": "The document type name is required"
     },
     "nameSize": {
-      "code": "DTP0002",
+      "code": "DOCT002",
       "message": "The document type name must be at least 2 characters long"
     },
     "queryErrors":{
       "createError": {
-        "code": "DCMTP_001",
-        "message": "Something went wrong."
+        "code": "DOCT_001",
+        "message": "Something went wrong"
       },
       "updateError": {
-        "code": "DCMTP_002",
-        "message": "Something went wrong."
+        "code": "DOCT_002",
+        "message": "Something went wrong"
       },
       "findAllError": {
-        "code": "DCMTP_003",
-        "message": "Something went wrong."
+        "code": "DOCT_003",
+        "message": "Something went wrong"
       },
       "deleteError": {
-        "code": "DCMTP_004",
-        "message": "Something went wrong."
+        "code": "DOCT_004",
+        "message": "Something went wrong"
       }
     }
   },
   "indicativeNumberErrors":{
     "numberRequired":{
-      "code": "INNU001",
+      "code": "INDN001",
       "message": "The code number is required"
     },
     "numberSize":{
-      "code": "INNU002",
+      "code": "INDN002",
       "message": "The code number must have a minimum length of 1 character and a maximum length of 10 character"
     },
     "countryRequired":{
-      "code": "INNU003",
+      "code": "INDN003",
       "message": "The country is required"
     },
     "countrySize":{
-      "code": "INNU004",
+      "code": "INDN004",
       "message": "The country must have a minimum length of 1 character and a maximum length of 50 characters"
     },
     "queryErrors": {
       "createError": {
-        "code": "INNU_001",
-        "message": "Something went wrong."
+        "code": "INDN_001",
+        "message": "Something went wrong"
       },
       "updateError": {
-        "code": "INNU_002",
-        "message": "Something went wrong."
+        "code": "INDN_002",
+        "message": "Something went wrong"
       },
       "findAllError": {
-        "code": "INNU_003",
-        "message": "Something went wrong."
+        "code": "INDN_003",
+        "message": "Something went wrong"
       },
       "deleteError": {
-        "code": "INNU_004",
-        "message": "Something went wrong."
+        "code": "INDN_004",
+        "message": "Something went wrong"
       }
     }
   },
@@ -279,83 +279,83 @@
     "queryErrors":{
       "createError": {
         "code": "DEPT_001",
-        "message": "Something went wrong."
+        "message": "Something went wrong"
       },
       "updateError": {
         "code": "DEPT_002",
-        "message": "Something went wrong."
+        "message": "Something went wrong"
       },
       "findAllError": {
         "code": "DEPT_003",
-        "message": "Something went wrong."
+        "message": "Something went wrong"
       },
       "deleteError": {
         "code": "DEPT_004",
-        "message": "Something went wrong."
+        "message": "Something went wrong"
       }
     }
   },
   "municipalityErrors":{
     "nameRequired": {
-      "code": "MUNC001",
+      "code": "MUNI001",
       "message": "Municipality name is required"
     },
     "nameSize": {
-      "code": "MUNC002",
+      "code": "MUNI002",
       "message": "The municipality must have a minimum length of 1 character and a maximum length of 50 characters"
     },
     "departmentRequired":{
-      "code": "MUNC003",
+      "code": "MUNI003",
       "message": "Department is required"
     },
     "departmentAlreadyExist": {
-      "code": "MUNC004",
+      "code": "MUNI004",
       "message": "The department already exist"
     },
     "queryErrors":{
       "createError": {
-        "code": "MUNC_001",
-        "message": "Something went wrong."
+        "code": "MUNI_001",
+        "message": "Something went wrong"
       },
       "updateError": {
-        "code": "MUNC_002",
-        "message": "Something went wrong."
+        "code": "MUNI_002",
+        "message": "Something went wrong"
       },
       "findAllError": {
-        "code": "MUNC_003",
-        "message": "Something went wrong."
+        "code": "MUNI_003",
+        "message": "Something went wrong"
       },
       "deleteError": {
-        "code": "MUNC_004",
-        "message": "Something went wrong."
+        "code": "MUNI_004",
+        "message": "Something went wrong"
       }
     }
   },
   "paymentMethodErrors":{
     "nameRequired": {
-      "code": "PYMT001",
+      "code": "PAYM001",
       "message": "Payment method name is required"
     },
     "nameSize": {
-      "code": "PYMT003",
+      "code": "PAYM002",
       "message": "The Payment method name must have a minimum length of 1 character and a maximum length of 100 characters"
     },
     "queryErrors":{
       "createError": {
-        "code": "PYMT_001",
-        "message": "Something went wrong."
+        "code": "PAYM_001",
+        "message": "Something went wrong"
       },
       "updateError": {
-        "code": "PYMT_002",
-        "message": "Something went wrong."
+        "code": "PAYM_002",
+        "message": "Something went wrong"
       },
       "findAllError": {
-        "code": "PYMT_003",
-        "message": "Something went wrong."
+        "code": "PAYM_003",
+        "message": "Something went wrong"
       },
       "deleteError": {
-        "code": "PYMT_004",
-        "message": "Something went wrong."
+        "code": "PAYM_004",
+        "message": "Something went wrong"
       }
     }
   },
@@ -371,58 +371,58 @@
     "queryErrors":{
       "errorCreateUnitMeasure": {
         "code": "UNMS_001",
-        "message": "Something went wrong."
+        "message": "Something went wrong"
       },
       "updateError": {
         "code": "UNMS_002",
-        "message": "Something went wrong."
+        "message": "Something went wrong"
       },
       "finAllError": {
         "code": "UNMS_003",
-        "message": "Something went wrong."
+        "message": "Something went wrong"
       },
       "deleteError": {
         "code": "UNMS_004",
-        "message": "Something went wrong."
+        "message": "Something went wrong"
       }
     }
   },
   "shippingTypeErrors":{
     "nameRequired": {
-      "code": "STYP001",
+      "code": "SHPT001",
       "message": "Shipping type name is required"
     },
     "nameSize": {
-      "code": "STYP003",
+      "code": "SHPT002",
       "message": "The Shipment Type name must have a minimum length of 1 character and a maximum length of 100 characters"
     },
     "queryErrors":{
       "createError": {
-        "code": "STYP_001",
-        "message": "Something went wrong."
+        "code": "SHPT_001",
+        "message": "Something went wrong"
       },
       "updateError": {
-        "code": "STYP_002",
-        "message": "Something went wrong."
+        "code": "SHPT_002",
+        "message": "Something went wrong"
       },
       "findAllError": {
-        "code": "STYP_003",
-        "message": "Something went wrong."
+        "code": "SHPT_003",
+        "message": "Something went wrong"
       },
       "errorError": {
-        "code": "STYP_004",
-        "message": "Something went wrong."
+        "code": "SHPT_004",
+        "message": "Something went wrong"
       }
     }
   },
-  "admin": {
+  "adminErrors": {
     "nickNameRequired": {
       "code": "ADMI001",
       "message": "Nick name is required"
     },
-    "lengthNickName": {
+    "nickNameSize": {
       "code": "ADMI002",
-      "message": "The admin name must have a minimum of 1 character and a maximum of 100 characters"
+      "message": "The administrator's name must have a minimum length of 1 character and a maximum length of 100 characters"
     },
     "emailRequired":{
       "code": "ADMI003",
@@ -432,30 +432,34 @@
       "code": "ADMI004",
       "message": "Email is invalid"
     },
-    "passwordRequired":{
+    "emailSize":{
       "code": "ADMI005",
+      "message": "The email must have a minimum length of 6 character and a maximum length of 100 characters"
+    },
+    "passwordRequired":{
+      "code": "ADMI006",
       "message": "Password is required"
     },
-    "passwordInvalid":{
-      "code": "ADMI006",
-      "message": "Password is invalid"
+    "passwordSize":{
+      "code": "ADMI007",
+      "message": "The password must have a minimum length of 6 character and a maximum length of 10 characters"
     },
     "queryErrors": {
       "createError": {
         "code": "ADMI_001",
-        "message": "Something went wrong."
+        "message": "Something went wrong"
       },
       "updateError": {
         "code": "ADMI_002",
-        "message": "Something went wrong."
+        "message": "Something went wrong"
       },
       "findError": {
         "code": "ADMI_003",
-        "message": "Something went wrong."
+        "message": "Something went wrong"
       }
     }
   },
-  "client": {
+  "clientErrors": {
     "numberPhoneWhatsappRequired": {
       "code": "CLIEN001",
       "message": "Number phone whatsapp is required"
@@ -470,84 +474,84 @@
     },
     "idIndicativePhoneWhatsAppRequired": {
       "code": "CLIEN004",
-      "message": "The indicative number WhatsApp is required."
+      "message": "The indicative number WhatsApp is required"
     },
     "idIndicativePhoneWhatsAppInvalid": {
       "code": "CLIEN005",
-      "message": "The indicative number WhatsApp invalid."
+      "message": "The indicative number WhatsApp invalid"
     },
     "idMunicipalityRequired": {
       "code": "CLIEN006",
-      "message": "The municipality is required."
+      "message": "The municipality is required"
     },
     "idMunicipalityInvalid": {
       "code": "CLIEN007",
-      "message": "The municipality invalid."
+      "message": "The municipality invalid"
     },
     "queryErrors": {
       "findAllError": {
         "code": "CLIEN_001",
-        "message": "Something went wrong."
+        "message": "Something went wrong"
       },
       "findError": {
         "code": "CLIEN_002",
-        "message": "Something went wrong."
+        "message": "Something went wrong"
       },
       "createError": {
         "code": "CLIEN_003",
-        "message": "Something went wrong."
+        "message": "Something went wrong"
       },
       "updateError": {
         "code": "CLIEN_004",
-        "message": "Something went wrong."
+        "message": "Something went wrong"
       }
     }
   },
   "driverErrors":{
     "nickNameRequired": {
-      "code": "DRV001",
+      "code": "DRIV001",
       "message": "Nick name is required"
     },
     "emailRequired":{
-      "code": "DRV002",
+      "code": "DRIV002",
       "message": "Email is required"
     },
     "passwordRequired":{
-      "code": "DRV003",
+      "code": "DRIV003",
       "message": "Password is required"
     },
     "lengthNickName": {
-      "code": "DRV004",
+      "code": "DRIV004",
       "message": "The nickName must have a minimum length of 1 character and a maximum length of 100 characters"
     },
     "emailInvalid":{
-      "code": "DRV005",
+      "code": "DRIV005",
       "message": "Email is invalid"
     },
     "lengthPassword":{
-      "code": "DRV006",
+      "code": "DRIV006",
       "message": "The password must have a minimum length of 6 characters and a maximum length of 10 characters"
     },
     "driverNotExist":{
-      "code": "DRV007",
-      "message": "driver does not exist"
+      "code": "DRIV007",
+      "message": "Driver does not exist"
     },
     "queryErrors": {
       "create": {
-        "code": "DRVR_001",
+        "code": "DRIV_001",
         "message": "Something went wrong"
       },
       "findError": {
-        "code": "DRVR_002",
+        "code": "DRIV_002",
         "message": "Something went wrong"
       },
       "updateError": {
-        "code": "DRVR_003",
+        "code": "DRIV_003",
         "message": "Something went wrong"
       }
     }
   },
-  "coordinator":{
+  "coordinatorErrors":{
     "nickNameRequired": {
       "code": "COOR001",
       "message": "Nick name is required"
@@ -575,15 +579,15 @@
     "queryErrors": {
       "createError": {
         "code": "COOR_001",
-        "message": "Something went wrong."
+        "message": "Something went wrong"
       },
       "updateError": {
         "code": "COOR_002",
-        "message": "Something went wrong."
+        "message": "Something went wrong"
       },
       "findError": {
         "code": "COOR_003",
-        "message": "Something went wrong."
+        "message": "Something went wrong"
       }
     }
   },
@@ -619,83 +623,83 @@
     "queryErrors": {
       "createError": {
         "code": "SELL_001",
-        "message": "Something went wrong."
+        "message": "Something went wrong"
       },
       "updateError": {
         "code": "SELL_002",
-        "message": "Something went wrong."
+        "message": "Something went wrong"
       },
       "findError": {
         "code": "SELL_003",
-        "message": "Something went wrong."
+        "message": "Something went wrong"
       }
     }
   },
   "vehicleErrors": {
     "plateRequired": {
-      "code": "VHC001",
+      "code": "VEHI001",
       "message": "The license plate number of the vehicle is required"
     },
     "plateSize": {
-      "code": "VHC002",
+      "code": "VEHI002",
       "message": "The vehicle license plate entered must have a minimum length of 4 characters and a maximum length of 6 characters"
     },
     "plateAlreadyExists": {
-      "code": "VHC003",
+      "code": "VEHI003",
       "message": "The plate already exists"
     },
     "municipalityRequired": {
-      "code": "VHC004",
+      "code": "VEHI004",
       "message": "The municipality is required"
     },
     "municipalityDoesNotExist": {
-      "code": "VHC005",
+      "code": "VEHI005",
       "message": "The municipality does not exist"
     },
     "markRequired": {
-      "code": "VHC006",
+      "code": "VEHI006",
       "message": "The vehicle brand is invalid"
     },
     "modelRequired": {
-      "code": "VHC007",
+      "code": "VEHI007",
       "message": "Vehicle model is required"
     },
     "priceRequired": {
-      "code": "VHC008",
+      "code": "VEHI008",
       "message": "The default fare is required"
     },
     "priceInvalid": {
-      "code": "VHC009",
+      "code": "VEHI009",
       "message": "The price entered is invalid"
     },
     "seatingMatrixRequired": {
-      "code": "VHC010",
+      "code": "VEHI010",
       "message": "Vehicle seating matrix is required"
     },
     "heightInvalid": {
-      "code": "VHC011",
+      "code": "VEHI011",
       "message": "Vehicle height is invalid"
     },
     "widthInvalid": {
-      "code": "VHC012",
+      "code": "VEHI012",
       "message": "Vehicle width is invalid"
     },
     "vehicleDoesNotExist": {
-      "code": "VHC013",
-      "message": "the vehicle does not exist"
+      "code": "VEHI013",
+      "message": "The vehicle does not exist"
     },
     "queryErrors": {
       "createdError": {
-        "code": "VHCL_001",
-        "message": "Something went wrong."
+        "code": "VEHI_001",
+        "message": "Something went wrong"
       },
       "findError": {
-        "code": "VHCL_002",
-        "message": "Something went wrong."
+        "code": "VEHI_002",
+        "message": "Something went wrong"
       },
       "deleteError": {
-        "code": "VHCL_003",
-        "message": "Something went wrong."
+        "code": "VEHI_003",
+        "message": "Something went wrong"
       }
     }
   },
@@ -722,48 +726,48 @@
     },
     "roleAlreadyExists": {
       "code": "ROLE002",
-      "message": "The role type already exists."
+      "message": "The role type already exists"
     },
     "queryErrors": {
       "createError": {
         "code": "ROLE_001",
-        "message": "Something went wrong."
+        "message": "Something went wrong"
       },
       "findAllError": {
         "code": "ROLE_002",
-        "message": "Something went wrong."
+        "message": "Something went wrong"
       }
     }
   },
   "functionalityErrors": {
     "nameRequired": {
       "code": "FNCT001",
-      "message": "the name is required."
+      "message": "the name is required"
     },
     "nameSize": {
       "code": "FNCT002",
-      "message": "The functionality name must have a length of at least 1 character and a maximum of 10 characters."
+      "message": "The functionality name must have a length of at least 1 character and a maximum of 10 characters"
     },
     "nameAlreadyExists": {
       "code": "FNCT003",
-      "message": "The name already exists."
+      "message": "The name already exists"
     },
     "queryErrors": {
       "createError": {
         "code": "FNCT_001",
-        "message": "Something went wrong."
+        "message": "Something went wrong"
       },
       "findAllError": {
         "code": "FNCT_002",
-        "message": "Something went wrong."
+        "message": "Something went wrong"
       },
       "updateError": {
         "code": "FNCT_003",
-        "message": "Something went wrong."
+        "message": "Something went wrong"
       },
       "deleteError": {
         "code": "FNCT_004",
-        "message": "Something went wrong."
+        "message": "Something went wrong"
       }
     }
   },
@@ -771,7 +775,7 @@
     "queryErrors":{
       "createError":{
         "code": "DVVH_001",
-        "message": "Something went wrong."
+        "message": "Something went wrong"
       }
     }
   },
@@ -786,7 +790,7 @@
     },
     "driverNotExist":{
       "code": "TRVL003",
-      "message": "driver does not exist"
+      "message": "Driver does not exist"
     },
     "idVehicleRequired": {
       "code": "TRVL004",
@@ -839,30 +843,30 @@
     "queryErrors":{
       "createError":{
         "code": "TRVL_001",
-        "message": "Something went wrong."
+        "message": "Something went wrong"
       },
       "findError":{
         "code": "TRVL_002",
-        "message": "Something went wrong."
+        "message": "Something went wrong"
       },
       "updateError":{
         "code": "TRVL_003",
-        "message": "Something went wrong."
+        "message": "Something went wrong"
       },
       "deleteError":{
         "code": "TRVL_004",
-        "message": "Something went wrong."
+        "message": "Something went wrong"
       }
     }
   },
   "routeErrors":{
     "municipalityDepartRequired":{
       "code": "ROUT001",
-      "message": "The municipality depart is required."
+      "message": "The municipality depart is required"
     },
     "sameMunicipalityOfArrival":{
       "code": "ROUT002",
-      "message": "The municipality of departure must not be the same as the municipality of arrival."
+      "message": "The municipality of departure must not be the same as the municipality of arrival"
     },
     "municipalityDepartDoesNotExist":{
       "code": "ROUT003",
@@ -870,20 +874,20 @@
     },
     "municipalityArriveRequired":{
       "code": "ROUT004",
-      "message": "The municipality of arrival is required."
+      "message": "The municipality of arrival is required"
     },
     "municipalityArriveDoesNotExist":{
-      "code": "ROUT003",
+      "code": "ROUT005",
       "message": "The municipality of arrival does not exist"
     },
     "queryErrors": {
       "createError": {
         "code": "ROUT_001",
-        "message": "Something went wrong."
+        "message": "Something went wrong"
       },
       "findAllError": {
         "code": "ROUT_002",
-        "message": "Something went wrong."
+        "message": "Something went wrong"
       }
     }
   },
@@ -903,15 +907,15 @@
     "queryErrors": {
       "createError": {
         "code": "SEAT_001",
-        "message": "Something went wrong."
+        "message": "Something went wrong"
       },
       "findAllError": {
         "code": "SEAT_002",
-        "message": "Something went wrong."
+        "message": "Something went wrong"
       },
       "updateError": {
         "code": "SEAT_003",
-        "message": "Something went wrong."
+        "message": "Something went wrong"
       }
     }
   }

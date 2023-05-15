@@ -18,28 +18,17 @@ module.exports = {
     return [
       ...sharedCheckMiddleware.checkCreateUser(),
       check("nickName")
-        .isString()
-        .withMessage(new ErrorModel(errorsConst.sellerErrors.nickNameRequired))
-        .bail()
-        .isLength({ min: 1, max: 100 })
-        .withMessage(new ErrorModel(errorsConst.sellerErrors.nickNameSize)),
+        .isString().withMessage(new ErrorModel(errorsConst.sellerErrors.nickNameRequired)).bail()
+        .isLength({ min: 1, max: 100 }).withMessage(new ErrorModel(errorsConst.sellerErrors.nickNameSize)),
       sharedValidators.validateError,
       check("email")
-        .isString()
-        .withMessage(new ErrorModel(errorsConst.sellerErrors.emailRequired))
-        .bail()
-        .isEmail()
-        .withMessage(new ErrorModel(errorsConst.sellerErrors.emailInvalid))
-        .bail()
-        .isLength({ min: 1, max: 100 })
-        .withMessage(new ErrorModel(errorsConst.sellerErrors.emailSize)),
+        .isString().withMessage(new ErrorModel(errorsConst.sellerErrors.emailRequired)).bail()
+        .isEmail().withMessage(new ErrorModel(errorsConst.sellerErrors.emailInvalid)).bail()
+        .isLength({ min: 1, max: 100 }).withMessage(new ErrorModel(errorsConst.sellerErrors.emailSize)),
       sharedValidators.validateError,
       check("password")
-        .isString()
-        .withMessage(new ErrorModel(errorsConst.sellerErrors.passwordRequired))
-        .bail()
-        .isLength({ min: 6, max: 10 })
-        .withMessage(new ErrorModel(errorsConst.sellerErrors.passwordSize)),
+        .isString().withMessage(new ErrorModel(errorsConst.sellerErrors.passwordRequired)).bail()
+        .isLength({ min: 6, max: 10 }).withMessage(new ErrorModel(errorsConst.sellerErrors.passwordSize)),
       sharedValidators.validateError,
       ...sharedCheckMiddleware.checkEmailOrNickNameExist(),
       sharedValidators.validateError,
@@ -49,32 +38,18 @@ module.exports = {
   checkUpdateSeller: () => {
     return [
       ...sharedCheckMiddleware.checkUpdateUser(),
-      check("nickName")
-        .optional({ checkFalsy: false })
-        .isString()
-        .withMessage(new ErrorModel(errorsConst.sellerErrors.nickNameRequired))
-        .bail()
-        .isLength({ min: 1, max: 100 })
-        .withMessage(new ErrorModel(errorsConst.sellerErrors.nickNameSize)),
+      check("nickName").optional({ checkFalsy: false })
+        .isString().withMessage(new ErrorModel(errorsConst.sellerErrors.nickNameRequired)).bail()
+        .isLength({ min: 1, max: 100 }).withMessage(new ErrorModel(errorsConst.sellerErrors.nickNameSize)),
       sharedValidators.validateError,
-      check("email")
-        .optional({ checkFalsy: false })
-        .isString()
-        .withMessage(new ErrorModel(errorsConst.sellerErrors.emailRequired))
-        .bail()
-        .isEmail()
-        .withMessage(new ErrorModel(errorsConst.sellerErrors.emailInvalid))
-        .bail()
-        .isLength({ min: 1, max: 100 })
-        .withMessage(new ErrorModel(errorsConst.sellerErrors.emailSize)),
+      check("email").optional({ checkFalsy: false })
+        .isString().withMessage(new ErrorModel(errorsConst.sellerErrors.emailRequired)).bail()
+        .isEmail().withMessage(new ErrorModel(errorsConst.sellerErrors.emailInvalid)).bail()
+        .isLength({ min: 1, max: 100 }).withMessage(new ErrorModel(errorsConst.sellerErrors.emailSize)),
       sharedValidators.validateError,
-      check("password")
-        .optional({ checkFalsy: false })
-        .isString()
-        .withMessage(new ErrorModel(errorsConst.sellerErrors.passwordRequired))
-        .bail()
-        .isLength({ min: 6, max: 10 })
-        .withMessage(new ErrorModel(errorsConst.sellerErrors.passwordSize)),
+      check("password").optional({ checkFalsy: false })
+        .isString().withMessage(new ErrorModel(errorsConst.sellerErrors.passwordRequired)).bail()
+        .isLength({ min: 6, max: 10 }).withMessage(new ErrorModel(errorsConst.sellerErrors.passwordSize)),
       sharedValidators.validateError,
       ...sharedCheckMiddleware.checkEmailOrNickNameExist(),
       sharedValidators.validateError,

@@ -15,6 +15,8 @@ router.post('/', [
 
 router.get('/',sellerController.getAllSeller);
 
-router.get('/:id',[sharedMiddleware.checkId()],sellerController.getSeller);
+router.get('/:id',[
+    sharedMiddleware.checkId()
+],sellerController.getSeller);
 
 module.exports = router;

@@ -15,7 +15,9 @@ router.post('/', [
 
 router.get('/', adminController.getAllAdmin);
 
-router.get('/:id', [sharedMiddleware.checkId()], adminController.getAdmin);
+router.get('/:id', [
+    sharedMiddleware.checkId()
+], adminController.getAdmin);
 
 // TODO: This endpoint is not documented and is not being used in the project.
 router.put('/:id', [
