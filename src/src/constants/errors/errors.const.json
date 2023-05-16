@@ -80,9 +80,9 @@
       "code": "USRL002",
       "message": "The name must have a minimum of 1 character and a maximum of 50 characters"
     },
-    "numberDocumentIsEmpty": {
+    "valueToFilterIsRequired": {
       "code": "USRL003",
-      "message": "The number document is empty"
+      "message": "The value to filter is required"
     },
     "idRequired": {
       "code": "USRL004",
@@ -176,13 +176,9 @@
       "code": "USRL025",
       "message": "The nickName or email already exist"
     },
-    "nameIsEmpty": {
+    "filterValueIsEmpty": {
       "code": "USRL026",
-      "message": "The name is empty"
-    },
-    "lastNameIsEmpty": {
-      "code": "USRL027",
-      "message": "The last name is empty"
+      "message": "Filter value is empty"
     },
     "queryErrors": {
       "findAllError": {
