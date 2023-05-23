@@ -142,7 +142,9 @@ module.exports = {
                             id: vehicle.id,
                             plate: vehicle.plate,
                             mark: vehicle.mark,
-                            model: vehicle.model
+                            model: vehicle.model,
+                            width: vehicle.width,
+                            height: vehicle.height
                         },
                         totalSeatsAvailable: responseSeat.length,
                         travel: travel.id
