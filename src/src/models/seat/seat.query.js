@@ -23,7 +23,7 @@ module.exports = {
         try {
             const {  
                 where, 
-                attributes = ['id', 'row', 'column', 'price', 'state'],
+                attributes = ['id', 'row', 'column', 'price', 'state', 'name'],
                 include = [
                     { 
                         model: Client, 

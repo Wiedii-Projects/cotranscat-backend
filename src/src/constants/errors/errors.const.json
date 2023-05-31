@@ -918,5 +918,11 @@
         "message": "Something went wrong"
       }
     }
+  },
+  "appErrors":{
+    "letterIsRequired": {
+      "code": "APCT001",
+      "message": "Letter is required"
+    }
   }
 }
