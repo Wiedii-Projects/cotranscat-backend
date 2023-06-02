@@ -130,5 +130,10 @@ module.exports = {
         { name : "Autopartes y repuestos" },
         { name : "Publicidad, papelería y otros" },
         { name : "Documentos" }
+    ],
+    defaultServiceType:[
+        { type: 1 },
+        { type: 2 },
+        { type: 3 },
     ]
 }

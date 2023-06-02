@@ -19,6 +19,7 @@ const DriverVehicle = require("./driver-vehicle/driver-vehicle.model");
 const Travel = require("./travel/travel.model");
 const Route = require("./route/route.model");
 const Seat = require("./seat/seat.model");
+const ServiceType = require("./service-type/service-type.model");
 
 // Relationships BD
 
@@ -135,5 +136,6 @@ module.exports = {
   DriverVehicle,
   Travel,
   Route,
-  Seat
+  Seat,
+  ServiceType
 };
