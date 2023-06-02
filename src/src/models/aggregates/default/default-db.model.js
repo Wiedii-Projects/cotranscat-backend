@@ -8,7 +8,8 @@ const {
     defaultMunicipality, 
     defaultUnitMeasure, 
     defaultShippingType,
-    defaultAdmin
+    defaultAdmin,
+    defaultServiceType
 } = require('./default-data.model');
 
 //Const
@@ -25,6 +26,7 @@ const PaymentMethod = require('../../payment-method/payment-method.model');
 const Municipality = require('../../municipality/municipality.model');
 const UnitMeasure = require('../../unit-measure/unit-measure.model');
 const ShippingType = require('../../shipping-type/shipping-type.model');
+const ServiceType = require('../../service-type/service-type.model');
 
 class defaultDataBaseModel {
     constructor() {
@@ -119,6 +121,10 @@ class defaultDataBaseModel {
         return await ShippingType.count();
     }
 
+    async countServiceType() {
+        return await ServiceType.count();
+    }
+
     async createDefaultDataBase() {
         await this.countRole() || Object.values(roleConst).map(async (element) => {await Role.create({type: element})});
         await this.countIndicativeNumber() || defaultIndicativeNumber.map(  async(element) => await IndicativeNumber.create( element ) );
@@ -128,6 +134,7 @@ class defaultDataBaseModel {
         await this.countMunicipality() || defaultMunicipality.map(  async(element) => await Municipality.create( element ) );
         await this.countUnitMeasure() || defaultUnitMeasure.map(  async(element) => await UnitMeasure.create( element ) );
         await this.countShippingType() || defaultShippingType.map(  async(element) => await ShippingType.create( element ) );
+        await this.countServiceType() || defaultServiceType.map(  async(element) => await ServiceType.create( element ) );
 
         const indicativeNumber = await this.getIndicativeNumber();
         const idRole = await this.getAdminRole();

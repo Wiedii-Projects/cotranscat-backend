@@ -919,6 +919,22 @@
       }
     }
   },
+  "serviceTypeErrors": {
+    "queryErrors": {
+      "createError": {
+        "code": "SVCT_001",
+        "message": "Something went wrong"
+      },
+      "findAllError": {
+        "code": "SVCT_002",
+        "message": "Something went wrong"
+      },
+      "updateError": {
+        "code": "SVCT_003",
+        "message": "Something went wrong"
+      }
+    }
+  },
   "appErrors":{
     "letterIsRequired": {
       "code": "APCT001",
