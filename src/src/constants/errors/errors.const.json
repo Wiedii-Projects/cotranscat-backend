@@ -935,6 +935,60 @@
       }
     }
   },
+  "ticketErrors": {
+    "passengerNameRequired": {
+      "code": "TICK001",
+      "message": "The passenger is required"
+    },
+    "namePassengerSize": {
+      "code": "TICK002",
+      "message": "The nickName must have a maximum of 100 characters"
+    },
+    "numberPhoneRequired": {
+      "code": "TICK003",
+      "message": "The number phone is required"
+    },
+    "phoneNumberCharacter": {
+      "code": "TICK004",
+      "message": "The phone number must have a minimum of 1 character and a maximum of 12 characters"
+    },
+    "idSeatRequired": {
+      "code": "TICK005",
+      "message": "The id seat is required"
+    },
+    "idSeatWrong": {
+      "code": "TICK006",
+      "message": "The id seat wrong"
+    },
+    "idSeatNotExist": {
+      "code": "TICK007",
+      "message": "The seat not exist"
+    },
+    "clientNotExist": {
+      "code": "TICK008",
+      "message": "User client does not exist"
+    },
+    "queryErrors": {
+      "createError": {
+        "code": "TICK_001",
+        "message": "Something went wrong"
+      },
+      "findAllError": {
+        "code": "TICK_002",
+        "message": "Something went wrong"
+      },
+      "updateError": {
+        "code": "TICK_003",
+        "message": "Something went wrong"
+      }
+    }
+  },
+  "invoiceErrors": {
+    "ticketsRequired": {
+      "code": "INVO001",
+      "message": "The tickets is required"
+    }
+  },
   "appErrors":{
     "letterIsRequired": {
       "code": "APCT001",
