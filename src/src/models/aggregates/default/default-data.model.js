@@ -41,16 +41,57 @@ module.exports = {
           country: "Canadá"
         }
     ],
-    defaultUser: {
-            numberDocument: "0000000000",
-            name: "ADMIN", 
-            lastName: "USER",
-            numberPhone: "3052627084",
+    defaultUser: [{
+        numberDocument: "0000000000",
+        name: "ADMIN", 
+        lastName: "USER",
+        numberPhone: "3052627084",
     },
+    {
+        numberDocument: "0000000001",
+        name: "SELLER", 
+        lastName: "USER",
+        numberPhone: "3052627085",
+    },
+    {
+        numberDocument: "0000000002",
+        name: "CLIENT", 
+        lastName: "USER",
+        numberPhone: "3052627086",
+    },
+    {
+        numberDocument: "0000000003",
+        name: "DRIVER", 
+        lastName: "USER",
+        numberPhone: "3052627087",
+    }],
     defaultAdmin: {
             email: 'admi@admin.co',
             nickName: 'userAdmin',
             password: process.env.PASSWORD_ADMIN_ROOT
+    },
+    defaultSeller: {
+        email: 'seller@seller.co',
+        nickName: 'userSeller',
+        password: process.env.PASSWORD_ADMIN_ROOT
+    },
+    defaultDriver: {
+        email: 'driver@driver.co',
+        nickName: 'userDriver',
+        password: process.env.PASSWORD_ADMIN_ROOT
+    },
+    defaultClient: {
+        numberPhoneWhatsapp: '3052627086',
+        email: 'client@client.co',
+        address: "Mz 12 lote 8 palmeras alta"
+    },
+    defaultVehicle: {
+        plate: "ABC001",
+        mark: "Atos",
+        model: "99",
+        price: 35000,
+        width: 5,
+        height: 7
     },
     defaultDepartment : [
         { name: 'Amazonas' },
