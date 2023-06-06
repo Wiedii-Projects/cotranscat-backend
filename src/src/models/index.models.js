@@ -20,6 +20,7 @@ const Travel = require("./travel/travel.model");
 const Route = require("./route/route.model");
 const Seat = require("./seat/seat.model");
 const ServiceType = require("./service-type/service-type.model");
+const Ticket = require("./ticket/ticket.model");
 
 // Relationships BD
 
@@ -107,9 +108,9 @@ Route.hasMany(Travel, { foreignKey: { name: "idRoute", allowNull: false } });
 Seat.belongsTo(Travel, { as: 'TravelSeat', foreignKey: { name: 'idTravel', allowNull: false} });
 Travel.hasMany(Seat, { foreignKey: { name: "idTravel", allowNull: false } });
 
-// Relationship Seat-Client
-Seat.belongsTo(Client, { as: 'SeatClient', foreignKey: { name: 'idClient'} });
-Client.hasMany(Seat, { foreignKey: { name: "idClient" } });
+// Relationship Ticket-Seat
+Ticket.belongsTo(Seat, { as: 'TicketSeat', foreignKey: { name: 'idSeat', allowNull: false} });
+Seat.hasOne(Ticket, { foreignKey: { name: "idSeat" } });
 
 module.exports = {
   // Aggregates Models
@@ -137,5 +138,6 @@ module.exports = {
   Travel,
   Route,
   Seat,
-  ServiceType
+  ServiceType,
+  Ticket
 };

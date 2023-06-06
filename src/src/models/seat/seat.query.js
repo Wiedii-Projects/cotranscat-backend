@@ -24,12 +24,7 @@ module.exports = {
             const {  
                 where, 
                 attributes = ['id', 'row', 'column', 'price', 'state', 'name'],
-                include = [
-                    { 
-                        model: Client, 
-                        as: 'SeatClient'
-                    }
-                ]
+                include = []
             } = query;
             return await Seat.findAll({
                 where,

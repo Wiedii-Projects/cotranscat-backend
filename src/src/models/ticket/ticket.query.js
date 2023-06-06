@@ -11,7 +11,7 @@ module.exports = {
     try {
       return await Ticket.bulkCreate(where);
     } catch {
-      throw errorsConst.userErrors.queryErrors.createError;
+      throw errorsConst.ticketErrors.queryErrors.createError;
     }
   },
 };

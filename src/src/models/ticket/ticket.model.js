@@ -6,6 +6,8 @@ const {
 // Libraries
 const { DataTypes } = require("sequelize");
 const { nextLetter } = require("../../helpers/invoice.helpers");
+const { decryptIdDataBase } = require("../../helpers/shared.helpers");
+const Seat = require("../seat/seat.model");
 
 
 const TicketSchema = dbConnectionOptions.define(
@@ -14,8 +16,7 @@ const TicketSchema = dbConnectionOptions.define(
     number: {
       type: DataTypes.STRING(5),
       field: "number",
-      allowNull: false,
-      defaultValue: null
+      allowNull: false
     },
     code: {
       type: DataTypes.STRING(5),
@@ -30,8 +31,22 @@ const TicketSchema = dbConnectionOptions.define(
     passengerName: {
       type: DataTypes.STRING(100),
       field: "passengerName",
-      allowNull: false
-    }
+      allowNull: true
+    },
+    idSeat: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+      unique: true,
+      references: {
+        model: "seat",
+        key: "id",
+      },
+      onUpdate: "CASCADE",
+      onDelete: "CASCADE",
+    },
+  },
+  {
+      tableName: "ticket",
   }
 );
 
@@ -45,6 +60,8 @@ TicketSchema.beforeBulkCreate(async (registers) => {
   let nextMaxNumber = maxNumber ? parseInt(maxNumber) + 1 : 1;
   
   for (const register of registers) {
+    register.idSeat =  decryptIdDataBase(register.idSeat);
+    await Seat.update({ state: 1 }, { where: { id: register.idSeat } });
     if(nextMaxNumber.toString().length > 5) {
       nextMaxNumber = 0;
       maxLetter = nextLetter(maxLetter);
