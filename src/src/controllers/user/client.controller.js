@@ -61,7 +61,37 @@ module.exports = {
   getAllClient: async (req, res) => {
     try {
       const client = await clientQuery.findClientQuery();
-      return responseHelpers.responseSuccess(res, client);
+
+      const allClient = client.map(
+        ({ 
+          UserClient: { UserDocumentType, UserIndicativePhone, ...user }, 
+          ClientIndicativeNumberWhatsApp, ClientMunicipality, id, ...client 
+        }) => {
+        return {
+          id: sharedHelpers.encryptIdDataBase(id),
+          ...client,
+          ...user,
+          indicativeNumberWhatsApp: {
+            ...ClientIndicativeNumberWhatsApp,
+            id: sharedHelpers.encryptIdDataBase(ClientIndicativeNumberWhatsApp.id)
+          },
+          municipality: ClientMunicipality.id ? {
+            name: ClientMunicipality.name,
+            idDepartment: sharedHelpers.encryptIdDataBase(ClientMunicipality.idDepartment),
+            id: sharedHelpers.encryptIdDataBase(ClientMunicipality.id)
+          } : null,
+          documentType: {
+            ...UserDocumentType,
+            id: sharedHelpers.encryptIdDataBase(UserDocumentType.id)
+          },
+          indicativePhone: {
+            ...UserIndicativePhone,
+            id: sharedHelpers.encryptIdDataBase(UserIndicativePhone.id)
+          }
+        }
+      })
+
+      return responseHelpers.responseSuccess(res, allClient);
     } catch (error) {
       return responseHelpers.responseError(res, 500, error);
     }

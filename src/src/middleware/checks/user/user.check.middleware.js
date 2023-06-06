@@ -18,30 +18,13 @@ module.exports = {
   },
   checkFilterUsers: () => {
     return [
-      check('name')
-        .optional({checkFalsy: false})
+      check('filterValue')
         .isString()
-        .withMessage(new ErrorModel(errorsConst.userErrors.nameRequired))
+        .withMessage(new ErrorModel(errorsConst.userErrors.valueToFilterIsRequired))
         .bail()
         .isLength({ min: 1 })
-        .withMessage(new ErrorModel(errorsConst.userErrors.nameIsEmpty)),
-        sharedValidators.validateError,
-      check('lastName')
-        .optional({checkFalsy: false})
-        .isString()
-        .withMessage(new ErrorModel(errorsConst.userErrors.lastNameRequired))
-        .bail()
-        .isLength({ min: 1 })
-        .withMessage(new ErrorModel(errorsConst.userErrors.lastNameIsEmpty)),
-        sharedValidators.validateError,
-      check('numberDocument')
-        .optional({checkFalsy: false})
-        .isString()
-        .withMessage(new ErrorModel(errorsConst.userErrors.numberDocumentRequired))
-        .bail()
-        .isLength({ min: 1 })
-        .withMessage(new ErrorModel(errorsConst.userErrors.numberDocumentIsEmpty)),
-        sharedValidators.validateError,
+        .withMessage(new ErrorModel(errorsConst.userErrors.filterValueIsEmpty)),
+        sharedValidators.validateError
     ]
   },
 };

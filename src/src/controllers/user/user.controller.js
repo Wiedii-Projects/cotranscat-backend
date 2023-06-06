@@ -9,10 +9,15 @@ const {
 
 // Libraries
 const unicodeNormalizerLibrary = require('unorm')
-const { col, fn, where } = require("sequelize");
+const { col, fn, where, Op } = require("sequelize");
+
+// Models - model
+const { 
+  IndicativeNumber, DocumentType, Client, Municipality, Department 
+} = require("../../models/index.models");
 
 // Models - Queries
-const { userQuery } = require("../../models/index.queries");
+const { userQuery, clientQuery } = require("../../models/index.queries");
 
 module.exports = {
   deleteUser: async (req, res) => {
@@ -36,43 +41,128 @@ module.exports = {
   },
   searchUsers: async (req, res) => {
 
-    const { name, lastName, numberDocument } = req.body;
+    let { filterValue } = req.body;
 
-    if (!name && !lastName && !numberDocument) return responseHelpers.responseSuccess(res, [])
-
-    const nameWithoutTildes = name ? unicodeNormalizerLibrary.nfd(name).replace(/[\u0300-\u036f]/g, "") : null;
-    const lastNameWithoutTildes = lastName ? unicodeNormalizerLibrary.nfd(lastName).replace(/[\u0300-\u036f]/g, "") : null;
+    if (isNaN(filterValue)) 
+      filterValue = filterValue ? (unicodeNormalizerLibrary.nfd(filterValue).replace(/[\u0300-\u036f]/g, "")).toLowerCase() : null;
 
     try {
-      const usersFound = await userQuery.findUserQuery({
+      const usersFound = await clientQuery.findClientQuery({
         where: {
-          ...(name && {
-            name: where(
-              fn('LOWER', col('name')),
-              'LIKE',
-              `%${nameWithoutTildes.toLowerCase()}%`
-            )
-          }),
-          ...(lastName && {
-            lastName: where(
-              fn('LOWER', col('lastName')),
-              'LIKE',
-              `%${lastNameWithoutTildes.toLowerCase()}%`
-            )
-          }),
-          ...(numberDocument && { numberDocument })
+          [Op.or]: [
+            {
+              name: where(
+                fn('LOWER', col('UserClient.name')),
+                'LIKE',
+                `%${filterValue}%`
+              )
+            },
+            {
+              lastName: where(
+                fn('LOWER', col('UserClient.lastName')),
+                'LIKE',
+                `%${filterValue}%`
+              )
+            },
+            {
+              numberDocument: where(
+                col('UserClient.numberDocument'),
+                'LIKE',
+                `%${filterValue}%`
+              )
+            }
+          ]
         },
-        include: []
+        include: [
+          {
+            model: IndicativeNumber,
+            as: "UserIndicativePhone"
+          },
+          {
+            model: DocumentType,
+            as: "UserDocumentType"
+          },
+          {
+            model: Client,
+            as: "UserClient",
+            required: false,
+            include: [
+              {
+                model: IndicativeNumber,
+                as: "ClientIndicativeNumberWhatsApp",
+                required: false
+              },
+              {
+                model: Municipality,
+                as: "ClientMunicipality",
+                required: false,
+                include: [
+                  {
+                    model: Department,
+                    as: "MunicipalityDepartment",
+                    required: false
+                  }
+                ]
+              }
+            ]
+          }
+        ]
       })
 
       const users = usersFound.map(
         ({
           id,
-          ...user
-        }) => ({
-          id: sharedHelpers.encryptIdDataBase(id),
-          ...user,
-        })
+          UserClient: {
+            numberDocument, name, lastName, numberPhone, UserDocumentType: documentType,
+            UserIndicativePhone: indicativePhone
+          },
+          ClientIndicativeNumberWhatsApp: indicativeNumberWhatsApp, numberPhoneWhatsapp, email,
+          address, ClientMunicipality
+        }) => {
+
+          let municipality = null
+          let department = null
+
+          if (ClientMunicipality?.id) {
+            const { id: idMunicipality, name, MunicipalityDepartment: departmentData } = ClientMunicipality
+            municipality = {
+              id: sharedHelpers.encryptIdDataBase(idMunicipality),
+              name
+            }
+
+            if (departmentData?.id) {
+              department = {
+                id: sharedHelpers.encryptIdDataBase(departmentData.id),
+                name: departmentData.name
+              }
+            }
+          }
+
+          return {
+            id: sharedHelpers.encryptIdDataBase(id),
+            numberDocument,
+            name,
+            lastName,
+            documentType: {
+              ...documentType,
+              id: sharedHelpers.encryptIdDataBase(documentType.id),
+            },
+            indicativeNumber: {
+              ...indicativePhone,
+              id: sharedHelpers.encryptIdDataBase(indicativePhone.id),
+            },
+            numberPhone,
+            email: email ?? undefined,
+            address: address ?? undefined,
+            numberPhoneWhatsapp: numberPhoneWhatsapp ?? undefined,
+            indicativeNumberWhatsApp: {
+              ...indicativeNumberWhatsApp,
+              id: indicativeNumberWhatsApp.id ? sharedHelpers.encryptIdDataBase(indicativeNumberWhatsApp.id) : null,
+            },
+            municipality,
+            department
+          }
+        }
       )
 
       return responseHelpers.responseSuccess(res, users)

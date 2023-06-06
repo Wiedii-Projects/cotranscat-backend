@@ -1,11 +1,10 @@
 // Constants
 const { errorsConst } = require('../../constants/index.constants');
 
-//Helpers
-const sharedHelpers = require('../../helpers/shared.helpers');
-
 // Models
-const { Client, User, DocumentType, IndicativeNumber, Municipality } = require('../index.models');
+const {
+    Client, User, DocumentType, IndicativeNumber, Municipality, Department
+} = require('../index.models');
 
 module.exports = {
     createClientQuery: async (where, transaction) => {
@@ -16,10 +15,10 @@ module.exports = {
         }
     },
 
-    findClientQuery: (query = {}) => {
+    findClientQuery: async (query = {}) => {
         try {
             const { where } = query;
-            return Client.findAll({
+            return await Client.findAll({
                 where,
                 raw: true,
                 nest: true,
@@ -47,31 +46,13 @@ module.exports = {
                 },
                 {
                     model: Municipality, 
-                    as: "ClientMunicipality"
+                    as: "ClientMunicipality",
+                    include: [{
+                        model: Department,
+                        as: "MunicipalityDepartment"
+                    }]
                 }
-            ]}).then(clients => clients.map( ({UserClient : {UserDocumentType, UserIndicativePhone, ...user}, ClientIndicativeNumberWhatsApp, ClientMunicipality, id, ...client}) => {
-                return {
-                    id: sharedHelpers.encryptIdDataBase(id),
-                    ...client,
-                    ...user,
-                    indicativeNumberWhatsApp: {
-                        ...ClientIndicativeNumberWhatsApp,
-                        id: sharedHelpers.encryptIdDataBase(ClientIndicativeNumberWhatsApp.id)
-                    },
-                    municipality: ClientMunicipality.id? {
-                        ...ClientMunicipality,
-                        id: sharedHelpers.encryptIdDataBase(ClientMunicipality.id)
-                    } : null,
-                    documentType: {
-                        ...UserDocumentType,
-                        id: sharedHelpers.encryptIdDataBase(UserDocumentType.id)
-                    },
-                    indicativePhone: {
-                        ...UserIndicativePhone,
-                        id: sharedHelpers.encryptIdDataBase(UserIndicativePhone.id)
-                    }
-                }
-            }))
+            ]})
         } catch {
             throw errorsConst.aggregateErrorsApp.errorGetClient
         }
