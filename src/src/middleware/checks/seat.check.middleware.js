@@ -21,22 +21,11 @@ module.exports = {
             .custom((_, {req}) => !!req.body.travelExist).withMessage(new ErrorModel(errorsConst.travelErrors.travelDoesNotExist)),
         sharedValidators.validateError,
     ]),
-    checkChangeStateToStandBy: () => ([
-        check('seat')
-            .isString().withMessage(new ErrorModel(errorsConst.seatErrors.idSeatInvalid)).bail()
-            .custom((value, {req}) => seatValidators.validateSeat(sharedHelpers.decryptIdDataBase(value), req))
-            .custom((_, {req}) => !!req.body.seatExist).withMessage(new ErrorModel(errorsConst.seatErrors.seatDoesNotExist)),
-        check('seatExist')
-            .custom((value) => !(value.state!==0)).withMessage(new ErrorModel(errorsConst.seatErrors.seatNotAvailable)),
-    sharedValidators.validateError,
-    ]),
-    checkChangeStateNotAvailable: () => ([
-        check('seat')
-            .isString().withMessage(new ErrorModel(errorsConst.seatErrors.idSeatInvalid)).bail()
-            .custom((value, {req}) => seatValidators.validateSeat(sharedHelpers.decryptIdDataBase(value), req))
-            .custom((_, {req}) => !!req.body.seatExist).withMessage(new ErrorModel(errorsConst.seatErrors.seatDoesNotExist)),
-        check('seatExist')
-            .custom((value) => !(value.state!==2)).withMessage(new ErrorModel(errorsConst.seatErrors.seatNotAvailable)),
+    checkChangeState: () => ([
+        check('seats')
+            .isArray().withMessage(new ErrorModel(errorsConst.seatErrors.idSeatInvalid)).bail()
+            .custom((value, {req}) => seatValidators.validateSeat(value, req))
+            .custom((_, {req}) => !!req.body.seatsExist).withMessage(new ErrorModel(errorsConst.seatErrors.seatDoesNotExist)),
     sharedValidators.validateError,
     ])
 }

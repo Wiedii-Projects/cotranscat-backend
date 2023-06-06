@@ -12,7 +12,7 @@ module.exports = {
             throw errorsConst.seatErrors.queryErrors.createError;
         }
     },
-    updateSeat: async (where, update) => {
+    updateSeat: async (update, where) => {
         try {
             return await Seat.update(update, { where });
         } catch {
