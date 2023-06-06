@@ -12,4 +12,16 @@ module.exports = {
             throw errorsConst.serviceTypeErrors.queryErrors.createError;
         }
     },
+    findServiceTypeQuery: async (query = {}) => {
+        const { where } = query;
+        try {
+            return await ServiceType.findAll({
+                where,
+                raw: true,
+                nest:true
+            });
+        } catch {
+            throw errorsConst.serviceTypeErrors.queryErrors.findAllError
+        }
+    },
 }

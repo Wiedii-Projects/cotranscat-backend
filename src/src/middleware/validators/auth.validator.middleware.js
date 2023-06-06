@@ -21,9 +21,8 @@ module.exports = {
                 const [ validateUser ] = await userQuery.findUserQuery({
                     where: { id, state: true }
                 });
-
                 const {
-                    id,
+                    id: idUser,
                     UserDriver,
                     UserAdmin,
                     UserCoordinator,
@@ -35,7 +34,7 @@ module.exports = {
                   } = validateUser
             
                   const userAllData = {
-                    id: sharedHelpers.encryptIdDataBase(id),
+                    id: sharedHelpers.encryptIdDataBase(idUser),
                     role: {
                       id: sharedHelpers.encryptIdDataBase(UserRole.id),
                     },

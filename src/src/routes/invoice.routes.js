@@ -9,8 +9,8 @@ const { Router } = require("express");
 
 const router = Router();
 
-router.post('/', [
-    invoiceMiddleware.checkCreateInvoice()
-], invoiceController.createInvoice);
+router.post('/travel', [
+    invoiceMiddleware.checkCreateInvoiceTravel()
+], invoiceController.createInvoiceTravel);
 
 module.exports = router;

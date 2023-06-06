@@ -12,8 +12,9 @@ const { sharedValidators, userValidators, seatValidators, clientValidator } = re
 const sharedCheckMiddleware = require('./shared.check.middleware');
 
 module.exports = {
-    checkCreateInvoice: () => {
+    checkCreateInvoiceTravel: () => {
         return [
+            ...sharedCheckMiddleware.checkJwt(),
             ...sharedCheckMiddleware.checkId(),
             check('decryptId', new ErrorModel(errorsConst.ticketErrors.clientNotExist))
                 .isNumeric()

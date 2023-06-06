@@ -7,11 +7,11 @@ const {
 } = require("../index.models");
 
 module.exports = {
-  createNewTicketQuery: async (where, transaction) => {
+  createNewTicketQuery: async (where, invoice, transaction) => {
     try {
-      return await Ticket.bulkCreate(where);
+      return await Ticket.bulkCreate(where, { transaction, invoice });
     } catch {
-      throw errorsConst.ticketErrors.queryErrors.createError;
+      throw errorsConst.invoiceErrors.queryErrors.createError;
     }
   },
 };
