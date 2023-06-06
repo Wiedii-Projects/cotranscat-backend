@@ -987,6 +987,20 @@
     "ticketsRequired": {
       "code": "INVO001",
       "message": "The tickets is required"
+    },
+    "queryErrors": {
+      "createError": {
+        "code": "INVO_001",
+        "message": "Something went wrong"
+      },
+      "findAllError": {
+        "code": "INVO_002",
+        "message": "Something went wrong"
+      },
+      "updateError": {
+        "code": "INVO_003",
+        "message": "Something went wrong"
+      }
     }
   },
   "appErrors":{

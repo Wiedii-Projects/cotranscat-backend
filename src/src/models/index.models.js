@@ -21,6 +21,7 @@ const Route = require("./route/route.model");
 const Seat = require("./seat/seat.model");
 const ServiceType = require("./service-type/service-type.model");
 const Ticket = require("./ticket/ticket.model");
+const Invoice = require("./invoice/invoice.model");
 
 // Relationships BD
 
@@ -111,6 +112,18 @@ Travel.hasMany(Seat, { foreignKey: { name: "idTravel", allowNull: false } });
 // Relationship Ticket-Seat
 Ticket.belongsTo(Seat, { as: 'TicketSeat', foreignKey: { name: 'idSeat', allowNull: false} });
 Seat.hasOne(Ticket, { foreignKey: { name: "idSeat" } });
+
+// Relationship Ticket-Invoice
+Ticket.belongsTo(Invoice, { as: 'TicketInvoice', foreignKey: { name: 'idInvoice', allowNull: true} });
+Invoice.hasMany(Ticket, { foreignKey: { name: "idInvoice", allowNull: true } });
+
+// Relationship Invoice-ServiceType
+Invoice.belongsTo(ServiceType, { as: 'InvoiceServiceType', foreignKey: { name: 'idServiceType', allowNull: false} });
+ServiceType.hasMany(Invoice, { foreignKey: { name: "idServiceType", allowNull: false } });
+
+// Relationship Invoice-Seller
+Invoice.belongsTo(Seller, { as: 'InvoiceSeller', foreignKey: { name: 'idSeller', allowNull: false} });
+Seller.hasMany(Invoice, { foreignKey: { name: "idSeller", allowNull: false } });
 
 module.exports = {
   // Aggregates Models

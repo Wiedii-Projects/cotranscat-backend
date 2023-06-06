@@ -50,7 +50,7 @@ const TicketSchema = dbConnectionOptions.define(
   }
 );
 
-TicketSchema.beforeBulkCreate(async (registers) => {
+TicketSchema.beforeBulkCreate(async (registers, options) => {
   let maxLetter = await TicketSchema.max('code')||'PT A';
   let maxNumber = await TicketSchema.max('number', {
     where: {
@@ -61,7 +61,8 @@ TicketSchema.beforeBulkCreate(async (registers) => {
   
   for (const register of registers) {
     register.idSeat =  decryptIdDataBase(register.idSeat);
-    await Seat.update({ state: 1 }, { where: { id: register.idSeat } });
+    register.idInvoice = options.invoice;
+    await Seat.update({ state: 1 }, { where: { id: register.idSeat }, transaction: options.transaction });
     if(nextMaxNumber.toString().length > 5) {
       nextMaxNumber = 0;
       maxLetter = nextLetter(maxLetter);
