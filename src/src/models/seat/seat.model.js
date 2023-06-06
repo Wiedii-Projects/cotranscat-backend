@@ -29,6 +29,11 @@ const SeatSchema = dbConnectionOptions.define(
       field: "state",
       allowNull: false,
     },
+    name: {
+      type: DataTypes.STRING(6),
+      field: "name",
+      allowNull: false
+  }
   },
   {
     tableName: "seat"

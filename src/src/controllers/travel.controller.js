@@ -33,7 +33,8 @@ module.exports = {
                     column: seatRule.column,
                     row: seatRule.row,
                     price: vehicle.price,
-                    state: 0
+                    state: 0,
+                    name: seatRule.name
                 }, transaction)
             }
 
@@ -142,7 +143,9 @@ module.exports = {
                             id: vehicle.id,
                             plate: vehicle.plate,
                             mark: vehicle.mark,
-                            model: vehicle.model
+                            model: vehicle.model,
+                            width: vehicle.width,
+                            height: vehicle.height
                         },
                         totalSeatsAvailable: responseSeat.length,
                         travel: travel.id

@@ -28,7 +28,7 @@ module.exports = {
                             { 
                                 model: Vehicle, 
                                 as: 'Vehicle', 
-                                attributes: ['id', 'plate', 'mark', 'model', 'price']
+                                attributes: ['id', 'plate', 'mark', 'model', 'price', 'width', 'height']
                             },
                             { 
                                 model: Driver, 

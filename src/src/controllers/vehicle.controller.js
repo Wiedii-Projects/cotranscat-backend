@@ -6,7 +6,7 @@ const { dbConnectionOptions } = require("../constants/core/core-configurations.c
 
 // Helpers
 const { responseHelpers } = require('../helpers/index.helpers');
-const { decryptIdDataBase } = require("../helpers/shared.helpers");
+const { decryptIdDataBase, getNextConsecutiveLetterHelper } = require("../helpers/shared.helpers");
 
 // Models - Queries
 const { vehicleQuery, seatRulerQuery } = require('../models/index.queries');
@@ -24,17 +24,21 @@ module.exports = {
                 ...newVehicle
             }, { transaction });
 
+            let initialLetter = "A"
             for (let row = 0; row < seatingMatrix.length; row++) {
+                let consecutiveChair = 1
                 for (let column = 0; column < seatingMatrix[row].length; column++) {
                     if (seatingMatrix[row][column]) {
                         await seatRulerQuery.createSeatRuler({
                             idVehicle: vehicle.id,
-                            name: `${row}${column}`,//TODO: implement naming algorithm
+                            name: `${initialLetter}${(consecutiveChair)}`,
                             row,
                             column
                         }, { transaction });
+                        consecutiveChair++
                     }
                 }
+                initialLetter = getNextConsecutiveLetterHelper(initialLetter)
             }
             await transaction.commit();
             return responseHelpers.responseSuccess(res, null);

@@ -1,7 +1,7 @@
 // Constants
 const { dbConnectionOptions } = require("../constants/core/core-configurations.const");
 const {
-  coreConfigurationsConst
+  coreConfigurationsConst, errorsConst
 } = require("../constants/index.constants");
 
 // Libraries
@@ -17,23 +17,37 @@ const keyLength = Math.min(key.length, coreConfigurationsConst.keyEncrypt.length
 key.write(coreConfigurationsConst.keyEncrypt.slice(0, keyLength));
 
 module.exports = {
-    decryptIdDataBase: (token) => {
-      try {
-        const decipher = crypto.createDecipheriv(coreConfigurationsConst.algorithmEncrypt, key, iv);
-        let decrypted = decipher.update(token, 'hex', 'utf8');
-        decrypted += decipher.final('utf8');
-        return parseInt(decrypted);
-      } catch {
-        return false;
-      }
-    },
-    encryptIdDataBase: (value) => {
-        const cipher = crypto.createCipheriv(coreConfigurationsConst.algorithmEncrypt, key, iv);
-        let encrypted = cipher.update(value.toString(), 'utf8', 'hex');
-        encrypted += cipher.final('hex');
-        return encrypted;
-    },
-    initTransaction: async() => {
-      return await dbConnectionOptions.transaction();
+  decryptIdDataBase: (token) => {
+    try {
+      const decipher = crypto.createDecipheriv(coreConfigurationsConst.algorithmEncrypt, key, iv);
+      let decrypted = decipher.update(token, 'hex', 'utf8');
+      decrypted += decipher.final('utf8');
+      return parseInt(decrypted);
+    } catch {
+      return false;
     }
+  },
+  encryptIdDataBase: (value) => {
+    const cipher = crypto.createCipheriv(coreConfigurationsConst.algorithmEncrypt, key, iv);
+    let encrypted = cipher.update(value.toString(), 'utf8', 'hex');
+    encrypted += cipher.final('hex');
+    return encrypted;
+  },
+  initTransaction: async () => {
+    return await dbConnectionOptions.transaction();
+  },
+  getNextConsecutiveLetterHelper: (letter) => {
+    if (!letter || letter.length !== 1) throw errorsConst.appErrors.letterIsRequired;
+    
+    let isUpperCaseLetter = true
+    if (letter.match(/[a-z]/)) isUpperCaseLetter = false
+
+    typeStandardLetter = isUpperCaseLetter ? 65 : 97
+
+    const letterCode = letter.charCodeAt(0);
+    const nextLetterCode = ((letterCode - typeStandardLetter + 1) % 26) + typeStandardLetter;
+    const nextLetter = String.fromCharCode(nextLetterCode);
+
+    return nextLetter;
+  }
 }
