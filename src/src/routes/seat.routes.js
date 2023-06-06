@@ -17,4 +17,8 @@ router.post('/changeStateToStandBy', [
     seatMiddleware.checkChangeState()
 ], seatController.changeStateToStandBy);
 
+router.post('/changeStateToAvailable', [
+    seatMiddleware.checkChangeState()
+], seatController.changeStateToAvailable);
+
 module.exports = router;

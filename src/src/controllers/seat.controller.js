@@ -29,5 +29,13 @@ module.exports = {
       return responseHelpers.responseError(res, 500, error);
     }
   },
-  
+  changeStateToAvailable: async (req, res) => {
+    const { idsSeat } = req.body;
+    try {
+      await seatQuery.updateSeat({ state: 0 }, { id: { [Sequelize.Op.or]: idsSeat } });
+      return responseHelpers.responseSuccess(res, null);
+    } catch (error){
+      return responseHelpers.responseError(res, 500, error);
+    }
+  }
 }; 
