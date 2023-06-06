@@ -3,15 +3,23 @@
 // Helpers
 const sharedHelpers = require('../../helpers/shared.helpers');
 const { seatQuery } = require('../../models/index.queries')
+const { Sequelize } = require("sequelize");
 
 module.exports = {
-    validateSeat: async (id, req) => {
+    validateSeat: async (value, req) => {
         try {
-            const [seat] = await seatQuery.findSeat({ where: { id }, include: []});
-            req.body.seatExist = seat;
-            req.body.idSeat = id;
+            const idsSeat = value.map( data => sharedHelpers.decryptIdDataBase(data));
+            const seatsExist = await seatQuery.findSeat({ 
+                where: { 
+                    id: {
+                        [Sequelize.Op.or]: idsSeat,
+                    },
+                } 
+            });
+            req.body.seatsExist = idsSeat.length == seatsExist.length;
+            req.body.idsSeat = idsSeat;
         } catch {
-            req.body.idSeat = false;
+            req.body.idsSeat = false;
         }
     },
     validateArraySeat: async (id, req) => {

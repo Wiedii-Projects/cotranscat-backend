@@ -4,6 +4,7 @@ const { sharedHelpers } = require("../helpers/index.helpers");
 
 // Models - Queries
 const { seatQuery } = require("../models/index.queries");
+const { Sequelize } = require("sequelize");
 
 module.exports = {
   getAllSeatTravel: async (req, res) => {
@@ -20,19 +21,13 @@ module.exports = {
     }
   },
   changeStateToStandBy: async (req, res) => {
+    const { idsSeat } = req.body;
     try {
-      await seatQuery.updateSeat({ id: req.body.seatExist.id }, { state: 2 });
+      await seatQuery.updateSeat({ state: 2 }, { id: { [Sequelize.Op.or]: idsSeat } });
       return responseHelpers.responseSuccess(res, null);
     } catch (error){
       return responseHelpers.responseError(res, 500, error);
     }
   },
-  changeStateNotAvailable: async (req, res) => {
-    try {
-      await seatQuery.updateSeat({ id: req.body.seatExist.id }, { state: 1 });
-      return responseHelpers.responseSuccess(res, null);
-    } catch (error) {
-      return responseHelpers.responseError(res, 500, error);
-    }
-  }
-};
+  
+}; 
