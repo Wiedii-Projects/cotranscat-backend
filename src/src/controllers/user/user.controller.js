@@ -12,10 +12,12 @@ const unicodeNormalizerLibrary = require('unorm')
 const { col, fn, where, Op } = require("sequelize");
 
 // Models - model
-const { IndicativeNumber, DocumentType, Client, Municipality, Department } = require("../../models/index.models");
+const { 
+  IndicativeNumber, DocumentType, Client, Municipality, Department 
+} = require("../../models/index.models");
 
 // Models - Queries
-const { userQuery } = require("../../models/index.queries");
+const { userQuery, clientQuery } = require("../../models/index.queries");
 
 module.exports = {
   deleteUser: async (req, res) => {
@@ -45,27 +47,29 @@ module.exports = {
       filterValue = filterValue ? (unicodeNormalizerLibrary.nfd(filterValue).replace(/[\u0300-\u036f]/g, "")).toLowerCase() : null;
 
     try {
-      const usersFound = await userQuery.findUserQuery({
+      const usersFound = await clientQuery.findClientQuery({
         where: {
           [Op.or]: [
             {
               name: where(
-                fn('LOWER', col('User.name')),
+                fn('LOWER', col('UserClient.name')),
                 'LIKE',
                 `%${filterValue}%`
               )
             },
             {
               lastName: where(
-                fn('LOWER', col('User.lastName')),
+                fn('LOWER', col('UserClient.lastName')),
                 'LIKE',
                 `%${filterValue}%`
               )
             },
             {
-              numberDocument: {
-                [Op.like]: `%${filterValue}%`
-              }
+              numberDocument: where(
+                col('UserClient.numberDocument'),
+                'LIKE',
+                `%${filterValue}%`
+              )
             }
           ]
         },
@@ -104,51 +108,56 @@ module.exports = {
           }
         ]
       })
+
       const users = usersFound.map(
         ({
-          id, numberDocument, name, lastName, UserDocumentType, UserIndicativePhone, numberPhone, 
-          UserClient :{numberPhoneWhatsapp, email, address, ClientIndicativeNumberWhatsApp, ClientMunicipality },
-          ...user
+          id,
+          UserClient: {
+            numberDocument, name, lastName, numberPhone, UserDocumentType: documentType,
+            UserIndicativePhone: indicativePhone
+          },
+          ClientIndicativeNumberWhatsApp: indicativeNumberWhatsApp, numberPhoneWhatsapp, email,
+          address, ClientMunicipality
         }) => {
 
           let municipality = null
           let department = null
 
-          if (ClientMunicipality.id) {
-            const { id: idMunicipality, name, MunicipalityDepartment: departmentData, ...otherDataMunicipality } = ClientMunicipality
+          if (ClientMunicipality?.id) {
+            const { id: idMunicipality, name, MunicipalityDepartment: departmentData } = ClientMunicipality
             municipality = {
-              name,
               id: sharedHelpers.encryptIdDataBase(idMunicipality),
+              name
             }
-            if (departmentData.id) {
 
+            if (departmentData?.id) {
               department = {
-                name: departmentData.name,
                 id: sharedHelpers.encryptIdDataBase(departmentData.id),
+                name: departmentData.name
               }
             }
           }
 
           return {
             id: sharedHelpers.encryptIdDataBase(id),
-            numberDocument, 
-            name, 
+            numberDocument,
+            name,
             lastName,
             documentType: {
-              ...UserDocumentType,
-              id: sharedHelpers.encryptIdDataBase(UserDocumentType.id),
+              ...documentType,
+              id: sharedHelpers.encryptIdDataBase(documentType.id),
             },
             indicativeNumber: {
-              ...UserIndicativePhone,
-              id: sharedHelpers.encryptIdDataBase(UserIndicativePhone.id),
+              ...indicativePhone,
+              id: sharedHelpers.encryptIdDataBase(indicativePhone.id),
             },
             numberPhone,
             email: email ?? undefined,
             address: address ?? undefined,
             numberPhoneWhatsapp: numberPhoneWhatsapp ?? undefined,
             indicativeNumberWhatsApp: {
-              ...ClientIndicativeNumberWhatsApp,
-              id: ClientIndicativeNumberWhatsApp.id ? sharedHelpers.encryptIdDataBase(ClientIndicativeNumberWhatsApp.id) : null,
+              ...indicativeNumberWhatsApp,
+              id: indicativeNumberWhatsApp.id ? sharedHelpers.encryptIdDataBase(indicativeNumberWhatsApp.id) : null,
             },
             municipality,
             department
