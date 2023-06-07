@@ -49,7 +49,7 @@ module.exports = {
           transaction
         );
         await transaction.commit();
-        return responseHelpers.responseSuccess(res, null);
+        return responseHelpers.responseSuccess(res, sharedHelpers.encryptIdDataBase(user.id));
       }
       return responseHelpers.responseSuccess(res, null);
     } catch (error) {
