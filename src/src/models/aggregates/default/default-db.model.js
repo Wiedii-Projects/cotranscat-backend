@@ -13,6 +13,7 @@ const {
     defaultSeller,
     defaultClient,
     defaultDriver,
+    defaultBank
 } = require('./default-data.model');
 
 //Const
@@ -35,6 +36,7 @@ const ServiceType = require('../../service-type/service-type.model');
 const Driver = require('../../driver/driver.model');
 const Vehicle = require('../../vehicle/vehicle.model');
 const Route = require('../../route/route.model');
+const Bank = require('../../bank/bank.model');
 
 class defaultDataBaseModel {
     constructor() {
@@ -108,6 +110,12 @@ class defaultDataBaseModel {
         return id;
     }
 
+    async getFirstBank () {
+        const [{ code }] = defaultBank;
+        const { id } = await Bank.findOne({ where: { code }});
+        return id;
+    }
+
     async countUser() {
         return await User.count();
     }
@@ -160,6 +168,10 @@ class defaultDataBaseModel {
         return await Route.count();
     }
 
+    async countBank () {
+        return await Bank.count();
+    }
+
     async createDefaultDataBase() {
         await this.countRole() || Object.values(roleConst).map(async (element) => {await Role.create({type: element})});
         await this.countIndicativeNumber() || defaultIndicativeNumber.map(  async(element) => await IndicativeNumber.create( element ) );
@@ -172,6 +184,7 @@ class defaultDataBaseModel {
         await this.countServiceType() || defaultServiceType.map(  async(element) => await ServiceType.create( element ) );
         const [idMunicipality, idMunicipalityArrive] = await this.getMunicipality();
         await this.countRoute() || await Route.create({ idMunicipalityDepart: idMunicipality, idMunicipalityArrive });
+        await this.countBank() || defaultBank.map(  async(element) => await Bank.create( element ) );
 
         const userCreate = await this.countUser();
 
@@ -187,6 +200,7 @@ class defaultDataBaseModel {
                 idPaymentMethod,
                 idUnitMeasure,
                 idShippingType,
+                idBank
             ] = await Promise.all([
                 this.getIndicativeNumber(),
                 this.getAdminRole(),
@@ -197,6 +211,7 @@ class defaultDataBaseModel {
                 this.getPaymentMethod(),
                 this.getUnitMeasure(),
                 this.getShippingType(),
+                this.getFirstBank()
             ]);
             const [ userAdmin, userSeller, userClient, userDriver ] = await Promise.all ([
                 User.create({ 
@@ -235,10 +250,11 @@ class defaultDataBaseModel {
                     idUnitMeasure,
                     idShippingType
                 })
-            ]); 
+            ]);
+
             await Promise.all([
                 Admin.create({ ...defaultAdmin, id: userAdmin.id }),
-                Seller.create({ ...defaultSeller, id: userSeller.id }),
+                Seller.create({ ...defaultSeller, id: userSeller.id, idBank }),
                 Client.create({ 
                     ...defaultClient, 
                     idIndicativePhoneWhatsApp: indicativeNumber, 

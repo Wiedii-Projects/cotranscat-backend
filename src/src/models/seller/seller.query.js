@@ -23,63 +23,54 @@ module.exports = {
       throw errorsConst.sellerErrors.queryErrors.createError;
     }
   },
-  findSellerQuery: async (where) => {
+  findSellerQuery: async (query = {}) => {
+    const {
+      where,
+      attributes= ["id", "nickName", "email"],
+      include =  [
+        {
+          model: User,
+          as: "UserSeller",
+          attributes: [
+            "numberDocument",
+            "name",
+            "lastName",
+            "numberPhone",
+            "state",
+          ],
+          include: [
+            {
+              model: DocumentType,
+              as: "UserDocumentType",
+            },
+            {
+              model: IndicativeNumber,
+              as: "UserIndicativePhone",
+            },
+            {
+              model: IndicativeNumber,
+              as: "UserIndicativePhone",
+            },
+          ],
+        },
+      ],
+      group,
+      limit,
+      offset,
+      order
+    } = query
     try {
       return await Seller.findAll({
         where,
-        attributes: ["id", "nickName", "email"],
+        attributes,
         raw: true,
         nest: true,
-        include: [
-          {
-            model: User,
-            as: "UserSeller",
-            attributes: [
-              "numberDocument",
-              "name",
-              "lastName",
-              "numberPhone",
-              "state",
-            ],
-            include: [
-              {
-                model: DocumentType,
-                as: "UserDocumentType",
-              },
-              {
-                model: IndicativeNumber,
-                as: "UserIndicativePhone",
-              },
-              {
-                model: IndicativeNumber,
-                as: "UserIndicativePhone",
-              },
-            ],
-          },
-        ],
-      }).then((sellers) =>
-        sellers.map(
-          ({
-            UserSeller: { UserDocumentType, UserIndicativePhone, ...user },
-            id,
-            ...seller
-          }) => {
-            return {
-              id: sharedHelpers.encryptIdDataBase(id),
-              ...seller,
-              ...user,
-              documentType: {
-                ...UserDocumentType,
-                id: sharedHelpers.encryptIdDataBase(UserDocumentType.id),
-              },
-              indicativePhone: {
-                ...UserIndicativePhone,
-                id: sharedHelpers.encryptIdDataBase(UserIndicativePhone.id),
-              },
-            };
-          }
-        )
-      );
+        include,
+        group,
+        limit,
+        offset,
+        order
+      })
     } catch {
       throw errorsConst.sellerErrors.queryErrors.findError;
     }
