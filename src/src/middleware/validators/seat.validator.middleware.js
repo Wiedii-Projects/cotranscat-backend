@@ -25,9 +25,9 @@ module.exports = {
     validateArraySeat: async (id, req) => {
         try {
             req.body.seatExist = req.body.seatExist ? req.body.seatExist : [];
-            req.body.price = req.body.price ? req.body.price : 0;
+            req.body.priceSeat = req.body.priceSeat ? req.body.priceSeat : 0;
             const [seat] = await seatQuery.findSeat({ where: { id: sharedHelpers.decryptIdDataBase(id), state: 2 } });
-            req.body.price += parseFloat(seat.price);
+            req.body.priceSeat += parseFloat(seat.price);
             req.body.seatExist = [ ...req.body.seatExist, seat?true:false ];
         } catch {
             req.body.seatExist = [false];

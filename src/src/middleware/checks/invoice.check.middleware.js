@@ -26,6 +26,8 @@ module.exports = {
                 .custom((value, {req}) => paymentMethodValidators.validatePaymentMethod(req, {id: sharedHelpers.decryptIdDataBase(value)}))
                 .custom((value, {req}) => !!req.body.idPaymentMethod)
                 .withMessage(new ErrorModel(errorsConst.invoiceErrors.paymentMethodRequired)),
+            check("price").optional({checkFalsy: false})
+                .isFloat().withMessage(new ErrorModel(errorsConst.invoiceErrors.priceRequired)),
             check("tickets")
                 .isArray()
                 .isLength({min: 1})
