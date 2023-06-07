@@ -54,7 +54,7 @@ module.exports = {
                 }
             ]})
         } catch {
-            throw errorsConst.aggregateErrorsApp.errorGetClient
+            throw errorsConst.clientErrors.queryErrors.findAllError
         }
     },
 
@@ -62,7 +62,7 @@ module.exports = {
         try {
             return await Client.update(update, { where });
         } catch {
-            throw errorsConst.aggregateErrorsApp.errorUpdateClient
+            throw errorsConst.clientErrors.queryErrors.updateError
         }
     },
 

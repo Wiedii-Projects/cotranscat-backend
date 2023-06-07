@@ -49,7 +49,7 @@ module.exports = {
           transaction
         );
         await transaction.commit();
-        return responseHelpers.responseSuccess(res, null);
+        return responseHelpers.responseSuccess(res, sharedHelpers.encryptIdDataBase(user.id));
       }
       return responseHelpers.responseSuccess(res, null);
     } catch (error) {
@@ -57,7 +57,39 @@ module.exports = {
       return responseHelpers.responseError(res, 500, error);
     }
   },
-
+  updateClient: async (req, res) => {
+    const { decryptId } = req.body;
+    const { idDocumentType, numberDocument, ...extractUser } = userHelpers.extractUserDataHelper(req.body);
+    const extractClient = userHelpers.extractClientDataHelper(req.body)
+    let  userAlreadyExists;
+    try {
+      const [client] = await clientQuery.findClientQuery({ where: { id: decryptId }});
+      if(client){
+        if( idDocumentType && numberDocument ){
+          const [{ id: role }] = await roleQuery.findRoleTypeQuery({
+            where: { type: roleModelConst.CLIENT_ROLE }
+          });
+          const idRole = sharedHelpers.decryptIdDataBase(role);
+          [userAlreadyExists] = await userQuery.findUserQuery({
+            where: {
+              idDocumentType: idDocumentType,
+              numberDocument: numberDocument,
+              idRole,
+            },
+          });
+        }
+        await Promise.all([
+          userAlreadyExists ? 
+              userQuery.updateUserQuery({ id: decryptId }, extractUser) : 
+              userQuery.updateUserQuery({ id: decryptId }, { idDocumentType, numberDocument, ...extractUser }),
+          clientQuery.updateClientQuery({ id: decryptId }, extractClient)
+        ])
+      }
+      return responseHelpers.responseSuccess(res, null);
+    } catch (error) {
+      return responseHelpers.responseError(res, 500, error);
+    }
+  },
   getAllClient: async (req, res) => {
     try {
       const client = await clientQuery.findClientQuery();
