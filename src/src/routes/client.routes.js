@@ -13,6 +13,10 @@ router.post('/', [
     clientMiddleware.checkCreateClient()
 ], clientController.createClient);
 
+router.put('/',[
+    clientMiddleware.checkUpdateClient()
+], clientController.updateClient)
+
 router.get('/', clientController.getAllClient);
 
 module.exports = router;
