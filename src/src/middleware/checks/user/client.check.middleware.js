@@ -49,6 +49,8 @@ module.exports = {
 
   checkUpdateClient: () => {
     return [
+      ...sharedCheckMiddleware.checkJwt(),
+      ...sharedCheckMiddleware.checkId(),
       ...sharedCheckMiddleware.checkUpdateUser(),
       check("indicativeNumberWhatsapp").optional({ checkFalsy: false })
         .isString().withMessage(new ErrorModel(errorsConst.clientErrors.idIndicativePhoneWhatsAppRequired)).bail()
