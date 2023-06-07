@@ -8,8 +8,9 @@ const { check } = require('express-validator');
 const { ErrorModel } = require("../../models/index.models");
 
 // Validators - middleware
-const { sharedValidators, userValidators, seatValidators, clientValidator } = require('../index.validators.middleware');
+const { sharedValidators, userValidators, seatValidators, clientValidator, paymentMethodValidators } = require('../index.validators.middleware');
 const sharedCheckMiddleware = require('./shared.check.middleware');
+const sharedHelpers = require('../../helpers/shared.helpers');
 
 module.exports = {
     checkCreateInvoiceTravel: () => {
@@ -21,6 +22,10 @@ module.exports = {
                 .custom((id, { req }) => clientValidator.validateClient(req, { id }))
                 .custom((_, { req }) => !!req.body.idClient),
         sharedValidators.validateError,
+            check("paymentMethod")
+                .custom((value, {req}) => paymentMethodValidators.validatePaymentMethod(req, {id: sharedHelpers.decryptIdDataBase(value)}))
+                .custom((value, {req}) => !!req.body.idPaymentMethod)
+                .withMessage(new ErrorModel(errorsConst.invoiceErrors.paymentMethodRequired)),
             check("tickets")
                 .isArray()
                 .isLength({min: 1})

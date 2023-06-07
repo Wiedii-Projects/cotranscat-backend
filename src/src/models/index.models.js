@@ -125,6 +125,10 @@ ServiceType.hasMany(Invoice, { foreignKey: { name: "idServiceType", allowNull: f
 Invoice.belongsTo(Seller, { as: 'InvoiceSeller', foreignKey: { name: 'idSeller', allowNull: false} });
 Seller.hasMany(Invoice, { foreignKey: { name: "idSeller", allowNull: false } });
 
+// Relationship Invoice-Seller
+Invoice.belongsTo(PaymentMethod, { as: 'InvoicePaymentMethod', foreignKey: { name: 'idPaymentMethod', allowNull: false} });
+PaymentMethod.hasMany(Invoice, { foreignKey: { name: "idPaymentMethod", allowNull: false } });
+
 module.exports = {
   // Aggregates Models
   ServerModel: require("./aggregates/server/server.model"),
