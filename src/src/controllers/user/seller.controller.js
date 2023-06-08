@@ -60,8 +60,29 @@ module.exports = {
 
   getAllSeller: async (req, res) => {
     try {
-      const resp = await sellerQuery.findSellerQuery();
-      return responseHelpers.responseSuccess(res, resp);
+      const sellers = await sellerQuery.findSellerQuery();
+      const allSeller = sellers.map(
+        ({
+          UserSeller: { UserDocumentType, UserIndicativePhone, ...user },
+          id,
+          ...seller
+        }) => {
+          return {
+            id: sharedHelpers.encryptIdDataBase(id),
+            ...seller,
+            ...user,
+            documentType: {
+              ...UserDocumentType,
+              id: sharedHelpers.encryptIdDataBase(UserDocumentType.id),
+            },
+            indicativePhone: {
+              ...UserIndicativePhone,
+              id: sharedHelpers.encryptIdDataBase(UserIndicativePhone.id),
+            },
+          };
+        }
+      )
+      return responseHelpers.responseSuccess(res, allSeller);
     } catch (error) {
       return responseHelpers.responseError(res, 500, error);
     }
@@ -70,8 +91,28 @@ module.exports = {
   getSeller: async (req, res) => {
     const { decryptId } = req.body;
     try {
-      const resp = await sellerQuery.findSellerQuery(decryptId);
-      return responseHelpers.responseSuccess(res, resp);
+      const [sellerFound] = await sellerQuery.findSellerQuery({where: {id: decryptId}});
+      
+      const {
+        UserSeller: { UserDocumentType, UserIndicativePhone, ...user },
+        id,
+        ...seller
+      } = sellerFound
+
+      const sellerResponse = {
+        id: sharedHelpers.encryptIdDataBase(id),
+        ...seller,
+        ...user,
+        documentType: {
+          ...UserDocumentType,
+          id: sharedHelpers.encryptIdDataBase(UserDocumentType.id),
+        },
+        indicativePhone: {
+          ...UserIndicativePhone,
+          id: sharedHelpers.encryptIdDataBase(UserIndicativePhone.id),
+        }
+      }
+      return responseHelpers.responseSuccess(res, sellerResponse);
     } catch (error) {
       return responseHelpers.responseError(res, 500, error);
     }

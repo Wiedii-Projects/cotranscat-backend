@@ -176,5 +176,9 @@ module.exports = {
         { type: 1 },
         { type: 2 },
         { type: 3 },
+    ],
+    defaultBank: [
+        { code: "01", description: "Tibu general cash register" },
+        { code: "02", description: "Cúcuta general cash register"}
     ]
 }

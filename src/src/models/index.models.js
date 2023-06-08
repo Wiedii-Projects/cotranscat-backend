@@ -22,6 +22,7 @@ const Seat = require("./seat/seat.model");
 const ServiceType = require("./service-type/service-type.model");
 const Ticket = require("./ticket/ticket.model");
 const Invoice = require("./invoice/invoice.model");
+const Bank = require('./bank/bank.model')
 
 // Relationships BD
 
@@ -125,6 +126,10 @@ ServiceType.hasMany(Invoice, { foreignKey: { name: "idServiceType", allowNull: f
 Invoice.belongsTo(Seller, { as: 'InvoiceSeller', foreignKey: { name: 'idSeller', allowNull: false} });
 Seller.hasMany(Invoice, { foreignKey: { name: "idSeller", allowNull: false } });
 
+// Relationship Bank-Seller
+Seller.belongsTo(Bank,{ as: 'BankSeller', foreignKey: { name: 'idBank', allowNull: false}})
+Bank.hasMany(Seller, { foreignKey: { name: "idBank", allowNull: false } } )
+
 // Relationship Invoice-Seller
 Invoice.belongsTo(PaymentMethod, { as: 'InvoicePaymentMethod', foreignKey: { name: 'idPaymentMethod', allowNull: false} });
 PaymentMethod.hasMany(Invoice, { foreignKey: { name: "idPaymentMethod", allowNull: false } });
@@ -156,5 +161,6 @@ module.exports = {
   Route,
   Seat,
   ServiceType,
-  Ticket
+  Ticket,
+  Bank
 };
