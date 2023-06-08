@@ -13,11 +13,11 @@ router.get('/', [
     seatMiddleware.checkGetAllSeat(),
 ], seatController.getAllSeatTravel);
 
-router.post('/changeStateToStandBy', [
+router.put('/changeStateToStandBy', [
     seatMiddleware.checkChangeState()
 ], seatController.changeStateToStandBy);
 
-router.post('/changeStateToAvailable', [
+router.put('/changeStateToAvailable', [
     seatMiddleware.checkChangeState()
 ], seatController.changeStateToAvailable);
 

@@ -984,6 +984,14 @@
       "code": "INVO001",
       "message": "The tickets is required"
     },
+    "paymentMethodRequired": {
+      "code": "INVO002",
+      "message": "The payment method is required"
+    },
+    "priceRequired": {
+      "code": "INVO003",
+      "message": "The price is required"
+    },
     "queryErrors": {
       "createError": {
         "code": "INVO_001",

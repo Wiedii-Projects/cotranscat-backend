@@ -8,7 +8,7 @@ module.exports = {
     try {
       return await Invoice.create(where, { transaction });
     } catch {
-      throw errorsConst.userErrors.queryErrors.createError;
+      throw errorsConst.invoiceErrors.queryErrors.createError;
     }
   },
 };
