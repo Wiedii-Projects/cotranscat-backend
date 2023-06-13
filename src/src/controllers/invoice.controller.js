@@ -1,8 +1,12 @@
+// Constants
+const { salesConst } = require('../constants/index.constants');
+
 // Helpers
-const { getBankCodeAssociatedWithTheSeller } = require('../helpers/user/client.helpers');
+const { 
+    responseHelpers, sharedHelpers, clientHelper 
+} = require('../helpers/index.helpers');
+
 const { dbConnectionOptions } = require('../constants/core/core-configurations.const');
-const { responseHelpers } = require('../helpers/index.helpers');
-const { decryptIdDataBase } = require('../helpers/shared.helpers');
 const { createNewInvoiceQuery } = require('../models/invoice/invoice.query');
 const { findServiceTypeQuery } = require('../models/service-type/service-type.query');
 const { createNewTicketQuery } = require('../models/ticket/ticket.query');
@@ -13,9 +17,12 @@ module.exports = {
         price = price ? price*tickets.length : priceSeat;
         let transaction;
         try {
-            const idSeller = decryptIdDataBase(id);
-            // TODO: In this line we obtain the bank code associated to the seller, it is required to use the variable 'codeBank' to register the invoice in API transactional queries.
-            const codeBank = await getBankCodeAssociatedWithTheSeller(idSeller)
+            const idSeller = sharedHelpers.decryptIdDataBase(id);
+            
+            // TODO: In this line we obtain bank details associated to the seller, it is required to use the variable 'codeBank' to register the invoice in API transactional queries.
+            const { codeBank, codePaymentMethod, headquarter }  = await clientHelper.getBankByPaymentMethodAssociatedWithTheSellerHelper(id,idPaymentMethod)
+            const { codeSale, prefix, code }  = sharedHelpers.getInvoiceRegisterParametersByBankHelper(salesConst.TYPE_SERVICE.PASSAGE, headquarter)
+
             const [{ id: idServiceType }] = await findServiceTypeQuery({where: { type: 2 }})
             transaction = await dbConnectionOptions.transaction();
             const invoice = await createNewInvoiceQuery({ idClient: decryptId, idServiceType, price, idSeller, idPaymentMethod }, transaction);

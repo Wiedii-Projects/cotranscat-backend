@@ -1011,6 +1011,10 @@
     "letterIsRequired": {
       "code": "APCT001",
       "message": "Letter is required"
+    },
+    "InvalidTypeServiceOrHeadquarters": {
+      "code": "APCT002",
+      "message": "Invalid typeService or headquarters"
     }
   }
 }

@@ -1,3 +1,6 @@
+// Constants
+const { salesConst } = require("../../../constants/index.constants");
+
 module.exports = {
     defaultDocumentType: [ 
         { 
@@ -178,7 +181,11 @@ module.exports = {
         { type: 3 },
     ],
     defaultBank: [
-        { code: "01", description: "Tibu general cash register" },
-        { code: "02", description: "Cúcuta general cash register"}
+        { code: "01", description: "Tibu general cash register", headquarterAssociated: salesConst.HEADQUARTERS.TIBU },
+        { code: "02", description: "Cúcuta general cash register", headquarterAssociated: salesConst.HEADQUARTERS.CUCUTA}
+    ],
+    defaultHeadquarter: [
+        { name: salesConst.HEADQUARTERS.TIBU },
+        { name: salesConst.HEADQUARTERS.CUCUTA }
     ]
 }

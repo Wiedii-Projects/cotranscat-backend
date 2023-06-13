@@ -1,7 +1,7 @@
 // Constants
 const { dbConnectionOptions } = require("../constants/core/core-configurations.const");
 const {
-  coreConfigurationsConst, errorsConst
+  coreConfigurationsConst, errorsConst, salesConst
 } = require("../constants/index.constants");
 
 // Libraries
@@ -49,5 +49,57 @@ module.exports = {
     const nextLetter = String.fromCharCode(nextLetterCode);
 
     return nextLetter;
-  }
+  },
+  getInvoiceRegisterParametersByBankHelper: (typeService, headquarters) => {
+    const { CUCUTA, TIBU } = salesConst.HEADQUARTERS
+    const { PASSAGE, SHIPPING, MONEY_TRANSFER } = salesConst.TYPE_SERVICE
+
+    const serviceMappings = {
+      [PASSAGE]: {
+        [TIBU]: {
+          codeSale: salesConst.SALES_PREFIXES_CODE.TIBU_PASSAGES,
+          codeService: salesConst.CODE_SERVICE_TYPE.PASSAGE
+        },
+        [CUCUTA]: {
+          codeSale: salesConst.SALES_PREFIXES_CODE.CUCUTA_PASSAGES,
+          codeService: salesConst.CODE_SERVICE_TYPE.PASSAGE
+        }
+      },
+      [SHIPPING]: {
+        [TIBU]: {
+          codeSale: salesConst.SALES_PREFIXES_CODE.TIBU_SHIPPING,
+          codeService: salesConst.CODE_SERVICE_TYPE.SHIPPING
+        },
+        [CUCUTA]: {
+          codeSale: salesConst.SALES_PREFIXES_CODE.CUCUTA_SHIPPING,
+          codeService: salesConst.CODE_SERVICE_TYPE.SHIPPING
+        }
+      },
+      [MONEY_TRANSFER]: {
+        TIBU: {
+          codeSale: salesConst.SALES_PREFIXES_CODE.TIBU_MONEY_TRANSFER,
+          codeService: salesConst.CODE_SERVICE_TYPE.MONEY_TRANSFER
+        },
+        [CUCUTA]: {
+          codeSale: salesConst.SALES_PREFIXES_CODE.CUCUTA_MONEY_TRANSFER,
+          codeService: salesConst.CODE_SERVICE_TYPE.MONEY_TRANSFER
+        }
+      }
+    };
+
+    const invoiceParams = {
+      codeSale: salesConst.SALES_CODE.SALES_INVOICE
+    };
+
+    if (serviceMappings[typeService] && serviceMappings[typeService][headquarters]) {
+      const { codeSale, codeService } = serviceMappings[typeService][headquarters];
+      invoiceParams.prefix = codeSale;
+      invoiceParams.code = codeService;
+
+    } else {
+      throw errorsConst.appErrors.InvalidTypeServiceOrHeadquarters;
+    }
+
+    return invoiceParams
+   }
 }

@@ -23,6 +23,8 @@ const ServiceType = require("./service-type/service-type.model");
 const Ticket = require("./ticket/ticket.model");
 const Invoice = require("./invoice/invoice.model");
 const Bank = require('./bank/bank.model')
+const PaymentMethodBank = require('./payment-method-bank/payment-method-bank.model')
+const Headquarter = require('./headquarter/headquarter.model')
 
 // Relationships BD
 
@@ -134,6 +136,18 @@ Bank.hasMany(Seller, { foreignKey: { name: "idBank", allowNull: false } } )
 Invoice.belongsTo(PaymentMethod, { as: 'InvoicePaymentMethod', foreignKey: { name: 'idPaymentMethod', allowNull: false} });
 PaymentMethod.hasMany(Invoice, { foreignKey: { name: "idPaymentMethod", allowNull: false } });
 
+// Relationship PaymentMethod-PaymentMethodBank
+PaymentMethod.hasMany(PaymentMethodBank, { as: 'PaymentMethodBank', foreignKey: { name: 'idPaymentMethod', allowNull: false } });
+PaymentMethodBank.belongsTo(PaymentMethod, { as: 'PaymentMethodBank', foreignKey: { name: 'idPaymentMethod', allowNull: false } });
+
+// Relationship Bank-PaymentMethodBank
+PaymentMethodBank.belongsTo(Bank, { as: 'BankPaymentMethod', foreignKey: { name: "idBank", allowNull: false } });
+Bank.hasMany(PaymentMethodBank, { as: 'BankPaymentMethod', foreignKey: { name: "idBank", allowNull: false } });
+
+// Relationship Headquarter-Bank
+Headquarter.hasMany(Bank, { as: 'HeadquarterBank', foreignKey: { name: 'idHeadquarter', allowNull: false } });
+Bank.belongsTo(Headquarter, { as: 'HeadquarterBank', foreignKey: { name: 'idHeadquarter', allowNull: false } });
+
 module.exports = {
   // Aggregates Models
   ServerModel: require("./aggregates/server/server.model"),
@@ -162,5 +176,7 @@ module.exports = {
   Seat,
   ServiceType,
   Ticket,
-  Bank
+  Bank,
+  PaymentMethodBank,
+  Headquarter
 };
