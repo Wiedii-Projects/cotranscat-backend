@@ -41,7 +41,7 @@ module.exports = {
         .isString().withMessage(new ErrorModel(errorsConst.clientErrors.idMunicipalityRequired)).bail()
         .custom((value, { req }) => userValidators.decryptId(value, "idMunicipality", req))
         .custom((_, { req }) => (req.body.idMunicipality ? true : false)).withMessage(new ErrorModel(errorsConst.clientErrors.idMunicipalityRequired)).bail()
-        .custom(async (_, { req }) => await userValidators.validateIdIndicativeNumber({ where: { id: req.body.idMunicipality } }, req))
+        .custom(async (_, { req }) => await userValidators.validateIdMunicipality({ where: { id: req.body.idMunicipality } }, req))
         .custom((_, { req }) => (req.body.isValid ? true : false)).withMessage(new ErrorModel(errorsConst.userErrors.idMunicipalityInvalid)).bail(),
       sharedValidators.validateError,
     ];
@@ -76,7 +76,7 @@ module.exports = {
         .isString().withMessage(new ErrorModel(errorsConst.clientErrors.idMunicipalityRequired)).bail()
         .custom((value, { req }) => userValidators.decryptId(value, "idMunicipality", req))
         .custom((_, { req }) => (req.body.idMunicipality ? true : false)).withMessage(new ErrorModel(errorsConst.clientErrors.idMunicipalityRequired)).bail()
-        .custom(async (_, { req }) => await userValidators.validateIdIndicativeNumber({ where: { id: req.body.idMunicipality } }, req))
+        .custom(async (_, { req }) => await userValidators.validateIdMunicipality({ where: { id: req.body.idMunicipality } }, req))
         .custom((_, { req }) => (req.body.isValid ? true : false)).withMessage(new ErrorModel(errorsConst.userErrors.idMunicipalityInvalid)),
       sharedValidators.validateError,
     ];
