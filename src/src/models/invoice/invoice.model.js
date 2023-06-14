@@ -11,7 +11,7 @@ const {
     "invoice",
     {
       number: {
-        type: DataTypes.INTEGER.UNSIGNED.ZEROFILL,
+        type: DataTypes.STRING(10),
         field: "number",
         allowNull: false
       },
