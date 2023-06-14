@@ -13,4 +13,8 @@ router.post('/', [
     invoiceMiddleware.checkCreateInvoiceTravel()
 ], invoiceController.createInvoiceTravel);
 
+router.get('/:idInvoice', [
+    invoiceMiddleware.checkGetInvoice()
+], invoiceController.getInvoice)
+
 module.exports = router;

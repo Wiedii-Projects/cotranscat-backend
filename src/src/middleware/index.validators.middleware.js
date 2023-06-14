@@ -13,4 +13,5 @@ module.exports = {
     departmentValidators: require('./validators/department.validator.middleware'),
     seatValidators: require('./validators/seat.validator.middleware'),
     paymentMethodValidators: require('./validators/paymentMethod.validator.middleware'),
+    invoiceValidators: require('./validators/invoice.validator.middleware'),
 }

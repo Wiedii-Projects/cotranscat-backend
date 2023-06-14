@@ -992,6 +992,14 @@
       "code": "INVO003",
       "message": "The price is required"
     },
+    "invoiceRequired": {
+      "code": "INVO004",
+      "message": "The invoice is required"
+    },
+    "invoiceNotGenerated": {
+      "code": "INVO005",
+      "message": "error when trying to display the generated invoice"
+    },
     "queryErrors": {
       "createError": {
         "code": "INVO_001",
