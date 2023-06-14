@@ -112,7 +112,9 @@ module.exports = {
         }
     },
     getVehiclesAvailableToTravel: async (req, res) => {
-        const { date, time, route } = req.body;
+        const { date, time } = req.query
+        const { route } = req.body
+        
         try {
 
             let vehiclesAvailable = []
