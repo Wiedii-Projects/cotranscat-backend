@@ -15,7 +15,7 @@ module.exports = {
         try {
             const idSeller = decryptIdDataBase(id);
             // TODO: In this line we obtain the bank code associated to the seller, it is required to use the variable 'codeBank' to register the invoice in API transactional queries.
-            const codeBank = await getBankCodeAssociatedWithTheSeller(idSeller)
+            //const codeBank = await getBankCodeAssociatedWithTheSeller(idSeller)
             const [{ id: idServiceType }] = await findServiceTypeQuery({where: { type: 2 }})
             transaction = await dbConnectionOptions.transaction();
             const invoice = await createNewInvoiceQuery({ idClient: decryptId, idServiceType, price, idSeller, idPaymentMethod }, transaction);

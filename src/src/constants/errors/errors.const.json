@@ -715,6 +715,22 @@
       }
     }
   },
+  "observationErrors": {
+    "idInvoiceRequired": {
+      "code": "OBSR001",
+      "message": "The invoice is required"
+    },
+    "queryErrors": {
+      "createError": {
+        "code": "OBSR_001",
+        "message": "Something went wrong"
+      },
+      "findAllError": {
+        "code": "OBSR_002",
+        "message": "Something went wrong"
+      }
+    }
+  },
   "roleErrors": {
     "typeSize": {
       "code": "ROLE001",
