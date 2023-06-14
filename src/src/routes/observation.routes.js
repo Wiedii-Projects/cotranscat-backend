@@ -1,18 +1,16 @@
 // Controllers
-const { roleController } = require('../controllers/index.controllers');
+const { observationController } = require('../controllers/index.controllers');
 
 // Checks - middleware
-const { roleMiddleware } = require('../middleware/index.checks.middleware');
+const { observationMiddleware } = require('../middleware/index.checks.middleware');
 
 // Libraries
 const { Router } = require("express");
  
 const router = Router();
 
-router.post('/', [
-    roleMiddleware.checkCreateRole(),
-], roleController.createRole);
+router.post('/');
 
-router.get('/', roleController.getAllRoles);
+router.get('/');
 
 module.exports = router;

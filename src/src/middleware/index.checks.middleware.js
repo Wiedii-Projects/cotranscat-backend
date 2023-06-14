@@ -21,4 +21,5 @@ module.exports = {
   routeMiddleware: require("./checks/route.check.middleware"),
   seatMiddleware: require("./checks/seat.check.middleware"),
   invoiceMiddleware: require("./checks/invoice.check.middleware"),
+  observationMiddleware: require("./checks/observation.check.middleware"),
 };
