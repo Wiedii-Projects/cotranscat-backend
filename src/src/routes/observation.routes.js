@@ -10,7 +10,7 @@ const { Router } = require("express");
 const router = Router();
 
 router.post('/', [
-    observationMiddleware.checkObservation(),
+    observationMiddleware.checkCreateObservation(),
 ], observationController.createObservation);
 
 router.get('/:idInvoice', [

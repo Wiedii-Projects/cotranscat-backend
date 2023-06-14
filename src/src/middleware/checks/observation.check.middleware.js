@@ -15,9 +15,17 @@ const sharedCheckMiddleware = require('./shared.check.middleware');
 
 module.exports = {
 
+    checkCreateObservation: () => [
+        ...sharedCheckMiddleware.checkJwt(),
+            check('description', new ErrorModel(errorsConst.observationErrors.descriptionRequired)).isString(),
+            check('idInvoice', new ErrorModel(errorsConst.invoiceErrors.invoiceRequired))
+                .custom((value, {req}) => invoiceValidatorMiddleware.validateInvoiceExist({ id: sharedHelpers.decryptIdDataBase(value) }, req))
+                .custom((value, {req}) => !!req.body.invoice)
+                .withMessage(new ErrorModel(errorsConst.invoiceErrors.invoiceNotGenerated)),
+            sharedValidators.validateError,
+    ],
     checkObservation: () => [
         ...sharedCheckMiddleware.checkJwt(),
-            check('description').isString(),
             check('idInvoice', new ErrorModel(errorsConst.invoiceErrors.invoiceRequired))
                 .custom((value, {req}) => invoiceValidatorMiddleware.validateInvoiceExist({ id: sharedHelpers.decryptIdDataBase(value) }, req))
                 .custom((value, {req}) => !!req.body.invoice)
