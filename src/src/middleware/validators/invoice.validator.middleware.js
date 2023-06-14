@@ -14,6 +14,14 @@ module.exports = {
         } catch {
             req.body.invoice = false;
         }
+    },
+    validateInvoiceExist: async (where, req) => {
+        try {
+            let invoice = await invoiceQuery.findInvoiceQuery({ where });
+            req.body.invoice = invoice.id? where.id:false;
+        } catch {
+            req.body.invoice = false;
+        }
     }
 }
 
