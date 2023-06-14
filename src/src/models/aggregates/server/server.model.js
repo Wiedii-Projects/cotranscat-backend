@@ -35,6 +35,7 @@ class ServerModel {
             route: '/api/route',
             seat: '/api/seat',
             invoice: '/api/invoice',
+            observation: '/api/observation',
         }
         this.dbHost = coreConfigurationsConst.dbHost;
         this.db();
@@ -76,6 +77,7 @@ class ServerModel {
         this.app.use(this.paths.seat, require('../../../routes/seat.routes'));
         this.app.use(this.paths.travel, require('../../../routes/travel.routes'));
         this.app.use(this.paths.invoice, require('../../../routes/invoice.routes'));
+        this.app.use(this.paths.observation, require('../../../routes/observation.routes'));
     }
 
     listen() {

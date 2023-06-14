@@ -23,6 +23,7 @@ const ServiceType = require("./service-type/service-type.model");
 const Ticket = require("./ticket/ticket.model");
 const Invoice = require("./invoice/invoice.model");
 const Bank = require('./bank/bank.model')
+const Observation = require('./observation/observation.model');
 
 // Relationships BD
 
@@ -134,6 +135,10 @@ PaymentMethod.hasMany(Invoice, { as: 'InvoicePaymentMethod', foreignKey: { name:
 Invoice.belongsTo(Client, { as: 'InvoiceClient', foreignKey: { name: 'idClient', allowNull: false} });
 Client.hasMany(Invoice, { as: 'InvoiceClient', foreignKey: { name: "idClient", allowNull: false } });
 
+// Relationship Observation-Invoice
+Observation.belongsTo(Invoice, { as: 'ObservationInvoice', foreignKey: { name: 'idInvoice', allowNull: false} });
+Invoice.hasMany(Observation, { as: 'ObservationInvoice', foreignKey: { name: "idInvoice", allowNull: false } });
+
 module.exports = {
   // Aggregates Models
   ServerModel: require("./aggregates/server/server.model"),
@@ -162,5 +167,6 @@ module.exports = {
   Seat,
   ServiceType,
   Ticket,
-  Bank
+  Bank,
+  Observation
 };
