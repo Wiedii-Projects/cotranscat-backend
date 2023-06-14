@@ -720,6 +720,10 @@
       "code": "OBSR001",
       "message": "The invoice is required"
     },
+    "descriptionRequired": {
+      "code": "OBSR002",
+      "message": "The description is required"
+    },
     "queryErrors": {
       "createError": {
         "code": "OBSR_001",

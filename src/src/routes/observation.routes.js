@@ -13,6 +13,8 @@ router.post('/', [
     observationMiddleware.checkCreateObservation(),
 ], observationController.createObservation);
 
-router.get('/');
+router.get('/:idInvoice', [
+    observationMiddleware.checkObservation(),
+], observationController.getObservation);
 
 module.exports = router;
