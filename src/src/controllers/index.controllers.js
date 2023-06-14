@@ -20,4 +20,5 @@ module.exports = {
   routeController: require("./route.controller"),
   seatController: require("./seat.controller"),
   invoiceController: require("./invoice.controller"),
+  observationController: require("./observation.controller"),
 };

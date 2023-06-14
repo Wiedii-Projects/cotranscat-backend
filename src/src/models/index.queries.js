@@ -21,4 +21,5 @@ module.exports = {
   routeQuery: require("./route/route.query"),
   seatQuery: require("./seat/seat.query"),
   invoiceQuery: require("./invoice/invoice.query"),
+  observationQuery: require("./observation/observation.query"),
 };
