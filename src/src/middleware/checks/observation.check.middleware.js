@@ -15,7 +15,7 @@ const sharedCheckMiddleware = require('./shared.check.middleware');
 
 module.exports = {
 
-    checkCreateObservation: () => [
+    checkObservation: () => [
         ...sharedCheckMiddleware.checkJwt(),
             check('description').isString(),
             check('idInvoice', new ErrorModel(errorsConst.invoiceErrors.invoiceRequired))

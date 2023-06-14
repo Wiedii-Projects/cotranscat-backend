@@ -12,6 +12,11 @@ const ObservationSchema = dbConnectionOptions.define(
       field: "description",
       allowNull: false
     },
+    date: {
+      type: DataTypes.DATEONLY,
+      field: "date",
+      allowNull: false,
+    },
   },
   {
     tableName: "observation"
