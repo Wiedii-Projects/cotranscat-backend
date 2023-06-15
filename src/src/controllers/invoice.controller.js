@@ -6,6 +6,7 @@ const { decryptIdDataBase, encryptIdDataBase } = require('../helpers/shared.help
 const { createNewInvoiceQuery } = require('../models/invoice/invoice.query');
 const { findServiceTypeQuery } = require('../models/service-type/service-type.query');
 const { createNewTicketQuery } = require('../models/ticket/ticket.query');
+const { invoiceQuery, travelQuery } = require('../models/index.queries');
 
 module.exports = {
     createInvoiceTravel: async(req, res) => {
@@ -30,7 +31,28 @@ module.exports = {
     getInvoice: async(req, res) => {
         try {
             return responseHelpers.responseSuccess(res, req.body.invoice);
-        } catch {
+        } catch (error){
+            return responseHelpers.responseError(res, 500, error);
+        }
+    },
+    getAllInvoice: async(req, res) => {
+        const { page = 0 } = req.query;
+        try {
+            let [invoice, count] = await Promise.all([
+                invoiceQuery.findAllInvoiceQuery({ where: {}, offset: page}),
+                invoiceQuery.countInvoiceQuery()
+            ]);
+            let rows = [];
+            for (const value of invoice) {
+                const route = await travelQuery.findRouteToTravel({ id: value.idTravel });
+                rows.push({
+                    ...route,
+                    ...value,
+                    idTravel: undefined
+                })
+              }
+            return responseHelpers.responseSuccess(res, { count, rows });
+        } catch (error){
             return responseHelpers.responseError(res, 500, error);
         }
     }

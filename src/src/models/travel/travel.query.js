@@ -3,7 +3,7 @@ const { errorsConst } = require('../../constants/index.constants');
 const sharedHelpers = require('../../helpers/shared.helpers');
 
 // Models
-const { Travel, DriverVehicle, Driver, Vehicle } = require('../index.models');
+const { Travel, DriverVehicle, Driver, Vehicle, Route, Municipality } = require('../index.models');
 
 module.exports = {
     createTravel: async (where, transaction) => {
@@ -12,6 +12,41 @@ module.exports = {
             return [travel.get(), isCreated]
         } catch {
             throw errorsConst.travelErrors.queryErrors.createError;
+        }
+    },
+    findRouteToTravel: async(where) => {
+        try {
+            return await Travel.findOne({
+                raw: true,
+                nest: true,
+                where,
+                attributes: ['idRoute'],
+                include: [
+                    {
+                        model: Route,
+                        as: 'TravelRoute',
+                        attributes: ['idMunicipalityDepart', 'idMunicipalityArrive'],
+                        include: [
+                            {
+                                model: Municipality,
+                                as: 'MunicipalityDepart',
+                                attributes: ['name'],
+                            },
+                            {
+                                model: Municipality,
+                                as: 'MunicipalityArrive',
+                                attributes: ['name'],
+                            }
+                        ]
+                    }
+                ]
+            })
+            .then((result) => ({
+                municipalityDepart: result.TravelRoute.MunicipalityDepart.name,
+                municipalityArrive: result.TravelRoute.MunicipalityArrive.name
+            }));
+        } catch {
+            throw errorsConst.travelErrors.queryErrors.findError;
         }
     },
     findTravels: async (query = {}) => {

@@ -17,4 +17,8 @@ router.get('/:idInvoice', [
     invoiceMiddleware.checkGetInvoice()
 ], invoiceController.getInvoice)
 
+router.get('/', [
+    invoiceMiddleware.checkGetAllInvoice()
+], invoiceController.getAllInvoice)
+
 module.exports = router;
