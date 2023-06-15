@@ -8,10 +8,10 @@ const {
   
   
   const InvoiceSchema = dbConnectionOptions.define(
-    "invoice",
+    "Invoice",
     {
       number: {
-        type: DataTypes.INTEGER.UNSIGNED.ZEROFILL,
+        type: DataTypes.STRING(10),
         field: "number",
         allowNull: false
       },
@@ -25,6 +25,9 @@ const {
         field: "price",
         allowNull: false
       }
+    },
+    {
+      tableName: "invoice"
     }
   );
   

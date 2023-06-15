@@ -23,6 +23,7 @@ const ServiceType = require("./service-type/service-type.model");
 const Ticket = require("./ticket/ticket.model");
 const Invoice = require("./invoice/invoice.model");
 const Bank = require('./bank/bank.model')
+const Observation = require('./observation/observation.model');
 const PaymentMethodBank = require('./payment-method-bank/payment-method-bank.model')
 const Headquarter = require('./headquarter/headquarter.model')
 
@@ -80,10 +81,6 @@ IndicativeNumber.hasMany(User, { as: 'UserIndicativePhone', foreignKey: { name: 
 Coordinator.belongsTo(User, { as: 'UserCoordinator', foreignKey: { name: 'id', allowNull: false, primaryKey: true } });
 User.hasOne(Coordinator, { as: 'UserCoordinator', foreignKey: { name: 'id', allowNull: false, primaryKey: true } });
 
-// Relationship User-Seller
-Seller.belongsTo(User, { foreignKey: { name: 'id', allowNull: false, primaryKey: true } });
-User.hasOne(Seller, { foreignKey: { name: 'id', allowNull: false, primaryKey: true } });
-
 // Relationship Municipality-Department
 Municipality.belongsTo(Department, { as: 'MunicipalityDepartment', foreignKey: { name: "idDepartment", allowNull: false } });
 Department.hasMany(Municipality, { as: 'MunicipalityDepartment', foreignKey: { name: "idDepartment", allowNull: false } });
@@ -98,43 +95,51 @@ SeatRuler.belongsTo(Vehicle, { as: 'SeatRulerVehicle', foreignKey: { name: "idVe
 
 // Relationship Route-MunicipalityDepart
 Route.belongsTo(Municipality, { as: 'MunicipalityDepart', foreignKey: { name: 'idMunicipalityDepart', allowNull: false} });
-Municipality.hasMany(Route, { foreignKey: { name: "idMunicipalityDepart", allowNull: false } });
+Municipality.hasMany(Route, { as: 'MunicipalityDepart', foreignKey: { name: "idMunicipalityDepart", allowNull: false } });
 
 // Relationship Route-MunicipalityArrive
 Route.belongsTo(Municipality, { as: 'MunicipalityArrive', foreignKey: { name: 'idMunicipalityArrive', allowNull: false} });
-Municipality.hasMany(Route, { foreignKey: { name: "idMunicipalityArrive", allowNull: false } });
+Municipality.hasMany(Route, { as: 'MunicipalityArrive', foreignKey: { name: "idMunicipalityArrive", allowNull: false } });
 
 // Relationship Travel-Route
-Travel.belongsTo(Route, { foreignKey: { name: 'idRoute', allowNull: false} });
-Route.hasMany(Travel, { foreignKey: { name: "idRoute", allowNull: false } });
+Travel.belongsTo(Route, { as: 'TravelRoute', foreignKey: { name: 'idRoute', allowNull: false} });
+Route.hasMany(Travel, { as: 'TravelRoute', foreignKey: { name: "idRoute", allowNull: false } });
 
 // Relationship Travel-Seat
 Seat.belongsTo(Travel, { as: 'TravelSeat', foreignKey: { name: 'idTravel', allowNull: false} });
-Travel.hasMany(Seat, { foreignKey: { name: "idTravel", allowNull: false } });
+Travel.hasMany(Seat, { as: 'TravelSeat', foreignKey: { name: "idTravel", allowNull: false } });
 
 // Relationship Ticket-Seat
 Ticket.belongsTo(Seat, { as: 'TicketSeat', foreignKey: { name: 'idSeat', allowNull: false} });
-Seat.hasOne(Ticket, { foreignKey: { name: "idSeat" } });
+Seat.hasOne(Ticket, { as: 'TicketSeat', foreignKey: { name: "idSeat" } });
 
 // Relationship Ticket-Invoice
 Ticket.belongsTo(Invoice, { as: 'TicketInvoice', foreignKey: { name: 'idInvoice', allowNull: true} });
-Invoice.hasMany(Ticket, { foreignKey: { name: "idInvoice", allowNull: true } });
+Invoice.hasMany(Ticket, { as: 'TicketInvoice', foreignKey: { name: "idInvoice", allowNull: true } });
 
 // Relationship Invoice-ServiceType
 Invoice.belongsTo(ServiceType, { as: 'InvoiceServiceType', foreignKey: { name: 'idServiceType', allowNull: false} });
-ServiceType.hasMany(Invoice, { foreignKey: { name: "idServiceType", allowNull: false } });
+ServiceType.hasMany(Invoice, { as: 'InvoiceServiceType', foreignKey: { name: "idServiceType", allowNull: false } });
 
 // Relationship Invoice-Seller
 Invoice.belongsTo(Seller, { as: 'InvoiceSeller', foreignKey: { name: 'idSeller', allowNull: false} });
-Seller.hasMany(Invoice, { foreignKey: { name: "idSeller", allowNull: false } });
+Seller.hasMany(Invoice, { as: 'InvoiceSeller', foreignKey: { name: "idSeller", allowNull: false } });
 
 // Relationship Bank-Seller
 Seller.belongsTo(Bank,{ as: 'BankSeller', foreignKey: { name: 'idBank', allowNull: false}})
-Bank.hasMany(Seller, { foreignKey: { name: "idBank", allowNull: false } } )
+Bank.hasMany(Seller, { as: 'BankSeller', foreignKey: { name: "idBank", allowNull: false } } )
 
 // Relationship Invoice-Seller
 Invoice.belongsTo(PaymentMethod, { as: 'InvoicePaymentMethod', foreignKey: { name: 'idPaymentMethod', allowNull: false} });
-PaymentMethod.hasMany(Invoice, { foreignKey: { name: "idPaymentMethod", allowNull: false } });
+PaymentMethod.hasMany(Invoice, { as: 'InvoicePaymentMethod', foreignKey: { name: "idPaymentMethod", allowNull: false } });
+
+// Relationship Invoice-Client
+Invoice.belongsTo(Client, { as: 'InvoiceClient', foreignKey: { name: 'idClient', allowNull: false} });
+Client.hasMany(Invoice, { as: 'InvoiceClient', foreignKey: { name: "idClient", allowNull: false } });
+
+// Relationship Observation-Invoice
+Observation.belongsTo(Invoice, { as: 'ObservationInvoice', foreignKey: { name: 'idInvoice', allowNull: false} });
+Invoice.hasMany(Observation, { as: 'ObservationInvoice', foreignKey: { name: "idInvoice", allowNull: false } });
 
 // Relationship PaymentMethod-PaymentMethodBank
 PaymentMethod.hasMany(PaymentMethodBank, { as: 'PaymentMethodBank', foreignKey: { name: 'idPaymentMethod', allowNull: false } });
@@ -177,6 +182,7 @@ module.exports = {
   ServiceType,
   Ticket,
   Bank,
+  Observation,
   PaymentMethodBank,
   Headquarter
 };

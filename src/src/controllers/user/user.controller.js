@@ -41,7 +41,7 @@ module.exports = {
   },
   searchUsers: async (req, res) => {
 
-    let { filterValue } = req.body;
+    let { filterValue } = req.query;
 
     if (isNaN(filterValue)) 
       filterValue = filterValue ? (unicodeNormalizerLibrary.nfd(filterValue).replace(/[\u0300-\u036f]/g, "")).toLowerCase() : null;

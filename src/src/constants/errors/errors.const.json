@@ -715,6 +715,26 @@
       }
     }
   },
+  "observationErrors": {
+    "idInvoiceRequired": {
+      "code": "OBSR001",
+      "message": "The invoice is required"
+    },
+    "descriptionRequired": {
+      "code": "OBSR002",
+      "message": "The description is required"
+    },
+    "queryErrors": {
+      "createError": {
+        "code": "OBSR_001",
+        "message": "Something went wrong"
+      },
+      "findAllError": {
+        "code": "OBSR_002",
+        "message": "Something went wrong"
+      }
+    }
+  },
   "roleErrors": {
     "typeSize": {
       "code": "ROLE001",
@@ -991,6 +1011,14 @@
     "priceRequired": {
       "code": "INVO003",
       "message": "The price is required"
+    },
+    "invoiceRequired": {
+      "code": "INVO004",
+      "message": "The invoice is required"
+    },
+    "invoiceNotGenerated": {
+      "code": "INVO005",
+      "message": "error when trying to display the generated invoice"
     },
     "queryErrors": {
       "createError": {

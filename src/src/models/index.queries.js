@@ -19,5 +19,7 @@ module.exports = {
   travelQuery: require("./travel/travel.query"),
   sellerQuery: require("./seller/seller.query"),
   routeQuery: require("./route/route.query"),
-  seatQuery: require("./seat/seat.query")
+  seatQuery: require("./seat/seat.query"),
+  invoiceQuery: require("./invoice/invoice.query"),
+  observationQuery: require("./observation/observation.query"),
 };

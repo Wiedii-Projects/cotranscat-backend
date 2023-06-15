@@ -8,11 +8,26 @@ const { check } = require('express-validator');
 const { ErrorModel } = require("../../models/index.models");
 
 // Validators - middleware
-const { sharedValidators, userValidators, seatValidators, clientValidator, paymentMethodValidators } = require('../index.validators.middleware');
+const { sharedValidators, userValidators, seatValidators, clientValidator, paymentMethodValidators, invoiceValidators } = require('../index.validators.middleware');
 const sharedCheckMiddleware = require('./shared.check.middleware');
 const sharedHelpers = require('../../helpers/shared.helpers');
 
 module.exports = {
+    checkGetInvoice: () => {
+        return [
+            ...sharedCheckMiddleware.checkJwt(),
+            check('idInvoice', new ErrorModel(errorsConst.invoiceErrors.invoiceRequired))
+                .custom((value, {req}) => invoiceValidators.validateInvoice({ id: sharedHelpers.decryptIdDataBase(value) }, req))
+                .custom((value, {req}) => !!req.body.invoice)
+                .withMessage(new ErrorModel(errorsConst.invoiceErrors.invoiceNotGenerated)),
+            sharedValidators.validateError,
+        ]
+    },
+    checkGetAllInvoice: () => {
+        return [
+            ...sharedCheckMiddleware.checkJwt(),
+        ]
+    },
     checkCreateInvoiceTravel: () => {
         return [
             ...sharedCheckMiddleware.checkJwt(),
