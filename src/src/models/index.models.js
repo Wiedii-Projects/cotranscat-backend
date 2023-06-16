@@ -129,7 +129,7 @@ Seller.hasMany(Invoice, { as: 'InvoiceSeller', foreignKey: { name: "idSeller", a
 Seller.belongsTo(Bank,{ as: 'BankSeller', foreignKey: { name: 'idBank', allowNull: false}})
 Bank.hasMany(Seller, { as: 'BankSeller', foreignKey: { name: "idBank", allowNull: false } } )
 
-// Relationship Invoice-Seller
+// Relationship Invoice-PaymentMethod
 Invoice.belongsTo(PaymentMethod, { as: 'InvoicePaymentMethod', foreignKey: { name: 'idPaymentMethod', allowNull: false} });
 PaymentMethod.hasMany(Invoice, { as: 'InvoicePaymentMethod', foreignKey: { name: "idPaymentMethod", allowNull: false } });
 
@@ -184,5 +184,6 @@ module.exports = {
   Bank,
   Observation,
   PaymentMethodBank,
-  Headquarter
+  Headquarter,
+  Invoice
 };

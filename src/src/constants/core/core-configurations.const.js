@@ -60,6 +60,11 @@ const dbConnectionOptions = new Sequelize(
   option
 );
 
+const serverHostApiTransactionalQueries = process.env.SERVER_HOST_API_TRANSACTIONAL_QUERIES;
+const serverPortApiTransactionalQueries = process.env.SERVER_PORT_API_TRANSACTIONAL_QUERIES;
+
+const domainApiTransactionalQueries = `http://${serverHostApiTransactionalQueries}:${serverPortApiTransactionalQueries}`
+
 module.exports = {
   nodeEnv,
   serverHost,
@@ -74,5 +79,6 @@ module.exports = {
   algorithmEncrypt,
   keyEncrypt,
   ivEncrypt,
-  saltBcrypt
+  saltBcrypt,
+  domainApiTransactionalQueries
 };

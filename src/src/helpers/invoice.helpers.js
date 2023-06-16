@@ -1,4 +1,3 @@
-
 module.exports = {
   nextLetter: (letter) => {
       const lastChar = letter.slice(-1); 
