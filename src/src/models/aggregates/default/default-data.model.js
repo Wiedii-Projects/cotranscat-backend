@@ -4,22 +4,22 @@ const { salesConst } = require("../../../constants/index.constants");
 module.exports = {
     defaultDocumentType: [ 
         { 
-            name: "C.C." 
+            name: "C.C.", code: "C"
         }, 
         { 
-            name: "T.I." 
+            name: "T.I.", code: "T"
         }, 
         { 
-            name: "C.E."
+            name: "C.E.", code: "E"
         }, 
         { 
-            name: "P.P.T." 
+            name: "P.P.T.", code: "P"
         }, 
         { 
-            name: "S.C." 
+            name: "S.C.", code: "S"
         }, 
         { 
-            name: "R.C." 
+            name: "R.C.", code: "R"
         } 
     ],
     defaultIndicativeNumber: [
