@@ -24,6 +24,18 @@ const {
         type: DataTypes.INTEGER,
         field: "price",
         allowNull: false
+      },
+      isSynchronized: {
+        type: DataTypes.BOOLEAN,
+        field: "isSynchronized",
+        defaultValue: false,
+        allowNull: false
+      },
+      numberReference: {
+        type: DataTypes.STRING(10),
+        field: "numberReference",
+        defaultValue: "",
+        allowNull: false
       }
     },
     {
