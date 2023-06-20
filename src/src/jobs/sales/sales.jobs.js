@@ -8,79 +8,112 @@ const sharedHelpers = require("../../helpers/shared.helpers");
 const { invoiceSynchronizationJobsQueue } = require("../../connections/queues/sales.queues.connection");
 
 // Queries - Jobs
-const { getInvoiceDetailsJobQuery } = require("../infrastructure/queries/invoice/invoice.query.job");
+const {
+    getInvoicesDetailsNotSynchronizedJobQuery, updateInvoiceSynchronizedJobQuery
+} = require("../infrastructure/queries/invoice/invoice.query.job");
 
 // Services
 const { invoiceServices } = require("../../services/index.services");
 
 module.exports = {
-     synchronizeInvoicesStatusPendingJob: async (job) => {
+    synchronizeInvoicesStatusPendingJob: async (job) => {
         try {
-    
-          const {
-            invoicePrice,
-            bankHeadquarterName,
-            bankCodePaymentMethod,
-            bankCode,
-            sellerEmail,
-            sellerName,
-            sellerNumberDocument,
-            sellerDocumentType,
-            clientName,clientEmail,
-            clientNumberDocument,
-            clientDocumentType
-          } = await getInvoiceDetailsJobQuery(3, 4)
-    
-          const { codeSale, prefix, code } = sharedHelpers.getInvoiceRegisterParametersByBankHelper(salesConst.TYPE_SERVICE.PASSAGE, bankHeadquarterName)
-    
-          let lastNumberInvoice = await invoiceServices.getLastNumberInvoiceService()
+            const invoicesNotSynchronized = await getInvoicesDetailsNotSynchronizedJobQuery()
 
-          const invoices = [
-            {
-              numberInvoice: `${lastNumberInvoice+1}`,
-              codeSaleInvoice: codeSale,
-              codePrefixInvoice: prefix,
-              ivaValueInvoice: 0,
-              client: {
-                documentType: clientDocumentType,
-                nit: clientNumberDocument,
-                name: clientName,
-                email: clientEmail
-              },
-              seller: {
-                documentType: sellerDocumentType,
-                nit: sellerNumberDocument,
-                name: sellerName,
-                email: sellerEmail,
-                bankCode
-              },
-              invoiceDetail: [
-                {
-                  code,
-                  price: invoicePrice,
-                  quantity: 1
+            if (invoicesNotSynchronized.length > 0) {
+                let invoices = []
+                let lastNumberInvoice = await invoiceServices.getLastNumberInvoiceService()
+                lastNumberInvoice++
+
+                for (const invoiceElement of invoicesNotSynchronized) {
+                    const {
+                        invoiceId, invoicePrice, bankHeadquarterName, bankCodePaymentMethod, bankCode, sellerEmail, sellerName,
+                        sellerNumberDocument, sellerDocumentType, clientName, clientEmail, clientNumberDocument,
+                        clientDocumentType
+                    } = invoiceElement
+
+                    const { codeSale, prefix, code } = sharedHelpers.getInvoiceRegisterParametersByBankHelper(salesConst.TYPE_SERVICE.PASSAGE, bankHeadquarterName)
+
+                    invoices.push({
+                        invoiceId,
+                        numberInvoice: `${lastNumberInvoice}`,
+                        codeSaleInvoice: codeSale,
+                        codePrefixInvoice: prefix,
+                        ivaValueInvoice: 0,
+                        client: {
+                            documentType: clientDocumentType,
+                            nit: clientNumberDocument,
+                            name: clientName,
+                            email: clientEmail
+                        },
+                        seller: {
+                            documentType: sellerDocumentType,
+                            nit: sellerNumberDocument,
+                            name: sellerName,
+                            email: sellerEmail,
+                            bankCode
+                        },
+                        invoiceDetail: [
+                            {
+                                code,
+                                price: invoicePrice,
+                                quantity: 1
+                            }
+                        ],
+                        invoicePaymentMethodDetail: [
+                            {
+                                codePaymentMethod: bankCodePaymentMethod,
+                                totalValue: invoicePrice
+                            }
+                        ]
+                    })
+
+                    lastNumberInvoice++
                 }
-              ],
-              invoicePaymentMethodDetail: [
-                {
-                  codePaymentMethod: bankCodePaymentMethod,
-                  totalValue: invoicePrice
+
+                if (invoices.length > 0) {
+                    const { invoicesRegistered, invoicesFailed } = await invoiceServices.createInvoicesService({ invoices })
+
+                    const filteredInvoices = invoices.filter(invoice => {
+                        return invoicesRegistered.some(regInvoice => regInvoice.invoice === invoice.numberInvoice);
+                    });
+
+                    const updatePromises = filteredInvoices.map(invoiceToUpdate => {
+                        return updateInvoiceSynchronizedJobQuery(
+                            { id: sharedHelpers.decryptIdDataBase(invoiceToUpdate.invoiceId) },
+                            { isSynchronized: true, numberReference: invoiceToUpdate.numberInvoice }
+                        )
+                    });
+
+                    Promise.allSettled(updatePromises)
+                        .then(results => {
+                            const successfulUpdates = [];
+                            // TODO: Implement work flow invoices failed updates
+                            const failedUpdates = [];
+
+                            results.forEach((result, index) => {
+                                if (result.status === 'fulfilled') {
+                                    successfulUpdates.push(invoices[index]);
+                                } else {
+                                    failedUpdates.push(invoices[index]);
+                                }
+                            });
+                        })
+                        .catch(() => {
+                            // TODO: Implement work flow invoices all failed updates
+                        });
+
+                    job.data = {
+                        inputJob: invoices,
+                        outputJob: { invoicesRegistered, invoicesFailed }
+                    }
+
+                    await invoiceSynchronizationJobsQueue.add(job.type, job, job.options);
                 }
-              ]
             }
-          ]
 
-          const response = await invoiceServices.createInvoicesService({invoices: invoices})
-    
-          job.data = {
-            inputJob: invoices,
-            outputJob: response 
-          }
-    
-            await invoiceSynchronizationJobsQueue.add(job.type, job, job.options);
         } catch {
             // TODO: Create register on redis or log register on local BD
         }
-       
     }
 }

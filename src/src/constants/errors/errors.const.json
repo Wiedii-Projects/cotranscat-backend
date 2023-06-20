@@ -1032,6 +1032,14 @@
       "updateError": {
         "code": "INVO_003",
         "message": "Something went wrong"
+      },
+      "findAllJobError": {
+        "code": "INVO_004",
+        "message": "Something went wrong"
+      },
+      "updateJobError": {
+        "code": "INVO_005",
+        "message": "Something went wrong"
       }
     },
     "servicesErrors": {

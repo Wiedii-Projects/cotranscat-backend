@@ -1,6 +1,9 @@
 // Constants
 const { errorsConst } = require("../../../../constants/index.constants");
 
+// Helpers
+const { encryptIdDataBase } = require("../../../../helpers/shared.helpers");
+
 // Libraries
 const { col } = require("sequelize");
 
@@ -15,12 +18,13 @@ const SellerSchema = require("../../../../models/seller/seller.model");
 const UserSchema = require("../../../../models/user/user.model");
 
 module.exports = {
-    getInvoiceDetailsJobQuery: async (idSeller, idPaymentMethod) => {
+    getInvoicesDetailsNotSynchronizedJobQuery: async () => {
         try {
-            const [invoiceDetail] = await InvoiceSchema.findAll({
+            const invoicesDetails = await InvoiceSchema.findAll({
                 raw: true,
                 nest: true,
                 attributes: [
+                    [col('Invoice.id'), 'invoiceId'],
                     [col('Invoice.number'), 'invoiceNumber'],
                     [col('Invoice.price'), 'invoicePrice'],
                     [col('InvoiceSeller->BankSeller->HeadquarterBank.name'), 'bankHeadquarterName'],
@@ -54,7 +58,6 @@ module.exports = {
                                     {
                                         model: PaymentMethodBankSchema,
                                         as: 'BankPaymentMethod',
-                                        where: { idPaymentMethod },
                                         attributes: []
                                     }
                                 ]
@@ -94,13 +97,27 @@ module.exports = {
                     }
                 ],
                 where: {
-                    '$InvoiceSeller.id$': idSeller
+                    isSynchronized: false
                 }
             })
 
-            return invoiceDetail
+            const invoicesNotSynchronized = invoicesDetails.map(({ invoiceId, ...otherData }) => {
+                return {
+                    invoiceId: encryptIdDataBase(invoiceId),
+                    ...otherData
+                }
+            })
+
+            return invoicesNotSynchronized
         } catch {
-            throw errorsConst.invoiceErrors.queryErrors.findAllError;
+            throw errorsConst.invoiceErrors.queryErrors.findAllJobError;
+        }
+    },
+    updateInvoiceSynchronizedJobQuery: async (where, update) => {
+        try {
+            return await InvoiceSchema.update(update, { where });
+        } catch {
+            throw errorsConst.clientErrors.queryErrors.updateJobError
         }
     }
 }
