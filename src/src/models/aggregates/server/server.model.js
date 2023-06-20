@@ -1,12 +1,23 @@
 // Constants
 const { coreConfigurationsConst } = require('../../../constants/index.constants')
 
+// Crons
+const { jobsBuilder } = require('../../../jobs/index.jobs');
+
 // Libraries
 const express = require('express');
 const cors = require('cors');
+const { createBullBoard } = require("@bull-board/api");
+const { BullMQAdapter } = require("@bull-board/api/bullMQAdapter");
+const { ExpressAdapter } = require("@bull-board/express");
+
 
 // DB Connections
 const { mySqlDBConnection, mySqlDBSynchronization, mySqlDBDefaultDataCreation } = require('../../../connections/my-sql.connection');
+const { redisDBConnection } = require('../../../connections/redis.connection');
+
+// Queues
+const { invoiceSynchronizationJobsQueue } = require('../../../connections/queues/sales.queues.connection');
 
 class ServerModel {
     constructor() {
@@ -38,21 +49,34 @@ class ServerModel {
             observation: '/api/observation',
         }
         this.dbHost = coreConfigurationsConst.dbHost;
-        this.db();
+        this.dbs();
         this.middleware();
         this.routes();
     }
 
-    async db() {
+    async dbs() {
         await mySqlDBConnection();
         await mySqlDBSynchronization();
         await mySqlDBDefaultDataCreation();
+        await redisDBConnection()
+        await jobsBuilder()
+
     }
 
     middleware() {
         this.app.use(cors());
         this.app.use(express.json());
         this.app.use(express.static('public'));
+
+        const serverAdapter = new ExpressAdapter();
+        const bullBoard = createBullBoard({
+            queues: [new BullMQAdapter(invoiceSynchronizationJobsQueue)],
+            serverAdapter: serverAdapter,
+        });
+        serverAdapter.setBasePath("/admin");
+
+        this.app.use("/admin",serverAdapter.getRouter());
+
     }
 
     routes() {

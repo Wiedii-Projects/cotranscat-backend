@@ -1,6 +1,3 @@
-// Constants
-const { errorsConst } = require("../../constants/index.constants");
-
 // Helpers
 const {
   authHelpers,

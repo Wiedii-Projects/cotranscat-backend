@@ -4,11 +4,8 @@ const { errorsConst } = require("../../constants/index.constants");
 // Helpers
 const { encryptIdDataBase } = require("../../helpers/shared.helpers");
 
-// Libraries
-const { col } = require("sequelize");
-
 // Models
-const { Seller, Ticket, Seat, Travel, Route, Client, DocumentType, User, Municipality, DriverVehicle, Vehicle, Bank, Headquarter, PaymentMethodBank } = require("../index.models");
+const { Seller, Ticket, Seat, Travel, Route, Client, DocumentType, User, Municipality, DriverVehicle, Vehicle } = require("../index.models");
 const Invoice = require("./invoice.model");
 
 module.exports = {
@@ -234,93 +231,5 @@ module.exports = {
     } catch {
         throw errorsConst.invoiceErrors.queryErrors.findAllError;
     }
-},
-getInvoiceDetailsQuery: async (idSeller, idPaymentMethod) => {
-  try {
-    const [invoiceDetail] = await Invoice.findAll({
-      raw: true,
-      nest: true,
-      attributes: [
-          [col('Invoice.number'), 'invoiceNumber'],
-          [col('Invoice.price'), 'invoicePrice'],
-          [col('InvoiceSeller->BankSeller->HeadquarterBank.name'), 'bankHeadquarterName'],
-          [col('InvoiceSeller->BankSeller->BankPaymentMethod.codePaymentMethod'), 'bankCodePaymentMethod'],
-          [col('InvoiceSeller->BankSeller.code'), 'bankCode'],
-          [col('InvoiceSeller.email'), 'sellerEmail'],
-          [col('InvoiceSeller->UserSeller.name'), 'sellerName'],
-          [col('InvoiceSeller->UserSeller.numberDocument'), 'sellerNumberDocument'],
-          [col('InvoiceSeller->UserSeller->UserDocumentType.code'), 'sellerDocumentType'],
-          [col('InvoiceClient->UserClient.name'), 'clientName'],
-          [col('InvoiceClient.email'), 'clientEmail'],
-          [col('InvoiceClient->UserClient.numberDocument'), 'clientNumberDocument'],
-          [col('InvoiceClient->UserClient->UserDocumentType.code'), 'clientDocumentType'],
-      ],
-      include: [
-          {
-              model: Seller,
-              as: 'InvoiceSeller',
-              attributes: [],
-              include: [
-                  {
-                      model: Bank,
-                      as: 'BankSeller',
-                      attributes: [],
-                      include: [
-                          {
-                              model: Headquarter,
-                              as: 'HeadquarterBank',
-                              attributes: []
-                          },
-                          {
-                              model: PaymentMethodBank,
-                              as: 'BankPaymentMethod',
-                              where: { idPaymentMethod },
-                              attributes: []
-                          }
-                      ]
-                  },
-                  {
-                      model: User,
-                      as: 'UserSeller',
-                      attributes: [],
-                      include: [
-                          {
-                              model: DocumentType,
-                              as: 'UserDocumentType',
-                              attributes: []
-                          }
-                      ]
-                  },
-              ]
-          },
-          {
-              model: Client,
-              as: 'InvoiceClient',
-              attributes: [],
-              include: [
-                  {
-                      model: User,
-                      as: 'UserClient',
-                      attributes: [],
-                      include: [
-                          {
-                              model: DocumentType,
-                              as: 'UserDocumentType',
-                              attributes: []
-                          }
-                      ]
-                  }
-              ]
-          }
-      ],
-      where: {
-          '$InvoiceSeller.id$': idSeller
-      }
-  })
-
-  return invoiceDetail
-  } catch {
-    throw errorsConst.invoiceErrors.queryErrors.findAllError;
-  }
 }
 };
