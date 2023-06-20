@@ -79,7 +79,7 @@ module.exports = {
         attributes: ['number', 'price', 'date', 'id'],
         order: [['number', 'DESC']],
         limit: 20,
-        offset: offset*10
+        offset: offset * 20
       })
       .then( (result) => result.map((invoice) => ({
           id: encryptIdDataBase(invoice.id),
