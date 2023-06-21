@@ -18,26 +18,28 @@ module.exports = {
             transaction = await dbConnectionOptions.transaction();
             const [driverVehicle] = await driverVehicleQuery.createDriverVehicle({ idDriver, idVehicle }, transaction)
             
-            const [travel] = await travelQuery.createTravel({
+            const [travel, isCreated] = await travelQuery.createTravel({
                 idDriverVehicle: driverVehicle.id, date, time, idRoute
             }, transaction);
 
-            const vehicleSeatRules = await seatRulerQuery.getSeatRulers({ where: { idVehicle: idVehicle } });
+            if (isCreated) {
+                const vehicleSeatRules = await seatRulerQuery.getSeatRulers({ where: { idVehicle: idVehicle } });
 
-            if (vehicleSeatRules.length === 0) throw errorsConst.seatRuler.vehicleHasNoAssignedSeats
+                if (vehicleSeatRules.length === 0) throw errorsConst.seatRuler.vehicleHasNoAssignedSeats
 
-            for (let indexSeatRule = 0; indexSeatRule < vehicleSeatRules.length; indexSeatRule++) {
-                const seatRule = vehicleSeatRules[indexSeatRule];
-                await seatQuery.createSeat({
-                    idTravel: travel.id,
-                    column: seatRule.column,
-                    row: seatRule.row,
-                    price: vehicle.price,
-                    state: 0,
-                    name: seatRule.name
-                }, transaction)
+                for (let indexSeatRule = 0; indexSeatRule < vehicleSeatRules.length; indexSeatRule++) {
+                    const seatRule = vehicleSeatRules[indexSeatRule];
+                    await seatQuery.createSeat({
+                        idTravel: travel.id,
+                        column: seatRule.column,
+                        row: seatRule.row,
+                        price: vehicle.price,
+                        state: 0,
+                        name: seatRule.name
+                    }, transaction)
+                }
             }
-
+            
             await transaction.commit();
             return responseHelpers.responseSuccess(res, null);
         } catch (error) {
