@@ -1041,12 +1041,6 @@
         "code": "INVO_005",
         "message": "Something went wrong"
       }
-    },
-    "servicesErrors": {
-      "getLastNumberInvoiceError": {
-        "code": "INVO-001",
-        "message": "Something went wrong"
-      }
     }
   },
   "appErrors":{

@@ -1,16 +1,10 @@
-// Constants
-const salesConst = require("../../constants/core/sales.const");
-
-// Helpers
-const sharedHelpers = require("../../helpers/shared.helpers");
-
 // Queues
 const { invoiceSynchronizationJobsQueue } = require("../../connections/queues/sales.queues.connection");
 
 // Queries - Jobs
 const {
     getInvoicesDetailsNotSynchronizedJobQuery, updateInvoiceSynchronizedJobQuery
-} = require("../infrastructure/queries/invoice/invoice.query.job");
+} = require("./../infrastructure/queries/invoice/invoice.query.job");
 
 // Services
 const { invoiceServices } = require("../../services/index.services");
@@ -22,23 +16,18 @@ module.exports = {
 
             if (invoicesNotSynchronized.length > 0) {
                 let invoices = []
-                let lastNumberInvoice = await invoiceServices.getLastNumberInvoiceService()
-                lastNumberInvoice++
 
                 for (const invoiceElement of invoicesNotSynchronized) {
                     const {
-                        invoiceId, invoicePrice, bankHeadquarterName, bankCodePaymentMethod, bankCode, sellerEmail, sellerName,
+                        codeSale, codePrefix, codeTypeService , invoicePrice, invoiceNumber, bankCodePaymentMethod, bankCode, sellerEmail, sellerName,
                         sellerNumberDocument, sellerDocumentType, clientName, clientEmail, clientNumberDocument,
                         clientDocumentType
                     } = invoiceElement
 
-                    const { codeSale, prefix, code } = sharedHelpers.getInvoiceRegisterParametersByBankHelper(salesConst.TYPE_SERVICE.PASSAGE, bankHeadquarterName)
-
                     invoices.push({
-                        invoiceId,
-                        numberInvoice: `${lastNumberInvoice}`,
+                        numberInvoice: `${invoiceNumber}`,
                         codeSaleInvoice: codeSale,
-                        codePrefixInvoice: prefix,
+                        codePrefixInvoice: codePrefix,
                         ivaValueInvoice: 0,
                         client: {
                             documentType: clientDocumentType,
@@ -55,7 +44,7 @@ module.exports = {
                         },
                         invoiceDetail: [
                             {
-                                code,
+                                code: codeTypeService,
                                 price: invoicePrice,
                                 quantity: 1
                             }
@@ -67,8 +56,6 @@ module.exports = {
                             }
                         ]
                     })
-
-                    lastNumberInvoice++
                 }
 
                 if (invoices.length > 0) {
@@ -80,8 +67,8 @@ module.exports = {
 
                     const updatePromises = filteredInvoices.map(invoiceToUpdate => {
                         return updateInvoiceSynchronizedJobQuery(
-                            { id: sharedHelpers.decryptIdDataBase(invoiceToUpdate.invoiceId) },
-                            { isSynchronized: true, numberReference: invoiceToUpdate.numberInvoice }
+                            { number: invoiceToUpdate.numberInvoice.toString().padStart(8, '0')},
+                            { isSynchronized: true }
                         )
                     });
 

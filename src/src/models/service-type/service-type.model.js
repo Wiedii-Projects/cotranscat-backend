@@ -15,6 +15,11 @@ const ServiceTypeSchema = dbConnectionOptions.define(
       unique: true,
       field: "type",
     },
+    code: {
+      type: DataTypes.STRING(25),
+      field: "code",
+      allowNull: false
+    }
   },
   {
     tableName: "serviceType"

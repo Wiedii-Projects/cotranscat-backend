@@ -39,7 +39,7 @@ module.exports = {
         const { message: messageErrorApp, code: codeErrorApp } = errorsConst.appErrors.servicesErrors.responseReceivedStatusFailed
 
         let message = data && data.errors && data.errors.message ? data.errors.message : statusText;
-        message = message.length === 0
+        message = message?.length === 0
           ? messageErrorApp
           : message
 
@@ -67,7 +67,7 @@ module.exports = {
         const { message: messageErrorApp, code: codeErrorApp } = errorsConst.appErrors.servicesErrors.responseStatusFailed
 
         let message = data && data.errors && data.errors.message ? data.errors.message : statusText;
-        message = message.length === 0
+        message = message?.length === 0
           ? messageErrorApp
           : message
 

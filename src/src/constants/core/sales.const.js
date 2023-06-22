@@ -3,21 +3,16 @@ module.exports = {
         SALES_INVOICE: "FV"
     },
     SALES_PREFIXES_CODE : {
-        TIBU_PASSAGES: "PT",
-        CUCUTA_PASSAGES: "PC",
-        TIBU_SHIPPING: "ET",
-        CUCUTA_SHIPPING: "EC",
-        TIBU_MONEY_TRANSFER: "GX",
-        CUCUTA_MONEY_TRANSFER: "GY",
+        TIBU_PASSAGES: "PU",
+        CUCUTA_PASSAGES: "PA",
+        TIBU_SHIPPING: "SU",
+        CUCUTA_SHIPPING: "SA",
+        TIBU_MONEY_TRANSFER: "TU",
+        CUCUTA_MONEY_TRANSFER: "TA",
     },
     HEADQUARTERS: {
         TIBU: "TIBU",
         CUCUTA: "CUCUTA"
-    },
-    CODE_SERVICE_TYPE: {
-        PASSAGE: "PASTIQ",
-        SHIPPING: "PORREM",
-        MONEY_TRANSFER: "IMPGIRCU"
     },
     TYPE_SERVICE: {
         PASSAGE: "PASSAGE",

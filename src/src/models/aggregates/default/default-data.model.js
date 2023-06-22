@@ -40,7 +40,7 @@ module.exports = {
           country: "México"
         },
         {
-          number: "+1",
+          number: "+2",
           country: "Canadá"
         }
     ],
@@ -176,9 +176,9 @@ module.exports = {
         { name : "Documentos" }
     ],
     defaultServiceType:[
-        { type: 1 },
-        { type: 2 },
-        { type: 3 },
+        { type: 1, code: "IMPGIRCU" },
+        { type: 2, code: "PASTIQ" },
+        { type: 3, code: "PORREM" },
     ],
     defaultBank: [
         { code: "01", description: "Tibu general cash register", headquarterAssociated: salesConst.HEADQUARTERS.TIBU },
