@@ -18,7 +18,7 @@ module.exports = {
     getObservation: async(req, res) => {
         try {
             const { invoice: idInvoice } = req.body;
-            const observation = await observationQuery.findObservationQuery({ where: idInvoice });
+            const observation = await observationQuery.findObservationQuery({ where: {idInvoice} });
             return responseHelpers.responseSuccess(res, observation);
         } catch {
             return responseHelpers.responseError(res, 500, error);
