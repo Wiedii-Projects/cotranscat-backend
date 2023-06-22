@@ -65,14 +65,7 @@ module.exports = {
                   {
                     model: Travel,
                     as: 'TravelSeat',
-                    attributes: ['id'],
-                    include: [
-                      {
-                        model: Route,
-                        as: 'TravelRoute',
-                        attributes: ['id'],
-                      }
-                    ]
+                    attributes: ['id']
                   },
                 ]
               },
@@ -83,7 +76,7 @@ module.exports = {
         attributes: ['number', 'price', 'date', 'id'],
         order: [['number', 'DESC']],
         limit: 20,
-        offset: offset*10
+        offset: offset * 20
       })
       .then( (result) => result.map((invoice) => ({
           id: encryptIdDataBase(invoice.id),
@@ -91,7 +84,7 @@ module.exports = {
           price: invoice.price,
           date: invoice.date,
           tickets: invoice.TicketInvoice.length,
-          idTravel: invoice.TicketInvoice[0].TicketSeat.TravelSeat.TravelRoute.id,
+          idTravel: invoice.TicketInvoice[0].TicketSeat.TravelSeat.id,
           client: {
             numberDocument: invoice.InvoiceClient.UserClient.numberDocument,
             name: invoice.InvoiceClient.UserClient.name,
@@ -118,6 +111,7 @@ module.exports = {
             'id',
             'number',
             'date',
+            'price'
           ],
           include: [
             {
@@ -205,6 +199,7 @@ module.exports = {
               id: encryptIdDataBase(result.id),
               number: result.number,
               date: result.date,
+              price: result.price,
               invoiceClient: {
                 name: result.InvoiceClient.UserClient.name,
                 lastName: result.InvoiceClient.UserClient.lastName,
