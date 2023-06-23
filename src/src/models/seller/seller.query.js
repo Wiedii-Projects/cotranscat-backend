@@ -7,6 +7,8 @@ const {
   IndicativeNumber,
   DocumentType,
   Seller,
+  Bank,
+  Headquarter,
 } = require("../index.models");
 
 // Helpers
@@ -75,4 +77,33 @@ module.exports = {
       throw errorsConst.sellerErrors.queryErrors.findError;
     }
   },
+  getHeadquarterAssociatedBySellerQuery: async (where) => {
+    const [headquarter] = await Seller.findAll({
+      attributes: [],
+      include: [
+        {
+          model: Bank,
+          attributes: [],
+          as: "BankSeller",
+          include: [
+            {
+              model: Headquarter,
+              attributes: ['id', 'name'],
+              as: "HeadquarterBank"
+            }
+          ]
+        }
+      ],
+      where,
+      raw: true,
+      nest: true
+    })
+
+    const { BankSeller: { HeadquarterBank: { id, name } } } = headquarter
+
+    return {
+      id: sharedHelpers.encryptIdDataBase(id),
+      name
+    }
+  }
 };

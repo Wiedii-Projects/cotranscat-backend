@@ -1,7 +1,7 @@
 // Constants
 const { dbConnectionOptions } = require("../constants/core/core-configurations.const");
 const {
-  coreConfigurationsConst, errorsConst
+  coreConfigurationsConst, errorsConst, salesConst
 } = require("../constants/index.constants");
 
 // Libraries
@@ -49,5 +49,48 @@ module.exports = {
     const nextLetter = String.fromCharCode(nextLetterCode);
 
     return nextLetter;
-  }
+  },
+  getInvoiceRegisterParametersByBankHelper: (typeService, headquarters) => {
+    const { CUCUTA, TIBU } = salesConst.HEADQUARTERS
+    const { PASSAGE, SHIPPING, MONEY_TRANSFER } = salesConst.TYPE_SERVICE
+
+    const serviceMappings = {
+      [PASSAGE]: {
+        [TIBU]: {
+          codePrefix: salesConst.SALES_PREFIXES_CODE.TIBU_PASSAGES
+        },
+        [CUCUTA]: {
+          codePrefix: salesConst.SALES_PREFIXES_CODE.CUCUTA_PASSAGES
+        }
+      },
+      [SHIPPING]: {
+        [TIBU]: {
+          codePrefix: salesConst.SALES_PREFIXES_CODE.TIBU_SHIPPING
+        },
+        [CUCUTA]: {
+          codePrefix: salesConst.SALES_PREFIXES_CODE.CUCUTA_SHIPPING
+        }
+      },
+      [MONEY_TRANSFER]: {
+        TIBU: {
+          codePrefix: salesConst.SALES_PREFIXES_CODE.TIBU_MONEY_TRANSFER
+        },
+        [CUCUTA]: {
+          codePrefix: salesConst.SALES_PREFIXES_CODE.CUCUTA_MONEY_TRANSFER
+        }
+      }
+    };
+
+    let invoiceParams = {}
+
+    if (serviceMappings[typeService] && serviceMappings[typeService][headquarters]) {
+      const { codePrefix } = serviceMappings[typeService][headquarters];
+      invoiceParams.codePrefix = codePrefix;
+
+    } else {
+      throw errorsConst.appErrors.InvalidTypeServiceOrHeadquarters;
+    }
+
+    return invoiceParams
+   }
 }

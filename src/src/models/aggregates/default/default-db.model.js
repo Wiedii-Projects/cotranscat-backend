@@ -13,7 +13,8 @@ const {
     defaultSeller,
     defaultClient,
     defaultDriver,
-    defaultBank
+    defaultBank,
+    defaultHeadquarter
 } = require('./default-data.model');
 
 //Const
@@ -37,6 +38,7 @@ const Driver = require('../../driver/driver.model');
 const Vehicle = require('../../vehicle/vehicle.model');
 const Route = require('../../route/route.model');
 const Bank = require('../../bank/bank.model');
+const Headquarter = require('../../headquarter/headquarter.model');
 
 class defaultDataBaseModel {
     constructor() {
@@ -168,8 +170,20 @@ class defaultDataBaseModel {
         return await Route.count();
     }
 
-    async countBank () {
-        return await Bank.count();
+    async countBank (name) {
+        return  await Bank.count({
+            include: [
+              {
+                model: Headquarter,
+                as: "HeadquarterBank",
+                where: { name }
+              }
+            ]
+          });          
+    }
+
+    async countHeadquarter () {
+        return await Headquarter.count();
     }
 
     async createDefaultDataBase() {
@@ -184,7 +198,23 @@ class defaultDataBaseModel {
         await this.countServiceType() || defaultServiceType.map(  async(element) => await ServiceType.create( element ) );
         const [idMunicipality, idMunicipalityArrive] = await this.getMunicipality();
         await this.countRoute() || await Route.create({ idMunicipalityDepart: idMunicipality, idMunicipalityArrive });
-        await this.countBank() || defaultBank.map(  async(element) => await Bank.create( element ) );
+
+        if (await this.countHeadquarter() === 0) {
+            for (const element of defaultHeadquarter) {
+                const createdHeadquarter = await Headquarter.create( element )
+                const newHeadquarter = { ...element, id: createdHeadquarter.id };
+            
+                const newBanks = defaultBank.filter(bank => bank.headquarterAssociated === newHeadquarter.name);
+                
+                // TODO: a process flow must be established in which banks have already been created, in order to know how to allocate headquarters.
+                if(await this.countBank(element.name) === 0) {
+                    for (const bank of newBanks) {
+                        bank.idHeadquarter = newHeadquarter.id;
+                        await Bank.create(bank);
+                      }
+                }
+              }
+        }
 
         const userCreate = await this.countUser();
 

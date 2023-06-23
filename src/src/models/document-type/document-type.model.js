@@ -14,6 +14,11 @@ const DocumentTypeSchema = dbConnectionOptions.define(
       field: "name",
       required: [true, "The name document type is required"],
     },
+    code: {
+      type: DataTypes.STRING(1),
+      field: "code",
+      required: [true, "The code document type is required"],
+    },
   },
   {
     tableName: "documentType",

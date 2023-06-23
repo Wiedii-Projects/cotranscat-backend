@@ -24,6 +24,8 @@ const Ticket = require("./ticket/ticket.model");
 const Invoice = require("./invoice/invoice.model");
 const Bank = require('./bank/bank.model')
 const Observation = require('./observation/observation.model');
+const PaymentMethodBank = require('./payment-method-bank/payment-method-bank.model')
+const Headquarter = require('./headquarter/headquarter.model')
 
 // Relationships BD
 
@@ -127,7 +129,7 @@ Seller.hasMany(Invoice, { as: 'InvoiceSeller', foreignKey: { name: "idSeller", a
 Seller.belongsTo(Bank,{ as: 'BankSeller', foreignKey: { name: 'idBank', allowNull: false}})
 Bank.hasMany(Seller, { as: 'BankSeller', foreignKey: { name: "idBank", allowNull: false } } )
 
-// Relationship Invoice-Seller
+// Relationship Invoice-PaymentMethod
 Invoice.belongsTo(PaymentMethod, { as: 'InvoicePaymentMethod', foreignKey: { name: 'idPaymentMethod', allowNull: false} });
 PaymentMethod.hasMany(Invoice, { as: 'InvoicePaymentMethod', foreignKey: { name: "idPaymentMethod", allowNull: false } });
 
@@ -138,6 +140,18 @@ Client.hasMany(Invoice, { as: 'InvoiceClient', foreignKey: { name: "idClient", a
 // Relationship Observation-Invoice
 Observation.belongsTo(Invoice, { as: 'ObservationInvoice', foreignKey: { name: 'idInvoice', allowNull: false} });
 Invoice.hasMany(Observation, { as: 'ObservationInvoice', foreignKey: { name: "idInvoice", allowNull: false } });
+
+// Relationship PaymentMethod-PaymentMethodBank
+PaymentMethod.hasMany(PaymentMethodBank, { as: 'PaymentMethodBank', foreignKey: { name: 'idPaymentMethod', allowNull: false } });
+PaymentMethodBank.belongsTo(PaymentMethod, { as: 'PaymentMethodBank', foreignKey: { name: 'idPaymentMethod', allowNull: false } });
+
+// Relationship Bank-PaymentMethodBank
+PaymentMethodBank.belongsTo(Bank, { as: 'BankPaymentMethod', foreignKey: { name: "idBank", allowNull: false } });
+Bank.hasMany(PaymentMethodBank, { as: 'BankPaymentMethod', foreignKey: { name: "idBank", allowNull: false } });
+
+// Relationship Headquarter-Bank
+Headquarter.hasMany(Bank, { as: 'HeadquarterBank', foreignKey: { name: 'idHeadquarter', allowNull: false } });
+Bank.belongsTo(Headquarter, { as: 'HeadquarterBank', foreignKey: { name: 'idHeadquarter', allowNull: false } });
 
 module.exports = {
   // Aggregates Models
@@ -168,5 +182,8 @@ module.exports = {
   ServiceType,
   Ticket,
   Bank,
-  Observation
+  Observation,
+  PaymentMethodBank,
+  Headquarter,
+  Invoice
 };

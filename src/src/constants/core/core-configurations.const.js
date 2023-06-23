@@ -6,6 +6,7 @@ const dotenv = require("dotenv");
 const path = require("path");
 const bcryptjs = require("bcryptjs");
 const { Sequelize } = require("sequelize");
+const { RedisConnection } = require("bullmq");
 
 const envFound = dotenv.config({
   path: path.resolve(__dirname, `../../../${process.env.APP_ENV}.env`),
@@ -60,6 +61,21 @@ const dbConnectionOptions = new Sequelize(
   option
 );
 
+const redisHost = process.env.REDIS_HOST
+const redisPort = process.env.REDIS_PORT
+
+const serverHostApiTransactionalQueries = process.env.SERVER_HOST_API_TRANSACTIONAL_QUERIES;
+const serverPortApiTransactionalQueries = process.env.SERVER_PORT_API_TRANSACTIONAL_QUERIES;
+
+const domainApiTransactionalQueries = `http://${serverHostApiTransactionalQueries}:${serverPortApiTransactionalQueries}`
+
+const redisDBConnectionOptions = {
+  host: redisHost,
+  port: redisPort
+}
+
+const redisConnectionInstanceBullMq = new RedisConnection(redisDBConnectionOptions);
+
 module.exports = {
   nodeEnv,
   serverHost,
@@ -74,5 +90,8 @@ module.exports = {
   algorithmEncrypt,
   keyEncrypt,
   ivEncrypt,
-  saltBcrypt
+  saltBcrypt,
+  domainApiTransactionalQueries,
+  redisDBConnectionOptions,
+  redisConnectionInstanceBullMq
 };

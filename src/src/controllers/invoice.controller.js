@@ -1,12 +1,21 @@
-// Helpers
-const { getBankCodeAssociatedWithTheSeller } = require('../helpers/user/client.helpers');
+// Constants
 const { dbConnectionOptions } = require('../constants/core/core-configurations.const');
-const { responseHelpers } = require('../helpers/index.helpers');
-const { decryptIdDataBase, encryptIdDataBase } = require('../helpers/shared.helpers');
+const { salesConst } = require('../constants/index.constants');
+
+// Helpers
+const { 
+    responseHelpers, sharedHelpers 
+} = require('../helpers/index.helpers');
+const { 
+    encryptIdDataBase, getInvoiceRegisterParametersByBankHelper 
+} = require('../helpers/shared.helpers');
+
+// Queries
 const { createNewInvoiceQuery } = require('../models/invoice/invoice.query');
 const { findServiceTypeQuery } = require('../models/service-type/service-type.query');
 const { createNewTicketQuery } = require('../models/ticket/ticket.query');
 const { invoiceQuery, travelQuery } = require('../models/index.queries');
+const { getHeadquarterAssociatedBySellerQuery } = require('../models/seller/seller.query');
 
 module.exports = {
     createInvoiceTravel: async(req, res) => {
@@ -14,12 +23,16 @@ module.exports = {
         price = price ? price*tickets.length : priceSeat;
         let transaction;
         try {
-            const idSeller = decryptIdDataBase(id);
-            // TODO: In this line we obtain the bank code associated to the seller, it is required to use the variable 'codeBank' to register the invoice in API transactional queries.
-            //const codeBank = await getBankCodeAssociatedWithTheSeller(idSeller)
+            const idSeller = sharedHelpers.decryptIdDataBase(id);
             const [{ id: idServiceType }] = await findServiceTypeQuery({where: { type: 2 }})
             transaction = await dbConnectionOptions.transaction();
-            const invoice = await createNewInvoiceQuery({ idClient: decryptId, idServiceType, price, idSeller, idPaymentMethod }, transaction);
+            const { name: nameHeadquarter } = await getHeadquarterAssociatedBySellerQuery({ id: idSeller })
+            const { codePrefix } = getInvoiceRegisterParametersByBankHelper(salesConst.TYPE_SERVICE.PASSAGE, nameHeadquarter)
+            const codeSale = salesConst.SALES_CODE.SALES_INVOICE
+
+            const invoice = await createNewInvoiceQuery({ 
+                idClient: decryptId, idServiceType, price, idSeller, idPaymentMethod, codePrefix, codeSale
+            }, transaction);
             await createNewTicketQuery(tickets, { invoice: invoice.id, price: price/tickets.length, transaction});
             await transaction.commit();
             return responseHelpers.responseSuccess(res, encryptIdDataBase(invoice.id));

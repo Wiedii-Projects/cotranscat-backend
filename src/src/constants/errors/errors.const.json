@@ -1032,6 +1032,14 @@
       "updateError": {
         "code": "INVO_003",
         "message": "Something went wrong"
+      },
+      "findAllJobError": {
+        "code": "INVO_004",
+        "message": "Something went wrong"
+      },
+      "updateJobError": {
+        "code": "INVO_005",
+        "message": "Something went wrong"
       }
     }
   },
@@ -1039,6 +1047,46 @@
     "letterIsRequired": {
       "code": "APCT001",
       "message": "Letter is required"
+    },
+    "InvalidTypeServiceOrHeadquarters": {
+      "code": "APCT002",
+      "message": "Invalid typeService or headquarters"
+    },
+    "servicesErrors":{
+      "requestBodyToSendIsInvalid": {
+        "code": "APCT-001",
+        "message": "Something went wrong"
+      },
+      "responseReceivedWithoutStatusFailed": {
+        "code": "APCT-002",
+        "message": "Something went wrong",
+        "description": "Contact support lions.team@wiedii.co"
+      },
+      "responseReceivedStatusFailed": {
+        "code": "APCT-003",
+        "message": "Something went wrong",
+        "description": "Contact support lions.team@wiedii.co"
+      },
+      "responseStatusFailed": {
+        "code": "APCT-004",
+        "message": "Something went wrong",
+        "description": "Contact support lions.team@wiedii.co"
+      },
+      "responseErrorAxiosFound": {
+        "code": "APCT-005",
+        "message": "Something went wrong",
+        "description": "Contact support lions.team@wiedii.co"
+      },
+      "requestNeverReceived": {
+        "code": "APCT-006",
+        "message": "Something went wrong",
+        "description": "Contact support lions.team@wiedii.co"
+      },
+      "responseOtherFail": {
+        "code": "APCT-007",
+        "message": "Something went wrong",
+        "description": "Contact support lions.team@wiedii.co"
+      }
     }
   }
 }

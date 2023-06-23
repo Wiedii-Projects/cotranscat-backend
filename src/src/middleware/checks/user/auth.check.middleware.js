@@ -96,5 +96,5 @@ module.exports = {
         new ErrorModel(errorsConst.authErrors.validatePassword)
       ).custom((value) => (value ? true : false)),
     ];
-  },
+  }
 };

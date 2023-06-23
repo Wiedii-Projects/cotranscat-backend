@@ -1,22 +1,25 @@
+// Constants
+const { salesConst } = require("../../../constants/index.constants");
+
 module.exports = {
     defaultDocumentType: [ 
         { 
-            name: "C.C." 
+            name: "C.C.", code: "C"
         }, 
         { 
-            name: "T.I." 
+            name: "T.I.", code: "T"
         }, 
         { 
-            name: "C.E."
+            name: "C.E.", code: "E"
         }, 
         { 
-            name: "P.P.T." 
+            name: "P.P.T.", code: "P"
         }, 
         { 
-            name: "S.C." 
+            name: "S.C.", code: "S"
         }, 
         { 
-            name: "R.C." 
+            name: "R.C.", code: "R"
         } 
     ],
     defaultIndicativeNumber: [
@@ -37,7 +40,7 @@ module.exports = {
           country: "México"
         },
         {
-          number: "+1",
+          number: "+2",
           country: "Canadá"
         }
     ],
@@ -173,12 +176,16 @@ module.exports = {
         { name : "Documentos" }
     ],
     defaultServiceType:[
-        { type: 1 },
-        { type: 2 },
-        { type: 3 },
+        { type: 1, code: "IMPGIRCU" },
+        { type: 2, code: "PASTIQ" },
+        { type: 3, code: "PORREM" },
     ],
     defaultBank: [
-        { code: "01", description: "Tibu general cash register" },
-        { code: "02", description: "Cúcuta general cash register"}
+        { code: "01", description: "Tibu general cash register", headquarterAssociated: salesConst.HEADQUARTERS.TIBU },
+        { code: "02", description: "Cúcuta general cash register", headquarterAssociated: salesConst.HEADQUARTERS.CUCUTA}
+    ],
+    defaultHeadquarter: [
+        { name: salesConst.HEADQUARTERS.TIBU },
+        { name: salesConst.HEADQUARTERS.CUCUTA }
     ]
 }

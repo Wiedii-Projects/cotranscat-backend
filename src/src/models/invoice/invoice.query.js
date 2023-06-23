@@ -1,8 +1,12 @@
 // Constants
 const { errorsConst } = require("../../constants/index.constants");
-const { ServiceType, Seller, PaymentMethod, Ticket, Seat, Travel, Route, Client, DocumentType, User, Municipality, DriverVehicle, Vehicle } = require("../index.models");
-const Invoice = require("./invoice.model");
+
+// Helpers
 const { encryptIdDataBase } = require("../../helpers/shared.helpers");
+
+// Models
+const { Seller, Ticket, Seat, Travel, Route, Client, DocumentType, User, Municipality, DriverVehicle, Vehicle } = require("../index.models");
+const Invoice = require("./invoice.model");
 
 module.exports = {
   createNewInvoiceQuery: async (where, transaction) => {
