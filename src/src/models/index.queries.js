@@ -22,4 +22,7 @@ module.exports = {
   seatQuery: require("./seat/seat.query"),
   invoiceQuery: require("./invoice/invoice.query"),
   observationQuery: require("./observation/observation.query"),
+  shippingQuery: require('./shipping/shipping.query'),
+  shipmentTrackingQuery: require('./shipment-tracking/shipment-tracking.query'),
+  trackingStatusQuery: require('./tracking-status/tracking-status.query')
 };

@@ -1020,6 +1020,18 @@
       "code": "INVO005",
       "message": "error when trying to display the generated invoice"
     },
+    "sellerNotExist": {
+      "code": "INVO006",
+      "message": "User seller does not exist"
+    },
+    "clientRequired": {
+      "code": "INVO007",
+      "message": "The client is required"
+    },
+    "clientNotExist": {
+      "code": "INVO008",
+      "message": "User client does not exist"
+    },
     "queryErrors": {
       "createError": {
         "code": "INVO_001",
@@ -1039,6 +1051,102 @@
       },
       "updateJobError": {
         "code": "INVO_005",
+        "message": "Something went wrong"
+      }
+    }
+  },
+  "shippingErrors": {
+    "paymentMethodRequired": {
+      "code": "SHPG001",
+      "message": "The payment method not exist"
+    },
+    "paymentMethodNotExist": {
+      "code": "SHPG002",
+      "message": "The payment method is required"
+    },
+    "weightRequired": {
+      "code": "SHPG003",
+      "message": "The weight is required"
+    },
+    "depthRequired": {
+      "code": "SHPG004",
+      "message": "The depth is required"
+    },
+    "widthRequired": {
+      "code": "SHPG005",
+      "message": "The width is required"
+    },
+    "highRequired": {
+      "code": "SHPG006",
+      "message": "The high is required"
+    },
+    "declaredValueRequired": {
+      "code": "SHPG007",
+      "message": "The declared value is required"
+    },
+    "insuranceCostRequired": {
+      "code": "SHPG008",
+      "message": "The insurance cost is required"
+    },
+    "clientReceivesRequired": {
+      "code": "SHPG009",
+      "message": "The client receives is required"
+    },
+    "clientReceivesNotExist": {
+      "code": "SHPG010",
+      "message": "The client receives not exist"
+    },
+    "contentRequired": {
+      "code": "SHPG011",
+      "message": "The content is required"
+    },
+    "isHomeDeliveryRequired": {
+      "code": "SHPG012",
+      "message": "The home delivery value is required"
+    },
+    "isHomeDeliveryInvalidValue": {
+      "code": "SHPG013",
+      "message": "The home delivery invalid value"
+    },
+    "shippingTypeNotExist": {
+      "code": "SHPG014",
+      "message": "The shipping type not exist"
+    },
+    "shippingTypeRequired": {
+      "code": "SHPG015",
+      "message": "The shipping type is required"
+    },
+    "unitMeasureRequired": {
+      "code": "SHPG016",
+      "message": "The unit measure is required"
+    },
+    "unitMeasureNotExist": {
+      "code": "SHPG017",
+      "message": "The unit measure not exist"
+    },
+    "queryErrors": {
+      "createError": {
+        "code": "SHPG_001",
+        "message": "Something went wrong"
+      }
+    }
+  },
+  "shipmentTrackingErrors": {
+    "queryErrors": {
+      "createError": {
+        "code": "SHTK_001",
+        "message": "Something went wrong"
+      }
+    }
+  },
+  "trackingStatusErrors": {
+    "queryErrors": {
+      "createError": {
+        "code": "TKST_001",
+        "message": "Something went wrong"
+      },
+      "findTrackingStatusByPositionOfGroupError": {
+        "code": "TKST_002",
         "message": "Something went wrong"
       }
     }

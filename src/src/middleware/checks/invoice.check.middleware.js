@@ -8,7 +8,10 @@ const { check } = require('express-validator');
 const { ErrorModel } = require("../../models/index.models");
 
 // Validators - middleware
-const { sharedValidators, userValidators, seatValidators, clientValidator, paymentMethodValidators, invoiceValidators } = require('../index.validators.middleware');
+const { 
+    sharedValidators, userValidators, seatValidators, clientValidator, paymentMethodValidators, 
+    invoiceValidators, unitMeasureValidators, shippingTypeValidators 
+} = require('../index.validators.middleware');
 const sharedCheckMiddleware = require('./shared.check.middleware');
 const sharedHelpers = require('../../helpers/shared.helpers');
 
@@ -34,7 +37,7 @@ module.exports = {
             ...sharedCheckMiddleware.checkId(),
             check('decryptId', new ErrorModel(errorsConst.ticketErrors.clientNotExist))
                 .isNumeric()
-                .custom((id, { req }) => clientValidator.validateClient(req, { id }))
+                .custom((id, { req }) => clientValidator.validateClient(req, { id }, "idClient"))
                 .custom((_, { req }) => !!req.body.idClient),
         sharedValidators.validateError,
             check("paymentMethod")
@@ -69,4 +72,112 @@ module.exports = {
         sharedValidators.validateError,
         ]
     },
+    checkCreateInvoiceShipping: () => {
+        return [
+            ...sharedCheckMiddleware.checkJwt(),
+            check("paymentMethod")
+                .isString()
+                .withMessage(new ErrorModel(errorsConst.shippingErrors.paymentMethodNotExist))
+                .bail(),
+            check("paymentMethod")
+                .custom((value, {req}) => paymentMethodValidators.validatePaymentMethod(req, {id: sharedHelpers.decryptIdDataBase(value)}))
+                .custom((value, {req}) => !!req.body.idPaymentMethod)
+                .withMessage(new ErrorModel(errorsConst.shippingErrors.paymentMethodRequired))
+                .bail(),
+            sharedValidators.validateError,
+            check("depth")
+                .isInt( { min: 1})
+                .withMessage(new ErrorModel(errorsConst.shippingErrors.depthRequired))
+                .bail(),
+            sharedValidators.validateError,
+            check("weight")
+                .isInt( { min: 1})
+                .withMessage(new ErrorModel(errorsConst.shippingErrors.weightRequired))
+                .bail(),
+            sharedValidators.validateError,
+            check("width")
+                .isInt( { min: 1})
+                .withMessage(new ErrorModel(errorsConst.shippingErrors.widthRequired))
+                .bail(),
+            sharedValidators.validateError,
+            check("high")
+                .isInt( { min: 1})
+                .withMessage(new ErrorModel(errorsConst.shippingErrors.highRequired))
+                .bail(),
+            sharedValidators.validateError,
+            check("declaredValue")
+                .isInt( { min: 0})
+                .withMessage(new ErrorModel(errorsConst.shippingErrors.declaredValueRequired))
+                .bail(),
+            sharedValidators.validateError,
+            check("insuranceCost")
+                .isInt( { min: 1})
+                .withMessage(new ErrorModel(errorsConst.shippingErrors.insuranceCostRequired))
+                .bail(),
+            sharedValidators.validateError,
+            check("price")
+                .isFloat( { min: 1})
+                .withMessage(new ErrorModel(errorsConst.invoiceErrors.priceRequired))
+                .bail(),
+            sharedValidators.validateError,
+            check('content')
+                .customSanitizer((value) => value.toString()) 
+                .isLength({min: 1})
+                .withMessage(new ErrorModel(errorsConst.shippingErrors.contentRequired))
+                .bail(),
+            sharedValidators.validateError,
+            check('isHomeDelivery')
+                .customSanitizer((value) => {
+                    if (typeof value === 'string') return parseInt(value, 10)
+                    return value;
+                })
+                .isInt().withMessage(new ErrorModel(errorsConst.shippingErrors.isHomeDeliveryRequired))
+                .isIn([0, 1]).withMessage(new ErrorModel(errorsConst.shippingErrors.isHomeDeliveryInvalidValue))
+                .bail(),
+            sharedValidators.validateError,
+            check("idClientSends")
+                .isString()
+                .withMessage(new ErrorModel(errorsConst.invoiceErrors.clientRequired))
+                .bail(),
+            sharedValidators.validateError,
+            check("idClientSends")
+                .custom((value, {req}) => clientValidator.validateClient(req, {id: sharedHelpers.decryptIdDataBase(value)}, "clientSend"))
+                .custom((value, {req}) => !!req.body.clientSend)
+                .withMessage(new ErrorModel(errorsConst.invoiceErrors.clientNotExist))
+                .bail(),
+            sharedValidators.validateError,
+            check("idClientReceives")
+                .isString()
+                .withMessage(new ErrorModel(errorsConst.shippingErrors.clientReceivesRequired))
+                .bail(),
+            sharedValidators.validateError,
+            check("idClientReceives")
+                .custom((value, {req}) => clientValidator.validateClient(req, {id: sharedHelpers.decryptIdDataBase(value)}, "clientReceives"))
+                .custom((value, {req}) => !!req.body.clientReceives)
+                .withMessage(new ErrorModel(errorsConst.shippingErrors.clientReceivesNotExist))
+                .bail(),
+            sharedValidators.validateError,
+            check("idShippingType")
+                .isString()
+                .withMessage(new ErrorModel(errorsConst.shippingErrors.shippingTypeRequired))
+                .bail(),
+            sharedValidators.validateError,
+            check("idShippingType")
+                .custom((value, {req}) => shippingTypeValidators.validateShippingType(req, {id: sharedHelpers.decryptIdDataBase(value)}))
+                .custom((value, {req}) => !!req.body.shippingType)
+                .withMessage(new ErrorModel(errorsConst.shippingErrors.shippingTypeNotExist))
+                .bail(),
+            sharedValidators.validateError,
+            check("idUnitMeasure")
+                .isString()
+                .withMessage(new ErrorModel(errorsConst.shippingErrors.unitMeasureRequired))
+                .bail(),
+            sharedValidators.validateError,
+            check("idUnitMeasure")
+                .custom((value, {req}) => unitMeasureValidators.validateUnitMeasure(req, {id: sharedHelpers.decryptIdDataBase(value)}))
+                .custom((value, {req}) => !!req.body.unitMeasure)
+                .withMessage(new ErrorModel(errorsConst.shippingErrors.unitMeasureNotExist)),
+            sharedValidators.validateError
+        ]
+    }
 }

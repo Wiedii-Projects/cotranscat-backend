@@ -21,4 +21,8 @@ router.get('/', [
     invoiceMiddleware.checkGetAllInvoice()
 ], invoiceController.getAllInvoice)
 
+router.post('/shipping/', [
+    invoiceMiddleware.checkCreateInvoiceShipping()
+], invoiceController.createInvoiceShipping);
+
 module.exports = router;
