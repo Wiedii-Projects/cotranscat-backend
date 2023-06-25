@@ -6,7 +6,6 @@ const {
   // Libraries
   const { DataTypes } = require("sequelize");
   
-  
   const InvoiceSchema = dbConnectionOptions.define(
     "Invoice",
     {

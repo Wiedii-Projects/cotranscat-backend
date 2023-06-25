@@ -115,6 +115,11 @@ module.exports = {
                 .withMessage(new ErrorModel(errorsConst.shippingErrors.insuranceCostRequired))
                 .bail(),
             sharedValidators.validateError,
+            check("costShipping")
+                .isInt( { min: 1})
+                .withMessage(new ErrorModel(errorsConst.shippingErrors.costShippingRequired))
+                .bail(),
+            sharedValidators.validateError,
             check("price")
                 .isFloat( { min: 1})
                 .withMessage(new ErrorModel(errorsConst.invoiceErrors.priceRequired))
@@ -179,5 +184,17 @@ module.exports = {
                 .withMessage(new ErrorModel(errorsConst.shippingErrors.unitMeasureNotExist)),
             sharedValidators.validateError
         ]
+    },
+    checkFilterDetailsShipping: () => {
+      return [
+        ...sharedCheckMiddleware.checkJwt(),
+        check('filterValue')
+          .isString()
+          .withMessage(new ErrorModel(errorsConst.shippingErrors.valueToFilterIsRequired))
+          .bail()
+          .isLength({ min: 1 })
+          .withMessage(new ErrorModel(errorsConst.shippingErrors.filterValueIsEmpty)),
+          sharedValidators.validateError
+      ]
     }
 }

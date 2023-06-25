@@ -5,7 +5,10 @@ const { errorsConst } = require("../../constants/index.constants");
 const { encryptIdDataBase } = require("../../helpers/shared.helpers");
 
 // Models
-const { Seller, Ticket, Seat, Travel, Route, Client, DocumentType, User, Municipality, DriverVehicle, Vehicle } = require("../index.models");
+const { 
+  Seller, Ticket, Seat, Travel, Route, Client, DocumentType, User, Municipality, DriverVehicle, Vehicle, 
+  IndicativeNumber, Department, Shipping, ShippingType, UnitMeasure, ShipmentTracking, TrackingStatus 
+} = require("../index.models");
 const Invoice = require("./invoice.model");
 
 module.exports = {
@@ -226,5 +229,226 @@ module.exports = {
     } catch {
         throw errorsConst.invoiceErrors.queryErrors.findAllError;
     }
+},
+  getInvoiceDetailsShippingQuery: async (conditionFilter) => {
+
+     const detailShippingFound =  await Invoice.findOne({
+      where: conditionFilter,
+      include: [
+        {
+          model: Client,
+          as: 'InvoiceClient',
+          include: [
+            {
+              model: User,
+              as: 'UserClient',
+              include: [
+                {
+                  model: DocumentType,
+                  as: 'UserDocumentType'
+                },
+                {
+                  model: IndicativeNumber,
+                  as: 'UserIndicativePhone'
+                }
+              ]
+            },
+            {
+              model: Municipality,
+              as: "ClientMunicipality",
+              required: false,
+              include: [
+                {
+                  model: Department,
+                  as: "MunicipalityDepartment",
+                  required: false
+                }
+              ]
+            },
+            {
+              model: IndicativeNumber,
+              as: 'ClientIndicativeNumberWhatsApp',
+              required: false
+            }
+          ]
+        },
+        {
+          model: Shipping,
+          as: "InvoiceShipping",
+          include: [
+            {
+              model: ShippingType,
+              as: "ShippingTypeShipping"
+            },
+            {
+              model: UnitMeasure,
+              as: "UnitMeasureShipping"
+            },
+            {
+              model: Client,
+              as: "ClientShipping",
+              include: [
+                {
+                  model: User,
+                  as: 'UserClient',
+                  include: [
+                    {
+                      model: DocumentType,
+                      as: 'UserDocumentType'
+                    },
+                    {
+                      model: IndicativeNumber,
+                      as: 'UserIndicativePhone'
+                    }
+                  ]
+                },
+                {
+                  model: Municipality,
+                  as: "ClientMunicipality",
+                  required: false,
+                  include: [
+                    {
+                      model: Department,
+                      as: "MunicipalityDepartment",
+                      required: false
+                    }
+                  ]
+                },
+                {
+                  model: IndicativeNumber,
+                  as: 'ClientIndicativeNumberWhatsApp',
+                  required: false
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      raw: true,
+      nest: true
+    })
+
+    if (!detailShippingFound) return null
+
+    const {
+      id: idInvoice, number, price, codeSale, codePrefix,
+      InvoiceClient: {
+        id: idSends, email: emailSends, address: addressSends, numberPhoneWhatsappSends,
+        ClientMunicipality: dataMunicipalitySends, ClientIndicativeNumberWhatsApp: dataIndicativeNumberWhatsAppSends,
+        UserClient: { 
+          numberDocument: numberDocumentSends, name: nameSends, lastName: lastNameSends, 
+          numberPhone: numberPhoneSends, UserDocumentType: documentTypeSends, UserIndicativePhone: indicativePhoneSends
+        }
+      },
+      InvoiceShipping: {
+        id: idShipping, dateOfEntry, dateDeparture, declaredValue, insuranceCost, content, isHomeDelivery, costShipping,
+        ShippingTypeShipping: { name: nameTypeShipping },
+        UnitMeasureShipping: { name: nameUnitMeasure },
+        ClientShipping: {
+          id: idReceives, email: emailReceives, address: addressReceives, numberPhoneWhatsappReceives,
+          ClientMunicipality: dataMunicipalityReceives, ClientIndicativeNumberWhatsApp: dataIndicativeNumberWhatsAppReceives,
+          UserClient: { 
+            numberDocument: numberDocumentReceives, name: nameReceives, lastName: lastNameReceives, 
+            numberPhone: numberPhoneReceives, UserDocumentType: documentTypeReceives, UserIndicativePhone: indicativePhoneReceives
+          }
+        }
+      }
+    } = detailShippingFound
+
+    let municipalityReceives = null
+    let departmentReceives = null
+
+    if (dataMunicipalityReceives?.id) {
+      const { id: idMunicipality, name, MunicipalityDepartment: departmentData } = dataMunicipalityReceives
+      municipalityReceives = {
+        id: encryptIdDataBase(idMunicipality),
+
+        name
+      }
+
+      if (departmentData?.id) {
+        departmentReceives = {
+          id: encryptIdDataBase(departmentData.id),
+
+          name: departmentData.name
+        }
+      }
+    }
+
+    let municipalitySends = null
+    let departmentSends = null
+
+    if (dataMunicipalitySends?.id) {
+      const { id: idMunicipality, name, MunicipalityDepartment: departmentData } = dataMunicipalitySends
+      municipalitySends = {
+        id: encryptIdDataBase(idMunicipality),
+
+        name
+      }
+
+      if (departmentData?.id) {
+        departmentSends = {
+          id: encryptIdDataBase(departmentData.id),
+
+          name: departmentData.name
+        }
+      }
+    }
+
+    return {
+      invoice: {
+        id: encryptIdDataBase(idInvoice), number, price, codeSale, codePrefix
+      },
+      invoiceDetails: {
+        id: encryptIdDataBase(idShipping), dateOfEntry, dateDeparture, isHomeDelivery,
+      declaredValue, insuranceCost, content, nameTypeShipping, nameUnitMeasure, costShipping
+      },
+      clientReceives: {
+        id: encryptIdDataBase(idReceives),
+        numberDocument: numberDocumentReceives,
+        name: nameReceives,
+        lastName: lastNameReceives,
+        documentType: {
+          ...documentTypeReceives,
+          id: encryptIdDataBase(documentTypeReceives.id),
+        },
+        indicativeNumber: {
+          ...indicativePhoneReceives,
+          id: encryptIdDataBase(indicativePhoneReceives.id),
+        },
+        numberPhone: numberPhoneReceives,
+        email: emailReceives ?? undefined,
+        address: addressReceives ?? undefined,
+        numberPhoneWhatsapp: numberPhoneWhatsappReceives ?? undefined,
+        indicativeNumberWhatsApp: {
+          ...dataIndicativeNumberWhatsAppReceives,
+          id: dataIndicativeNumberWhatsAppReceives?.id ? encryptIdDataBase(dataIndicativeNumberWhatsAppReceives.id) : null,
+        },
+        municipality: municipalityReceives, department: departmentReceives
+      },
+      clientSends: {
+        id: encryptIdDataBase(idSends),
+        numberDocument: numberDocumentSends,
+        name: nameSends,
+        lastName: lastNameSends,
+        documentType: {
+          ...documentTypeSends,
+          id: encryptIdDataBase(documentTypeSends.id),
+        },
+        indicativeNumber: {
+          ...indicativePhoneSends,
+          id: encryptIdDataBase(indicativePhoneSends.id),
+        },
+        numberPhone: numberPhoneSends,
+        email: emailSends ?? undefined,
+        address: addressSends ?? undefined,
+        numberPhoneWhatsapp: numberPhoneWhatsappSends ?? undefined,
+        indicativeNumberWhatsApp: {
+          ...dataIndicativeNumberWhatsAppSends,
+          id: dataIndicativeNumberWhatsAppSends?.id ? encryptIdDataBase(dataIndicativeNumberWhatsAppSends.id) : null,
+        },
+        municipality: municipalitySends, department: departmentSends
+      }
+    }
+  }
 }
-};

@@ -58,6 +58,11 @@ const ShippingSchema = dbConnectionOptions.define(
             field: "insuranceCost",
             allowNull: false
         },
+        costShipping: {
+            type: DataTypes.INTEGER.UNSIGNED,
+            field: "costShipping",
+            allowNull: false
+        },
         content: {
             type: DataTypes.STRING(100),
             field: "content",

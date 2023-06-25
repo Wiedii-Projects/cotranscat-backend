@@ -9,6 +9,14 @@ const { Router } = require("express");
 
 const router = Router();
 
+router.get('/shipping/', [
+    invoiceMiddleware.checkFilterDetailsShipping()
+], invoiceController.getShipping)
+
+router.post('/shipping/', [
+    invoiceMiddleware.checkCreateInvoiceShipping()
+], invoiceController.createInvoiceShipping);
+
 router.post('/', [
     invoiceMiddleware.checkCreateInvoiceTravel()
 ], invoiceController.createInvoiceTravel);
@@ -20,9 +28,5 @@ router.get('/:idInvoice', [
 router.get('/', [
     invoiceMiddleware.checkGetAllInvoice()
 ], invoiceController.getAllInvoice)
-
-router.post('/shipping/', [
-    invoiceMiddleware.checkCreateInvoiceShipping()
-], invoiceController.createInvoiceShipping);
 
 module.exports = router;

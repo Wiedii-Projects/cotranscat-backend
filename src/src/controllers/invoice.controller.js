@@ -1,6 +1,6 @@
 // Constants
 const { dbConnectionOptions } = require('../constants/core/core-configurations.const');
-const { salesConst } = require('../constants/index.constants');
+const { salesConst, errorsConst } = require('../constants/index.constants');
 
 // Helpers
 const { 
@@ -11,7 +11,7 @@ const {
 } = require('../helpers/shared.helpers');
 
 // Queries
-const { createNewInvoiceQuery } = require('../models/invoice/invoice.query');
+const { createNewInvoiceQuery, getInvoiceDetailsShippingQuery } = require('../models/invoice/invoice.query');
 const { findServiceTypeQuery } = require('../models/service-type/service-type.query');
 const { createNewTicketQuery } = require('../models/ticket/ticket.query');
 const { invoiceQuery, travelQuery, shippingQuery } = require('../models/index.queries');
@@ -73,8 +73,8 @@ module.exports = {
         }
     },
     createInvoiceShipping: async(req, res) => {
-         const { idPaymentMethod, depth, weight, width, high, declaredValue, insuranceCost, price, content, 
-            isHomeDelivery, idClientSends: idClientSendEncrypt, idClientReceives: idClientReceivesEncrypt, 
+         const { idPaymentMethod, depth, weight, width, high, declaredValue, costShipping, insuranceCost, price, 
+            content, isHomeDelivery, idClientSends: idClientSendEncrypt, idClientReceives: idClientReceivesEncrypt, 
             idShippingType: idShippingTypeEncrypt, idUnitMeasure: idUnitMeasureEncrypt, user: {id: idSellerEncrypt},
         } = req.body
 
@@ -112,7 +112,7 @@ module.exports = {
             let timeOfEntry = formattedTime;
 
             const shipping = await shippingQuery.createShippingQuery({
-                depth, weight, width, high, declaredValue, insuranceCost, content, isHomeDelivery,
+                depth, weight, width, high, declaredValue, costShipping, insuranceCost, content, isHomeDelivery,
                 idClientReceives, idUnitMeasure, idShippingType, idInvoice :invoice.id, dateOfEntry, timeOfEntry
             }, transaction)
 
@@ -132,6 +132,30 @@ module.exports = {
             return responseHelpers.responseSuccess(res, encryptIdDataBase(invoice.id));
         } catch (error){
             if (transaction) await transaction.rollback();
+            return responseHelpers.responseError(res, 500, error);
+        }
+    },
+    getShipping: async (req, res) => {
+        const { filterValue } = req.query
+        try {
+            let filterSearch
+            if (!isNaN(filterValue)) filterSearch = { number: filterValue }
+            else {
+                const value = sharedHelpers.decryptIdDataBase(filterValue)
+                if (!isNaN(value)) filterSearch = { id: value }
+            }
+            if (!filterSearch) throw errorsConst.shippingErrors.filterValueInvalid
+
+            let shippingInvoice = await getInvoiceDetailsShippingQuery(filterSearch)
+
+            if (shippingInvoice) {
+                const {invoiceDetails} = shippingInvoice
+                const shipmentTrackingResponse = await shipmentTrackingQuery.findShipmentTrackingByIdShipping(invoiceDetails.id)
+                shippingInvoice.shipmentTracking = shipmentTrackingResponse
+            }
+
+            return responseHelpers.responseSuccess(res, shippingInvoice);
+        } catch (error) {
             return responseHelpers.responseError(res, 500, error);
         }
     }

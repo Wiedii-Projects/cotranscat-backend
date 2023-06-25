@@ -1124,6 +1124,22 @@
       "code": "SHPG017",
       "message": "The unit measure not exist"
     },
+    "valueToFilterIsRequired": {
+      "code": "SHPG018",
+      "message": "The value to filter is required"
+    },
+    "filterValueIsEmpty": {
+      "code": "SHPG019",
+      "message": "Filter value is empty"
+    },
+    "costShippingRequired": {
+      "code": "SHPG020",
+      "message": "The shipping cost is required"
+    },
+    "filterValueInvalid": {
+      "code": "SHPG021",
+      "message": "Filter value invalid"
+    },
     "queryErrors": {
       "createError": {
         "code": "SHPG_001",
@@ -1135,6 +1151,10 @@
     "queryErrors": {
       "createError": {
         "code": "SHTK_001",
+        "message": "Something went wrong"
+      },
+      "findShipmentTrackingByIdInvoiceError": {
+        "code": "SHTK_002",
         "message": "Something went wrong"
       }
     }
