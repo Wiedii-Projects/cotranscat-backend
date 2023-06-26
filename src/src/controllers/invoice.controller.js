@@ -1,6 +1,7 @@
 // Constants
 const { dbConnectionOptions } = require('../constants/core/core-configurations.const');
 const { salesConst, errorsConst } = require('../constants/index.constants');
+const trackingConst = require('../constants/core/tracking.const');
 
 // Helpers
 const { 
@@ -18,7 +19,6 @@ const { invoiceQuery, travelQuery, shippingQuery } = require('../models/index.qu
 const { getHeadquarterAssociatedBySellerQuery } = require('../models/seller/seller.query');
 const shipmentTrackingQuery = require('../models/shipment-tracking/shipment-tracking.query');
 const trackingStatusQuery = require('../models/tracking-status/tracking-status.query');
-const trackingConst = require('../constants/core/tracking.const');
 
 module.exports = {
     createInvoiceTravel: async(req, res) => {

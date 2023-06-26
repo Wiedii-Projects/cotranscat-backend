@@ -78,32 +78,36 @@ module.exports = {
     }
   },
   getHeadquarterAssociatedBySellerQuery: async (where) => {
-    const [headquarter] = await Seller.findAll({
-      attributes: [],
-      include: [
-        {
-          model: Bank,
-          attributes: [],
-          as: "BankSeller",
-          include: [
-            {
-              model: Headquarter,
-              attributes: ['id', 'name'],
-              as: "HeadquarterBank"
-            }
-          ]
-        }
-      ],
-      where,
-      raw: true,
-      nest: true
-    })
+    try {
+      const [headquarter] = await Seller.findAll({
+        attributes: [],
+        include: [
+          {
+            model: Bank,
+            attributes: [],
+            as: "BankSeller",
+            include: [
+              {
+                model: Headquarter,
+                attributes: ['id', 'name'],
+                as: "HeadquarterBank"
+              }
+            ]
+          }
+        ],
+        where,
+        raw: true,
+        nest: true
+      })
 
-    const { BankSeller: { HeadquarterBank: { id, name } } } = headquarter
+      const { BankSeller: { HeadquarterBank: { id, name } } } = headquarter
 
-    return {
-      id: sharedHelpers.encryptIdDataBase(id),
-      name
+      return {
+        id: sharedHelpers.encryptIdDataBase(id),
+        name
+      }
+    } catch {
+      throw errorsConst.sellerErrors.queryErrors.findHeadquarterAssociatedBySellerError;
     }
   }
 };

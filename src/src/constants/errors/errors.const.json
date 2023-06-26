@@ -628,6 +628,10 @@
       "findError": {
         "code": "SELL_003",
         "message": "Something went wrong"
+      },
+      "findHeadquarterAssociatedBySellerError": {
+        "code": "SELL_004",
+        "message": "Something went wrong"
       }
     }
   },
