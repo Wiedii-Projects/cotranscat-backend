@@ -176,9 +176,9 @@ module.exports = {
         { name : "Documentos" }
     ],
     defaultServiceType:[
-        { type: 1, code: "IMPGIRCU" },
-        { type: 2, code: "PASTIQ" },
-        { type: 3, code: "PORREM" },
+        { type: salesConst.TYPE_SERVICE.MONEY_TRANSFER.VALUE_CONVENTION, code: "IMPGIRCU" },
+        { type: salesConst.TYPE_SERVICE.PASSAGE.VALUE_CONVENTION, code: "PASTIQ" },
+        { type: salesConst.TYPE_SERVICE.SHIPPING.VALUE_CONVENTION, code: "PORREM" },
     ],
     defaultBank: [
         { code: "01", description: "Tibu general cash register", headquarterAssociated: salesConst.HEADQUARTERS.TIBU },

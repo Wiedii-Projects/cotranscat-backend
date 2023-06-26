@@ -9,6 +9,18 @@ const { Router } = require("express");
 
 const router = Router();
 
+router.get('/shipping/', [
+    invoiceMiddleware.checkFilterDetailsShipping()
+], invoiceController.getShipping)
+
+router.post('/shipping/', [
+    invoiceMiddleware.checkCreateInvoiceShipping()
+], invoiceController.createInvoiceShipping);
+
+router.get('/shipping/all/', [
+    invoiceMiddleware.checkGetAllShippingInvoice()
+], invoiceController.getAllShippingInvoice)
+
 router.post('/', [
     invoiceMiddleware.checkCreateInvoiceTravel()
 ], invoiceController.createInvoiceTravel);

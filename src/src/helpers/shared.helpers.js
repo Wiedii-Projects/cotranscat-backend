@@ -52,7 +52,11 @@ module.exports = {
   },
   getInvoiceRegisterParametersByBankHelper: (typeService, headquarters) => {
     const { CUCUTA, TIBU } = salesConst.HEADQUARTERS
-    const { PASSAGE, SHIPPING, MONEY_TRANSFER } = salesConst.TYPE_SERVICE
+    const {
+      PASSAGE: { VALUE_STRING: PASSAGE },
+      SHIPPING: { VALUE_STRING: SHIPPING },
+      MONEY_TRANSFER: { VALUE_STRING: MONEY_TRANSFER },
+    } = salesConst.TYPE_SERVICE
 
     const serviceMappings = {
       [PASSAGE]: {

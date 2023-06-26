@@ -2,12 +2,12 @@
 const { clientQuery } = require('./../../models/index.queries')
 
 module.exports = {
-    validateClient: async (req, where) => {
+    validateClient: async (req, where, nameProperty) => {
         try {
             const [client] = await clientQuery.findClientQuery({where});
-            req.body.idClient = client;
+            req.body[nameProperty] = client;
         } catch {
-            req.body.idClient = false;
+            req.body[nameProperty] = false;
         }
     }
 }

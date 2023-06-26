@@ -26,6 +26,9 @@ const Bank = require('./bank/bank.model')
 const Observation = require('./observation/observation.model');
 const PaymentMethodBank = require('./payment-method-bank/payment-method-bank.model')
 const Headquarter = require('./headquarter/headquarter.model')
+const Shipping = require('./shipping/shipping.model');
+const ShipmentTracking = require('./shipment-tracking/shipment-tracking.model')
+const TrackingStatus = require('./tracking-status/tracking-status.model')
 
 // Relationships BD
 
@@ -153,6 +156,30 @@ Bank.hasMany(PaymentMethodBank, { as: 'BankPaymentMethod', foreignKey: { name: "
 Headquarter.hasMany(Bank, { as: 'HeadquarterBank', foreignKey: { name: 'idHeadquarter', allowNull: false } });
 Bank.belongsTo(Headquarter, { as: 'HeadquarterBank', foreignKey: { name: 'idHeadquarter', allowNull: false } });
 
+// Relationship UnitMeasure-Shipping
+UnitMeasure.hasMany(Shipping, { as: 'UnitMeasureShipping', foreignKey: { name: 'idUnitMeasure', allowNull: false } })
+Shipping.belongsTo(UnitMeasure, { as: 'UnitMeasureShipping', foreignKey: { name: 'idUnitMeasure', allowNull: false } })
+
+// Relationship ShippingType-Shipping
+ShippingType.hasMany(Shipping, { as: 'ShippingTypeShipping', foreignKey: { name: 'idShippingType', allowNull: false } })
+Shipping.belongsTo(ShippingType, { as: 'ShippingTypeShipping', foreignKey: { name: 'idShippingType', allowNull: false } })
+
+// Relationship Client-Shipping
+Client.hasMany(Shipping, { as: 'ClientShipping', foreignKey: { name: 'idClientReceives', allowNull: false } })
+Shipping.belongsTo(Client, { as: 'ClientShipping', foreignKey: { name: 'idClientReceives', allowNull: false } })
+
+// Relationship Invoice-Shipping
+Invoice.hasMany(Shipping, { as: 'InvoiceShipping', foreignKey: { name: 'idInvoice', allowNull: false } })
+Shipping.belongsTo(Invoice, { as: 'InvoiceShipping', foreignKey: { name: 'idInvoice', allowNull: false } })
+
+// Relationship Shipping-ShipmentTracking
+Shipping.hasMany(ShipmentTracking, { as: 'ShippingShipmentTracking', foreignKey: { name: 'idShipping', allowNull: false } })
+ShipmentTracking.belongsTo(Shipping, { as: 'ShippingShipmentTracking', foreignKey: { name: 'idShipping', allowNull: false } })
+
+// Relationship TrackingStatus-ShipmentTracking
+TrackingStatus.hasMany(ShipmentTracking, { as: 'TrackingStatusShipmentTracking', foreignKey: { name: 'idTrackingStatus', allowNull: false } })
+ShipmentTracking.belongsTo(TrackingStatus, { as: 'TrackingStatusShipmentTracking', foreignKey: { name: 'idTrackingStatus', allowNull: false } })
+
 module.exports = {
   // Aggregates Models
   ServerModel: require("./aggregates/server/server.model"),
@@ -185,5 +212,8 @@ module.exports = {
   Observation,
   PaymentMethodBank,
   Headquarter,
-  Invoice
+  Invoice,
+  Shipping,
+  ShipmentTracking,
+  TrackingStatus
 };

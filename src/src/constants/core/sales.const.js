@@ -15,8 +15,17 @@ module.exports = {
         CUCUTA: "CUCUTA"
     },
     TYPE_SERVICE: {
-        PASSAGE: "PASSAGE",
-        SHIPPING: "SHIPPING",
-        MONEY_TRANSFER: "MONEY_TRANSFER"
+        PASSAGE: {
+            VALUE_STRING: "PASSAGE",
+            VALUE_CONVENTION: 2
+        },
+        SHIPPING: {
+            VALUE_STRING: "SHIPPING",
+            VALUE_CONVENTION: 3
+        },
+        MONEY_TRANSFER:{
+            VALUE_STRING: "MONEY_TRANSFER",
+            VALUE_CONVENTION: 1
+        }
     }
 }
