@@ -450,5 +450,93 @@ module.exports = {
         municipality: municipalitySends, department: departmentSends
       }
     }
+  },
+  findAllShippingInvoiceQuery: async (query) => {
+    try {
+      const { 
+        where,
+        offset
+      } = query;
+      const allShippingInvoiceResponse = await Invoice.findAll({
+        where,
+        include: [
+          {
+            model: Client,
+            as: 'InvoiceClient',
+            attributes: ['id'],
+            include: [
+              {
+                model: User,
+                as: 'UserClient',
+                attributes: ['numberDocument', 'name', 'lastName'],
+              }
+            ]
+          },
+          {
+            model: Seller,
+            as: 'InvoiceSeller',
+            attributes: ['id'],
+            include: [
+              {
+                model: User,
+                as: 'UserSeller',
+                attributes: ['name', 'lastName'],
+              }
+            ]
+          },
+          {
+            model: Shipping,
+            as: "InvoiceShipping",
+            include: [
+              {
+                model: Client,
+                as: "ClientShipping",
+                attributes: ['id'],
+                include: [
+                  {
+                    model: User,
+                    as: 'UserClient',
+                    attributes: ['numberDocument', 'name', 'lastName'],
+                  }
+                ]
+              }
+            ]
+          }
+        ],
+        nest: true,
+        raw:true,
+        attributes: ['codeSale', 'codePrefix','number', 'price', 'date', 'id'],
+        order: [['number', 'DESC']],
+        limit: 20,
+        offset: offset * 20
+      })
+
+      const allShippingInvoice = allShippingInvoiceResponse.map((shippingInvoice) => ({
+          id: encryptIdDataBase(shippingInvoice.id),
+          number: shippingInvoice.number,
+          codeSale: shippingInvoice.codeSale,
+          codePrefix: shippingInvoice.codePrefix,
+          price: shippingInvoice.price,
+          date: shippingInvoice.date,
+          clientSends: {
+            numberDocument: shippingInvoice.InvoiceClient.UserClient.numberDocument,
+            name: shippingInvoice.InvoiceClient.UserClient.name,
+            lastName: shippingInvoice.InvoiceClient.UserClient.lastName,
+          },
+          seller: {
+            name: shippingInvoice.InvoiceSeller.UserSeller.name,
+            lastName: shippingInvoice.InvoiceSeller.UserSeller.lastName,
+          },
+          clientReceives: {
+            numberDocument: shippingInvoice.InvoiceShipping.ClientShipping.UserClient.numberDocument,
+            name: shippingInvoice.InvoiceShipping.ClientShipping.UserClient.name,
+            lastName: shippingInvoice.InvoiceShipping.ClientShipping.UserClient.lastName
+          }
+        }))
+     
+     return allShippingInvoice
+    } catch {
+      throw errorsConst.invoiceErrors.queryErrors.findAllError;
+    }
   }
 }

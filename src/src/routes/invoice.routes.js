@@ -17,6 +17,10 @@ router.post('/shipping/', [
     invoiceMiddleware.checkCreateInvoiceShipping()
 ], invoiceController.createInvoiceShipping);
 
+router.get('/shipping/all/', [
+    invoiceMiddleware.checkGetAllShippingInvoice()
+], invoiceController.getAllShippingInvoice)
+
 router.post('/', [
     invoiceMiddleware.checkCreateInvoiceTravel()
 ], invoiceController.createInvoiceTravel);

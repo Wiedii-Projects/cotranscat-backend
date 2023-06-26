@@ -158,5 +158,18 @@ module.exports = {
         } catch (error) {
             return responseHelpers.responseError(res, 500, error);
         }
+    },
+    getAllShippingInvoice: async (req, res) => {
+        const { page = 0 } = req.query;
+        try {
+            let [shippingInvoices, counterShipping] = await Promise.all([
+                invoiceQuery.findAllShippingInvoiceQuery({ where: {}, offset: page }),
+                invoiceQuery.countInvoiceQuery()
+            ]);
+
+            return responseHelpers.responseSuccess(res, { count: counterShipping, shippingInvoices });
+        } catch (error) {
+            return responseHelpers.responseError(res, 500, error);
+        }
     }
 }

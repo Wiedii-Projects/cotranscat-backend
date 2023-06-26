@@ -196,5 +196,10 @@ module.exports = {
           .withMessage(new ErrorModel(errorsConst.shippingErrors.filterValueIsEmpty)),
           sharedValidators.validateError
       ]
+    },
+    checkGetAllShippingInvoice: () => {
+        return [
+            ...sharedCheckMiddleware.checkJwt(),
+        ]
     }
 }

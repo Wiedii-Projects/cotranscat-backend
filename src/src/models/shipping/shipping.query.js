@@ -8,9 +8,11 @@ module.exports = {
   createShippingQuery: async (where, transaction) => {
     try {
       return await Shipping.create(where, { transaction });
-    } catch (e){
-        console.log(e)
+    } catch {
       throw errorsConst.shippingErrors.queryErrors.createError;
     }
+  },
+  countShippingInvoiceQuery: async(where = {}) => {
+    return await Shipping.count(where)
   }
 }
