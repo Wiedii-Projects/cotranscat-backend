@@ -16,8 +16,12 @@ const mySqlDBConnection = async () => {
 
 const mySqlDBSynchronization = async () => {
   try {
-    await dbConnectionOptions.sync();
-    console.log(appConst.SYNCHRONIZATION_BD_SUCCESS);
+    await dbConnectionOptions.sync().then(() => {
+      console.log(appConst.SYNCHRONIZATION_BD_SUCCESS);
+    })
+    .catch(() => {
+      console.log(appConst.SYNCHRONIZATION_BD_FAILED);
+    });
   } catch {
     console.log(appConst.SYNCHRONIZATION_BD_ERROR);
   }
