@@ -1175,6 +1175,14 @@
       }
     }
   },
+  "moneyTransferErrors": {
+    "queryErrors": {
+      "createError": {
+        "code": "MNEY_001",
+        "message": "Something went wrong"
+      }
+    }
+  },
   "appErrors":{
     "letterIsRequired": {
       "code": "APCT001",

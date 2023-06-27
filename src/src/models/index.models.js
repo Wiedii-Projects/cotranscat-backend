@@ -29,6 +29,7 @@ const Headquarter = require('./headquarter/headquarter.model')
 const Shipping = require('./shipping/shipping.model');
 const ShipmentTracking = require('./shipment-tracking/shipment-tracking.model')
 const TrackingStatus = require('./tracking-status/tracking-status.model')
+const MoneyTransfer = require('./money-transfer/money-transfer.model')
 
 // Relationships BD
 
@@ -180,6 +181,14 @@ ShipmentTracking.belongsTo(Shipping, { as: 'ShippingShipmentTracking', foreignKe
 TrackingStatus.hasMany(ShipmentTracking, { as: 'TrackingStatusShipmentTracking', foreignKey: { name: 'idTrackingStatus', allowNull: false } })
 ShipmentTracking.belongsTo(TrackingStatus, { as: 'TrackingStatusShipmentTracking', foreignKey: { name: 'idTrackingStatus', allowNull: false } })
 
+// Relationship MoneyTransfer-Invoice
+Invoice.hasMany(MoneyTransfer, { as: 'MoneyTransferInvoice', foreignKey: { name: 'idInvoice', allowNull: false } })
+MoneyTransfer.belongsTo(Invoice, { as: 'MoneyTransferInvoice', foreignKey: { name: 'idInvoice', allowNull: false } })
+
+// Relationship MoneyTransfer-Client
+Client.hasMany(MoneyTransfer, { as: 'MoneyTransferClient', foreignKey: { name: 'idClient', allowNull: false } })
+MoneyTransfer.belongsTo(Client, { as: 'MoneyTransferClient', foreignKey: { name: 'idClient', allowNull: false } })
+
 module.exports = {
   // Aggregates Models
   ServerModel: require("./aggregates/server/server.model"),
@@ -215,5 +224,6 @@ module.exports = {
   Invoice,
   Shipping,
   ShipmentTracking,
-  TrackingStatus
+  TrackingStatus,
+  MoneyTransfer
 };
