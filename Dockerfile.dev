@@ -1,0 +1,10 @@
+FROM node:18.16.1-alpine
+RUN apk update && apk add tzdata
+ENV TZ=America/Bogota
+ENV APP_ENV=local
+RUN mkdir -p /server
+WORKDIR /server
+
+EXPOSE 8000
+
+CMD ["npm","run","local"]
