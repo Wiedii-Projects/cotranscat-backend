@@ -19,6 +19,12 @@ const { invoiceQuery, travelQuery, shippingQuery } = require('../models/index.qu
 const { getHeadquarterAssociatedBySellerQuery } = require('../models/seller/seller.query');
 const shipmentTrackingQuery = require('../models/shipment-tracking/shipment-tracking.query');
 const trackingStatusQuery = require('../models/tracking-status/tracking-status.query');
+const { findPaymentMethodQuery } = require('../models/payment-method/payment-method.query');
+const { PAYMENT_METHOD } = require('../constants/core/invoice.const');
+const { extractInvoice, extractInvoiceMoneyTransfer } = require('../helpers/invoice.helpers');
+const { TYPE_SERVICE } = require('../constants/core/sales.const');
+const { createMoneyTransferQuery } = require('../models/money-transfer/money-transfer.query');
+const { createMoneyTransferTrackerQuery } = require('../models/money-transfer-tracker/money-transfer-tracker.query');
 
 module.exports = {
     createInvoiceTravel: async(req, res) => {
@@ -35,7 +41,7 @@ module.exports = {
 
             const invoice = await createNewInvoiceQuery({ 
                 idClient: decryptId, idServiceType, price, idSeller, idPaymentMethod, codePrefix, codeSale
-            }, transaction);
+            }, { transaction });
             await createNewTicketQuery(tickets, { invoice: invoice.id, price: price/tickets.length, transaction});
             await transaction.commit();
             return responseHelpers.responseSuccess(res, encryptIdDataBase(invoice.id));
@@ -77,6 +83,39 @@ module.exports = {
             return responseHelpers.responseError(res, 500, error);
         }
     },
+    createInvoiceMoneyTransfer: async(req, res) => {
+        let transaction;
+        const { user: { id: idSeller }, amountMoney, cost, iva, clientSend: { id: idClient }, clientReceives: { id: idClientReceives } } = req.body;
+        try {
+            const [[{ id: idPaymentMethod }], [{ id: idServiceType }], { id: idTrackingStatus }] = await Promise.all([
+                findPaymentMethodQuery({ where: { name: PAYMENT_METHOD.CASH } }),
+                findServiceTypeQuery({ where: { type: TYPE_SERVICE.MONEY_TRANSFER.VALUE_CONVENTION } }),
+                trackingStatusQuery.findTrackingStatusByChronologicalPositionOfGroup( 
+                    trackingConst.TRACKING_STATUS.RECEIVED.VALUE_CONVENTION, 
+                    trackingConst.TRACKING_STATUS.RECEIVED.VALUE_STRING )
+            ]);
+            const { name: nameHeadquarter } = await getHeadquarterAssociatedBySellerQuery({ id: decryptIdDataBase(idSeller) })
+            const { codePrefix } = getInvoiceRegisterParametersByBankHelper(salesConst.TYPE_SERVICE.MONEY_TRANSFER.VALUE_STRING, nameHeadquarter);
+            const invoice = extractInvoice({ 
+                price: (amountMoney + cost + iva),
+                idServiceType,
+                idPaymentMethod,
+                codePrefix,
+                codeSale: salesConst.SALES_CODE.SALES_INVOICE,
+                idClient,
+                idSeller
+            });
+            transaction = await dbConnectionOptions.transaction();
+            const { id } = await createNewInvoiceQuery(invoice, { transaction });
+            const moneyTransfer = extractInvoiceMoneyTransfer({ ...req.body, idInvoice: id, idClientReceives });
+            const { id: idMoneyTransfer } = await createMoneyTransferQuery(moneyTransfer, { transaction });
+            await createMoneyTransferTrackerQuery({ idMoneyTransfer, idTrackingStatus: decryptIdDataBase(idTrackingStatus) }, { transaction });
+            await transaction.commit();
+            return responseHelpers.responseSuccess(res, encryptIdDataBase(id));
+        } catch (error) {
+            return responseHelpers.responseError(res, 500, error);
+        }
+    },
     createInvoiceShipping: async(req, res) => {
          const { idPaymentMethod, depth, weight, width, high, declaredValue, costShipping, insuranceCost, price, 
             content, isHomeDelivery, idClientSends: idClientSendEncrypt, idClientReceives: idClientReceivesEncrypt, 
@@ -103,7 +142,7 @@ module.exports = {
 
             const invoice = await createNewInvoiceQuery({ 
                 idClient: idClientSend, idServiceType, price, idSeller, idPaymentMethod, codePrefix, codeSale
-            }, transaction);
+            }, { transaction });
             
             let dateOfEntry = new Date().toISOString().split('T')[0];
 

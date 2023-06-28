@@ -12,9 +12,9 @@ const {
 const Invoice = require("./invoice.model");
 
 module.exports = {
-  createNewInvoiceQuery: async (where, transaction) => {
+  createNewInvoiceQuery: async (where, options) => {
     try {
-      return await Invoice.create(where, { transaction });
+      return await Invoice.create(where, options);
     } catch {
       throw errorsConst.invoiceErrors.queryErrors.createError;
     }

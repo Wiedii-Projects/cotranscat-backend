@@ -1,3 +1,5 @@
+const { decryptIdDataBase } = require("./shared.helpers");
+
 module.exports = {
   nextLetter: (letter) => {
       const lastChar = letter.slice(-1); 
@@ -5,5 +7,29 @@ module.exports = {
       const nextChar = String.fromCharCode(nextCharCode); 
       const remainingChars = letter.slice(0, -1); 
       return remainingChars + nextChar; 
-    }
+  },
+  extractInvoice: ({
+    idServiceType, 
+    price, 
+    clientSend,
+    idPaymentMethod, 
+    codePrefix, 
+    codeSale,
+    idClient,
+    idSeller
+  }) => ({
+    idClient: decryptIdDataBase(clientSend), 
+    idServiceType, 
+    price, 
+    idPaymentMethod: decryptIdDataBase(idPaymentMethod), 
+    codePrefix, 
+    codeSale,
+    idClient,
+    idSeller: decryptIdDataBase(idSeller),
+  }),
+  extractInvoiceMoneyTransfer: ({
+    amountMoney, cost, iva, idClientReceives, idInvoice
+  }) => ({
+    amountMoney, cost, iva, idClientReceives, idInvoice
+  })
 }

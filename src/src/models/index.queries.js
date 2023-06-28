@@ -24,5 +24,6 @@ module.exports = {
   observationQuery: require("./observation/observation.query"),
   shippingQuery: require('./shipping/shipping.query'),
   shipmentTrackingQuery: require('./shipment-tracking/shipment-tracking.query'),
-  trackingStatusQuery: require('./tracking-status/tracking-status.query')
+  trackingStatusQuery: require('./tracking-status/tracking-status.query'),
+  moneyTransferQuery: require("./money-transfer/money-transfer.query")
 };
