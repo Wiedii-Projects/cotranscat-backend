@@ -61,7 +61,12 @@ module.exports = {
         const { page = 0 } = req.query;
         try {
             let [invoice, count] = await Promise.all([
-                invoiceQuery.findAllInvoiceQuery({ where: {}, offset: page}),
+                invoiceQuery.findAllInvoiceQuery({ 
+                    where: { 
+                        idServiceType: salesConst.TYPE_SERVICE.PASSAGE.VALUE_CONVENTION
+                    }, 
+                    offset: page
+                }),
                 invoiceQuery.countInvoiceQuery()
             ]);
             let rows = [];
@@ -126,7 +131,7 @@ module.exports = {
             const idShippingType = sharedHelpers.decryptIdDataBase(idShippingTypeEncrypt);
             const idUnitMeasure = sharedHelpers.decryptIdDataBase(idUnitMeasureEncrypt);
 
-            const [{ id: idServiceType }] = await findServiceTypeQuery({where: { type: salesConst.TYPE_SERVICE.PASSAGE.VALUE_CONVENTION }})
+            const [{ id: idServiceType }] = await findServiceTypeQuery({where: { type: salesConst.TYPE_SERVICE.SHIPPING.VALUE_CONVENTION }})
 
             transaction = await dbConnectionOptions.transaction();
 
@@ -189,7 +194,7 @@ module.exports = {
 
             if (shippingInvoice) {
                 const {invoiceDetails} = shippingInvoice
-                const shipmentTrackingResponse = await shipmentTrackingQuery.findShipmentTrackingByIdShipping(invoiceDetails.id)
+                const shipmentTrackingResponse = await shipmentTrackingQuery.findShipmentTrackingByIdShipping(decryptIdDataBase(invoiceDetails.id))
                 shippingInvoice.shipmentTracking = shipmentTrackingResponse
             }
 
