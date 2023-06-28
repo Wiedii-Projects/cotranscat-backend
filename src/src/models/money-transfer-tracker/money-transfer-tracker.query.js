@@ -8,9 +8,9 @@ const sharedHelpers = require("../../helpers/shared.helpers");
 const MoneyTransferTracker = require("./money-transfer-tracker.model");
 
 module.exports = {
-    createMoneyTransferTrackerQuery: async (data, transaction) => {
+    createMoneyTransferTrackerQuery: async (data, options) => {
         try {
-            return await MoneyTransferTracker.create(data, { transaction });
+            return await MoneyTransferTracker.create(data, options);
         } catch {
             throw errorsConst.moneyTransferTrackerErrors.queryErrors.createError
         }

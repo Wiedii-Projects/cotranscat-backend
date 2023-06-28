@@ -187,8 +187,8 @@ Invoice.hasOne(MoneyTransfer, { as: 'MoneyTransferInvoice', foreignKey: { name: 
 MoneyTransfer.belongsTo(Invoice, { as: 'MoneyTransferInvoice', foreignKey: { name: 'idInvoice', allowNull: false } })
 
 // Relationship MoneyTransfer-Client
-Client.hasMany(MoneyTransfer, { as: 'MoneyTransferClient', foreignKey: { name: 'idClient', allowNull: false } })
-MoneyTransfer.belongsTo(Client, { as: 'MoneyTransferClient', foreignKey: { name: 'idClient', allowNull: false } })
+Client.hasMany(MoneyTransfer, { as: 'MoneyTransferClient', foreignKey: { name: 'idClientReceives', allowNull: false } })
+MoneyTransfer.belongsTo(Client, { as: 'MoneyTransferClient', foreignKey: { name: 'idClientReceives', allowNull: false } })
 
 // Relationship MoneyTransferTracker-MoneyTransfer
 MoneyTransfer.hasOne(MoneyTransferTracker, { as: 'MoneyTransferTrackerMoneyTransfer', foreignKey: { name: 'idMoneyTransfer', allowNull: false } })

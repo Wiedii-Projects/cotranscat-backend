@@ -1184,6 +1184,18 @@
     }
   },
   "moneyTransferErrors": {
+    "amountMoneyRequired": {
+      "code": "MNEY001",
+      "message": "The money transfer amount money is required"
+    },
+    "costRequired": {
+      "code": "MNEY002",
+      "message": "The money transfer cost is required"
+    },
+    "ivaRequired": {
+      "code": "MNEY003",
+      "message": "The money transfer iva is required"
+    },
     "queryErrors": {
       "createError": {
         "code": "MNEY_001",
