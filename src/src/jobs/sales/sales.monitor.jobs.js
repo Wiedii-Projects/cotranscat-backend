@@ -1,6 +1,6 @@
 
 // Constants
-const { redisConnectionInstanceBullMq } = require("../../constants/core/core-configurations.const");
+const { redisDBConnectionOptions, redisConnectionInstanceBullMq } = require("../../constants/core/core-configurations.const");
 
 // Constants - Jobs
 const salesConstJobs = require("../../jobs/sales/sales.const.jobs");
@@ -16,10 +16,10 @@ module.exports = {
             console.log(
                 `Processing job ${job.id} with data ${JSON.stringify(job.data, null, 4)}`
             );
-        }, { connection: redisConnectionInstanceBullMq });
+        }, { connection: redisDBConnectionOptions });
 
 
-        const events = new QueueEvents(INVOICE_SYNCHRONIZATION_QUEUE, { connection: redisConnectionInstanceBullMq });
+        const events = new QueueEvents(INVOICE_SYNCHRONIZATION_QUEUE, { connection: redisDBConnectionOptions });
 
         events.on("completed", (job) => {
             console.log(`Job ${job.jobId} has been completed`);

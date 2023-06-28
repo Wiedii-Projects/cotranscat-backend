@@ -1,10 +1,20 @@
-node_modules/
-local.env
-.yarn.lock
-package-lock.json
-
 # misc
 *.DS_Store
 
 # IDE VSCode
 *.vscode/
+
+.AppleDouble
+.LSOverride
+
+src/node_modules/
+src/local.env
+src/yarn.lock
+src/package-lock.json
+
+src/npm-debug.log*
+src/yarn-debug.log*
+src/yarn-error.log*
+src/.idea/*
+
+dbdata/

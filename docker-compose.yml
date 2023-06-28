@@ -1,24 +1,36 @@
 version: '3.8'
 services:
 
-  docker-cotranstcat-backend.com:
-    build: .
+  backend:
+    depends_on: 
+      - db_redis
+    container_name: contranscat_backend
+    build:
+      context: .
+      dockerfile: Dockerfile.dev
     ports:
-      - 80:3000 
+      - 8000:8000 
     environment:
       APP_ENV: local
-    volumes:
-      - ./src:/usr/src
+    volumes:  
+      - ./src:/server
+    command: > 
+      sh -c "npm install && npm run local"
 
-  bd-cotranstcat-mongo:
-    image: mongo:5.0.14
+  db_contrans:
+    image: mysql:8.0.32
+    container_name: contranscat_mysql_db
+    restart: unless-stopped
+    env_file:
+      - src/local.env
+    volumes: 
+      - ./dbdata:/var/lib/mysql
+    command: '--default-authentication-plugin=mysql_native_password'
     ports:
-      - 27018:27017
-    environment:
-      MONGO_INITDB_ROOT_USERNAME: cotranstcatUser
-      MONGO_INITDB_ROOT_PASSWORD: x19l7es5122IUAYe
-    volumes:
-      - mongo_data:/data/db
-    
-volumes:
-  mongo_data:
+      - 3306:3306
+
+  db_redis:
+    image: redis:7.0.11-alpine3.18
+    container_name: contranscat_redis_db
+    ports:
+      - 6379:6379
