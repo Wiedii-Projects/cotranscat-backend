@@ -3,11 +3,17 @@ const {
     dbConnectionOptions,
 } = require("../../constants/core/core-configurations.const");
 
-// Libraries
-const { DataTypes } = require("sequelize");
+//helpers
+const { decryptIdDataBase } = require("../../helpers/shared.helpers");
+
+//Query
 const { createMoneyTransferTrackerQuery } = require("../money-transfer-tracker/money-transfer-tracker.query");
 const { findTrackingStatusByChronologicalPositionOfGroup } = require("../tracking-status/tracking-status.query");
-const { decryptIdDataBase } = require("../../helpers/shared.helpers");
+
+// Libraries
+const { DataTypes } = require("sequelize");
+
+// Constants
 const trackingConst = require("../../constants/core/tracking.const");
 
 

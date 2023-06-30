@@ -1,7 +1,8 @@
 // Constants
 const { dbConnectionOptions } = require('../constants/core/core-configurations.const');
 const { salesConst, errorsConst } = require('../constants/index.constants');
-const trackingConst = require('../constants/core/tracking.const');
+const { PAYMENT_METHOD } = require('../constants/core/invoice.const');
+const { TYPE_SERVICE } = require('../constants/core/sales.const');
 
 // Helpers
 const { 
@@ -10,21 +11,15 @@ const {
 const { 
     encryptIdDataBase, getInvoiceRegisterParametersByBankHelper, decryptIdDataBase 
 } = require('../helpers/shared.helpers');
+const { extractInvoice, extractInvoiceMoneyTransfer, extractInvoiceShipping } = require('../helpers/invoice.helpers');
 
 // Queries
 const { createNewInvoiceQuery, getInvoiceDetailsShippingQuery } = require('../models/invoice/invoice.query');
 const { findServiceTypeQuery } = require('../models/service-type/service-type.query');
-const { createNewTicketQuery } = require('../models/ticket/ticket.query');
-const { invoiceQuery, travelQuery, shippingQuery } = require('../models/index.queries');
+const { invoiceQuery, travelQuery } = require('../models/index.queries');
 const { getHeadquarterAssociatedBySellerQuery } = require('../models/seller/seller.query');
 const shipmentTrackingQuery = require('../models/shipment-tracking/shipment-tracking.query');
-const trackingStatusQuery = require('../models/tracking-status/tracking-status.query');
 const { findPaymentMethodQuery } = require('../models/payment-method/payment-method.query');
-const { PAYMENT_METHOD } = require('../constants/core/invoice.const');
-const { extractInvoice, extractInvoiceMoneyTransfer, extractInvoiceShipping, extractInvoiceTravel } = require('../helpers/invoice.helpers');
-const { TYPE_SERVICE } = require('../constants/core/sales.const');
-const { createMoneyTransferQuery } = require('../models/money-transfer/money-transfer.query');
-const { createMoneyTransferTrackerQuery } = require('../models/money-transfer-tracker/money-transfer-tracker.query');
 
 module.exports = {
     getInvoice: async(req, res) => {

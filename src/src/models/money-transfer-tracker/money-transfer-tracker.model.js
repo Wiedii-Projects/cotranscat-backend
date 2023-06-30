@@ -5,6 +5,8 @@ const {
 
 // Libraries
 const { DataTypes } = require("sequelize");
+
+// Helpers
 const { formateDateTime } = require("../../helpers/invoice.helpers");
 
 const MoneyTransferTrackerSchema = dbConnectionOptions.define(

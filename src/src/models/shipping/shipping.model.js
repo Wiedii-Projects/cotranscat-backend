@@ -5,9 +5,15 @@ const {
 
 // Libraries
 const { DataTypes } = require("sequelize");
+
+// Query
 const { createShipmentTrackingQuery } = require("../shipment-tracking/shipment-tracking.query");
 const { findTrackingStatusByChronologicalPositionOfGroup } = require("../tracking-status/tracking-status.query");
+
+// Constants
 const trackingConst = require("../../constants/core/tracking.const");
+
+// Helpers
 const { decryptIdDataBase } = require("../../helpers/shared.helpers");
 
 
