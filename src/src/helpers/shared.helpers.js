@@ -50,6 +50,15 @@ module.exports = {
 
     return nextLetter;
   },
+  getDateNow: () => {
+    const currentDate = new Date();
+    const currentHour = currentDate.getHours();
+    const currentMinute = currentDate.getMinutes();
+    const currentSecond = currentDate.getSeconds();
+        
+    const formattedTime = `${currentHour.toString().padStart(2, '0')}:${currentMinute.toString().padStart(2, '0')}:${currentSecond.toString().padStart(2, '0')}`;
+    return formattedTime;
+  },
   getInvoiceRegisterParametersByBankHelper: (typeService, headquarters) => {
     const { CUCUTA, TIBU } = salesConst.HEADQUARTERS
     const {

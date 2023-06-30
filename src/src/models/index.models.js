@@ -32,6 +32,7 @@ const TrackingStatus = require('./tracking-status/tracking-status.model')
 const MoneyTransfer = require('./money-transfer/money-transfer.model')
 const Prefix = require('./prefix/prefix.model')
 const Resolution = require('./resolution/resolution.model')
+const MoneyTransferTracker = require('./money-transfer-tracker/money-transfer-tracker.model')
 
 // Relationships BD
 
@@ -179,12 +180,20 @@ TrackingStatus.hasMany(ShipmentTracking, { as: 'TrackingStatusShipmentTracking',
 ShipmentTracking.belongsTo(TrackingStatus, { as: 'TrackingStatusShipmentTracking', foreignKey: { name: 'idTrackingStatus', allowNull: false } })
 
 // Relationship MoneyTransfer-Invoice
-Invoice.hasMany(MoneyTransfer, { as: 'MoneyTransferInvoice', foreignKey: { name: 'idInvoice', allowNull: false } })
+Invoice.hasOne(MoneyTransfer, { as: 'MoneyTransferInvoice', foreignKey: { name: 'idInvoice', allowNull: false } })
 MoneyTransfer.belongsTo(Invoice, { as: 'MoneyTransferInvoice', foreignKey: { name: 'idInvoice', allowNull: false } })
 
 // Relationship MoneyTransfer-Client
-Client.hasMany(MoneyTransfer, { as: 'MoneyTransferClient', foreignKey: { name: 'idClient', allowNull: false } })
-MoneyTransfer.belongsTo(Client, { as: 'MoneyTransferClient', foreignKey: { name: 'idClient', allowNull: false } })
+Client.hasMany(MoneyTransfer, { as: 'MoneyTransferClient', foreignKey: { name: 'idClientReceives', allowNull: false } })
+MoneyTransfer.belongsTo(Client, { as: 'MoneyTransferClient', foreignKey: { name: 'idClientReceives', allowNull: false } })
+
+// Relationship MoneyTransferTracker-MoneyTransfer
+MoneyTransfer.hasOne(MoneyTransferTracker, { as: 'MoneyTransferTrackerMoneyTransfer', foreignKey: { name: 'idMoneyTransfer', allowNull: false } })
+MoneyTransferTracker.belongsTo(MoneyTransfer, { as: 'MoneyTransferTrackerMoneyTransfer', foreignKey: { name: 'idMoneyTransfer', allowNull: false } })
+
+// Relationship MoneyTransferTracker-TrackingStatus
+TrackingStatus.hasMany(MoneyTransferTracker, { as: 'MoneyTransferTrackerTrackingStatus', foreignKey: { name: 'idTrackingStatus', allowNull: false } })
+MoneyTransferTracker.belongsTo(TrackingStatus, { as: 'MoneyTransferTrackerTrackingStatus', foreignKey: { name: 'idTrackingStatus', allowNull: false } })
 
 // Relationship Headquarter-Prefix
 Headquarter.hasMany(Prefix, { as: 'HeadquarterPrefix', foreignKey: { name: 'idHeadquarter', allowNull: false } })
@@ -252,5 +261,6 @@ module.exports = {
   TrackingStatus,
   MoneyTransfer,
   Prefix,
-  Resolution
+  Resolution,
+  MoneyTransferTracker
 };

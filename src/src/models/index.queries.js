@@ -28,5 +28,6 @@ module.exports = {
   serviceTypeQuery: require('./service-type/service-type.query'),
   prefixQuery: require('./prefix/prefix.query'),
   resolutionQuery: require('./resolution/resolution.query'),
-  bankQuery: require('./bank/bank.query')
+  bankQuery: require('./bank/bank.query'),
+  moneyTransferQuery: require("./money-transfer/money-transfer.query")
 };

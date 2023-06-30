@@ -72,6 +72,35 @@ module.exports = {
         sharedValidators.validateError,
         ]
     },
+    checkCreateMoneyTransfer: () => [
+        ...sharedCheckMiddleware.checkJwt(),
+        check("idClientSends")
+            .isString()
+            .withMessage(new ErrorModel(errorsConst.invoiceErrors.clientRequired))
+            .bail(),
+        sharedValidators.validateError,
+        check("idClientSends")
+            .custom((value, {req}) => clientValidator.validateClient(req, {id: sharedHelpers.decryptIdDataBase(value)}, "clientSend"))
+            .custom((value, {req}) => !!req.body.clientSend)
+            .withMessage(new ErrorModel(errorsConst.invoiceErrors.clientNotExist))
+            .bail(),
+        sharedValidators.validateError,
+        check("idClientReceives")
+            .isString()
+            .withMessage(new ErrorModel(errorsConst.shippingErrors.clientReceivesRequired))
+            .bail(),
+        sharedValidators.validateError,
+        check("idClientReceives")
+            .custom((value, {req}) => clientValidator.validateClient(req, {id: sharedHelpers.decryptIdDataBase(value)}, "clientReceives"))
+            .custom((value, {req}) => !!req.body.clientReceives)
+            .withMessage(new ErrorModel(errorsConst.shippingErrors.clientReceivesNotExist))
+            .bail(),
+        sharedValidators.validateError,
+        check('amountMoney').isDecimal({ decimal_digits: '0,2' }).withMessage(new ErrorModel(errorsConst.moneyTransferErrors.amountMoneyRequired)).bail(),
+        check('cost').isDecimal({ decimal_digits: '0,2' }).withMessage(new ErrorModel(errorsConst.moneyTransferErrors.costRequired)).bail(),
+        check('iva').isDecimal({ decimal_digits: '0,2' }).withMessage(new ErrorModel(errorsConst.moneyTransferErrors.ivaRequired)).bail(),
+        sharedValidators.validateError,
+    ],
     checkCreateInvoiceShipping: () => {
         return [
             ...sharedCheckMiddleware.checkJwt(),
