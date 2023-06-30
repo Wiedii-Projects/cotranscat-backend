@@ -1,10 +1,8 @@
 // Constants
 const { errorsConst } = require("../../constants/index.constants");
-const { encryptIdDataBase } = require("../../helpers/shared.helpers");
-
 
 // Helpers
-
+const { encryptIdDataBase } = require("../../helpers/shared.helpers");
 
 // Models
 const { Bank, Municipality, Headquarter } = require("../index.models");

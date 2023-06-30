@@ -629,8 +629,12 @@
         "code": "SELL_003",
         "message": "Something went wrong"
       },
-      "findHeadquarterAssociatedBySellerError": {
+      "": {
         "code": "SELL_004",
+        "message": "Something went wrong"
+      },
+      "getPrefixesOfResolutionByBankSellerError": {
+        "code": "SELL_005",
         "message": "Something went wrong"
       }
     }
@@ -1040,6 +1044,14 @@
       "code": "INVO008",
       "message": "User client does not exist"
     },
+    "thereAreNoActiveResolutions": {
+      "code": "INVO009",
+      "message": "There are no active resolutions for invoice creation"
+    },
+    "resolutionsAlreadyUsedAllPrefixes": {
+      "code": "INVO010",
+      "message": "Current resolutions already used all prefixes"
+    },
     "queryErrors": {
       "createError": {
         "code": "INVO_001",
@@ -1340,6 +1352,10 @@
       "findAllError": {
         "code": "PRFX_002",
         "message": "Something went wrong"
+      },
+      "updateError": {
+        "code": "PRFX_003",
+        "message": ""
       }
     }
   },
@@ -1348,9 +1364,9 @@
       "code": "APCT001",
       "message": "Letter is required"
     },
-    "InvalidTypeServiceOrHeadquarters": {
+    "": {
       "code": "APCT002",
-      "message": "Invalid typeService or headquarters"
+      "message": ""
     },
     "servicesErrors":{
       "requestBodyToSendIsInvalid": {

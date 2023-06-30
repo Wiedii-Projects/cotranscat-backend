@@ -8,7 +8,7 @@ const {
     responseHelpers, sharedHelpers 
 } = require('../helpers/index.helpers');
 const { 
-    encryptIdDataBase, getInvoiceRegisterParametersByBankHelper, decryptIdDataBase 
+    encryptIdDataBase, decryptIdDataBase 
 } = require('../helpers/shared.helpers');
 
 // Queries
@@ -16,7 +16,6 @@ const { createNewInvoiceQuery, getInvoiceDetailsShippingQuery } = require('../mo
 const { findServiceTypeQuery } = require('../models/service-type/service-type.query');
 const { createNewTicketQuery } = require('../models/ticket/ticket.query');
 const { invoiceQuery, travelQuery, shippingQuery } = require('../models/index.queries');
-const { getHeadquarterAssociatedBySellerQuery } = require('../models/seller/seller.query');
 const shipmentTrackingQuery = require('../models/shipment-tracking/shipment-tracking.query');
 const trackingStatusQuery = require('../models/tracking-status/tracking-status.query');
 const { findPaymentMethodQuery } = require('../models/payment-method/payment-method.query');
@@ -25,6 +24,8 @@ const { extractInvoice, extractInvoiceMoneyTransfer } = require('../helpers/invo
 const { TYPE_SERVICE } = require('../constants/core/sales.const');
 const { createMoneyTransferQuery } = require('../models/money-transfer/money-transfer.query');
 const { createMoneyTransferTrackerQuery } = require('../models/money-transfer-tracker/money-transfer-tracker.query');
+const prefixQuery = require('../models/prefix/prefix.query');
+const sellerQuery = require('../models/seller/seller.query');
 
 module.exports = {
     createInvoiceTravel: async(req, res) => {
@@ -35,14 +36,23 @@ module.exports = {
             const idSeller = sharedHelpers.decryptIdDataBase(id);
             const [{ id: idServiceType }] = await findServiceTypeQuery({where: { type: salesConst.TYPE_SERVICE.PASSAGE.VALUE_CONVENTION }})
             transaction = await dbConnectionOptions.transaction();
-            const { name: nameHeadquarter } = await getHeadquarterAssociatedBySellerQuery({ id: idSeller })
-            const { codePrefix } = getInvoiceRegisterParametersByBankHelper(salesConst.TYPE_SERVICE.PASSAGE.VALUE_STRING, nameHeadquarter)
+            
+            const resolutionsFound = await sellerQuery.getPrefixesOfResolutionByBankSellerQuery(idSeller, idServiceType);
+            const { codePrefix, numberFormatted: number, numberRaw, idPrefix } = await sharedHelpers.getPrefixAndInvoiceNumberNewRegister(resolutionsFound)
+
             const codeSale = salesConst.SALES_CODE.SALES_INVOICE
 
             const invoice = await createNewInvoiceQuery({ 
-                idClient: decryptId, idServiceType, price, idSeller, idPaymentMethod, codePrefix, codeSale
+                idClient: decryptId, idServiceType, price, idSeller, idPaymentMethod, codePrefix, codeSale, number
             }, { transaction });
             await createNewTicketQuery(tickets, { invoice: invoice.id, price: price/tickets.length, transaction});
+
+            await prefixQuery.updatePrefixQuery(
+                { id: decryptIdDataBase(idPrefix) },
+                { currentConsecutive: numberRaw },
+                transaction
+            )
+            
             await transaction.commit();
             return responseHelpers.responseSuccess(res, encryptIdDataBase(invoice.id));
         } catch (error){
@@ -94,8 +104,10 @@ module.exports = {
                     trackingConst.TRACKING_STATUS.RECEIVED.VALUE_CONVENTION, 
                     trackingConst.TRACKING_STATUS.RECEIVED.VALUE_STRING )
             ]);
-            const { name: nameHeadquarter } = await getHeadquarterAssociatedBySellerQuery({ id: decryptIdDataBase(idSeller) })
-            const { codePrefix } = getInvoiceRegisterParametersByBankHelper(salesConst.TYPE_SERVICE.MONEY_TRANSFER.VALUE_STRING, nameHeadquarter);
+
+            const resolutionsFound = await sellerQuery.getPrefixesOfResolutionByBankSellerQuery(idSeller, idServiceType);
+            const { codePrefix, numberFormatted: number, numberRaw, idPrefix } = await sharedHelpers.getPrefixAndInvoiceNumberNewRegister(resolutionsFound)
+
             const invoice = extractInvoice({ 
                 price: (amountMoney + cost + iva),
                 idServiceType,
@@ -103,8 +115,16 @@ module.exports = {
                 codePrefix,
                 codeSale: salesConst.SALES_CODE.SALES_INVOICE,
                 idClient,
-                idSeller
+                idSeller,
+                number
             });
+
+            await prefixQuery.updatePrefixQuery(
+                { id: decryptIdDataBase(idPrefix) },
+                { currentConsecutive: numberRaw },
+                transaction
+            )
+
             transaction = await dbConnectionOptions.transaction();
             const { id } = await createNewInvoiceQuery(invoice, { transaction });
             const moneyTransfer = extractInvoiceMoneyTransfer({ ...req.body, idInvoice: id, idClientReceives });
@@ -135,14 +155,20 @@ module.exports = {
 
             transaction = await dbConnectionOptions.transaction();
 
-            const { name: nameHeadquarter } = await getHeadquarterAssociatedBySellerQuery({ id: idSeller })
-            const { codePrefix } = getInvoiceRegisterParametersByBankHelper(salesConst.TYPE_SERVICE.SHIPPING.VALUE_STRING, nameHeadquarter)
-
+            const resolutionsFound = await sellerQuery.getPrefixesOfResolutionByBankSellerQuery(idSeller, idServiceType);
+            const { codePrefix, numberFormatted: number, numberRaw, idPrefix } = await sharedHelpers.getPrefixAndInvoiceNumberNewRegister(resolutionsFound)
             const codeSale = salesConst.SALES_CODE.SALES_INVOICE
 
             const invoice = await createNewInvoiceQuery({ 
-                idClient: idClientSend, idServiceType, price, idSeller, idPaymentMethod, codePrefix, codeSale
+                idClient: idClientSend, idServiceType, price, idSeller, idPaymentMethod, codePrefix, codeSale,
+                number
             }, { transaction });
+
+            await prefixQuery.updatePrefixQuery(
+                { id: decryptIdDataBase(idPrefix) },
+                { currentConsecutive: numberRaw },
+                transaction
+            )
             
             let dateOfEntry = new Date().toISOString().split('T')[0];
 

@@ -34,5 +34,12 @@ module.exports = {
         } catch {
             throw errorsConst.prefixErrors.queryErrors.findAllError
         }
+    },
+    updatePrefixQuery: async (where, update, transaction) => {
+        try {
+            return await Prefix.update(update, { where, transaction });
+        } catch {
+            throw errorsConst.prefixErrors.queryErrors.updateError
+        }
     }
 }
