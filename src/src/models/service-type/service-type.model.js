@@ -9,6 +9,13 @@ const { DataTypes } = require("sequelize");
 const ServiceTypeSchema = dbConnectionOptions.define(
   "serviceType",
   {
+    id: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+      field: "id",
+      primaryKey: true,
+      autoIncrement: true
+    },
     type: {
       type: DataTypes.TINYINT.UNSIGNED,
       allowNull: false,

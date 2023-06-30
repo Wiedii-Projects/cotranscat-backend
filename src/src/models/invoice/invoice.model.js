@@ -42,7 +42,14 @@ const {
       }
     },
     {
-      tableName: "invoice"
+      tableName: "invoice",
+      indexes: [
+        {
+          unique: true,
+          fields: ['number', 'codePrefix'],
+          name: "uniqueInvoicePrefixByServiceType"
+        }
+      ]
     }
   );
   

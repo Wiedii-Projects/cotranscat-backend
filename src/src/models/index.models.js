@@ -30,13 +30,14 @@ const Shipping = require('./shipping/shipping.model');
 const ShipmentTracking = require('./shipment-tracking/shipment-tracking.model')
 const TrackingStatus = require('./tracking-status/tracking-status.model')
 const MoneyTransfer = require('./money-transfer/money-transfer.model')
+const Prefix = require('./prefix/prefix.model')
+const Resolution = require('./resolution/resolution.model')
 
 // Relationships BD
 
 // Relationship User-Admin
 Admin.belongsTo(User, { as: 'UserAdmin', foreignKey: { name: 'id', allowNull: false, primaryKey: true } });
 User.hasOne(Admin, { as: 'UserAdmin', foreignKey: { name: 'id', allowNull: false, primaryKey: true } });
-
 // Relationship User-Client
 Client.belongsTo(User, { as: 'UserClient', foreignKey: { name: 'id', allowNull: false, primaryKey: true } });
 User.hasOne(Client, { as: 'UserClient', foreignKey: { name: 'id', allowNull: false, primaryKey: true } });
@@ -153,10 +154,6 @@ PaymentMethodBank.belongsTo(PaymentMethod, { as: 'PaymentMethodBank', foreignKey
 PaymentMethodBank.belongsTo(Bank, { as: 'BankPaymentMethod', foreignKey: { name: "idBank", allowNull: false } });
 Bank.hasMany(PaymentMethodBank, { as: 'BankPaymentMethod', foreignKey: { name: "idBank", allowNull: false } });
 
-// Relationship Headquarter-Bank
-Headquarter.hasMany(Bank, { as: 'HeadquarterBank', foreignKey: { name: 'idHeadquarter', allowNull: false } });
-Bank.belongsTo(Headquarter, { as: 'HeadquarterBank', foreignKey: { name: 'idHeadquarter', allowNull: false } });
-
 // Relationship UnitMeasure-Shipping
 UnitMeasure.hasMany(Shipping, { as: 'UnitMeasureShipping', foreignKey: { name: 'idUnitMeasure', allowNull: false } })
 Shipping.belongsTo(UnitMeasure, { as: 'UnitMeasureShipping', foreignKey: { name: 'idUnitMeasure', allowNull: false } })
@@ -188,6 +185,34 @@ MoneyTransfer.belongsTo(Invoice, { as: 'MoneyTransferInvoice', foreignKey: { nam
 // Relationship MoneyTransfer-Client
 Client.hasMany(MoneyTransfer, { as: 'MoneyTransferClient', foreignKey: { name: 'idClient', allowNull: false } })
 MoneyTransfer.belongsTo(Client, { as: 'MoneyTransferClient', foreignKey: { name: 'idClient', allowNull: false } })
+
+// Relationship Headquarter-Prefix
+Headquarter.hasMany(Prefix, { as: 'HeadquarterPrefix', foreignKey: { name: 'idHeadquarter', allowNull: false } })
+Prefix.belongsTo(Headquarter, { as: 'HeadquarterPrefix', foreignKey: { name: 'idHeadquarter', allowNull: false } })
+
+// Relationship Bank-Prefix
+Bank.hasMany(Prefix, { as: 'BankPrefix', foreignKey: { name: 'idBank', allowNull: false } })
+Prefix.belongsTo(Bank, { as: 'BankPrefix', foreignKey: { name: 'idBank', allowNull: false } })
+
+// Relationship ServiceType-Prefix
+ServiceType.hasMany(Prefix, { as: 'ServiceTypePrefix', foreignKey: { name: 'idServiceType', allowNull: false } })
+Prefix.belongsTo(ServiceType, { as: 'ServiceTypePrefix', foreignKey: { name: 'idServiceType', allowNull: false } })
+
+// Relationship Municipality-Headquarter
+Municipality.hasMany(Headquarter, { as: 'MunicipalityHeadquarter', foreignKey: { name: 'idMunicipality', allowNull: false } });
+Headquarter.belongsTo(Municipality, { as: 'MunicipalityHeadquarter', foreignKey: { name: 'idMunicipality', allowNull: false } });
+
+// Relationship Prefix-Resolution
+Prefix.hasMany(Resolution, { as: 'PrefixResolution', foreignKey: { name: 'idPrefix', allowNull: false } });
+Resolution.belongsTo(Prefix, { as: 'PrefixResolution', foreignKey: { name: 'idPrefix', allowNull: false } });
+
+// Relationship Route-Resolution
+Route.hasMany(Resolution, { as: 'RouteResolution', foreignKey: { name: 'idRoute', allowNull: false } });
+Resolution.belongsTo(Route, { as: 'RouteResolution', foreignKey: { name: 'idRoute', allowNull: false } });
+
+// Relationship Municipality-Resolution
+Municipality.hasMany(Bank, { as: 'MunicipalityBank', foreignKey: { name: 'idMunicipality', allowNull: false } });
+Bank.belongsTo(Municipality, { as: 'MunicipalityBank', foreignKey: { name: 'idMunicipality', allowNull: false } });
 
 module.exports = {
   // Aggregates Models
@@ -225,5 +250,7 @@ module.exports = {
   Shipping,
   ShipmentTracking,
   TrackingStatus,
-  MoneyTransfer
+  MoneyTransfer,
+  Prefix,
+  Resolution
 };

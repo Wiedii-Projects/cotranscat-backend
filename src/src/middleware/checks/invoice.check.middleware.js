@@ -186,16 +186,16 @@ module.exports = {
         ]
     },
     checkFilterDetailsShipping: () => {
-      return [
-        ...sharedCheckMiddleware.checkJwt(),
-        check('filterValue')
-          .isString()
-          .withMessage(new ErrorModel(errorsConst.shippingErrors.valueToFilterIsRequired))
-          .bail()
-          .isLength({ min: 1 })
-          .withMessage(new ErrorModel(errorsConst.shippingErrors.filterValueIsEmpty)),
-          sharedValidators.validateError
-      ]
+        return [
+            ...sharedCheckMiddleware.checkJwt(),
+            check('filterValue')
+                .isString()
+                .withMessage(new ErrorModel(errorsConst.shippingErrors.valueToFilterIsRequired))
+                .bail()
+                .isLength({ min: 1 })
+                .withMessage(new ErrorModel(errorsConst.shippingErrors.filterValueIsEmpty)),
+            sharedValidators.validateError
+        ]
     },
     checkGetAllShippingInvoice: () => {
         return [

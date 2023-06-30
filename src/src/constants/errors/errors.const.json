@@ -908,6 +908,10 @@
       "findAllError": {
         "code": "ROUT_002",
         "message": "Something went wrong"
+      },
+      "findHeadquarterByMunicipalitySourceError": {
+        "code": "ROUT_003",
+        "message": "Something went wrong"
       }
     }
   },
@@ -1179,6 +1183,142 @@
     "queryErrors": {
       "createError": {
         "code": "MNEY_001",
+        "message": "Something went wrong"
+      }
+    }
+  },
+  "resolutionErrors": {
+    "idRouteRequired": {
+      "code": "RSLT001",
+      "message": "The route is required"
+    },
+    "TNSPrefixRequired": {
+      "code": "RSLT002",
+      "message": "The TNS prefix is required"
+    },
+    "TNSPrefixInvalid": {
+      "code": "RSLT003",
+      "message": "The TNS prefix is invalid"
+    },
+    "DIANPrefixRequired": {
+      "code": "RSLT004",
+      "message": "The DIAN prefix is required"
+    },
+    "currentConsecutiveRequired": {
+      "code": "RSLT005",
+      "message": "The current consecutive is required"
+    },
+    "numberRequired": {
+      "code": "RSLT006",
+      "message": "The number resolution is required"
+    },
+    "numberInvalid": {
+      "code": "RSLT007",
+      "message": "The number resolution is invalid"
+    },
+    "initialRangeRequired": {
+      "code": "RSLT008",
+      "message": "The initial range of resolution is required"
+    },
+    "finalRangeRequired": {
+      "code": "RSLT009",
+      "message": "The final range of resolution is required"
+    },
+    "rangesInvalid": {
+      "code": "RSLT010",
+      "message": "The resolution ranges are invalid"
+    },
+    "dateResolutionRequired": {
+      "code": "RSLT011",
+      "message": "The date resolution is required"
+    },
+    "dateResolutionInvalid": {
+      "code": "RSLT012",
+      "message": "The date resolution is invalid"
+    },
+    "codeBankRequired": {
+      "code": "RSLT013",
+      "message": "The code bank is required"
+    },
+    "codeBankInvalid": {
+      "code": "RSLT014",
+      "message": "The code bank is invalid"
+    },
+    "idRouteInvalid": {
+      "code": "RSLT015",
+      "message": "The id route is invalid"
+    },
+    "idServiceTypeRequired": {
+      "code": "RSLT016",
+      "message": "The service type is required"
+    },
+    "routeNotExist": {
+      "code": "RSLT017",
+      "message": "The route not exist"
+    },
+    "headquarterNotExist": {
+      "code": "RSLT018",
+      "message": "The headquarter not exist"
+    },
+    "headquarterInvalid": {
+      "code": "RSLT019",
+      "message": "The id route is invalid"
+    },
+    "serviceTypeNotExist": {
+      "code": "RSLT020",
+      "message": "The service type not exist"
+    },
+    "serviceTypeInvalid": {
+      "code": "RSLT020",
+      "message": "The service type is invalid"
+    },
+    "TNSPrefixAlreadyExists": {
+      "code": "RSLT021",
+      "message": "The TNS prefix already exists"
+    },
+    "DIANPrefixAlreadyExists": {
+      "code": "RSLT022",
+      "message": "The DIAN prefix already exists"
+    },
+    "bankNotExist": {
+      "code": "RSLT023",
+      "message": "The bank not exist"
+    },
+    "bankAssociatedByHeadquarterIsInvalid": {
+      "code": "RSLT024",
+      "message": "The bank associated by headquarter is invalid"
+    },
+    "queryErrors": {
+      "createError": {
+        "code": "RSLT_001",
+        "message": "Something went wrong"
+      },
+      "findAllError": {
+        "code": "RSLT_002",
+        "message": "Something went wrong"
+      }
+    }
+  },
+  "bankErrors": {
+    "queryErrors": {
+      "findAllError": {
+        "code": "BNNK_001",
+        "message": "Something went wrong"
+      },
+      "findBankAssociatedByHeadquarterError": {
+        "code": "BNNK_002",
+        "message": "Something went wrong"
+      }
+    }
+  },
+  "prefixErrors": {
+    "queryErrors": {
+      "createError": {
+        "code": "PRFX_001",
+        "message": "Something went wrong"
+      },
+      "findAllError": {
+        "code": "PRFX_002",
         "message": "Something went wrong"
       }
     }

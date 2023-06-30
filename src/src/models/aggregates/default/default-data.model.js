@@ -181,11 +181,11 @@ module.exports = {
         { type: salesConst.TYPE_SERVICE.SHIPPING.VALUE_CONVENTION, code: "PORREM" },
     ],
     defaultBank: [
-        { code: "01", description: "Tibu general cash register", headquarterAssociated: salesConst.HEADQUARTERS.TIBU },
-        { code: "02", description: "Cúcuta general cash register", headquarterAssociated: salesConst.HEADQUARTERS.CUCUTA}
+        { code: "01", description: "Tibu general cash register", idMunicipality: 37 },
+        { code: "02", description: "Cúcuta general cash register", idMunicipality: 11 }
     ],
     defaultHeadquarter: [
-        { name: salesConst.HEADQUARTERS.TIBU },
-        { name: salesConst.HEADQUARTERS.CUCUTA }
+        { description: salesConst.HEADQUARTERS.TIBU, idMunicipality: 37 },
+        { description: salesConst.HEADQUARTERS.CUCUTA, idMunicipality: 11 }
     ]
 }
