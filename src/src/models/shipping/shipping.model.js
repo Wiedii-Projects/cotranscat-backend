@@ -5,21 +5,15 @@ const {
 
 // Libraries
 const { DataTypes } = require("sequelize");
+const { createShipmentTrackingQuery } = require("../shipment-tracking/shipment-tracking.query");
+const { findTrackingStatusByChronologicalPositionOfGroup } = require("../tracking-status/tracking-status.query");
+const trackingConst = require("../../constants/core/tracking.const");
+const { decryptIdDataBase } = require("../../helpers/shared.helpers");
 
 
 const ShippingSchema = dbConnectionOptions.define(
     "Shipping",
     {
-        dateOfEntry: {
-            type: DataTypes.DATE,
-            field: "dateOfEntry",
-            allowNull: false
-        },
-        timeOfEntry: {
-            type: DataTypes.TIME,
-            field: "timeOfEntry",
-            allowNull: false
-        },
         dateDeparture: {
             type: DataTypes.DATE,
             field: "dateDeparture"
@@ -78,5 +72,12 @@ const ShippingSchema = dbConnectionOptions.define(
         tableName: "shipping"
     }
 );
+
+ShippingSchema.afterCreate(async(register, options) => {
+    const { dataValues: { id: idShipping }} = register;
+    const { id: idTrackingStatus } = await findTrackingStatusByChronologicalPositionOfGroup(
+        trackingConst.TRACKING_STATUS.RECEIVED.VALUE_CONVENTION,  trackingConst.TRACKING_STATUS.RECEIVED.VALUE_STRING );
+    await createShipmentTrackingQuery({ idShipping, idTrackingStatus: decryptIdDataBase(idTrackingStatus) }, { transaction: options.transaction });
+});
 
 module.exports = ShippingSchema;

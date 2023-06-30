@@ -9,9 +9,9 @@ const ShipmentTracking = require("./shipment-tracking.model");
 const TrackingStatus = require("./../tracking-status/tracking-status.model");
 
 module.exports = {
-    createShipmentTrackingQuery: async (data, transaction) => {
+    createShipmentTrackingQuery: async (data, options) => {
         try {
-            return await ShipmentTracking.create(data, { transaction });
+            return await ShipmentTracking.create(data, options);
         } catch {
             throw errorsConst.shipmentTrackingErrors.queryErrors.createError
         }

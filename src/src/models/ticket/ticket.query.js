@@ -3,9 +3,8 @@ const { errorsConst } = require("../../constants/index.constants");
 const sharedHelpers = require("../../helpers/shared.helpers");
 
 // Models
-const {
-  Ticket, Seat,
-} = require("../index.models");
+const Seat = require("../seat/seat.model");
+const Ticket = require("./ticket.model");
 
 module.exports = {
   createNewTicketQuery: async (where, options) => {
