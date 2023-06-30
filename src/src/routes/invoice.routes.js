@@ -11,30 +11,30 @@ const router = Router();
 
 router.get('/shipping/', [
     invoiceMiddleware.checkFilterDetailsShipping()
-], invoiceController.getShipping)
+], invoiceController.getShipping);
 
 router.post('/shipping/', [
     invoiceMiddleware.checkCreateInvoiceShipping()
 ], invoiceController.createInvoiceShipping);
 
+router.get('/shipping/all/', [
+    invoiceMiddleware.checkGetAllShippingInvoice()
+], invoiceController.getAllShippingInvoice);
+
 router.post('/moneyTransfer/', [
     invoiceMiddleware.checkCreateMoneyTransfer()
 ], invoiceController.createInvoiceMoneyTransfer);
 
-router.get('/shipping/all/', [
-    invoiceMiddleware.checkGetAllShippingInvoice()
-], invoiceController.getAllShippingInvoice)
-
-router.post('/', [
+router.post('/travel/', [
     invoiceMiddleware.checkCreateInvoiceTravel()
 ], invoiceController.createInvoiceTravel);
 
-router.get('/:idInvoice', [
-    invoiceMiddleware.checkGetInvoice()
-], invoiceController.getInvoice)
+router.get('/travel/all/', [
+    invoiceMiddleware.checkGetAllTravelInvoice()
+], invoiceController.getAllInvoice);
 
-router.get('/', [
-    invoiceMiddleware.checkGetAllInvoice()
-], invoiceController.getAllInvoice)
+router.get('/travel/:idInvoice', [
+    invoiceMiddleware.checkGetInvoice()
+], invoiceController.getInvoice);
 
 module.exports = router;
