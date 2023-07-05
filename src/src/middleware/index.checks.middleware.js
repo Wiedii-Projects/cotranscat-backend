@@ -22,4 +22,5 @@ module.exports = {
   seatMiddleware: require("./checks/seat.check.middleware"),
   invoiceMiddleware: require("./checks/invoice.check.middleware"),
   observationMiddleware: require("./checks/observation.check.middleware"),
+  resolutionMiddleware: require("./checks/resolution.check.middleware")
 };

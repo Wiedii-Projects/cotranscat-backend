@@ -8,11 +8,15 @@ const {
   DocumentType,
   Seller,
   Bank,
-  Headquarter,
+  Prefix,
+  Resolution,
 } = require("../index.models");
 
 // Helpers
 const sharedHelpers = require("../../helpers/shared.helpers");
+
+// Libraries
+const { col } = require("sequelize");
 
 module.exports = {
   createSellerQuery: async (where, transaction) => {
@@ -77,37 +81,71 @@ module.exports = {
       throw errorsConst.sellerErrors.queryErrors.findError;
     }
   },
-  getHeadquarterAssociatedBySellerQuery: async (where) => {
+  getPrefixesOfResolutionByBankSellerQuery: async (idSeller, idServiceType) => {
     try {
-      const [headquarter] = await Seller.findAll({
+      const resolutionsFound = await Seller.findAll({
         attributes: [],
         include: [
           {
             model: Bank,
-            attributes: [],
             as: "BankSeller",
+            attributes: [],
+            required: false,
             include: [
               {
-                model: Headquarter,
-                attributes: ['id', 'name'],
-                as: "HeadquarterBank"
+                model: Prefix,
+                as: "BankPrefix",
+                attributes: ['code', 'currentConsecutive'],
+                required: false,
+                include: [
+                  {
+                    model: Resolution,
+                    as: "PrefixResolution",
+                    attributes: ['dateOfIssuance', 'initialRange', 'finalRange']
+                  }
+                ],
+                where: { idServiceType }
               }
-            ]
+            ],
+            order: [[{ model: Resolution, as: 'PrefixResolution' }, 'dateOfIssuance']],
           }
         ],
-        where,
+        where: {
+          id: idSeller
+        },
+        order: [[col('BankSeller.BankPrefix.PrefixResolution.dateOfIssuance')]],
         raw: true,
         nest: true
       })
 
-      const { BankSeller: { HeadquarterBank: { id, name } } } = headquarter
+      const resolutions = []
+      resolutionsFound.forEach((
+        {
+          BankSeller: {
+            BankPrefix: {
+              id: idPrefix, code, currentConsecutive,
+              PrefixResolution: {
+                id: idResolution, dateOfIssuance, initialRange, finalRange
+              }
+            }
+          },
+        }
+      ) => {
+        if (idPrefix)
+          resolutions.push({
+            idPrefix: idPrefix && sharedHelpers.encryptIdDataBase(idPrefix),
+            code,
+            currentConsecutive,
+            idResolution: idResolution && sharedHelpers.encryptIdDataBase(idResolution),
+            dateOfIssuance,
+            initialRange,
+            finalRange
+          })
+      })
 
-      return {
-        id: sharedHelpers.encryptIdDataBase(id),
-        name
-      }
+      return resolutions
     } catch {
-      throw errorsConst.sellerErrors.queryErrors.findHeadquarterAssociatedBySellerError;
+      throw errorsConst.sellerErrors.queryErrors.getPrefixesOfResolutionByBankSellerError;
     }
   }
 };

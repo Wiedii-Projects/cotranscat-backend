@@ -16,7 +16,8 @@ module.exports = {
     codePrefix, 
     codeSale,
     idClient,
-    idSeller
+    idSeller,
+    number
   }) => ({
     idClient: decryptIdDataBase(clientSend), 
     idServiceType, 
@@ -26,6 +27,7 @@ module.exports = {
     codeSale,
     idClient,
     idSeller: decryptIdDataBase(idSeller),
+    number
   }),
   extractInvoiceMoneyTransfer: ({
     amountMoney, cost, iva, idClientReceives

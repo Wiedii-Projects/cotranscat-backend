@@ -12,20 +12,13 @@ const BankSchema = dbConnectionOptions.define(
         code: {
             type: DataTypes.STRING(5),
             field: "code",
-            allowNull: false
+            allowNull: false,
+            unique: true
         },
         description: {
             type: DataTypes.STRING(100),
             field: "description",
             allowNull: false
-        },
-        idHeadquarter: {
-          type: DataTypes.INTEGER,
-          allowNull: false,
-          references: {
-            model: "headquarter",
-            key: "id",
-          }
         }
     },
     {

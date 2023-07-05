@@ -11,5 +11,13 @@ module.exports = {
         } catch (error) {
             req.body.route = route;
         }
+    },
+    validateHeadquarterByRouteSource: async (req, query) => {
+        try {
+            const headquarter = await routeQuery.findHeadquarterByMunicipalitySourceQuery(query);
+            req.body.headquarter = headquarter.id ? headquarter : false
+        } catch (error) {
+            req.body.headquarter = false;
+        }
     }
 }
