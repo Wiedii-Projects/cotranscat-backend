@@ -234,5 +234,6 @@ module.exports = {
   Shipping,
   ShipmentTracking,
   TrackingStatus,
-  MoneyTransfer
+  MoneyTransfer,
+  MoneyTransferTracker
 };
