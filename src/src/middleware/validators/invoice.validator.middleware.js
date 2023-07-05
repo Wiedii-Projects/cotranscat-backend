@@ -17,11 +17,7 @@ module.exports = {
     },
     validateInvoiceMoneyTransfer: async (where, req) => {
         try {
-            let [invoice, tickets] = await Promise.all([
-                invoiceQuery.findInvoiceTravelQuery({ where }),
-                ticketQuery.findAllTicketQuery({ where: { idInvoice: where.id} })
-            ]);
-            invoice.tickets = tickets;
+            let invoice = await invoiceQuery.findInvoiceMoneyTransferQuery({ where });
             req.body.invoice = invoice;
         } catch {
             req.body.invoice = false;
