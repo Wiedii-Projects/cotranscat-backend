@@ -30,8 +30,44 @@ module.exports = {
     number
   }),
   extractInvoiceMoneyTransfer: ({
-    amountMoney, cost, iva, idClientReceives, idInvoice
+    amountMoney, cost, iva, idClientReceives
   }) => ({
-    amountMoney, cost, iva, idClientReceives, idInvoice
-  })
+    amountMoney, cost, iva, idClientReceives
+  }),
+  extractInvoiceShipping: ({
+    depth, 
+    width, 
+    high, 
+    weight, 
+    declaredValue,
+    insuranceCost, 
+    costShipping,  
+    content, 
+    isHomeDelivery,
+    idUnitMeasure,
+    idShippingType,
+    idClientReceives
+  }) => ({
+    depth, 
+    width, 
+    high, 
+    weight, 
+    declaredValue,
+    insuranceCost, 
+    costShipping,  
+    content, 
+    isHomeDelivery,
+    idUnitMeasure: decryptIdDataBase(idUnitMeasure),
+    idShippingType: decryptIdDataBase(idShippingType),
+    idClientReceives
+  }),
+  formateDateTime: () => {
+    const currentDate = new Date();
+    const currentHour = currentDate.getHours();
+    const currentMinute = currentDate.getMinutes();
+    const currentSecond = currentDate.getSeconds();
+
+    const formattedTime = `${currentHour.toString().padStart(2, '0')}:${currentMinute.toString().padStart(2, '0')}:${currentSecond.toString().padStart(2, '0')}`;
+    return [ currentDate, formattedTime ] 
+  }
 }

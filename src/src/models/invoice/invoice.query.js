@@ -22,7 +22,7 @@ module.exports = {
   countInvoiceQuery: async(where = {}) => {
     return await Invoice.count(where)
   },
-  findAllInvoiceQuery: async (query) => {
+  findAllTravelInvoiceQuery: async (query) => {
     try {
       const { 
         where,

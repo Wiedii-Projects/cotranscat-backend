@@ -61,7 +61,7 @@ TicketSchema.beforeBulkCreate(async (registers, options) => {
   
   for (const register of registers) {
     register.idSeat =  decryptIdDataBase(register.idSeat);
-    register.idInvoice = options.invoice;
+    register.idInvoice = options.idInvoice;
     await Seat.update({ state: 1, price: options.price }, { where: { id: register.idSeat }, transaction: options.transaction });
     if(nextMaxNumber.toString().length > 5) {
       nextMaxNumber = 0;

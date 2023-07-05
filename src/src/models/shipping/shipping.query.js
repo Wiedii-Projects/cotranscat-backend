@@ -5,9 +5,9 @@ const { errorsConst } = require("../../constants/index.constants");
 const Shipping = require("./shipping.model");
 
 module.exports = {
-  createShippingQuery: async (where, transaction) => {
+  createShippingQuery: async (where, options) => {
     try {
-      return await Shipping.create(where, { transaction });
+      return await Shipping.create(where, options);
     } catch {
       throw errorsConst.shippingErrors.queryErrors.createError;
     }

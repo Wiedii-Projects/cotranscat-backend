@@ -26,7 +26,7 @@ module.exports = {
             sharedValidators.validateError,
         ]
     },
-    checkGetAllInvoice: () => {
+    checkGetAllTravelInvoice: () => {
         return [
             ...sharedCheckMiddleware.checkJwt(),
         ]
@@ -40,7 +40,7 @@ module.exports = {
                 .custom((id, { req }) => clientValidator.validateClient(req, { id }, "idClient"))
                 .custom((_, { req }) => !!req.body.idClient),
         sharedValidators.validateError,
-            check("paymentMethod")
+            check("idPaymentMethod")
                 .custom((value, {req}) => paymentMethodValidators.validatePaymentMethod(req, {id: sharedHelpers.decryptIdDataBase(value)}))
                 .custom((value, {req}) => !!req.body.idPaymentMethod)
                 .withMessage(new ErrorModel(errorsConst.invoiceErrors.paymentMethodRequired)),
