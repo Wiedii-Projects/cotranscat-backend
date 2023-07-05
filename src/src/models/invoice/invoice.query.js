@@ -20,7 +20,7 @@ module.exports = {
     }
   },
   countInvoiceQuery: async(where = {}) => {
-    return await Invoice.count(where)
+    return await Invoice.count({ where })
   },
   findAllTravelInvoiceQuery: async (query) => {
     try {
@@ -103,7 +103,36 @@ module.exports = {
       throw errorsConst.invoiceErrors.queryErrors.findAllError;
     }
   },
-  findInvoiceQuery: async (query = {}) => {
+  findInvoiceQuery: async(query = {}) => {
+    try {
+        const { 
+          where
+        } = query;
+        return await Invoice.findOne({
+          where,
+          attributes: [
+            'id',
+            'number',
+            'date',
+            'price'
+          ],
+          raw: true,
+          nest: true
+        })
+          .then((result) => {
+          const invoice = {
+              id: encryptIdDataBase(result.id),
+              number: result.number,
+              date: result.date,
+              price: result.price,
+          };
+          return invoice;
+        })
+    } catch {
+        throw errorsConst.invoiceErrors.queryErrors.findAllError;
+    }
+},
+  findInvoiceTravelQuery: async (query = {}) => {
     try {
         const { 
           where
@@ -229,8 +258,8 @@ module.exports = {
     } catch {
         throw errorsConst.invoiceErrors.queryErrors.findAllError;
     }
-},
-  getInvoiceDetailsShippingQuery: async (conditionFilter) => {
+  },
+  findInvoiceShippingQuery: async (conditionFilter) => {
 
      const detailShippingFound =  await Invoice.findOne({
       where: conditionFilter,

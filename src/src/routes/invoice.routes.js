@@ -11,7 +11,7 @@ const router = Router();
 
 router.get('/shipping/', [
     invoiceMiddleware.checkFilterDetailsShipping()
-], invoiceController.getShipping);
+], invoiceController.getInvoiceShipping);
 
 router.post('/shipping/', [
     invoiceMiddleware.checkCreateInvoiceShipping()
@@ -19,11 +19,15 @@ router.post('/shipping/', [
 
 router.get('/shipping/all/', [
     invoiceMiddleware.checkGetAllShippingInvoice()
-], invoiceController.getAllShippingInvoice);
+], invoiceController.getAllInvoiceShipping);
 
 router.post('/moneyTransfer/', [
     invoiceMiddleware.checkCreateMoneyTransfer()
 ], invoiceController.createInvoiceMoneyTransfer);
+
+router.get('/moneyTransfer/:idInvoice', [
+    invoiceMiddleware.checkGetInvoiceMoneyTransfer()
+], invoiceController.getInvoiceMoneyTransfer);
 
 router.post('/travel/', [
     invoiceMiddleware.checkCreateInvoiceTravel()
@@ -31,10 +35,10 @@ router.post('/travel/', [
 
 router.get('/travel/all/', [
     invoiceMiddleware.checkGetAllTravelInvoice()
-], invoiceController.getAllInvoice);
+], invoiceController.getAllInvoiceTravel);
 
 router.get('/travel/:idInvoice', [
-    invoiceMiddleware.checkGetInvoice()
-], invoiceController.getInvoice);
+    invoiceMiddleware.checkGetInvoiceTravel()
+], invoiceController.getInvoiceTravel);
 
 module.exports = router;

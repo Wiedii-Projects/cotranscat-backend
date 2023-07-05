@@ -16,11 +16,21 @@ const sharedCheckMiddleware = require('./shared.check.middleware');
 const sharedHelpers = require('../../helpers/shared.helpers');
 
 module.exports = {
-    checkGetInvoice: () => {
+    checkGetInvoiceTravel: () => {
         return [
             ...sharedCheckMiddleware.checkJwt(),
             check('idInvoice', new ErrorModel(errorsConst.invoiceErrors.invoiceRequired))
-                .custom((value, {req}) => invoiceValidators.validateInvoice({ id: sharedHelpers.decryptIdDataBase(value) }, req))
+                .custom((value, {req}) => invoiceValidators.validateInvoiceTravel({ id: sharedHelpers.decryptIdDataBase(value) }, req))
+                .custom((value, {req}) => !!req.body.invoice)
+                .withMessage(new ErrorModel(errorsConst.invoiceErrors.invoiceNotGenerated)),
+            sharedValidators.validateError,
+        ]
+    },
+    checkGetInvoiceMoneyTransfer: () => {
+        return [
+            ...sharedCheckMiddleware.checkJwt(),
+            check('idInvoice', new ErrorModel(errorsConst.invoiceErrors.invoiceRequired))
+                .custom((value, {req}) => invoiceValidators.validateInvoiceMoneyTransfer({ id: sharedHelpers.decryptIdDataBase(value) }, req))
                 .custom((value, {req}) => !!req.body.invoice)
                 .withMessage(new ErrorModel(errorsConst.invoiceErrors.invoiceNotGenerated)),
             sharedValidators.validateError,

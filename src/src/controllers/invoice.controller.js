@@ -14,7 +14,7 @@ const {
 const { extractInvoice, extractInvoiceMoneyTransfer, extractInvoiceShipping } = require('../helpers/invoice.helpers');
 
 // Queries
-const { createNewInvoiceQuery, getInvoiceDetailsShippingQuery } = require('../models/invoice/invoice.query');
+const { createNewInvoiceQuery, findInvoiceShippingQuery } = require('../models/invoice/invoice.query');
 const { findServiceTypeQuery } = require('../models/service-type/service-type.query');
 const { invoiceQuery, travelQuery } = require('../models/index.queries');
 const shipmentTrackingQuery = require('../models/shipment-tracking/shipment-tracking.query');
@@ -23,24 +23,32 @@ const prefixQuery = require('../models/prefix/prefix.query');
 const sellerQuery = require('../models/seller/seller.query');
 
 module.exports = {
-    getInvoice: async(req, res) => {
+    getInvoiceTravel: async(req, res) => {
         try {
             return responseHelpers.responseSuccess(res, req.body.invoice);
         } catch (error){
             return responseHelpers.responseError(res, 500, error);
         }
     },
-    getAllInvoice: async(req, res) => {
+    getInvoiceMoneyTransfer: async(req, res) => {
+        try {
+            return responseHelpers.responseSuccess(res, req.body.invoice);
+        } catch (error){
+            return responseHelpers.responseError(res, 500, error);
+        }
+    },
+    getAllInvoiceTravel: async(req, res) => {
         const { page = 0 } = req.query;
         try {
+            const [{ id: idServiceType }] = await findServiceTypeQuery({ where: { type: TYPE_SERVICE.MONEY_TRANSFER.VALUE_CONVENTION } });
             let [invoice, count] = await Promise.all([
                 invoiceQuery.findAllTravelInvoiceQuery({ 
                     where: { 
-                        idServiceType: salesConst.TYPE_SERVICE.PASSAGE.VALUE_CONVENTION
+                        idServiceType
                     }, 
                     offset: page
                 }),
-                invoiceQuery.countInvoiceQuery()
+                invoiceQuery.countInvoiceQuery({ idServiceType })
             ]);
             let rows = [];
             for (const value of invoice) {
@@ -175,7 +183,7 @@ module.exports = {
             return responseHelpers.responseError(res, 500, error);
         }
     },
-    getShipping: async (req, res) => {
+    getInvoiceShipping: async (req, res) => {
         const { filterValue } = req.query
         try {
             let filterSearch
@@ -186,7 +194,7 @@ module.exports = {
             }
             if (!filterSearch) throw errorsConst.shippingErrors.filterValueInvalid
 
-            let shippingInvoice = await getInvoiceDetailsShippingQuery(filterSearch)
+            let shippingInvoice = await findInvoiceShippingQuery(filterSearch)
 
             if (shippingInvoice) {
                 const {invoiceDetails} = shippingInvoice
@@ -199,7 +207,7 @@ module.exports = {
             return responseHelpers.responseError(res, 500, error);
         }
     },
-    getAllShippingInvoice: async (req, res) => {
+    getAllInvoiceShipping: async (req, res) => {
         const { page = 0 } = req.query;
         try {
             let [shippingInvoices, counterShipping] = await Promise.all([

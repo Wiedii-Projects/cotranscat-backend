@@ -14,7 +14,6 @@ const sharedHelpers = require('../../helpers/shared.helpers');
 const sharedCheckMiddleware = require('./shared.check.middleware');
 
 module.exports = {
-
     checkCreateObservation: () => [
         ...sharedCheckMiddleware.checkJwt(),
             check('description', new ErrorModel(errorsConst.observationErrors.descriptionRequired)).isString(),
