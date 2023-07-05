@@ -5,11 +5,11 @@ const { PAYMENT_METHOD } = require('../constants/core/invoice.const');
 const { TYPE_SERVICE } = require('../constants/core/sales.const');
 
 // Helpers
-const { 
-    responseHelpers, sharedHelpers 
+const {
+    responseHelpers, sharedHelpers
 } = require('../helpers/index.helpers');
-const { 
-    encryptIdDataBase, getInvoiceRegisterParametersByBankHelper, decryptIdDataBase 
+const {
+    encryptIdDataBase, decryptIdDataBase
 } = require('../helpers/shared.helpers');
 const { extractInvoice, extractInvoiceMoneyTransfer, extractInvoiceShipping } = require('../helpers/invoice.helpers');
 
@@ -17,9 +17,10 @@ const { extractInvoice, extractInvoiceMoneyTransfer, extractInvoiceShipping } = 
 const { createNewInvoiceQuery, getInvoiceDetailsShippingQuery } = require('../models/invoice/invoice.query');
 const { findServiceTypeQuery } = require('../models/service-type/service-type.query');
 const { invoiceQuery, travelQuery } = require('../models/index.queries');
-const { getHeadquarterAssociatedBySellerQuery } = require('../models/seller/seller.query');
 const shipmentTrackingQuery = require('../models/shipment-tracking/shipment-tracking.query');
 const { findPaymentMethodQuery } = require('../models/payment-method/payment-method.query');
+const prefixQuery = require('../models/prefix/prefix.query');
+const sellerQuery = require('../models/seller/seller.query');
 
 module.exports = {
     getInvoice: async(req, res) => {
@@ -49,7 +50,7 @@ module.exports = {
                     ...value,
                     idTravel: undefined
                 })
-              }
+            }
             return responseHelpers.responseSuccess(res, { count, rows });
         } catch (error){
             return responseHelpers.responseError(res, 500, error);
@@ -64,8 +65,10 @@ module.exports = {
                 findPaymentMethodQuery({ where: { name: PAYMENT_METHOD.CASH } }),
                 findServiceTypeQuery({ where: { type: TYPE_SERVICE.MONEY_TRANSFER.VALUE_CONVENTION } })
             ]);
-            const { name: nameHeadquarter } = await getHeadquarterAssociatedBySellerQuery({ id: decryptIdDataBase(idSeller) });
-            const { codePrefix } = getInvoiceRegisterParametersByBankHelper(salesConst.TYPE_SERVICE.MONEY_TRANSFER.VALUE_STRING, nameHeadquarter);
+
+            const resolutionsFound = await sellerQuery.getPrefixesOfResolutionByBankSellerQuery(sharedHelpers.decryptIdDataBase(idSeller), idServiceType );
+            const { codePrefix, numberFormatted: number, numberRaw, idPrefix } = await sharedHelpers.getPrefixAndInvoiceNumberNewRegister(resolutionsFound)
+
             const invoice = extractInvoice({ 
                 price: (amountMoney + cost + iva),
                 idServiceType,
@@ -73,10 +76,20 @@ module.exports = {
                 codePrefix,
                 codeSale: salesConst.SALES_CODE.SALES_INVOICE,
                 idClient,
-                idSeller
+                idSeller,
+                number
             });
+
             transaction = await dbConnectionOptions.transaction();
+            
             const { id } = await createNewInvoiceQuery(invoice, { transaction, moneyTransfer });
+            
+            await prefixQuery.updatePrefixQuery(
+                { id: decryptIdDataBase(idPrefix) },
+                { currentConsecutive: numberRaw },
+                transaction
+            )
+
             await transaction.commit();
             return responseHelpers.responseSuccess(res, encryptIdDataBase(id));
         } catch (error) {
@@ -87,8 +100,10 @@ module.exports = {
         const { tickets, user: { id: idSeller }, price, decryptId: idClient, priceSeat, idPaymentMethod } = req.body;
         try {
             const [{ id: idServiceType }] = await  findServiceTypeQuery({ where: { type: TYPE_SERVICE.PASSAGE.VALUE_CONVENTION } });
-            const { name: nameHeadquarter } = await getHeadquarterAssociatedBySellerQuery({ id: decryptIdDataBase(idSeller) });
-            const { codePrefix } = getInvoiceRegisterParametersByBankHelper(salesConst.TYPE_SERVICE.PASSAGE.VALUE_STRING, nameHeadquarter);
+            
+            const resolutionsFound = await sellerQuery.getPrefixesOfResolutionByBankSellerQuery(idSeller, idServiceType);
+            const { codePrefix, numberFormatted: number, numberRaw, idPrefix } = await sharedHelpers.getPrefixAndInvoiceNumberNewRegister(resolutionsFound)
+            
             const invoice = extractInvoice({ 
                 price: price ? price*tickets.length : priceSeat,
                 idServiceType,
@@ -96,11 +111,22 @@ module.exports = {
                 codePrefix,
                 codeSale: salesConst.SALES_CODE.SALES_INVOICE,
                 idClient,
-                idSeller
+                idSeller, 
+                number
             });
+            
             transaction = await dbConnectionOptions.transaction();
-            const { id } = await createNewInvoiceQuery(invoice, { transaction, tickets, price: invoice.price/tickets.length });
+            
+            const { id } = await createNewInvoiceQuery(invoice, { transaction, tickets, price: invoice.price/tickets.length });            
+            
+            await prefixQuery.updatePrefixQuery(
+                { id: decryptIdDataBase(idPrefix) },
+                { currentConsecutive: numberRaw },
+                transaction
+            )
+            
             await transaction.commit();
+
             return responseHelpers.responseSuccess(res, encryptIdDataBase(id));
         } catch (error){
             if (transaction) await transaction.rollback();
@@ -116,8 +142,10 @@ module.exports = {
                 findPaymentMethodQuery({ where: { name: PAYMENT_METHOD.CASH } }),
                 findServiceTypeQuery({ where: { type: TYPE_SERVICE.SHIPPING.VALUE_CONVENTION } })
             ]);
-            const { name: nameHeadquarter } = await getHeadquarterAssociatedBySellerQuery({ id: decryptIdDataBase(idSeller) })
-            const { codePrefix } = getInvoiceRegisterParametersByBankHelper(salesConst.TYPE_SERVICE.SHIPPING.VALUE_STRING, nameHeadquarter)
+            
+            const resolutionsFound = await sellerQuery.getPrefixesOfResolutionByBankSellerQuery(sharedHelpers.decryptIdDataBase(idSeller), idServiceType);
+            const { codePrefix, numberFormatted: number, numberRaw, idPrefix } = await sharedHelpers.getPrefixAndInvoiceNumberNewRegister(resolutionsFound)
+            
             const invoice = extractInvoice({ 
                 price,
                 idServiceType,
@@ -125,10 +153,20 @@ module.exports = {
                 codePrefix,
                 codeSale: salesConst.SALES_CODE.SALES_INVOICE,
                 idClient,
-                idSeller
+                idSeller,
+                number
             });
+
             transaction = await dbConnectionOptions.transaction();
+            
             const { id } = await createNewInvoiceQuery(invoice, { transaction, shipping });
+
+            await prefixQuery.updatePrefixQuery(
+                { id: decryptIdDataBase(idPrefix) },
+                { currentConsecutive: numberRaw },
+                transaction
+            )
+
             await transaction.commit();
             return responseHelpers.responseSuccess(res, encryptIdDataBase(id));
             

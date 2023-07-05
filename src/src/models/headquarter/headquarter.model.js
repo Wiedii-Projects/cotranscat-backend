@@ -9,11 +9,9 @@ const {
   const HeadquarterSchema = dbConnectionOptions.define(
     "headquarter",
     {
-      name: {
-        type: DataTypes.STRING(20),
-        allowNull: false,
-        unique: true,
-        field: "name",
+      description: {
+        type: DataTypes.STRING(50),
+        field: "description",
       }
     },
     {

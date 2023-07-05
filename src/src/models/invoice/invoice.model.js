@@ -47,14 +47,18 @@ const { errorsConst } = require("../../constants/index.constants");
       }
     },
     {
-      tableName: "invoice"
+      tableName: "invoice",
+      indexes: [
+        {
+          unique: true,
+          fields: ['number', 'codePrefix'],
+          name: "uniqueInvoicePrefixByServiceType"
+        }
+      ]
     }
   );
   
   InvoiceSchema.beforeValidate(async(register) => {
-    let maxNumber = await InvoiceSchema.max('number');
-    const nextMaxNumber = maxNumber ? parseInt(maxNumber) + 1 : 1;
-    register.number = nextMaxNumber.toString().padStart(8, '0');
     register.date = new Date();
   });
 

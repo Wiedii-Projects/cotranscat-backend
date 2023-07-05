@@ -59,51 +59,27 @@ module.exports = {
     const formattedTime = `${currentHour.toString().padStart(2, '0')}:${currentMinute.toString().padStart(2, '0')}:${currentSecond.toString().padStart(2, '0')}`;
     return formattedTime;
   },
-  getInvoiceRegisterParametersByBankHelper: (typeService, headquarters) => {
-    const { CUCUTA, TIBU } = salesConst.HEADQUARTERS
-    const {
-      PASSAGE: { VALUE_STRING: PASSAGE },
-      SHIPPING: { VALUE_STRING: SHIPPING },
-      MONEY_TRANSFER: { VALUE_STRING: MONEY_TRANSFER },
-    } = salesConst.TYPE_SERVICE
+  getPrefixAndInvoiceNumberNewRegister: async (resolutionsFound) => {
+    try {
 
-    const serviceMappings = {
-      [PASSAGE]: {
-        [TIBU]: {
-          codePrefix: salesConst.SALES_PREFIXES_CODE.TIBU_PASSAGES
-        },
-        [CUCUTA]: {
-          codePrefix: salesConst.SALES_PREFIXES_CODE.CUCUTA_PASSAGES
-        }
-      },
-      [SHIPPING]: {
-        [TIBU]: {
-          codePrefix: salesConst.SALES_PREFIXES_CODE.TIBU_SHIPPING
-        },
-        [CUCUTA]: {
-          codePrefix: salesConst.SALES_PREFIXES_CODE.CUCUTA_SHIPPING
-        }
-      },
-      [MONEY_TRANSFER]: {
-        TIBU: {
-          codePrefix: salesConst.SALES_PREFIXES_CODE.TIBU_MONEY_TRANSFER
-        },
-        [CUCUTA]: {
-          codePrefix: salesConst.SALES_PREFIXES_CODE.CUCUTA_MONEY_TRANSFER
-        }
+      if (resolutionsFound.length === 0) throw errorsConst.invoiceErrors.thereAreNoActiveResolutions
+
+      const resolutionSelected = resolutionsFound.find((resolutionElement) => {
+        if (resolutionElement.finalRange > resolutionElement.currentConsecutive) return resolutionElement
+      })
+      if (!resolutionSelected) throw errorsConst.invoiceErrors.resolutionsAlreadyUsedAllPrefixes
+
+      let nextNumberConsecutiveInvoice = parseInt(resolutionSelected.currentConsecutive) + 1
+
+      return {
+        numberFormatted: nextNumberConsecutiveInvoice.toString().padStart(8, '0'),
+        numberRaw: nextNumberConsecutiveInvoice,
+        codePrefix: resolutionSelected.code,
+        idPrefix: resolutionSelected.idPrefix
       }
-    };
-
-    let invoiceParams = {}
-
-    if (serviceMappings[typeService] && serviceMappings[typeService][headquarters]) {
-      const { codePrefix } = serviceMappings[typeService][headquarters];
-      invoiceParams.codePrefix = codePrefix;
-
-    } else {
-      throw errorsConst.appErrors.InvalidTypeServiceOrHeadquarters;
     }
-
-    return invoiceParams
-   }
+    catch (error) {
+      throw error;
+    }
+  }
 }

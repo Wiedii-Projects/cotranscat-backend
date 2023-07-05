@@ -25,5 +25,9 @@ module.exports = {
   shippingQuery: require('./shipping/shipping.query'),
   shipmentTrackingQuery: require('./shipment-tracking/shipment-tracking.query'),
   trackingStatusQuery: require('./tracking-status/tracking-status.query'),
+  serviceTypeQuery: require('./service-type/service-type.query'),
+  prefixQuery: require('./prefix/prefix.query'),
+  resolutionQuery: require('./resolution/resolution.query'),
+  bankQuery: require('./bank/bank.query'),
   moneyTransferQuery: require("./money-transfer/money-transfer.query")
 };

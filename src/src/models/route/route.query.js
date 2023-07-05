@@ -1,9 +1,11 @@
 // Constants
 const { errorsConst } = require('../../constants/index.constants');
+
+// Helpers
 const sharedHelpers = require('../../helpers/shared.helpers');
 
 // Models
-const { Route, Municipality } = require('../index.models');
+const { Route, Municipality, Headquarter } = require('../index.models');
 
 module.exports = {
     createRouteQuery: async (where) => {
@@ -32,4 +34,38 @@ module.exports = {
             throw errorsConst.routeErrors.queryErrors.findAllError
         }
     },
+    findHeadquarterByMunicipalitySourceQuery: async (query = {}) => {
+        const { where } = query;
+        try {
+            const [headquarterFound] = await Route.findAll({
+                where,
+                include: [
+                    {
+                        model: Municipality,
+                        as: 'MunicipalityDepart',
+                        include: [
+                            {
+                                model: Headquarter,
+                                as: 'MunicipalityHeadquarter'
+                            }
+                        ]
+                    }
+                ],
+                raw: true,
+                nest: true
+            })
+
+            const {
+                MunicipalityDepart: { MunicipalityHeadquarter: { id, description, idMunicipality } }
+            } = headquarterFound
+
+            return {
+                id: sharedHelpers.encryptIdDataBase(id),
+                description,
+                idMunicipality
+            }
+        } catch {
+            throw errorsConst.routeErrors.queryErrors.findHeadquarterByMunicipalitySourceError
+        }
+    }
 }

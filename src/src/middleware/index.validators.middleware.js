@@ -16,5 +16,9 @@ module.exports = {
     invoiceValidators: require('./validators/invoice.validator.middleware'),
     sellerValidators: require('./validators/seller.validator.middleware'),
     unitMeasureValidators: require('./validators/unit-measure.validator.middleware'),
-    shippingTypeValidators: require('./validators/shipping-type.validator.middleware')
+    shippingTypeValidators: require('./validators/shipping-type.validator.middleware'),
+    serviceTypeValidators: require('./validators/service-type.validator.middleware'),
+    prefixValidators: require('./validators/prefix.validator.middleware'),
+    resolutionValidators: require('./validators/resolution.validator.middleware'),
+    bankValidators: require('./validators/bank.validator.middleware')
 }
