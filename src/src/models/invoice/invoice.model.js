@@ -63,8 +63,8 @@ const { errorsConst } = require("../../constants/index.constants");
   });
 
   InvoiceSchema.afterCreate(async(register, options) => {
-    const { dataValues : { id: idInvoice, idServiceType } } = register;
-    switch (idServiceType) {
+    const { dataValues : { id: idInvoice } } = register;
+    switch (options.type) {
       case TYPE_SERVICE.MONEY_TRANSFER.VALUE_CONVENTION:
         await createMoneyTransferQuery({ ...options.moneyTransfer, idInvoice }, { transaction: options.transaction });
         break;

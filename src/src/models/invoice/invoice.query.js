@@ -7,7 +7,7 @@ const { encryptIdDataBase } = require("../../helpers/shared.helpers");
 // Models
 const { 
   Seller, Ticket, Seat, Travel, Route, Client, DocumentType, User, Municipality, DriverVehicle, Vehicle, 
-  IndicativeNumber, Department, Shipping, ShippingType, UnitMeasure, ShipmentTracking, TrackingStatus 
+  IndicativeNumber, Department, Shipping, ShippingType, UnitMeasure, MoneyTransfer 
 } = require("../index.models");
 const Invoice = require("./invoice.model");
 
@@ -250,6 +250,138 @@ module.exports = {
                 model: result.TicketInvoice.TicketSeat.TravelSeat.TravelDriverVehicle.Vehicle.model,
                 vehicleMunicipality: {
                   name: result.TicketInvoice.TicketSeat.TravelSeat.TravelDriverVehicle.Vehicle.VehicleMunicipality.name
+                }
+              }
+          };
+          return invoice;
+        })
+    } catch {
+        throw errorsConst.invoiceErrors.queryErrors.findAllError;
+    }
+  },
+  findInvoiceMoneyTransferQuery: async (query = {}) => {
+    try {
+        const { 
+          where
+        } = query;
+        return await Invoice.findOne({
+          where,
+          attributes: [
+            'id',
+            'number',
+            'date',
+            'price'
+          ],
+          include: [
+            {
+              model: Client,
+              as: 'InvoiceClient',
+              include: [
+                {
+                  model: User,
+                  as: 'UserClient',
+                  include: [
+                    {
+                      model: DocumentType,
+                      as: 'UserDocumentType'
+                    },
+                    {
+                      model: IndicativeNumber,
+                      as: 'UserIndicativePhone'
+                    }
+                  ]
+                },
+                {
+                  model: Municipality,
+                  as: "ClientMunicipality",
+                  required: false,
+                  include: [
+                    {
+                      model: Department,
+                      as: "MunicipalityDepartment",
+                      required: false
+                    }
+                  ]
+                },
+                {
+                  model: IndicativeNumber,
+                  as: 'ClientIndicativeNumberWhatsApp',
+                  required: false
+                }
+              ]
+            },
+            {
+              model: MoneyTransfer,
+              as: "MoneyTransferInvoice",
+              include: [
+                {
+                  model: Client,
+                  as: "MoneyTransferClient",
+                  include: [
+                    {
+                      model: User,
+                      as: 'UserClient',
+                      include: [
+                        {
+                          model: DocumentType,
+                          as: 'UserDocumentType'
+                        },
+                        {
+                          model: IndicativeNumber,
+                          as: 'UserIndicativePhone'
+                        }
+                      ]
+                    },
+                    {
+                      model: Municipality,
+                      as: "ClientMunicipality",
+                      required: false,
+                      include: [
+                        {
+                          model: Department,
+                          as: "MunicipalityDepartment",
+                          required: false
+                        }
+                      ]
+                    },
+                    {
+                      model: IndicativeNumber,
+                      as: 'ClientIndicativeNumberWhatsApp',
+                      required: false
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          raw: true,
+          nest: true
+        })
+          .then((result) => {
+          const invoice = {
+              id: encryptIdDataBase(result.id),
+              number: result.number,
+              date: result.date,
+              price: result.price,
+              invoiceClient: {
+                name: result.InvoiceClient.UserClient.name,
+                lastName: result.InvoiceClient.UserClient.lastName,
+                numberDocument: result.InvoiceClient.UserClient.numberDocument,
+                userDocumentType: result.InvoiceClient.UserClient.UserDocumentType.name
+              },
+              invoiceMoneyTransfer: {
+                id: encryptIdDataBase(result.MoneyTransferInvoice.id),
+                amountMoney: result.MoneyTransferInvoice.amountMoney,
+                cost: result.MoneyTransferInvoice.cost,
+                iva: result.MoneyTransferInvoice.iva,
+                moneyTransferClient: {
+                  name: result.MoneyTransferInvoice.MoneyTransferClient.UserClient.name,
+                  lastName: result.MoneyTransferInvoice.MoneyTransferClient.UserClient.lastName,
+                  numberDocument: result.MoneyTransferInvoice.MoneyTransferClient.UserClient.numberDocument,
+                  userDocumentType: result.MoneyTransferInvoice.MoneyTransferClient.UserClient.UserDocumentType.name,
+                  address: result.MoneyTransferInvoice.MoneyTransferClient.address,
+                  numberPhone: result.MoneyTransferInvoice.MoneyTransferClient.UserClient.numberPhone,
+                  indicativePhone: result.MoneyTransferInvoice.MoneyTransferClient.UserClient.UserIndicativePhone.number
                 }
               }
           };

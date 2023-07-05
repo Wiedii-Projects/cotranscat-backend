@@ -40,7 +40,7 @@ module.exports = {
     getAllInvoiceTravel: async(req, res) => {
         const { page = 0 } = req.query;
         try {
-            const [{ id: idServiceType }] = await findServiceTypeQuery({ where: { type: TYPE_SERVICE.MONEY_TRANSFER.VALUE_CONVENTION } });
+            const [{ id: idServiceType }] = await findServiceTypeQuery({ where: { type: TYPE_SERVICE.PASSAGE.VALUE_CONVENTION } });
             let [invoice, count] = await Promise.all([
                 invoiceQuery.findAllTravelInvoiceQuery({ 
                     where: { 
@@ -69,7 +69,7 @@ module.exports = {
         const { user: { id: idSeller }, amountMoney, cost, iva, clientSend: { id: idClient }, clientReceives: { id: idClientReceives } } = req.body;
         try {
             const moneyTransfer = extractInvoiceMoneyTransfer({ ...req.body, idClientReceives });
-            const [[{ id: idPaymentMethod }], [{ id: idServiceType }]] = await Promise.all([
+            const [[{ id: idPaymentMethod }], [{ id: idServiceType, type }]] = await Promise.all([
                 findPaymentMethodQuery({ where: { name: PAYMENT_METHOD.CASH } }),
                 findServiceTypeQuery({ where: { type: TYPE_SERVICE.MONEY_TRANSFER.VALUE_CONVENTION } })
             ]);
@@ -90,7 +90,7 @@ module.exports = {
 
             transaction = await dbConnectionOptions.transaction();
             
-            const { id } = await createNewInvoiceQuery(invoice, { transaction, moneyTransfer });
+            const { id } = await createNewInvoiceQuery(invoice, { transaction, moneyTransfer, type });
             
             await prefixQuery.updatePrefixQuery(
                 { id: decryptIdDataBase(idPrefix) },
@@ -105,11 +105,12 @@ module.exports = {
         }
     },
     createInvoiceTravel: async(req, res) => {
+        let transaction;
         const { tickets, user: { id: idSeller }, price, decryptId: idClient, priceSeat, idPaymentMethod } = req.body;
         try {
-            const [{ id: idServiceType }] = await  findServiceTypeQuery({ where: { type: TYPE_SERVICE.PASSAGE.VALUE_CONVENTION } });
+            const [{ id: idServiceType, type }] = await  findServiceTypeQuery({ where: { type: TYPE_SERVICE.PASSAGE.VALUE_CONVENTION } });
             
-            const resolutionsFound = await sellerQuery.getPrefixesOfResolutionByBankSellerQuery(idSeller, idServiceType);
+            const resolutionsFound = await sellerQuery.getPrefixesOfResolutionByBankSellerQuery(sharedHelpers.decryptIdDataBase(idSeller), idServiceType);
             const { codePrefix, numberFormatted: number, numberRaw, idPrefix } = await sharedHelpers.getPrefixAndInvoiceNumberNewRegister(resolutionsFound)
             
             const invoice = extractInvoice({ 
@@ -125,7 +126,7 @@ module.exports = {
             
             transaction = await dbConnectionOptions.transaction();
             
-            const { id } = await createNewInvoiceQuery(invoice, { transaction, tickets, price: invoice.price/tickets.length });            
+            const { id } = await createNewInvoiceQuery(invoice, { transaction, tickets, price: invoice.price/tickets.length, type });            
             
             await prefixQuery.updatePrefixQuery(
                 { id: decryptIdDataBase(idPrefix) },
@@ -146,7 +147,7 @@ module.exports = {
         const { user: { id: idSeller }, price, clientSend: { id: idClient }, clientReceives: { id: idClientReceives } } = req.body;
         try {
             const shipping = extractInvoiceShipping({ ...req.body, idClientReceives });
-            const [[{ id: idPaymentMethod }], [{ id: idServiceType }]] = await Promise.all([
+            const [[{ id: idPaymentMethod }], [{ id: idServiceType, type }]] = await Promise.all([
                 findPaymentMethodQuery({ where: { name: PAYMENT_METHOD.CASH } }),
                 findServiceTypeQuery({ where: { type: TYPE_SERVICE.SHIPPING.VALUE_CONVENTION } })
             ]);
@@ -167,7 +168,7 @@ module.exports = {
 
             transaction = await dbConnectionOptions.transaction();
             
-            const { id } = await createNewInvoiceQuery(invoice, { transaction, shipping });
+            const { id } = await createNewInvoiceQuery(invoice, { transaction, shipping, type });
 
             await prefixQuery.updatePrefixQuery(
                 { id: decryptIdDataBase(idPrefix) },
