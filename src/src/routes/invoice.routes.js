@@ -25,6 +25,10 @@ router.post('/moneyTransfer/', [
     invoiceMiddleware.checkCreateMoneyTransfer()
 ], invoiceController.createInvoiceMoneyTransfer);
 
+router.get('/moneyTransfer/all/', [
+    invoiceMiddleware.checkGetAllMoneyTransferInvoice()
+], invoiceController.getAllInvoiceMoneyTransfer);
+
 router.get('/moneyTransfer/:idInvoice', [
     invoiceMiddleware.checkGetInvoiceMoneyTransfer()
 ], invoiceController.getInvoiceMoneyTransfer);

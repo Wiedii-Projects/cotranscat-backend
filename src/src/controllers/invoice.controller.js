@@ -37,6 +37,24 @@ module.exports = {
             return responseHelpers.responseError(res, 500, error);
         }
     },
+    getAllInvoiceMoneyTransfer: async(req, res) => {
+        const { page = 0 } = req.query;
+        try {
+            const [{ id: idServiceType }] = await findServiceTypeQuery({ where: { type: TYPE_SERVICE.MONEY_TRANSFER.VALUE_CONVENTION } });
+            let [invoice, count] = await Promise.all([
+                invoiceQuery.findAllMoneyTransferInvoiceQuery({ 
+                    where: { 
+                        idServiceType
+                    }, 
+                    offset: page
+                }),
+                invoiceQuery.countInvoiceQuery({ idServiceType })
+            ]);
+            return responseHelpers.responseSuccess(res, { count, invoice });
+        } catch (error){
+            return responseHelpers.responseError(res, 500, error);
+        }
+    },
     getAllInvoiceTravel: async(req, res) => {
         const { page = 0 } = req.query;
         try {

@@ -103,6 +103,90 @@ module.exports = {
       throw errorsConst.invoiceErrors.queryErrors.findAllError;
     }
   },
+  findAllMoneyTransferInvoiceQuery: async (query) => {
+    try {
+      const { 
+        where,
+        offset
+      } = query;
+      return await Invoice.findAll({
+        where,
+        include: [
+          {
+            model: Client,
+            as: 'InvoiceClient',
+            attributes: ['id'],
+            include: [
+              {
+                model: User,
+                as: 'UserClient',
+                attributes: ['numberDocument', 'name', 'lastName'],
+              }
+            ]
+          },
+          {
+            model: Seller,
+            as: 'InvoiceSeller',
+            attributes: ['id'],
+            include: [
+              {
+                model: User,
+                as: 'UserSeller',
+                attributes: ['name', 'lastName'],
+              }
+            ]
+          },
+          {
+            model: MoneyTransfer,
+            as: 'MoneyTransferInvoice',
+            attributes: ['id', 'idClientReceives'],
+            include: [
+              {
+                model: Client,
+                as: 'MoneyTransferClient',
+                attributes: ['id'],
+                include: [
+                  {
+                    model: User,
+                    as: 'UserClient',
+                    attributes: ['numberDocument', 'name', 'lastName'],
+                  }
+                ]
+              }
+            ]
+          },
+        ],
+        nest: true,
+        raw: true,
+        attributes: ['number', 'price', 'date', 'id'],
+        order: [['number', 'DESC']],
+        limit: 20,
+        offset: offset * 20
+      })
+      .then( (result) => result.map((invoice) => ({
+          id: encryptIdDataBase(invoice.id),
+          number: invoice.number,
+          price: invoice.price,
+          date: invoice.date,
+          client: {
+            numberDocument: invoice.InvoiceClient.UserClient.numberDocument,
+            name: invoice.InvoiceClient.UserClient.name,
+            lastName: invoice.InvoiceClient.UserClient.lastName,
+          },
+          seller: {
+            name: invoice.InvoiceSeller.UserSeller.name,
+            lastName: invoice.InvoiceSeller.UserSeller.lastName,
+          },
+          clientReceives: {
+            ...invoice.MoneyTransferInvoice.MoneyTransferClient.UserClient,
+            id: undefined
+          }
+        }))
+      );
+    } catch {
+      throw errorsConst.invoiceErrors.queryErrors.findAllError;
+    }
+  },
   findInvoiceQuery: async(query = {}) => {
     try {
         const { 
@@ -388,7 +472,7 @@ module.exports = {
           return invoice;
         })
     } catch {
-        throw errorsConst.invoiceErrors.queryErrors.findAllError;
+      throw errorsConst.invoiceErrors.queryErrors.findAllError;
     }
   },
   findInvoiceShippingQuery: async (conditionFilter) => {

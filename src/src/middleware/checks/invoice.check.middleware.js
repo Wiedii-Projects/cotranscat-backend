@@ -36,6 +36,11 @@ module.exports = {
             sharedValidators.validateError,
         ]
     },
+    checkGetAllMoneyTransferInvoice: () => {
+        return [
+            ...sharedCheckMiddleware.checkJwt(),
+        ]
+    },
     checkGetAllTravelInvoice: () => {
         return [
             ...sharedCheckMiddleware.checkJwt(),
