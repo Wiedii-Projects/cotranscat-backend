@@ -19,5 +19,10 @@ module.exports = {
             VALUE_STRING: "MONEY_TRANSFER",
             VALUE_CONVENTION: 1
         }
+    },
+    TYPE_SYNCHRONIZATION_INVOICES: {
+        CREATE_INVOICE: 1,
+        CANCEL_INVOICE: 2,
+        CREATE_ELECTRONIC_INVOICE: 3
     }
 }

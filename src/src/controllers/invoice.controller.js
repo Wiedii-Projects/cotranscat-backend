@@ -21,6 +21,7 @@ const shipmentTrackingQuery = require('../models/shipment-tracking/shipment-trac
 const { findPaymentMethodQuery } = require('../models/payment-method/payment-method.query');
 const prefixQuery = require('../models/prefix/prefix.query');
 const sellerQuery = require('../models/seller/seller.query');
+const shippingQuery = require('../models/shipping/shipping.query');
 
 module.exports = {
     getInvoiceTravel: async(req, res) => {
@@ -233,8 +234,10 @@ module.exports = {
         const { page = 0 } = req.query;
         try {
             let [shippingInvoices, counterShipping] = await Promise.all([
-                invoiceQuery.findAllShippingInvoiceQuery({ where: {}, offset: page }),
-                invoiceQuery.countInvoiceQuery()
+                invoiceQuery.findAllShippingInvoiceQuery({ where: {
+                    idServiceType: salesConst.TYPE_SERVICE.SHIPPING.VALUE_CONVENTION
+                }, offset: page }),
+                shippingQuery.countShippingInvoiceQuery()
             ]);
 
             return responseHelpers.responseSuccess(res, { count: counterShipping, shippingInvoices });

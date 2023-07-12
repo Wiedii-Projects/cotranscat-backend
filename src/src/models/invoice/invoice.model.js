@@ -1,3 +1,6 @@
+// Constants
+const { errorsConst, salesConst } = require("../../constants/index.constants");
+
 // DB Connections
 const {
     dbConnectionOptions,
@@ -9,7 +12,6 @@ const { createMoneyTransferQuery } = require("../money-transfer/money-transfer.q
 const { TYPE_SERVICE } = require("../../constants/core/sales.const");
 const { createShippingQuery } = require("../shipping/shipping.query");
 const { createNewTicketQuery } = require("../ticket/ticket.query");
-const { errorsConst } = require("../../constants/index.constants");
   
   const InvoiceSchema = dbConnectionOptions.define(
     "Invoice",
@@ -44,6 +46,11 @@ const { errorsConst } = require("../../constants/index.constants");
           type: DataTypes.STRING(2),
           field: "codePrefix",
           allowNull: false
+      },
+      synchronizationType: {
+          type: DataTypes.INTEGER.UNSIGNED,
+          field: 'synchronizationType',
+          allowNull: false
       }
     },
     {
@@ -60,6 +67,7 @@ const { errorsConst } = require("../../constants/index.constants");
   
   InvoiceSchema.beforeValidate(async(register) => {
     register.date = new Date();
+    register.synchronizationType = salesConst.TYPE_SYNCHRONIZATION_INVOICES.CREATE_INVOICE
   });
 
   InvoiceSchema.afterCreate(async(register, options) => {
