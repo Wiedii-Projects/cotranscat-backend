@@ -223,6 +223,10 @@ Resolution.belongsTo(Route, { as: 'RouteResolution', foreignKey: { name: 'idRout
 Municipality.hasMany(Bank, { as: 'MunicipalityBank', foreignKey: { name: 'idMunicipality', allowNull: false } });
 Bank.belongsTo(Municipality, { as: 'MunicipalityBank', foreignKey: { name: 'idMunicipality', allowNull: false } });
 
+// Relationship Resolution-Invoice
+Resolution.hasMany(Invoice, { as: 'ResolutionInvoice', foreignKey: { name: 'idResolution', allowNull: false } });
+Invoice.belongsTo(Resolution, { as: 'ResolutionInvoice', foreignKey: { name: 'idResolution', allowNull: false } });
+
 module.exports = {
   // Aggregates Models
   ServerModel: require("./aggregates/server/server.model"),
