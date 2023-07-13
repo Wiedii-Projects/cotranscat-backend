@@ -29,11 +29,13 @@ module.exports = {
     checkGetInvoiceMoneyTransfer: () => {
         return [
             ...sharedCheckMiddleware.checkJwt(),
-            check('idInvoice', new ErrorModel(errorsConst.invoiceErrors.invoiceRequired))
-                .custom((value, {req}) => invoiceValidators.validateInvoiceMoneyTransfer({ id: sharedHelpers.decryptIdDataBase(value) }, req))
-                .custom((value, {req}) => !!req.body.invoice)
-                .withMessage(new ErrorModel(errorsConst.invoiceErrors.invoiceNotGenerated)),
-            sharedValidators.validateError,
+            check('filterValue')
+                .isString()
+                .withMessage(new ErrorModel(errorsConst.moneyTransferTrackerErrors.valueToFilterIsRequired))
+                .bail()
+                .isLength({ min: 1 })
+                .withMessage(new ErrorModel(errorsConst.moneyTransferTrackerErrors.filterValueIsEmpty)),
+            sharedValidators.validateError
         ]
     },
     checkGetAllMoneyTransferInvoice: () => {
@@ -102,13 +104,13 @@ module.exports = {
         sharedValidators.validateError,
         check("idClientReceives")
             .isString()
-            .withMessage(new ErrorModel(errorsConst.shippingErrors.clientReceivesRequired))
+            .withMessage(new ErrorModel(errorsConst.moneyTransferErrors.clientReceivesRequired))
             .bail(),
         sharedValidators.validateError,
         check("idClientReceives")
             .custom((value, {req}) => clientValidator.validateClient(req, {id: sharedHelpers.decryptIdDataBase(value)}, "clientReceives"))
             .custom((value, {req}) => !!req.body.clientReceives)
-            .withMessage(new ErrorModel(errorsConst.shippingErrors.clientReceivesNotExist))
+            .withMessage(new ErrorModel(errorsConst.moneyTransferErrors.clientReceivesNotExist))
             .bail(),
         sharedValidators.validateError,
         check('amountMoney').isDecimal({ decimal_digits: '0,2' }).withMessage(new ErrorModel(errorsConst.moneyTransferErrors.amountMoneyRequired)).bail(),

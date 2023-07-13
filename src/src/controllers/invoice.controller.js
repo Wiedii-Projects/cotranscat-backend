@@ -21,6 +21,7 @@ const shipmentTrackingQuery = require('../models/shipment-tracking/shipment-trac
 const { findPaymentMethodQuery } = require('../models/payment-method/payment-method.query');
 const prefixQuery = require('../models/prefix/prefix.query');
 const sellerQuery = require('../models/seller/seller.query');
+const { findMoneyTransferTrackerByIdMoneyTransfer } = require('../models/money-transfer-tracker/money-transfer-tracker.query');
 
 module.exports = {
     getInvoiceTravel: async(req, res) => {
@@ -31,8 +32,22 @@ module.exports = {
         }
     },
     getInvoiceMoneyTransfer: async(req, res) => {
+        const { filterValue } = req.query
         try {
-            return responseHelpers.responseSuccess(res, req.body.invoice);
+            let filterSearch
+            if (!isNaN(filterValue)) filterSearch = { number: filterValue }
+            else {
+                const value = sharedHelpers.decryptIdDataBase(filterValue)
+                if (!isNaN(value)) filterSearch = { id: value }
+            }
+            if (!filterSearch) throw errorsConst.shippingErrors.filterValueInvalid;
+            const [{ id: idServiceType }] = await findServiceTypeQuery({ where: { type: TYPE_SERVICE.MONEY_TRANSFER.VALUE_CONVENTION } });
+            let moneyTransferInvoice = await invoiceQuery.findInvoiceMoneyTransferQuery({ where: { ...filterSearch, idServiceType } });
+            if (moneyTransferInvoice) {
+                const moneyTransferTracker = await findMoneyTransferTrackerByIdMoneyTransfer(decryptIdDataBase(moneyTransferInvoice.invoiceMoneyTransfer.id))
+                moneyTransferInvoice.moneyTransferTracker = moneyTransferTracker
+            }
+            return responseHelpers.responseSuccess(res, moneyTransferInvoice);
         } catch (error){
             return responseHelpers.responseError(res, 500, error);
         }

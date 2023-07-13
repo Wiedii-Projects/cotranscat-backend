@@ -215,7 +215,7 @@ module.exports = {
     } catch {
         throw errorsConst.invoiceErrors.queryErrors.findAllError;
     }
-},
+  },
   findInvoiceTravelQuery: async (query = {}) => {
     try {
         const { 
@@ -372,7 +372,7 @@ module.exports = {
                     {
                       model: IndicativeNumber,
                       as: 'UserIndicativePhone'
-                    }
+                    },
                   ]
                 },
                 {
@@ -442,7 +442,8 @@ module.exports = {
           nest: true
         })
           .then((result) => {
-          const invoice = {
+          if(result){
+            const invoice = {
               id: encryptIdDataBase(result.id),
               number: result.number,
               date: result.date,
@@ -451,25 +452,37 @@ module.exports = {
                 name: result.InvoiceClient.UserClient.name,
                 lastName: result.InvoiceClient.UserClient.lastName,
                 numberDocument: result.InvoiceClient.UserClient.numberDocument,
-                userDocumentType: result.InvoiceClient.UserClient.UserDocumentType.name
+                userDocumentType: result.InvoiceClient.UserClient.UserDocumentType.name,
+                numberPhone: result.InvoiceClient.UserClient.numberPhone,
+                indicativePhone: result.InvoiceClient.UserClient.UserIndicativePhone.number,
+                numberPhoneWhatsapp: result.InvoiceClient.numberPhoneWhatsapp ?? undefined,
+                indicativePhoneWhatsapp: result.InvoiceClient.ClientIndicativeNumberWhatsApp.number,
+                address: result.InvoiceClient.UserClient.address ?? undefined,
+                municipality: result.InvoiceClient.ClientMunicipality.name
               },
               invoiceMoneyTransfer: {
                 id: encryptIdDataBase(result.MoneyTransferInvoice.id),
                 amountMoney: result.MoneyTransferInvoice.amountMoney,
                 cost: result.MoneyTransferInvoice.cost,
+                totalCost: result.MoneyTransferInvoice.cost + result.MoneyTransferInvoice.iva,
                 iva: result.MoneyTransferInvoice.iva,
                 moneyTransferClient: {
                   name: result.MoneyTransferInvoice.MoneyTransferClient.UserClient.name,
                   lastName: result.MoneyTransferInvoice.MoneyTransferClient.UserClient.lastName,
-                  numberDocument: result.MoneyTransferInvoice.MoneyTransferClient.UserClient.numberDocument,
                   userDocumentType: result.MoneyTransferInvoice.MoneyTransferClient.UserClient.UserDocumentType.name,
-                  address: result.MoneyTransferInvoice.MoneyTransferClient.address,
+                  numberDocument: result.MoneyTransferInvoice.MoneyTransferClient.UserClient.numberDocument,
                   numberPhone: result.MoneyTransferInvoice.MoneyTransferClient.UserClient.numberPhone,
-                  indicativePhone: result.MoneyTransferInvoice.MoneyTransferClient.UserClient.UserIndicativePhone.number
+                  indicativePhone: result.MoneyTransferInvoice.MoneyTransferClient.UserClient.UserIndicativePhone.number,
+                  address: result.MoneyTransferInvoice.MoneyTransferClient.address,
+                  municipality: result.MoneyTransferInvoice.MoneyTransferClient.ClientMunicipality.name
                 }
               }
           };
           return invoice;
+          } else {
+            return null;
+          }
+
         })
     } catch {
       throw errorsConst.invoiceErrors.queryErrors.findAllError;
