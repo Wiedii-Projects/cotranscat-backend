@@ -1052,6 +1052,10 @@
       "code": "INVO010",
       "message": "Current resolutions already used all prefixes"
     },
+    "processTypeForInvoiceSynchronizationDoesNotExist": {
+      "code": "INVO011",
+      "message": "Process type for invoice synchronization does not exist"
+    },
     "queryErrors": {
       "createError": {
         "code": "INVO_001",

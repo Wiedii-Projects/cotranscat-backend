@@ -1,3 +1,6 @@
+// Constants
+const { errorsConst, salesConst } = require("../../constants/index.constants");
+
 // Queues
 const { invoiceSynchronizationJobsQueue } = require("../../connections/queues/sales.queues.connection");
 
@@ -19,55 +22,88 @@ module.exports = {
 
                 for (const invoiceElement of invoicesNotSynchronized) {
                     const {
-                        codeSale, codePrefix, codeTypeService , invoicePrice, invoiceNumber, bankCodePaymentMethod, bankCode, sellerEmail, sellerName,
-                        sellerNumberDocument, sellerDocumentType, clientName, clientEmail, clientNumberDocument,
-                        clientDocumentType
+                        codeSale, codePrefix, codeTypeService , invoicePrice, invoiceNumber, bankCodePaymentMethod, 
+                        bankCode, sellerEmail, sellerName, sellerNumberDocument, sellerDocumentType, 
+                        clientName, clientEmail, clientNumberDocument, clientDocumentType, synchronizationType
                     } = invoiceElement
 
-                    invoices.push({
+                    const invoice = {
                         numberInvoice: `${invoiceNumber}`,
                         codeSaleInvoice: codeSale,
-                        codePrefixInvoice: codePrefix,
-                        ivaValueInvoice: 0,
-                        client: {
-                            documentType: clientDocumentType,
-                            nit: clientNumberDocument,
-                            name: clientName,
-                            email: clientEmail
-                        },
-                        seller: {
-                            documentType: sellerDocumentType,
-                            nit: sellerNumberDocument,
-                            name: sellerName,
-                            email: sellerEmail,
-                            bankCode
-                        },
-                        invoiceDetail: [
-                            {
-                                code: codeTypeService,
-                                price: invoicePrice,
-                                quantity: 1
-                            }
-                        ],
-                        invoicePaymentMethodDetail: [
-                            {
-                                codePaymentMethod: bankCodePaymentMethod,
-                                totalValue: invoicePrice
-                            }
-                        ]
-                    })
-                }
+                        codePrefixInvoice: codePrefix
+                    }
+                    switch (synchronizationType) {
+                        case salesConst.TYPE_SYNCHRONIZATION_INVOICES.CREATE_INVOICE:
+                            invoices.push({
+                                processType: salesConst.TYPE_SYNCHRONIZATION_INVOICES.CREATE_INVOICE,
+                                data: {
+                                    ...invoice,
+                                    ivaValueInvoice: 0,
+                                    client: {
+                                        documentType: clientDocumentType,
+                                        nit: clientNumberDocument,
+                                        name: clientName,
+                                        email: clientEmail
+                                    },
+                                    seller: {
+                                        documentType: sellerDocumentType,
+                                        nit: sellerNumberDocument,
+                                        name: sellerName,
+                                        email: sellerEmail,
+                                        bankCode
+                                    },
+                                    invoiceDetail: [
+                                        {
+                                            code: codeTypeService,
+                                            price: invoicePrice,
+                                            quantity: 1
+                                        }
+                                    ],
+                                    invoicePaymentMethodDetail: [
+                                        {
+                                            codePaymentMethod: bankCodePaymentMethod,
+                                            totalValue: invoicePrice
+                                        }
+                                    ]
+                                }
+                            })
+                            break;
+                        case salesConst.TYPE_SYNCHRONIZATION_INVOICES.CANCEL_INVOICE:
+                            invoices.push({
+                                processType: salesConst.TYPE_SYNCHRONIZATION_INVOICES.CANCEL_INVOICE,
+                                data: {
+                                    ...invoice
+                                }
+                            })
+                            break;
+                        case salesConst.TYPE_SYNCHRONIZATION_INVOICES.CREATE_ELECTRONIC_INVOICE:
+    
+                            break;
+    
+                        default:
+                            throw errorsConst.invoiceErrors.processTypeForInvoiceSynchronizationDoesNotExist
+                    }
 
+                }
                 if (invoices.length > 0) {
                     const { invoicesRegistered, invoicesFailed } = await invoiceServices.createInvoicesService({ invoices })
+                    const filteredInvoices = []
+                    invoices.forEach(({ data: invoice }) => {
+                        const invoiceFound = invoicesRegistered.find(regInvoice => (
+                            regInvoice.invoice.numberInvoice === invoice.numberInvoice &&
+                            regInvoice.invoice.codeSale === invoice.codeSale &&
+                            regInvoice.invoice.codePrefix === invoice.codePrefix
+                        ));
+                        if (invoiceFound) return filteredInvoices.push(invoiceFound.invoice)
 
-                    const filteredInvoices = invoices.filter(invoice => {
-                        return invoicesRegistered.some(regInvoice => regInvoice.invoice === invoice.numberInvoice);
                     });
-
                     const updatePromises = filteredInvoices.map(invoiceToUpdate => {
                         return updateInvoiceSynchronizedJobQuery(
-                            { number: invoiceToUpdate.numberInvoice.toString().padStart(8, '0')},
+                            { 
+                                number: invoiceToUpdate.numberInvoice.toString().padStart(8, '0'),
+                                codeSale: invoiceToUpdate.codeSaleInvoice,
+                                codePrefix: invoiceToUpdate.codePrefixInvoice
+                            },
                             { isSynchronized: true }
                         )
                     });

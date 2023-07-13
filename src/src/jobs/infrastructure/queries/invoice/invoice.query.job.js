@@ -21,6 +21,7 @@ module.exports = {
                 raw: true,
                 nest: true,
                 attributes: [
+                    [col('Invoice.synchronizationType'), 'synchronizationType'],
                     [col('Invoice.codeSale'), 'codeSale'],
                     [col('Invoice.codePrefix'), 'codePrefix'],
                     [col('InvoiceServiceType.code'), 'codeTypeService'],
