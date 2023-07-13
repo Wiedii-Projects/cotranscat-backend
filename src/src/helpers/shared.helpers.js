@@ -75,7 +75,8 @@ module.exports = {
         numberFormatted: nextNumberConsecutiveInvoice.toString().padStart(8, '0'),
         numberRaw: nextNumberConsecutiveInvoice,
         codePrefix: resolutionSelected.code,
-        idPrefix: resolutionSelected.idPrefix
+        idPrefix: resolutionSelected.idPrefix,
+        idResolution: resolutionSelected.idResolution
       }
     }
     catch (error) {

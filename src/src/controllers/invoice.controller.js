@@ -94,7 +94,7 @@ module.exports = {
             ]);
 
             const resolutionsFound = await sellerQuery.getPrefixesOfResolutionByBankSellerQuery(sharedHelpers.decryptIdDataBase(idSeller), idServiceType );
-            const { codePrefix, numberFormatted: number, numberRaw, idPrefix } = await sharedHelpers.getPrefixAndInvoiceNumberNewRegister(resolutionsFound)
+            const { codePrefix, numberFormatted: number, numberRaw, idPrefix, idResolution } = await sharedHelpers.getPrefixAndInvoiceNumberNewRegister(resolutionsFound)
 
             const invoice = extractInvoice({ 
                 price: (amountMoney + cost + iva),
@@ -104,7 +104,8 @@ module.exports = {
                 codeSale: salesConst.SALES_CODE.SALES_INVOICE,
                 idClient,
                 idSeller,
-                number
+                number,
+                idResolution
             });
 
             transaction = await dbConnectionOptions.transaction();
@@ -130,7 +131,7 @@ module.exports = {
             const [{ id: idServiceType, type }] = await  findServiceTypeQuery({ where: { type: TYPE_SERVICE.PASSAGE.VALUE_CONVENTION } });
             
             const resolutionsFound = await sellerQuery.getPrefixesOfResolutionByBankSellerQuery(sharedHelpers.decryptIdDataBase(idSeller), idServiceType);
-            const { codePrefix, numberFormatted: number, numberRaw, idPrefix } = await sharedHelpers.getPrefixAndInvoiceNumberNewRegister(resolutionsFound)
+            const { codePrefix, numberFormatted: number, numberRaw, idPrefix, idResolution }  = await sharedHelpers.getPrefixAndInvoiceNumberNewRegister(resolutionsFound)
             
             const invoice = extractInvoice({ 
                 price: price ? price*tickets.length : priceSeat,
@@ -140,7 +141,8 @@ module.exports = {
                 codeSale: salesConst.SALES_CODE.SALES_INVOICE,
                 idClient,
                 idSeller, 
-                number
+                number,
+                idResolution
             });
             
             transaction = await dbConnectionOptions.transaction();
@@ -172,7 +174,7 @@ module.exports = {
             ]);
             
             const resolutionsFound = await sellerQuery.getPrefixesOfResolutionByBankSellerQuery(sharedHelpers.decryptIdDataBase(idSeller), idServiceType);
-            const { codePrefix, numberFormatted: number, numberRaw, idPrefix } = await sharedHelpers.getPrefixAndInvoiceNumberNewRegister(resolutionsFound)
+            const { codePrefix, numberFormatted: number, numberRaw, idPrefix, idResolution } = await sharedHelpers.getPrefixAndInvoiceNumberNewRegister(resolutionsFound)
             
             const invoice = extractInvoice({ 
                 price,
@@ -182,7 +184,8 @@ module.exports = {
                 codeSale: salesConst.SALES_CODE.SALES_INVOICE,
                 idClient,
                 idSeller,
-                number
+                number,
+                idResolution
             });
 
             transaction = await dbConnectionOptions.transaction();
