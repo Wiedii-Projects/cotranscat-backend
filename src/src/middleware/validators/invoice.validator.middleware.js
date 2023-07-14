@@ -15,14 +15,6 @@ module.exports = {
             req.body.invoice = false;
         }
     },
-    validateInvoiceMoneyTransfer: async (where, req) => {
-        try {
-            let invoice = await invoiceQuery.findInvoiceMoneyTransferQuery({ where });
-            req.body.invoice = invoice;
-        } catch {
-            req.body.invoice = false;
-        }
-    },
     validateInvoiceExist: async (where, req) => {
         try {
             let invoice = await invoiceQuery.findInvoiceQuery({ where });

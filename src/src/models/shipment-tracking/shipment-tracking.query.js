@@ -40,7 +40,7 @@ module.exports = {
             })
             )
         } catch {
-            throw errorsConst.documentTypeErrors.queryErrors.findShipmentTrackingByIdInvoiceError
+            throw errorsConst.moneyTransferTrackerErrors.queryErrors.findAllError
         }
     }
 }
