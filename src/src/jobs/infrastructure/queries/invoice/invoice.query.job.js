@@ -13,6 +13,9 @@ const PaymentMethodBankSchema = require("../../../../models/payment-method-bank/
 const SellerSchema = require("../../../../models/seller/seller.model");
 const UserSchema = require("../../../../models/user/user.model");
 const ServiceTypeSchema = require("../../../../models/service-type/service-type.model");
+const PaymentMethodSchema = require("../../../../models/payment-method/payment-method.model");
+const ResolutionSchema = require("../../../../models/resolution/resolution.model");
+const PrefixSchema = require("../../../../models/prefix/prefix.model");
 
 module.exports = {
     getInvoicesDetailsNotSynchronizedJobQuery: async () => {
@@ -23,11 +26,11 @@ module.exports = {
                 attributes: [
                     [col('Invoice.synchronizationType'), 'synchronizationType'],
                     [col('Invoice.codeSale'), 'codeSale'],
-                    [col('Invoice.codePrefix'), 'codePrefix'],
+                    [col('ResolutionInvoice->PrefixResolution.code'), 'codePrefix'],
                     [col('InvoiceServiceType.code'), 'codeTypeService'],
                     [col('Invoice.number'), 'invoiceNumber'],
                     [col('Invoice.price'), 'invoicePrice'],
-                    [col('InvoiceSeller->BankSeller->BankPaymentMethod.codePaymentMethod'), 'bankCodePaymentMethod'],
+                    [col('InvoicePaymentMethod->PaymentMethodBank.codePaymentMethod'), 'bankCodePaymentMethod'],
                     [col('InvoiceSeller->BankSeller.code'), 'bankCode'],
                     [col('InvoiceSeller.email'), 'sellerEmail'],
                     [col('InvoiceSeller->UserSeller.name'), 'sellerName'],
@@ -47,14 +50,7 @@ module.exports = {
                             {
                                 model: BankSchema,
                                 as: 'BankSeller',
-                                attributes: [],
-                                include: [
-                                    {
-                                        model: PaymentMethodBankSchema,
-                                        as: 'BankPaymentMethod',
-                                        attributes: []
-                                    }
-                                ]
+                                attributes: []
                             },
                             {
                                 model: UserSchema,
@@ -93,6 +89,30 @@ module.exports = {
                         model: ServiceTypeSchema,
                         as: 'InvoiceServiceType',
                         attributes: []
+                    },
+                    {
+                        model: PaymentMethodSchema,
+                        as: 'InvoicePaymentMethod',
+                        attributes: [],
+                        include: [
+                            {
+                                model: PaymentMethodBankSchema,
+                                as: 'PaymentMethodBank',
+                                attributes: []
+                            }
+                        ]
+                    },
+                    {
+                        model: ResolutionSchema,
+                        as: 'ResolutionInvoice',
+                        attributes: [],
+                        include: [
+                            {
+                                model: PrefixSchema,
+                                as: 'PrefixResolution',
+                                attributes: []
+                            }
+                        ]
                     }
                 ],
                 where: {
