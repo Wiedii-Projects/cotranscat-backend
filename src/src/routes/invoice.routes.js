@@ -29,7 +29,7 @@ router.get('/moneyTransfer/all/', [
     invoiceMiddleware.checkGetAllMoneyTransferInvoice()
 ], invoiceController.getAllInvoiceMoneyTransfer);
 
-router.get('/moneyTransfer/:idInvoice', [
+router.get('/moneyTransfer/', [
     invoiceMiddleware.checkGetInvoiceMoneyTransfer()
 ], invoiceController.getInvoiceMoneyTransfer);
 

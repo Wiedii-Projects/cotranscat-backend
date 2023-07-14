@@ -1184,9 +1184,21 @@
     }
   },
   "moneyTransferTrackerErrors": {
+    "valueToFilterIsRequired": {
+      "code": "MTTR001",
+      "message": "The value to filter is required"
+    },
+    "filterValueIsEmpty": {
+      "code": "MTTR002",
+      "message": "Filter value is empty"
+    },
     "queryErrors": {
       "createError": {
         "code": "MTTR_001",
+        "message": "Something went wrong"
+      },
+      "findAllError": {
+        "code": "MTTR_002",
         "message": "Something went wrong"
       }
     }
@@ -1215,6 +1227,14 @@
     "ivaRequired": {
       "code": "MNEY003",
       "message": "The money transfer iva is required"
+    },
+    "clientReceivesRequired": {
+      "code": "MNEY004",
+      "message": "The client receives is required"
+    },
+    "clientReceivesNotExist": {
+      "code": "MNEY005",
+      "message": "The client receives not exist"
     },
     "queryErrors": {
       "createError": {
@@ -1359,7 +1379,7 @@
       },
       "updateError": {
         "code": "PRFX_003",
-        "message": ""
+        "message": "Something went wrong"
       }
     }
   },
