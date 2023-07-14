@@ -212,7 +212,7 @@ Municipality.hasMany(Headquarter, { as: 'MunicipalityHeadquarter', foreignKey: {
 Headquarter.belongsTo(Municipality, { as: 'MunicipalityHeadquarter', foreignKey: { name: 'idMunicipality', allowNull: false } });
 
 // Relationship Prefix-Resolution
-Prefix.hasMany(Resolution, { as: 'PrefixResolution', foreignKey: { name: 'idPrefix', allowNull: false } });
+Prefix.hasOne(Resolution, { as: 'PrefixResolution', foreignKey: { name: 'idPrefix', allowNull: false } });
 Resolution.belongsTo(Prefix, { as: 'PrefixResolution', foreignKey: { name: 'idPrefix', allowNull: false } });
 
 // Relationship Route-Resolution

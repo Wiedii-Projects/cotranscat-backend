@@ -7,7 +7,7 @@ const { encryptIdDataBase } = require("../../helpers/shared.helpers");
 // Models
 const { 
   Seller, Ticket, Seat, Travel, Route, Client, DocumentType, User, Municipality, DriverVehicle, Vehicle, 
-  IndicativeNumber, Department, Shipping, ShippingType, UnitMeasure, MoneyTransfer 
+  IndicativeNumber, Department, Shipping, ShippingType, UnitMeasure, MoneyTransfer, Resolution, Prefix 
 } = require("../index.models");
 const Invoice = require("./invoice.model");
 
@@ -475,9 +475,8 @@ module.exports = {
       throw errorsConst.invoiceErrors.queryErrors.findAllError;
     }
   },
-  findInvoiceShippingQuery: async (conditionFilter) => {
-
-     const detailShippingFound =  await Invoice.findOne({
+  findInvoiceShippingQuery: async (conditionFilter, whereCodePrefix = {}) => {
+     const detailShippingFound =  await Invoice.findOne( {
       where: conditionFilter,
       include: [
         {
@@ -567,6 +566,18 @@ module.exports = {
               ]
             }
           ]
+        },
+        {
+          model: Resolution,
+          as: 'ResolutionInvoice',
+          attributes: ['idPrefix'],
+          include: [
+            {
+              model: Prefix,
+              as: 'PrefixResolution',
+              where: whereCodePrefix
+            }
+          ]
         }
       ],
       raw: true,
@@ -576,7 +587,7 @@ module.exports = {
     if (!detailShippingFound) return null
 
     const {
-      id: idInvoice, number, price, codeSale, codePrefix,
+      id: idInvoice, number, price, codeSale,
       InvoiceClient: {
         id: idSends, email: emailSends, address: addressSends, numberPhoneWhatsappSends,
         ClientMunicipality: dataMunicipalitySends, ClientIndicativeNumberWhatsApp: dataIndicativeNumberWhatsAppSends,
@@ -597,7 +608,8 @@ module.exports = {
             numberPhone: numberPhoneReceives, UserDocumentType: documentTypeReceives, UserIndicativePhone: indicativePhoneReceives
           }
         }
-      }
+      },
+      ResolutionInvoice: { PrefixResolution: { code: codePrefix } }
     } = detailShippingFound
 
     let municipalityReceives = null
@@ -746,11 +758,22 @@ module.exports = {
                 ]
               }
             ]
+          },
+          {
+            model: Resolution,
+            as: 'ResolutionInvoice',
+            attributes: ['idPrefix'],
+            include: [
+              {
+                model: Prefix,
+                as: 'PrefixResolution'
+              }
+            ]
           }
         ],
         nest: true,
         raw:true,
-        attributes: ['codeSale', 'codePrefix','number', 'price', 'date', 'id'],
+        attributes: ['codeSale', 'number', 'price', 'date', 'id'],
         order: [['number', 'DESC']],
         limit: 20,
         offset: offset * 20
@@ -760,7 +783,7 @@ module.exports = {
           id: encryptIdDataBase(shippingInvoice.id),
           number: shippingInvoice.number,
           codeSale: shippingInvoice.codeSale,
-          codePrefix: shippingInvoice.codePrefix,
+          codePrefix: shippingInvoice.ResolutionInvoice.PrefixResolution.code,
           price: shippingInvoice.price,
           date: shippingInvoice.date,
           clientSends: {

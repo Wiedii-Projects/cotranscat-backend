@@ -94,13 +94,12 @@ module.exports = {
             ]);
 
             const resolutionsFound = await sellerQuery.getPrefixesOfResolutionByBankSellerQuery(sharedHelpers.decryptIdDataBase(idSeller), idServiceType );
-            const { codePrefix, numberFormatted: number, numberRaw, idPrefix, idResolution } = await sharedHelpers.getPrefixAndInvoiceNumberNewRegister(resolutionsFound)
+            const { numberFormatted: number, numberRaw, idPrefix, idResolution } = await sharedHelpers.getPrefixAndInvoiceNumberNewRegister(resolutionsFound)
 
             const invoice = extractInvoice({ 
                 price: (amountMoney + cost + iva),
                 idServiceType,
                 idPaymentMethod,
-                codePrefix,
                 codeSale: salesConst.SALES_CODE.SALES_INVOICE,
                 idClient,
                 idSeller,
@@ -131,13 +130,12 @@ module.exports = {
             const [{ id: idServiceType, type }] = await  findServiceTypeQuery({ where: { type: TYPE_SERVICE.PASSAGE.VALUE_CONVENTION } });
             
             const resolutionsFound = await sellerQuery.getPrefixesOfResolutionByBankSellerQuery(sharedHelpers.decryptIdDataBase(idSeller), idServiceType);
-            const { codePrefix, numberFormatted: number, numberRaw, idPrefix, idResolution }  = await sharedHelpers.getPrefixAndInvoiceNumberNewRegister(resolutionsFound)
+            const { numberFormatted: number, numberRaw, idPrefix, idResolution }  = await sharedHelpers.getPrefixAndInvoiceNumberNewRegister(resolutionsFound)
             
             const invoice = extractInvoice({ 
                 price: price ? price*tickets.length : priceSeat,
                 idServiceType,
                 idPaymentMethod,
-                codePrefix,
                 codeSale: salesConst.SALES_CODE.SALES_INVOICE,
                 idClient,
                 idSeller, 
@@ -174,13 +172,12 @@ module.exports = {
             ]);
             
             const resolutionsFound = await sellerQuery.getPrefixesOfResolutionByBankSellerQuery(sharedHelpers.decryptIdDataBase(idSeller), idServiceType);
-            const { codePrefix, numberFormatted: number, numberRaw, idPrefix, idResolution } = await sharedHelpers.getPrefixAndInvoiceNumberNewRegister(resolutionsFound)
+            const { numberFormatted: number, numberRaw, idPrefix, idResolution } = await sharedHelpers.getPrefixAndInvoiceNumberNewRegister(resolutionsFound)
             
             const invoice = extractInvoice({ 
                 price,
                 idServiceType,
                 idPaymentMethod,
-                codePrefix,
                 codeSale: salesConst.SALES_CODE.SALES_INVOICE,
                 idClient,
                 idSeller,
@@ -210,22 +207,29 @@ module.exports = {
         const { filterValue } = req.query
         try {
             let filterSearch
-            if (!isNaN(filterValue)) filterSearch = { number: filterValue }
-            else {
-                const value = sharedHelpers.decryptIdDataBase(filterValue)
-                if (!isNaN(value)) filterSearch = { id: value }
+            let shippingInvoice
+            const value = sharedHelpers.decryptIdDataBase(filterValue)
+
+            if (value && !isNaN(value)) {
+                filterSearch = { id: value }
+                if (!filterSearch) throw errorsConst.shippingErrors.filterValueInvalid
+
+                shippingInvoice = await findInvoiceShippingQuery(filterSearch)
+                return responseHelpers.responseSuccess(res, shippingInvoice);
+            } else {
+                const [codeSale, codePrefix, numberInvoice] = filterValue.split('-')
+                filterSearch = { number: numberInvoice, codeSale }
+                let whereCodePrefix = { code: codePrefix }
+                const [prefixFound] = await prefixQuery.findPrefixQuery({ where: { code: codePrefix } });
+                
+                if (!prefixFound) throw errorsConst.prefixErrors.prefixNotExists
+                if (salesConst.SALES_CODE.SALES_INVOICE !== codeSale) throw errorsConst.invoiceErrors.codeSaleNotExist
+                if (!filterSearch) throw errorsConst.shippingErrors.filterValueInvalid
+
+                shippingInvoice = await findInvoiceShippingQuery(filterSearch, whereCodePrefix)
+                return responseHelpers.responseSuccess(res, shippingInvoice);
             }
-            if (!filterSearch) throw errorsConst.shippingErrors.filterValueInvalid
 
-            let shippingInvoice = await findInvoiceShippingQuery(filterSearch)
-
-            if (shippingInvoice) {
-                const {invoiceDetails} = shippingInvoice
-                const shipmentTrackingResponse = await shipmentTrackingQuery.findShipmentTrackingByIdShipping(decryptIdDataBase(invoiceDetails.id))
-                shippingInvoice.shipmentTracking = shipmentTrackingResponse
-            }
-
-            return responseHelpers.responseSuccess(res, shippingInvoice);
         } catch (error) {
             return responseHelpers.responseError(res, 500, error);
         }
