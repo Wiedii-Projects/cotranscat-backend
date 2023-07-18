@@ -42,11 +42,6 @@ const { createNewTicketQuery } = require("../ticket/ticket.query");
           field: "codeSale",
           allowNull: false
       },
-      codePrefix: {
-          type: DataTypes.STRING(2),
-          field: "codePrefix",
-          allowNull: false
-      },
       synchronizationType: {
           type: DataTypes.INTEGER.UNSIGNED,
           field: 'synchronizationType',
