@@ -230,7 +230,6 @@ module.exports = {
                 if (!filterSearch) throw errorsConst.shippingErrors.filterValueInvalid
 
                 shippingInvoice = await findInvoiceShippingQuery(filterSearch)
-                return responseHelpers.responseSuccess(res, shippingInvoice);
             } else {
                 const [codeSale, codePrefix, numberInvoice] = filterValue.split('-')
                 filterSearch = { number: numberInvoice, codeSale }
@@ -242,9 +241,14 @@ module.exports = {
                 if (!filterSearch) throw errorsConst.shippingErrors.filterValueInvalid
 
                 shippingInvoice = await findInvoiceShippingQuery(filterSearch, whereCodePrefix)
-                return responseHelpers.responseSuccess(res, shippingInvoice);
+                
             }
-
+            if (shippingInvoice) {
+                const {invoiceDetails} = shippingInvoice
+                const shipmentTrackingResponse = await shipmentTrackingQuery.findShipmentTrackingByIdShipping(decryptIdDataBase(invoiceDetails.id))
+                shippingInvoice.shipmentTracking = shipmentTrackingResponse
+            }
+            return responseHelpers.responseSuccess(res, shippingInvoice);
         } catch (error) {
             return responseHelpers.responseError(res, 500, error);
         }
@@ -253,9 +257,9 @@ module.exports = {
         const { page = 0 } = req.query;
         try {
             let [shippingInvoices, counterShipping] = await Promise.all([
-                invoiceQuery.findAllShippingInvoiceQuery({ where: {
-                    idServiceType: salesConst.TYPE_SERVICE.SHIPPING.VALUE_CONVENTION
-                }, offset: page }),
+                invoiceQuery.findAllShippingInvoiceQuery({ offset: page },  {
+                    type: salesConst.TYPE_SERVICE.SHIPPING.VALUE_CONVENTION
+                }),
                 shippingQuery.countShippingInvoiceQuery()
             ]);
 
