@@ -42,23 +42,26 @@ const { createNewTicketQuery } = require("../ticket/ticket.query");
           field: "codeSale",
           allowNull: false
       },
-      codePrefix: {
-          type: DataTypes.STRING(2),
-          field: "codePrefix",
-          allowNull: false
-      },
       synchronizationType: {
           type: DataTypes.INTEGER.UNSIGNED,
           field: 'synchronizationType',
           allowNull: false
-      }
+      },
+      idResolution: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+        references: {
+          model: "resolution",
+          key: "id",
+        }
+      },
     },
     {
       tableName: "invoice",
       indexes: [
         {
           unique: true,
-          fields: ['number', 'codePrefix'],
+          fields: ['number', 'idResolution'],
           name: "uniqueInvoicePrefixByServiceType"
         }
       ]
