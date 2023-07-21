@@ -7,7 +7,7 @@ const { encryptIdDataBase } = require("../../helpers/shared.helpers");
 // Models
 const { 
   Seller, Ticket, Seat, Travel, Route, Client, DocumentType, User, Municipality, DriverVehicle, Vehicle, 
-  IndicativeNumber, Department, Shipping, ShippingType, UnitMeasure, MoneyTransfer, Resolution, Prefix 
+  IndicativeNumber, Department, Shipping, ShippingType, UnitMeasure, MoneyTransfer, Resolution, Prefix, ServiceType 
 } = require("../index.models");
 const Invoice = require("./invoice.model");
 
@@ -74,9 +74,20 @@ module.exports = {
               },
             ]
           },
+          {
+            model: Resolution,
+            as: 'ResolutionInvoice',
+            attributes: ['idPrefix'],
+            include: [
+              {
+                model: Prefix,
+                as: 'PrefixResolution'
+              }
+            ]
+          }
         ],
         nest: true,
-        attributes: ['number', 'price', 'date', 'id'],
+        attributes: ['number', 'codeSale', 'price', 'date', 'id'],
         order: [['number', 'DESC']],
         limit: 20,
         offset: offset * 20
@@ -84,6 +95,8 @@ module.exports = {
       .then( (result) => result.map((invoice) => ({
           id: encryptIdDataBase(invoice.id),
           number: invoice.number,
+          codeSale: invoice.codeSale,
+          codePrefix: invoice.ResolutionInvoice.PrefixResolution.code,
           price: invoice.price,
           date: invoice.date,
           tickets: invoice.TicketInvoice.length,
@@ -155,10 +168,22 @@ module.exports = {
               }
             ]
           },
+          {
+            model: Resolution,
+            as: 'ResolutionInvoice',
+            attributes: ['idPrefix'],
+            include: [
+              {
+                model: Prefix,
+                as: 'PrefixResolution',
+                attributes: ['code']
+              }
+            ]
+          }
         ],
         nest: true,
         raw: true,
-        attributes: ['number', 'price', 'date', 'id'],
+        attributes: ['number', 'price', 'date', 'id', 'codeSale'],
         order: [['number', 'DESC']],
         limit: 20,
         offset: offset * 20
@@ -166,6 +191,8 @@ module.exports = {
       .then( (result) => result.map((invoice) => ({
           id: encryptIdDataBase(invoice.id),
           number: invoice.number,
+          codeSale: invoice.codeSale,
+          codePrefix: invoice.ResolutionInvoice.PrefixResolution.code,
           price: invoice.price,
           date: invoice.date,
           client: {
@@ -226,6 +253,7 @@ module.exports = {
           attributes: [
             'id',
             'number',
+            'codeSale',
             'date',
             'price'
           ],
@@ -306,6 +334,17 @@ module.exports = {
                 },
               ]
             },
+            {
+              model: Resolution,
+              as: 'ResolutionInvoice',
+              attributes: ['idPrefix','number', 'dateOfIssuance', 'initialRange', 'finalRange'],
+              include: [
+                {
+                  model: Prefix,
+                  as: 'PrefixResolution'
+                }
+              ]
+            }
           ],
           raw: true,
           nest: true
@@ -314,6 +353,14 @@ module.exports = {
           const invoice = {
               id: encryptIdDataBase(result.id),
               number: result.number,
+              codeSale: result.codeSale,
+              codePrefix: result.ResolutionInvoice.PrefixResolution.code,
+              resolution: {
+                number: result.ResolutionInvoice.number,
+                date: result.ResolutionInvoice.dateOfIssuance,
+                initialRange: result.ResolutionInvoice.initialRange,
+                finalRange: result.ResolutionInvoice.finalRange
+              },
               date: result.date,
               price: result.price,
               invoiceClient: {
@@ -352,6 +399,7 @@ module.exports = {
           where,
           attributes: [
             'id',
+            'codeSale',
             'number',
             'date',
             'price'
@@ -436,6 +484,17 @@ module.exports = {
                   ]
                 }
               ]
+            },
+            {
+              model: Resolution,
+              as: 'ResolutionInvoice',
+              attributes: ['idPrefix','number', 'dateOfIssuance', 'initialRange', 'finalRange'],
+              include: [
+                {
+                  model: Prefix,
+                  as: 'PrefixResolution'
+                }
+              ]
             }
           ],
           raw: true,
@@ -446,6 +505,14 @@ module.exports = {
             const invoice = {
               id: encryptIdDataBase(result.id),
               number: result.number,
+              codeSale: result.codeSale,
+              codePrefix: result.ResolutionInvoice.PrefixResolution.code,
+              resolution: {
+                number: result.ResolutionInvoice.number,
+                date: result.ResolutionInvoice.dateOfIssuance,
+                initialRange: result.ResolutionInvoice.initialRange,
+                finalRange: result.ResolutionInvoice.finalRange
+              },
               date: result.date,
               price: result.price,
               invoiceClient: {
@@ -583,7 +650,7 @@ module.exports = {
         {
           model: Resolution,
           as: 'ResolutionInvoice',
-          attributes: ['idPrefix'],
+          attributes: ['idPrefix','number', 'dateOfIssuance', 'initialRange', 'finalRange'],
           include: [
             {
               model: Prefix,
@@ -622,7 +689,7 @@ module.exports = {
           }
         }
       },
-      ResolutionInvoice: { PrefixResolution: { code: codePrefix } }
+      ResolutionInvoice: { number: numberResolution, dateOfIssuance, initialRange, finalRange, PrefixResolution: { code: codePrefix } }
     } = detailShippingFound
 
     let municipalityReceives = null
@@ -667,7 +734,13 @@ module.exports = {
 
     return {
       invoice: {
-        id: encryptIdDataBase(idInvoice), number, price, codeSale, codePrefix
+        id: encryptIdDataBase(idInvoice), number, price, codeSale, codePrefix,
+        resolution: {
+          number: numberResolution,
+          date: dateOfIssuance,
+          initialRange: initialRange,
+          finalRange: finalRange
+        },
       },
       invoiceDetails: {
         id: encryptIdDataBase(idShipping), dateOfEntry, dateDeparture, isHomeDelivery,
@@ -721,14 +794,12 @@ module.exports = {
       }
     }
   },
-  findAllShippingInvoiceQuery: async (query) => {
+  findAllShippingInvoiceQuery: async (query, whereServiceType) => {
     try {
       const { 
-        where,
         offset
       } = query;
       const allShippingInvoiceResponse = await Invoice.findAll({
-        where,
         include: [
           {
             model: Client,
@@ -782,6 +853,11 @@ module.exports = {
                 as: 'PrefixResolution'
               }
             ]
+          },
+          {
+            model: ServiceType,
+            as: 'InvoiceServiceType',
+            where: whereServiceType
           }
         ],
         nest: true,
