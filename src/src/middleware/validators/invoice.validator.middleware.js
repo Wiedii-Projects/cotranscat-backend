@@ -22,6 +22,13 @@ module.exports = {
         } catch {
             req.body.invoice = false;
         }
+    },
+    validateInvoice: async (where, req) => {
+        try {
+            req.body.invoice = await invoiceQuery.findInvoiceQuery({ where });
+        } catch {
+            req.body.invoice = false;
+        }
     }
 }
 

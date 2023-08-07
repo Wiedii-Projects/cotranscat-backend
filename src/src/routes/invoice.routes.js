@@ -9,6 +9,10 @@ const { Router } = require("express");
 
 const router = Router();
 
+router.post('/cancelation/', [
+    invoiceMiddleware.checkCancelationInvoice()
+], invoiceController.cancelationInvoice);
+
 router.get('/shipping/', [
     invoiceMiddleware.checkFilterDetailsShipping()
 ], invoiceController.getInvoiceShipping);

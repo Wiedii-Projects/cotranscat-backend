@@ -33,9 +33,9 @@ module.exports = {
                         codePrefixInvoice: codePrefix
                     }
                     switch (synchronizationType) {
-                        case salesConst.TYPE_SYNCHRONIZATION_INVOICES.CREATE_INVOICE:
+                        case salesConst.TYPE_SYNCHRONIZATION_INVOICES.ONLY_CREATE_INVOICE:
                             invoices.push({
-                                processType: salesConst.TYPE_SYNCHRONIZATION_INVOICES.CREATE_INVOICE,
+                                processType: salesConst.TYPE_SYNCHRONIZATION_INVOICES.ONLY_CREATE_INVOICE,
                                 data: {
                                     ...invoice,
                                     ivaValueInvoice: 0,
@@ -68,15 +68,15 @@ module.exports = {
                                 }
                             })
                             break;
-                        case salesConst.TYPE_SYNCHRONIZATION_INVOICES.CANCEL_INVOICE:
+                        case salesConst.TYPE_SYNCHRONIZATION_INVOICES.ONLY_CANCEL_INVOICE:
                             invoices.push({
-                                processType: salesConst.TYPE_SYNCHRONIZATION_INVOICES.CANCEL_INVOICE,
+                                processType: salesConst.TYPE_SYNCHRONIZATION_INVOICES.ONLY_CANCEL_INVOICE,
                                 data: {
                                     ...invoice
                                 }
                             })
                             break;
-                        case salesConst.TYPE_SYNCHRONIZATION_INVOICES.CREATE_ELECTRONIC_INVOICE:
+                        case salesConst.TYPE_SYNCHRONIZATION_INVOICES.CREATION_AND_CANCELLATION_INVOICE:
     
                             break;
     

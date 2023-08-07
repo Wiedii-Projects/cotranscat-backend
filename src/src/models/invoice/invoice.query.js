@@ -225,7 +225,10 @@ module.exports = {
             'id',
             'number',
             'date',
-            'price'
+            'price',
+            'idServiceType',
+            'isSynchronized',
+            'synchronizationType'
           ],
           raw: true,
           nest: true
@@ -233,9 +236,12 @@ module.exports = {
           .then((result) => {
           const invoice = {
               id: encryptIdDataBase(result.id),
+              idServiceType: encryptIdDataBase(result.idServiceType),
               number: result.number,
               date: result.date,
               price: result.price,
+              isSynchronized: result.isSynchronized,
+              synchronizationType: result.synchronizationType
           };
           return invoice;
         })
@@ -894,6 +900,14 @@ module.exports = {
      return allShippingInvoice
     } catch {
       throw errorsConst.invoiceErrors.queryErrors.findAllError;
+    }
+  },
+  updateInvoiceQuery: async (where, update) => {
+    try {
+      console.log(update)
+      return await Invoice.update(update, { where });
+    } catch {
+      throw errorsConst.invoiceErrors.queryErrors.updateError;
     }
   }
 }

@@ -14,7 +14,7 @@ const {
 const { extractInvoice, extractInvoiceMoneyTransfer, extractInvoiceShipping } = require('../helpers/invoice.helpers');
 
 // Queries
-const { createNewInvoiceQuery, findInvoiceShippingQuery } = require('../models/invoice/invoice.query');
+const { createNewInvoiceQuery, findInvoiceShippingQuery, updateInvoiceQuery } = require('../models/invoice/invoice.query');
 const { findServiceTypeQuery } = require('../models/service-type/service-type.query');
 const { invoiceQuery, travelQuery } = require('../models/index.queries');
 const shipmentTrackingQuery = require('../models/shipment-tracking/shipment-tracking.query');
@@ -111,7 +111,7 @@ module.exports = {
             const resolutionsFound = await sellerQuery.getPrefixesOfResolutionByBankSellerQuery(sharedHelpers.decryptIdDataBase(idSeller), idServiceType );
             const { numberFormatted: number, numberRaw, idPrefix, idResolution } = await sharedHelpers.getPrefixAndInvoiceNumberNewRegister(resolutionsFound)
 
-            const invoice = extractInvoice({ 
+            let invoice = extractInvoice({
                 price: (amountMoney + cost + iva),
                 idServiceType,
                 idPaymentMethod,
@@ -121,6 +121,8 @@ module.exports = {
                 number,
                 idResolution
             });
+
+            invoice.synchronizationType = salesConst.TYPE_SYNCHRONIZATION_INVOICES.ONLY_CREATE_INVOICE
 
             transaction = await dbConnectionOptions.transaction();
             
@@ -147,7 +149,7 @@ module.exports = {
             const resolutionsFound = await sellerQuery.getPrefixesOfResolutionByBankSellerQuery(sharedHelpers.decryptIdDataBase(idSeller), idServiceType);
             const { numberFormatted: number, numberRaw, idPrefix, idResolution }  = await sharedHelpers.getPrefixAndInvoiceNumberNewRegister(resolutionsFound)
             
-            const invoice = extractInvoice({ 
+            let invoice = extractInvoice({
                 price: price ? price*tickets.length : priceSeat,
                 idServiceType,
                 idPaymentMethod,
@@ -157,6 +159,8 @@ module.exports = {
                 number,
                 idResolution
             });
+
+            invoice.synchronizationType = salesConst.TYPE_SYNCHRONIZATION_INVOICES.ONLY_CREATE_INVOICE
             
             transaction = await dbConnectionOptions.transaction();
             
@@ -189,7 +193,7 @@ module.exports = {
             const resolutionsFound = await sellerQuery.getPrefixesOfResolutionByBankSellerQuery(sharedHelpers.decryptIdDataBase(idSeller), idServiceType);
             const { numberFormatted: number, numberRaw, idPrefix, idResolution } = await sharedHelpers.getPrefixAndInvoiceNumberNewRegister(resolutionsFound)
             
-            const invoice = extractInvoice({ 
+            let invoice = extractInvoice({
                 price,
                 idServiceType,
                 idPaymentMethod,
@@ -199,6 +203,8 @@ module.exports = {
                 number,
                 idResolution
             });
+
+            invoice.synchronizationType = salesConst.TYPE_SYNCHRONIZATION_INVOICES.ONLY_CREATE_INVOICE
 
             transaction = await dbConnectionOptions.transaction();
             
@@ -264,6 +270,27 @@ module.exports = {
             ]);
 
             return responseHelpers.responseSuccess(res, { count: counterShipping, shippingInvoices });
+        } catch (error) {
+            return responseHelpers.responseError(res, 500, error);
+        }
+    },
+    cancelationInvoice: async (req, res) => {
+        try {
+            const { invoice } = req.body;
+            let newSynchronizationType = 2
+
+            if (!invoice.isSynchronized && invoice.synchronizationType === 1) newSynchronizationType = 3
+
+            await updateInvoiceQuery(
+                { id: decryptIdDataBase(invoice.id) },
+                {
+                    price: 0,
+                    observation: "invoice canceled",
+                    synchronizationType: newSynchronizationType,
+                    isSynchronized: false
+                }
+            )
+            return responseHelpers.responseSuccess(res, true);
         } catch (error) {
             return responseHelpers.responseError(res, 500, error);
         }
