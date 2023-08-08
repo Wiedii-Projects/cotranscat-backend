@@ -100,7 +100,7 @@ module.exports = {
     },
     createInvoiceMoneyTransfer: async(req, res) => {
         let transaction;
-        const { user: { id: idSeller }, amountMoney, cost, iva, clientSend: { id: idClient }, clientReceives: { id: idClientReceives } } = req.body;
+        const { user: { id: idSeller }, amountMoney, cost, iva, clientSend: { id: idClient }, clientReceives: { id: idClientReceives }, isElectronic } = req.body;
         try {
             const moneyTransfer = extractInvoiceMoneyTransfer({ ...req.body, idClientReceives });
             const [[{ id: idPaymentMethod }], [{ id: idServiceType, type }]] = await Promise.all([
@@ -108,7 +108,7 @@ module.exports = {
                 findServiceTypeQuery({ where: { type: TYPE_SERVICE.MONEY_TRANSFER.VALUE_CONVENTION } })
             ]);
 
-            const resolutionsFound = await sellerQuery.getPrefixesOfResolutionByBankSellerQuery(sharedHelpers.decryptIdDataBase(idSeller), idServiceType );
+            const resolutionsFound = await sellerQuery.getPrefixesOfResolutionByBankSellerQuery(sharedHelpers.decryptIdDataBase(idSeller), idServiceType, isElectronic);
             const { numberFormatted: number, numberRaw, idPrefix, idResolution } = await sharedHelpers.getPrefixAndInvoiceNumberNewRegister(resolutionsFound)
 
             let invoice = extractInvoice({
@@ -142,11 +142,11 @@ module.exports = {
     },
     createInvoiceTravel: async(req, res) => {
         let transaction;
-        const { tickets, user: { id: idSeller }, price, decryptId: idClient, priceSeat, idPaymentMethod } = req.body;
+        const { tickets, user: { id: idSeller }, price, decryptId: idClient, priceSeat, idPaymentMethod, isElectronic } = req.body;
         try {
             const [{ id: idServiceType, type }] = await  findServiceTypeQuery({ where: { type: TYPE_SERVICE.PASSAGE.VALUE_CONVENTION } });
             
-            const resolutionsFound = await sellerQuery.getPrefixesOfResolutionByBankSellerQuery(sharedHelpers.decryptIdDataBase(idSeller), idServiceType);
+            const resolutionsFound = await sellerQuery.getPrefixesOfResolutionByBankSellerQuery(sharedHelpers.decryptIdDataBase(idSeller), idServiceType, isElectronic);
             const { numberFormatted: number, numberRaw, idPrefix, idResolution }  = await sharedHelpers.getPrefixAndInvoiceNumberNewRegister(resolutionsFound)
             
             let invoice = extractInvoice({
@@ -182,7 +182,7 @@ module.exports = {
     },
     createInvoiceShipping: async(req, res) => {
         let transaction;
-        const { user: { id: idSeller }, price, clientSend: { id: idClient }, clientReceives: { id: idClientReceives } } = req.body;
+        const { user: { id: idSeller }, price, clientSend: { id: idClient }, clientReceives: { id: idClientReceives }, isElectronic } = req.body;
         try {
             const shipping = extractInvoiceShipping({ ...req.body, idClientReceives });
             const [[{ id: idPaymentMethod }], [{ id: idServiceType, type }]] = await Promise.all([
@@ -190,7 +190,7 @@ module.exports = {
                 findServiceTypeQuery({ where: { type: TYPE_SERVICE.SHIPPING.VALUE_CONVENTION } })
             ]);
             
-            const resolutionsFound = await sellerQuery.getPrefixesOfResolutionByBankSellerQuery(sharedHelpers.decryptIdDataBase(idSeller), idServiceType);
+            const resolutionsFound = await sellerQuery.getPrefixesOfResolutionByBankSellerQuery(sharedHelpers.decryptIdDataBase(idSeller), idServiceType, isElectronic);
             const { numberFormatted: number, numberRaw, idPrefix, idResolution } = await sharedHelpers.getPrefixAndInvoiceNumberNewRegister(resolutionsFound)
             
             let invoice = extractInvoice({

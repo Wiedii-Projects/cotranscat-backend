@@ -1060,6 +1060,10 @@
       "code": "INVO012",
       "message": "Code sale not exist"
     },
+    "isElectronicRequired": {
+      "code": "INVO013",
+      "message": "The electronic value is required"
+    },
     "queryErrors": {
       "createError": {
         "code": "INVO_001",
@@ -1347,6 +1351,10 @@
     "bankAssociatedByHeadquarterIsInvalid": {
       "code": "RSLT024",
       "message": "The bank associated by headquarter is invalid"
+    },
+    "isElectronicRequired": {
+      "code": "RSLT025",
+      "message": "The electronic value is required"
     },
     "queryErrors": {
       "createError": {

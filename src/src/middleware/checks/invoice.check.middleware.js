@@ -63,6 +63,11 @@ module.exports = {
                 .withMessage(new ErrorModel(errorsConst.invoiceErrors.paymentMethodRequired)),
             check("price").optional({checkFalsy: false})
                 .isFloat().withMessage(new ErrorModel(errorsConst.invoiceErrors.priceRequired)),
+            check("isElectronic")
+                    .isBoolean()
+                    .withMessage(new ErrorModel(errorsConst.invoiceErrors.isElectronicRequired))
+                    .bail(),
+            sharedValidators.validateError,
             check("tickets")
                 .isArray()
                 .isLength({min: 1})
@@ -91,6 +96,11 @@ module.exports = {
     },
     checkCreateMoneyTransfer: () => [
         ...sharedCheckMiddleware.checkJwt(),
+        check("isElectronic")
+            .isBoolean()
+            .withMessage(new ErrorModel(errorsConst.invoiceErrors.isElectronicRequired))
+            .bail(),
+        sharedValidators.validateError,
         check("idClientSends")
             .isString()
             .withMessage(new ErrorModel(errorsConst.invoiceErrors.clientRequired))
@@ -175,6 +185,11 @@ module.exports = {
                 .customSanitizer((value) => value.toString()) 
                 .isLength({min: 1})
                 .withMessage(new ErrorModel(errorsConst.shippingErrors.contentRequired))
+                .bail(),
+            sharedValidators.validateError,
+            check("isElectronic")
+                .isBoolean()
+                .withMessage(new ErrorModel(errorsConst.invoiceErrors.isElectronicRequired))
                 .bail(),
             sharedValidators.validateError,
             check('isHomeDelivery')
