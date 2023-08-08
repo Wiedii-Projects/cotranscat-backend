@@ -4,6 +4,7 @@ module.exports = {
   userController: require("./user/user.controller"),
   indicativeNumberController: require("./indicative-number.controller"),
   departmentController: require("./department.controller"),
+  countryController: require("./country.controller"),
   municipalityController: require("./municipality.controller"),
   paymentMethodController: require("./payment-method.controller"),
   unitMeasureController: require("./unit-measure.controller"),

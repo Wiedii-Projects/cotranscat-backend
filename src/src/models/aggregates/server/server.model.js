@@ -47,7 +47,8 @@ class ServerModel {
             seat: '/api/seat',
             invoice: '/api/invoice',
             observation: '/api/observation',
-            resolution: '/api/resolution'
+            resolution: '/api/resolution',
+            country: '/api/country',
         }
         this.dbHost = coreConfigurationsConst.dbHost;
         this.dbs();
@@ -104,6 +105,7 @@ class ServerModel {
         this.app.use(this.paths.invoice, require('../../../routes/invoice.routes'));
         this.app.use(this.paths.observation, require('../../../routes/observation.routes'));
         this.app.use(this.paths.resolution, require('../../../routes/resolution.routes'));
+        this.app.use(this.paths.country, require('../../../routes/country.routes'));
     }
 
     listen() {

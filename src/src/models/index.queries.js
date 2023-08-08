@@ -4,6 +4,7 @@ module.exports = {
   roleQuery: require("./role/role.query"),
   indicativeNumberQuery: require("./indicative-number/indicative-number.query"),
   departmentQuery: require("./department/department.query"),
+  countryQuery: require("./country/country.query"),
   municipalityQuery: require("./municipality/municipality.query"),
   paymentMethodQuery: require("./payment-method/payment-method.query"),
   unitMeasureQuery: require("./unit-measure/unit-measure.query"),
