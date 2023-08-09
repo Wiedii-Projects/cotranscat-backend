@@ -96,6 +96,16 @@ module.exports = {
         width: 5,
         height: 7
     },
+    defaultBloodType: [
+        { id: 1, name: 'Tipo A+'},
+        { id: 2, name: 'Tipo A-'},
+        { id: 3, name: 'Tipo O+'},
+        { id: 4, name: 'Tipo O-'},
+        { id: 5, name: 'Tipo B+'},
+        { id: 6, name: 'Tipo B-'},
+        { id: 7, name: 'Tipo AB+'},
+        { id: 8, name: 'Tipo AB-'}
+    ],
     defaultCountry: [
         { id: 1, name: 'Colombia'},
         { id: 2, name: 'Venezuela'},
