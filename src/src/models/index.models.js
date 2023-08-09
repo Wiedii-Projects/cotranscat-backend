@@ -66,6 +66,14 @@ DriverVehicle.hasMany(Travel, { as: 'TravelDriverVehicle', foreignKey: { name: "
 Driver.belongsTo(BloodType, { as: 'BloodTypeDriver', foreignKey: { name: 'idBloodType', allowNull: false } });
 BloodType.hasOne(Driver, { as: 'BloodTypeDriver', foreignKey: { name: 'idBloodType', allowNull: false } });
 
+// Relationship Driver-Municipality-Birth
+Driver.belongsTo(Municipality, { as: 'DriverMunicipalityBirth', foreignKey: { name: "idMunicipalityOfBirth", allowNull: false } });
+Municipality.hasMany(Driver, { as: 'DriverMunicipalityBirth', foreignKey: { name: "idMunicipalityOfBirth", allowNull: false } });
+
+// Relationship Driver-Municipality-Residence
+Driver.belongsTo(Municipality, { as: 'DriverMunicipalityResidence', foreignKey: { name: "idMunicipalityOfResidence", allowNull: true } });
+Municipality.hasMany(Driver, { as: 'DriverMunicipalityResidence', foreignKey: { name: "idMunicipalityOfResidence", allowNull: true } });
+
 // Relationship LicenseCategory-Driver
 Driver.belongsTo(LicenseCategory, { as: 'LicenseCategoryDriver', foreignKey: { name: 'idLicenseCategory', allowNull: false } });
 LicenseCategory.hasOne(Driver, { as: 'LicenseCategoryDriver', foreignKey: { name: 'idLicenseCategory', allowNull: false } });

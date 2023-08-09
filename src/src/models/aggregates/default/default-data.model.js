@@ -81,7 +81,14 @@ module.exports = {
     defaultDriver: {
         email: 'driver@driver.co',
         nickName: 'userDriver',
-        password: process.env.PASSWORD_ADMIN_ROOT
+        password: process.env.PASSWORD_ADMIN_ROOT,
+        dateOfBirth: '1999-09-01',
+        address: 'Manzana xxx lote xxx palmxxe',
+        licenseNumber: '12344321',
+        dateOfLicenseIssuance: '2020-01-05',
+        dateExpirationLicense: '2026-01-04',
+        transitAgency: 'agencia de transito xx',
+        restriction: 'debe usar lentes a la hora de conducir'
     },
     defaultClient: {
         numberPhoneWhatsapp: '3052627086',
