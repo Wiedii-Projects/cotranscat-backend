@@ -96,20 +96,25 @@ module.exports = {
         width: 5,
         height: 7
     },
+    defaultCountry: [
+        { id: 1, name: 'Colombia'},
+        { id: 2, name: 'Venezuela'},
+        { id: 3, name: 'Ecuador'},
+    ],
     defaultDepartment : [
-        { name: 'Amazonas' },
-        { name: 'Antioquia' },
-        { name: 'Arauca' },
-        { name: 'Atlántico' },
-        { name: 'Bolívar' },
-        { name: 'Boyacá' },
-        { name: 'Caldas' },
-        { name: 'Caquetá' },
-        { name: 'Casanare' },
-        { name: 'Cauca' },
-        { name: 'Cesar' },
-        { name: 'Chocó' },
-        { name: 'Norte de Santander'}
+        { id: 1, idCountry: "1", name: 'Amazonas' },
+        { id: 2, idCountry: "1", name: 'Antioquia' },
+        { id: 3, idCountry: "1", name: 'Arauca' },
+        { id: 4, idCountry: "1", name: 'Atlántico' },
+        { id: 5, idCountry: "1", name: 'Bolívar' },
+        { id: 6, idCountry: "1", name: 'Boyacá' },
+        { id: 7, idCountry: "1", name: 'Caldas' },
+        { id: 8, idCountry: "1", name: 'Caquetá' },
+        { id: 9, idCountry: "1", name: 'Casanare' },
+        { id: 10, idCountry: "1", name: 'Chocó' },
+        { id: 11, idCountry: "1", name: 'Cauca' },
+        { id: 12, idCountry: "1", name: 'Cesar' },
+        { id: 13, idCountry: "1", name: 'Norte de Santander'}
     ],
     defaultPaymentMethod : [
         { name: 'Transferencia' },

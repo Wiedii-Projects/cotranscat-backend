@@ -33,6 +33,7 @@ const MoneyTransfer = require('./money-transfer/money-transfer.model')
 const Prefix = require('./prefix/prefix.model')
 const Resolution = require('./resolution/resolution.model')
 const MoneyTransferTracker = require('./money-transfer-tracker/money-transfer-tracker.model')
+const Country = require('./country/country.model')
 
 // Relationships BD
 
@@ -90,6 +91,10 @@ User.hasOne(Coordinator, { as: 'UserCoordinator', foreignKey: { name: 'id', allo
 // Relationship Municipality-Department
 Municipality.belongsTo(Department, { as: 'MunicipalityDepartment', foreignKey: { name: "idDepartment", allowNull: false } });
 Department.hasMany(Municipality, { as: 'MunicipalityDepartment', foreignKey: { name: "idDepartment", allowNull: false } });
+
+// Relationship Department-Country
+Department.belongsTo(Country, { as: 'DepartmentCountry', foreignKey: { name: "idCountry", allowNull: false } });
+Country.hasMany(Department, { as: 'DepartmentCountry', foreignKey: { name: "idCountry", allowNull: false } });
 
 // Relationship Vehicle-Municipality
 Municipality.hasMany(Vehicle, { as: 'VehicleMunicipality', foreignKey: { name: "idMunicipality", allowNull: false } });
@@ -266,5 +271,6 @@ module.exports = {
   MoneyTransfer,
   Prefix,
   Resolution,
-  MoneyTransferTracker
+  MoneyTransferTracker,
+  Country
 };

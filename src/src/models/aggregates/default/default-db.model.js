@@ -14,7 +14,8 @@ const {
     defaultClient,
     defaultDriver,
     defaultBank,
-    defaultHeadquarter
+    defaultHeadquarter,
+    defaultCountry
 } = require('./default-data.model');
 
 //Const
@@ -31,6 +32,7 @@ const DocumentType = require('../../document-type/document-type.model');
 const Department = require('../../department/department.model');
 const PaymentMethod = require('../../payment-method/payment-method.model');
 const Municipality = require('../../municipality/municipality.model');
+const Country = require('../../country/country.model');
 const UnitMeasure = require('../../unit-measure/unit-measure.model');
 const ShippingType = require('../../shipping-type/shipping-type.model');
 const ServiceType = require('../../service-type/service-type.model');
@@ -146,6 +148,10 @@ class defaultDataBaseModel {
         return await Municipality.count();
     }
 
+    async countCountry() {
+        return await Country.count();
+    }
+
     async countPaymentMethod() {
         return await PaymentMethod.count();
     }
@@ -182,6 +188,7 @@ class defaultDataBaseModel {
         await this.countRole() || Object.values(roleConst).map(async (element) => {await Role.create({type: element})});
         await this.countIndicativeNumber() || defaultIndicativeNumber.map(  async(element) => await IndicativeNumber.create( element ) );
         await this.countDocumentType() || defaultDocumentType.map(  async(element) => await DocumentType.create( element ) );
+        await this.countCountry() || defaultCountry.map(  async(element) => await Country.create( element ) );
         await this.countDepartment() || defaultDepartment.map(  async(element) => await Department.create( element ) );
         await this.countPaymentMethod() || defaultPaymentMethod.map(  async(element) => await PaymentMethod.create( element ) );
         await this.countMunicipality() || defaultMunicipality.map(  async(element) => await Municipality.create( element ) );
