@@ -315,7 +315,14 @@ class defaultDataBaseModel {
                     idMunicipality,
                     id: userClient.id 
                 }),
-                Driver.create({ ...defaultDriver, id: userDriver.id, idBloodType, idLicenseCategory }),
+                Driver.create({ 
+                    ...defaultDriver, 
+                    id: userDriver.id, 
+                    idBloodType, 
+                    idLicenseCategory,
+                    idMunicipalityOfBirth: idMunicipality,
+                    idMunicipalityOfResidence: idMunicipality
+                }),
             ]); 
         };
     }
