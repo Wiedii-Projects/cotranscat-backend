@@ -14,6 +14,7 @@ router.post('/', [
 ], departmentController.createDepartment);
 
 router.get('/',[
+    departmentMiddleware.checkFindAllDepartment(),
 ],departmentController.getAllDepartment);
 
 router.put('/:id', [

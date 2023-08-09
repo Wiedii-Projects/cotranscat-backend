@@ -272,6 +272,14 @@
       "code": "DEPT002",
       "message": "The department name must have a minimum of 1 character and a maximum of 30 characters"
     },
+    "countryRequired": {
+      "code": "DEPT003",
+      "message": "country is required"
+    },
+    "countryDoesNotExist": {
+      "code": "DEPT004",
+      "message": "country does not exist"
+    },
     "queryErrors":{
       "createError": {
         "code": "DEPT_001",
@@ -1367,6 +1375,14 @@
       },
       "findBankAssociatedByHeadquarterError": {
         "code": "BNNK_002",
+        "message": "Something went wrong"
+      }
+    }
+  },
+  "CountryErrors": {
+    "queryErrors": {
+      "findAllError": {
+        "code": "COUN_001",
         "message": "Something went wrong"
       }
     }
