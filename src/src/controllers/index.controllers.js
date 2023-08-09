@@ -22,5 +22,6 @@ module.exports = {
   seatController: require("./seat.controller"),
   invoiceController: require("./invoice.controller"),
   observationController: require("./observation.controller"),
-  resolutionController: require("./resolution.controller")
+  resolutionController: require("./resolution.controller"),
+  bloodTypeController: require("./bloodType.controller")
 };
