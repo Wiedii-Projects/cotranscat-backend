@@ -34,6 +34,7 @@ const Prefix = require('./prefix/prefix.model')
 const Resolution = require('./resolution/resolution.model')
 const MoneyTransferTracker = require('./money-transfer-tracker/money-transfer-tracker.model')
 const Country = require('./country/country.model')
+const BloodType = require('./bloodType/bloodType.model')
 
 // Relationships BD
 
@@ -59,6 +60,10 @@ DriverVehicle.belongsTo(Driver, { as: 'Driver', foreignKey: { name: 'idDriver', 
 // Relationship DriverVehicle-Travel
 Travel.belongsTo(DriverVehicle, { as: 'TravelDriverVehicle', foreignKey: { name: "idDriverVehicle", allowNull: false } });
 DriverVehicle.hasMany(Travel, { as: 'TravelDriverVehicle', foreignKey: { name: "idDriverVehicle", allowNull: false } });
+
+// Relationship BloodType-Driver
+Driver.belongsTo(BloodType, { as: 'BloodTypeDriver', foreignKey: { name: 'idBloodType', allowNull: false } });
+BloodType.hasOne(Driver, { as: 'BloodTypeDriver', foreignKey: { name: 'idBloodType', allowNull: false } });
 
 // Relationship Client-idIndicativePhoneWhatsApp
 Client.belongsTo(IndicativeNumber, { as: 'ClientIndicativeNumberWhatsApp', foreignKey: { name: "idIndicativePhoneWhatsApp", allowNull: false } });
@@ -272,5 +277,6 @@ module.exports = {
   Prefix,
   Resolution,
   MoneyTransferTracker,
-  Country
+  Country,
+  BloodType
 };

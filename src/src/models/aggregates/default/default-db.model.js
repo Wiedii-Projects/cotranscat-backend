@@ -15,7 +15,8 @@ const {
     defaultDriver,
     defaultBank,
     defaultHeadquarter,
-    defaultCountry
+    defaultCountry,
+    defaultBloodType
 } = require('./default-data.model');
 
 //Const
@@ -41,6 +42,7 @@ const Vehicle = require('../../vehicle/vehicle.model');
 const Route = require('../../route/route.model');
 const Bank = require('../../bank/bank.model');
 const Headquarter = require('../../headquarter/headquarter.model');
+const BloodType = require('../../bloodType/bloodType.model');
 
 class defaultDataBaseModel {
     constructor() {
@@ -80,6 +82,12 @@ class defaultDataBaseModel {
     async getIndicativeNumber () {
         const [{ country }] = defaultIndicativeNumber;
         const { id } = await IndicativeNumber.findOne({ where: { country }});
+        return id;
+    }
+
+    async getBloodType () {
+        const [{ name }] = defaultBloodType;
+        const { id } = await BloodType.findOne({ where: { name }});
         return id;
     }
 
@@ -184,8 +192,13 @@ class defaultDataBaseModel {
         return await Headquarter.count();
     }
 
+    async countBloodType () {
+        return await BloodType.count();
+    }
+
     async createDefaultDataBase() {
         await this.countRole() || Object.values(roleConst).map(async (element) => {await Role.create({type: element})});
+        await this.countBloodType() || defaultBloodType.map(async (element) => {await BloodType.create( element )});
         await this.countIndicativeNumber() || defaultIndicativeNumber.map(  async(element) => await IndicativeNumber.create( element ) );
         await this.countDocumentType() || defaultDocumentType.map(  async(element) => await DocumentType.create( element ) );
         await this.countCountry() || defaultCountry.map(  async(element) => await Country.create( element ) );
@@ -224,7 +237,8 @@ class defaultDataBaseModel {
                 idPaymentMethod,
                 idUnitMeasure,
                 idShippingType,
-                idBank
+                idBank,
+                idBloodType
             ] = await Promise.all([
                 this.getIndicativeNumber(),
                 this.getAdminRole(),
@@ -235,7 +249,8 @@ class defaultDataBaseModel {
                 this.getPaymentMethod(),
                 this.getUnitMeasure(),
                 this.getShippingType(),
-                this.getFirstBank()
+                this.getFirstBank(),
+                this.getBloodType()
             ]);
             const [ userAdmin, userSeller, userClient, userDriver ] = await Promise.all ([
                 User.create({ 
@@ -285,7 +300,7 @@ class defaultDataBaseModel {
                     idMunicipality,
                     id: userClient.id 
                 }),
-                Driver.create({ ...defaultDriver, id: userDriver.id }),
+                Driver.create({ ...defaultDriver, id: userDriver.id, idBloodType }),
             ]); 
         };
     }
