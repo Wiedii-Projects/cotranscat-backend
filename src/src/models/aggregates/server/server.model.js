@@ -49,6 +49,7 @@ class ServerModel {
             observation: '/api/observation',
             resolution: '/api/resolution',
             country: '/api/country',
+            bloodType: '/api/bloodType'
         }
         this.dbHost = coreConfigurationsConst.dbHost;
         this.dbs();
@@ -106,6 +107,7 @@ class ServerModel {
         this.app.use(this.paths.observation, require('../../../routes/observation.routes'));
         this.app.use(this.paths.resolution, require('../../../routes/resolution.routes'));
         this.app.use(this.paths.country, require('../../../routes/country.routes'));
+        this.app.use(this.paths.bloodType, require('../../../routes/bloodType.routes'));
     }
 
     listen() {
