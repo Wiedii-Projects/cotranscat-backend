@@ -106,6 +106,16 @@ module.exports = {
         { id: 7, name: 'Tipo AB+'},
         { id: 8, name: 'Tipo AB-'}
     ],
+    defaultLicenseCategory: [
+        { id: 1, name: 'A1'},
+        { id: 2, name: 'A2'},
+        { id: 3, name: 'B1'},
+        { id: 4, name: 'B2'},
+        { id: 5, name: 'B3'},
+        { id: 6, name: 'C1'},
+        { id: 7, name: 'C2'},
+        { id: 8, name: 'C3'}
+    ],
     defaultCountry: [
         { id: 1, name: 'Colombia'},
         { id: 2, name: 'Venezuela'},

@@ -16,7 +16,8 @@ const {
     defaultBank,
     defaultHeadquarter,
     defaultCountry,
-    defaultBloodType
+    defaultBloodType,
+    defaultLicenseCategory
 } = require('./default-data.model');
 
 //Const
@@ -43,6 +44,7 @@ const Route = require('../../route/route.model');
 const Bank = require('../../bank/bank.model');
 const Headquarter = require('../../headquarter/headquarter.model');
 const BloodType = require('../../bloodType/bloodType.model');
+const LicenseCategory = require('../../licenseCategory/licenseCategory.model');
 
 class defaultDataBaseModel {
     constructor() {
@@ -88,6 +90,12 @@ class defaultDataBaseModel {
     async getBloodType () {
         const [{ name }] = defaultBloodType;
         const { id } = await BloodType.findOne({ where: { name }});
+        return id;
+    }
+
+    async getLicenseCategory () {
+        const [{ name }] = defaultLicenseCategory;
+        const { id } = await LicenseCategory.findOne({ where: { name }});
         return id;
     }
 
@@ -160,6 +168,10 @@ class defaultDataBaseModel {
         return await Country.count();
     }
 
+    async countLicenseCategory() {
+        return await LicenseCategory.count();
+    }
+
     async countPaymentMethod() {
         return await PaymentMethod.count();
     }
@@ -199,6 +211,7 @@ class defaultDataBaseModel {
     async createDefaultDataBase() {
         await this.countRole() || Object.values(roleConst).map(async (element) => {await Role.create({type: element})});
         await this.countBloodType() || defaultBloodType.map(async (element) => {await BloodType.create( element )});
+        await this.countLicenseCategory() || defaultLicenseCategory.map(async (element) => {await LicenseCategory.create( element )});
         await this.countIndicativeNumber() || defaultIndicativeNumber.map(  async(element) => await IndicativeNumber.create( element ) );
         await this.countDocumentType() || defaultDocumentType.map(  async(element) => await DocumentType.create( element ) );
         await this.countCountry() || defaultCountry.map(  async(element) => await Country.create( element ) );
@@ -238,7 +251,8 @@ class defaultDataBaseModel {
                 idUnitMeasure,
                 idShippingType,
                 idBank,
-                idBloodType
+                idBloodType,
+                idLicenseCategory
             ] = await Promise.all([
                 this.getIndicativeNumber(),
                 this.getAdminRole(),
@@ -250,7 +264,8 @@ class defaultDataBaseModel {
                 this.getUnitMeasure(),
                 this.getShippingType(),
                 this.getFirstBank(),
-                this.getBloodType()
+                this.getBloodType(),
+                this.getLicenseCategory()
             ]);
             const [ userAdmin, userSeller, userClient, userDriver ] = await Promise.all ([
                 User.create({ 
@@ -300,7 +315,7 @@ class defaultDataBaseModel {
                     idMunicipality,
                     id: userClient.id 
                 }),
-                Driver.create({ ...defaultDriver, id: userDriver.id, idBloodType }),
+                Driver.create({ ...defaultDriver, id: userDriver.id, idBloodType, idLicenseCategory }),
             ]); 
         };
     }

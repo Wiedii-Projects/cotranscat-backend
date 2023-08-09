@@ -35,6 +35,7 @@ const Resolution = require('./resolution/resolution.model')
 const MoneyTransferTracker = require('./money-transfer-tracker/money-transfer-tracker.model')
 const Country = require('./country/country.model')
 const BloodType = require('./bloodType/bloodType.model')
+const LicenseCategory = require('./licenseCategory/licenseCategory.model')
 
 // Relationships BD
 
@@ -64,6 +65,10 @@ DriverVehicle.hasMany(Travel, { as: 'TravelDriverVehicle', foreignKey: { name: "
 // Relationship BloodType-Driver
 Driver.belongsTo(BloodType, { as: 'BloodTypeDriver', foreignKey: { name: 'idBloodType', allowNull: false } });
 BloodType.hasOne(Driver, { as: 'BloodTypeDriver', foreignKey: { name: 'idBloodType', allowNull: false } });
+
+// Relationship LicenseCategory-Driver
+Driver.belongsTo(LicenseCategory, { as: 'LicenseCategoryDriver', foreignKey: { name: 'idLicenseCategory', allowNull: false } });
+LicenseCategory.hasOne(Driver, { as: 'LicenseCategoryDriver', foreignKey: { name: 'idLicenseCategory', allowNull: false } });
 
 // Relationship Client-idIndicativePhoneWhatsApp
 Client.belongsTo(IndicativeNumber, { as: 'ClientIndicativeNumberWhatsApp', foreignKey: { name: "idIndicativePhoneWhatsApp", allowNull: false } });
@@ -278,5 +283,6 @@ module.exports = {
   Resolution,
   MoneyTransferTracker,
   Country,
-  BloodType
+  BloodType,
+  LicenseCategory
 };
