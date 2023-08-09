@@ -7,7 +7,7 @@ const {
 const { DataTypes } = require("sequelize");
 
 const BloodTypeSchema = dbConnectionOptions.define(
-  "bloodTypeSchema",
+  "bloodType",
   {
     name: {
       type: DataTypes.STRING(50),
