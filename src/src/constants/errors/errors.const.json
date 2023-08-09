@@ -519,6 +519,14 @@
       }
     }
   },
+  "licenseCategoryErrors": {
+    "queryErrors": {
+      "findAllError": {
+        "code": "LICC_001",
+        "message": "Something went wrong"
+      }
+    }
+  },
   "driverErrors":{
     "nickNameRequired": {
       "code": "DRIV001",

@@ -23,5 +23,6 @@ module.exports = {
   invoiceController: require("./invoice.controller"),
   observationController: require("./observation.controller"),
   resolutionController: require("./resolution.controller"),
-  bloodTypeController: require("./bloodType.controller")
+  bloodTypeController: require("./bloodType.controller"),
+  licenseCategoryController: require("./licenseCategory.controller")
 };

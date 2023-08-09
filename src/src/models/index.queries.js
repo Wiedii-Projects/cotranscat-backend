@@ -31,5 +31,6 @@ module.exports = {
   resolutionQuery: require('./resolution/resolution.query'),
   bankQuery: require('./bank/bank.query'),
   moneyTransferQuery: require("./money-transfer/money-transfer.query"),
-  bloodTypeQuery: require("./bloodType/bloodType.query")
+  bloodTypeQuery: require("./bloodType/bloodType.query"),
+  licenseCategoryQuery: require("./licenseCategory/licenseCategory.query")
 };
