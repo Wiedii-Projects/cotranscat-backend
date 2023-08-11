@@ -1068,6 +1068,14 @@
       "code": "INVO013",
       "message": "The electronic value is required"
     },
+    "invoiceIsAlreadyCancelled": {
+      "code": "INVO014",
+      "message": "Invoice is already cancelled"
+    },
+    "invoiceIsAlreadyElectronic": {
+      "code": "INVO015",
+      "message": "Invoice is already electronic"
+    },
     "queryErrors": {
       "createError": {
         "code": "INVO_001",

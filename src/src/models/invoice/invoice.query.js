@@ -234,7 +234,8 @@ module.exports = {
             "idClient",
             "idSeller",
             "number",
-            "idResolution"
+            "idResolution",
+            "isCancelled"
           ],
           raw: true,
           nest: true
@@ -253,7 +254,8 @@ module.exports = {
               idClient: encryptIdDataBase(result.idClient),
               idSeller: encryptIdDataBase(result.idSeller),
               number: result.number,
-              idResolution: encryptIdDataBase(result.idResolution)
+              idResolution: encryptIdDataBase(result.idResolution),
+              isCancelled: result.isCancelled
           };
           return invoice;
         })
@@ -920,5 +922,69 @@ module.exports = {
     } catch {
       throw errorsConst.invoiceErrors.queryErrors.updateError;
     }
-  }
+  },
+  findInvoiceElectronicQuery: async(query = {}) => {
+    try {
+        const { 
+          where
+        } = query;
+        return await Invoice.findOne({
+          include: [
+            {
+              model: Resolution,
+              as: 'ResolutionInvoice',
+              attributes: [],
+              include: [
+                {
+                  model: Prefix,
+                  as: 'PrefixResolution',
+                  attributes: ['isElectronic']
+                }
+              ]
+            }
+          ],
+          where,
+          attributes: [
+            'id',
+            'number',
+            'date',
+            'price',
+            'idServiceType',
+            'isSynchronized',
+            'synchronizationType',
+            "idPaymentMethod",
+            "codeSale",
+            "idClient",
+            "idSeller",
+            "number",
+            "idResolution",
+            "isCancelled"
+          ],
+          raw: true,
+          nest: true
+        })
+          .then((result) => {
+          const invoice = {
+              id: encryptIdDataBase(result.id),
+              idServiceType: encryptIdDataBase(result.idServiceType),
+              number: result.number,
+              date: result.date,
+              price: result.price,
+              isSynchronized: result.isSynchronized,
+              synchronizationType: result.synchronizationType,
+              idPaymentMethod: encryptIdDataBase(result.idPaymentMethod),
+              codeSale: result.codeSale,
+              idClient: encryptIdDataBase(result.idClient),
+              idSeller: encryptIdDataBase(result.idSeller),
+              number: result.number,
+              idResolution: encryptIdDataBase(result.idResolution),
+              isCancelled: result.isCancelled,
+              isElectronic: result.ResolutionInvoice.PrefixResolution.isElectronic
+          };
+          return invoice;
+        })
+    } catch {
+        throw errorsConst.invoiceErrors.queryErrors.findAllError;
+    }
+  },
 }

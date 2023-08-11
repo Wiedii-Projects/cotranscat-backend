@@ -23,11 +23,23 @@ module.exports = {
             req.body.invoice = false;
         }
     },
-    validateInvoice: async (where, req) => {
+    validateInvoiceIsCancelled: async (where, req) => {
         try {
+            req.body.isCancelledInvoice = false
             req.body.invoice = await invoiceQuery.findInvoiceQuery({ where });
+
+            if (req.body.invoice && req.body.invoice.isCancelled === 0) req.body.isCancelledInvoice = true
         } catch {
             req.body.invoice = false;
+        }
+    },
+    validateInvoiceIsElectronic: async (where, req) => {
+        try {
+            req.body.isCancelledInvoice = false
+            const invoice = await invoiceQuery.findInvoiceElectronicQuery({ where });
+            req.body.isInvoiceElectronic = invoice.isElectronic === 1 ? true : false;
+        } catch {
+            req.body.isInvoiceElectronic = false;
         }
     }
 }

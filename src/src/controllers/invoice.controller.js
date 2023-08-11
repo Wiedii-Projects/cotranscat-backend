@@ -288,7 +288,8 @@ module.exports = {
                     price: 0,
                     observation: "invoice canceled",
                     synchronizationType: newSynchronizationType,
-                    isSynchronized: false
+                    isSynchronized: false,
+                    isCancelled: true
                 }
             )
             return responseHelpers.responseSuccess(res, true);
@@ -363,7 +364,8 @@ module.exports = {
                     price: 0,
                     observation: "invoice canceled - create electronic invoice",
                     synchronizationType: newSynchronizationType,
-                    isSynchronized: false
+                    isSynchronized: false,
+                    isCancelled: true
                 },
                 transaction
             )

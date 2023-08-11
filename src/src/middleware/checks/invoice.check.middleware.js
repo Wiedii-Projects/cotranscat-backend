@@ -267,9 +267,13 @@ module.exports = {
         return [
             ...sharedCheckMiddleware.checkJwt(),
             check('idInvoice', new ErrorModel(errorsConst.invoiceErrors.invoiceRequired))
-                .custom((value, { req }) => invoiceValidators.validateInvoice({ id: sharedHelpers.decryptIdDataBase(value) }, req))
-                .custom((value, { req }) => !!req.body.invoice)
-                .withMessage(new ErrorModel(errorsConst.invoiceErrors.invoiceNotGenerated)),
+                .custom((value, { req }) => invoiceValidators.validateInvoiceIsCancelled({ id: sharedHelpers.decryptIdDataBase(value) }, req))
+                .custom((_, { req }) => !!req.body.invoice)
+                .withMessage(new ErrorModel(errorsConst.invoiceErrors.invoiceNotGenerated))
+                .bail()
+                .custom((_, { req }) => req.body.isCancelledInvoice === true)
+                .withMessage(new ErrorModel(errorsConst.invoiceErrors.invoiceIsAlreadyCancelled))
+                .bail(),
             sharedValidators.validateError
         ]
     },
@@ -277,9 +281,17 @@ module.exports = {
         return [
             ...sharedCheckMiddleware.checkJwt(),
             check('idInvoice', new ErrorModel(errorsConst.invoiceErrors.invoiceRequired))
-                .custom((value, { req }) => invoiceValidators.validateInvoice({ id: sharedHelpers.decryptIdDataBase(value) }, req))
+                .custom((value, { req }) => invoiceValidators.validateInvoiceIsCancelled({ id: sharedHelpers.decryptIdDataBase(value) }, req))
                 .custom((value, { req }) => !!req.body.invoice)
-                .withMessage(new ErrorModel(errorsConst.invoiceErrors.invoiceNotGenerated)),
+                .withMessage(new ErrorModel(errorsConst.invoiceErrors.invoiceNotGenerated))
+                .bail()
+                .custom((_, { req }) => req.body.isCancelledInvoice === true)
+                .withMessage(new ErrorModel(errorsConst.invoiceErrors.invoiceIsAlreadyCancelled))
+                .bail()
+                .custom((value, { req }) => invoiceValidators.validateInvoiceIsElectronic({ id: sharedHelpers.decryptIdDataBase(value) }, req))
+                .custom((_, { req }) => req.body.isInvoiceElectronic === false)
+                .withMessage(new ErrorModel(errorsConst.invoiceErrors.invoiceIsAlreadyElectronic))
+                .bail(),
             sharedValidators.validateError
         ]
     }

@@ -59,6 +59,12 @@ const { createNewTicketQuery } = require("../ticket/ticket.query");
         type: DataTypes.STRING,
         field: "observation",
         defaultValue: ""
+      },
+      isCancelled: {
+        type: DataTypes.BOOLEAN,
+        field: "isCancelled",
+        defaultValue: false,
+        allowNull: false
       }
     },
     {
