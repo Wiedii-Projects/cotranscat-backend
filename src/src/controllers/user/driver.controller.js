@@ -79,8 +79,8 @@ module.exports = {
 
   updateDriver: async (req, res) => {
     const { decryptId: id } = req.body;
-    const userData = extractUserDataHelper(req.body);
-    const { password, ...driverData } = extractDriverDataHelper(req.body);
+    const userData = userHelpers.extractUserDataHelper(req.body);
+    const { password, ...driverData } = userHelpers.extractDriverDataHelper(req.body);
     let transaction;
     try {
       transaction = await dbConnectionOptions.transaction();

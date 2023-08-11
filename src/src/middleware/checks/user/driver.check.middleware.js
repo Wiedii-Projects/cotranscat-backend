@@ -11,10 +11,16 @@ const sharedCheckMiddleware = require("../shared.check.middleware");
 const {
   sharedValidators,
   driverValidator,
+  municipalityValidators,
+  bloodTypeValidators,
+  licenseCategoryValidators
 } = require("../../index.validators.middleware");
 
 // Models
 const { ErrorModel } = require("../../../models/index.models");
+
+// Helpers
+const sharedHelpers = require("../../../helpers/shared.helpers");
 
 module.exports = {
   checkCreateDriver: () => [
@@ -43,6 +49,7 @@ module.exports = {
   ],
   checkUpdateDriver: () => [
     ...sharedCheckMiddleware.checkId(),
+    ...sharedCheckMiddleware.checkUpdateUser(),
     check("nickName").optional({ checkFalsy: false })
       .isString().withMessage(new ErrorModel(errorsConst.driverErrors.nickNameRequired)).bail()
       .isLength({ min: 1, max: 100 }).withMessage(new ErrorModel(errorsConst.driverErrors.lengthNickName)),
@@ -56,6 +63,32 @@ module.exports = {
       .isLength({ min: 6, max: 10 }).withMessage(new ErrorModel(errorsConst.driverErrors.lengthPassword)),
     sharedValidators.validateError,
     ...sharedCheckMiddleware.checkEmailOrNickNameExist(),
+    check("dateOfBirth").optional({ checkFalsy: false })
+      .isDate().withMessage(new ErrorModel(errorsConst.driverErrors.dateOfBirthRequired)).bail(),
+    check("address").optional({ checkFalsy: false })
+      .isString().isLength({ min: 1, max: 100 }).withMessage(new ErrorModel(errorsConst.driverErrors.addressRequired)).bail(),
+    check("licenseNumber").optional({ checkFalsy: false })
+      .isString().isLength({ min: 1, max: 50 }).withMessage(new ErrorModel(errorsConst.driverErrors.licenseNumberRequired)).bail(),
+    check("dateOfLicenseIssuance").optional({ checkFalsy: false })
+      .isDate().withMessage(new ErrorModel(errorsConst.driverErrors.dateOfLicenseIssuanceRequired)).bail(),
+    check("dateExpirationLicense").optional({ checkFalsy: false })
+      .isDate().withMessage(new ErrorModel(errorsConst.driverErrors.dateExpirationLicenseRequired)).bail(),
+    check("transitAgency").optional({ checkFalsy: false })
+      .isString().isLength({ min: 1, max: 50 }).withMessage(new ErrorModel(errorsConst.driverErrors.transitAgencyRequired)).bail(),
+    check("restriction").optional({ checkFalsy: false })
+      .isString().isLength({ min: 1, max: 100 }).withMessage(new ErrorModel(errorsConst.driverErrors.restrictionRequired)).bail(),
+    check("municipalityOfBirth").optional({ checkFalsy: false })
+      .custom((value, { req }) => municipalityValidators.validateIdMunicipality(req, sharedHelpers.decryptIdDataBase(value), "idMunicipalityOfBirth"))
+      .custom((value, { req }) => !!req.body.idMunicipalityOfBirth).withMessage(new ErrorModel(errorsConst.driverErrors.idMunicipalityOfBirthRequired)).bail(),
+    check("municipalityOfResidence").optional({ checkFalsy: false })
+      .custom((value, { req }) => municipalityValidators.validateIdMunicipality(req, sharedHelpers.decryptIdDataBase(value), "idMunicipalityOfResidence"))
+      .custom((value, { req }) => !!req.body.idMunicipalityOfResidence).withMessage(new ErrorModel(errorsConst.driverErrors.idMunicipalityOfResidenceRequired)).bail(),
+    check("bloodType").optional({ checkFalsy: false })
+      .custom((value, { req }) => bloodTypeValidators.validateIdBloodType(req, sharedHelpers.decryptIdDataBase(value), "idBloodType"))
+      .custom((value, { req }) => !!req.body.idBloodType).withMessage(new ErrorModel(errorsConst.driverErrors.idBloodTypeRequired)).bail(),
+    check("licenseCategory").optional({ checkFalsy: false })
+      .custom((value, { req }) => licenseCategoryValidators.validateIdLicenseCategory(req, sharedHelpers.decryptIdDataBase(value), "idLicenseCategory"))
+      .custom((value, { req }) => !!req.body.idLicenseCategory).withMessage(new ErrorModel(errorsConst.driverErrors.idLicenseCategory)).bail(),
     sharedValidators.validateError,
   ],
 };

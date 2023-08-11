@@ -14,5 +14,15 @@ module.exports = {
         } catch (error) {
             req.body.idMunicipality = false;
         }
+    },
+    validateIdMunicipality: async (req, id, data) => {
+        try {
+            const [municipality] = await municipalityQuery.findMunicipalityQuery({ where: { id }});
+            req.body[data] = municipality
+                ? sharedHelpers.decryptIdDataBase(municipality.id)
+                : false
+        } catch (error) {
+            req.body[data] = false;
+        }
     }
 }
