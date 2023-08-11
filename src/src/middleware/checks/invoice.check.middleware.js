@@ -272,5 +272,15 @@ module.exports = {
                 .withMessage(new ErrorModel(errorsConst.invoiceErrors.invoiceNotGenerated)),
             sharedValidators.validateError
         ]
+    },
+    checkCreateElectronicInvoice: () => {
+        return [
+            ...sharedCheckMiddleware.checkJwt(),
+            check('idInvoice', new ErrorModel(errorsConst.invoiceErrors.invoiceRequired))
+                .custom((value, { req }) => invoiceValidators.validateInvoice({ id: sharedHelpers.decryptIdDataBase(value) }, req))
+                .custom((value, { req }) => !!req.body.invoice)
+                .withMessage(new ErrorModel(errorsConst.invoiceErrors.invoiceNotGenerated)),
+            sharedValidators.validateError
+        ]
     }
 }

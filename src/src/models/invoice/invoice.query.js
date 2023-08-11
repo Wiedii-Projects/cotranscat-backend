@@ -228,7 +228,13 @@ module.exports = {
             'price',
             'idServiceType',
             'isSynchronized',
-            'synchronizationType'
+            'synchronizationType',
+            "idPaymentMethod",
+            "codeSale",
+            "idClient",
+            "idSeller",
+            "number",
+            "idResolution"
           ],
           raw: true,
           nest: true
@@ -241,7 +247,13 @@ module.exports = {
               date: result.date,
               price: result.price,
               isSynchronized: result.isSynchronized,
-              synchronizationType: result.synchronizationType
+              synchronizationType: result.synchronizationType,
+              idPaymentMethod: encryptIdDataBase(result.idPaymentMethod),
+              codeSale: result.codeSale,
+              idClient: encryptIdDataBase(result.idClient),
+              idSeller: encryptIdDataBase(result.idSeller),
+              number: result.number,
+              idResolution: encryptIdDataBase(result.idResolution)
           };
           return invoice;
         })
@@ -902,10 +914,9 @@ module.exports = {
       throw errorsConst.invoiceErrors.queryErrors.findAllError;
     }
   },
-  updateInvoiceQuery: async (where, update) => {
+  updateInvoiceQuery: async (where, update, transaction) => {
     try {
-      console.log(update)
-      return await Invoice.update(update, { where });
+      return await Invoice.update(update, { where, transaction });
     } catch {
       throw errorsConst.invoiceErrors.queryErrors.updateError;
     }

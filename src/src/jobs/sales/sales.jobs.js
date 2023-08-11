@@ -11,6 +11,7 @@ const {
 
 // Services
 const { invoiceServices } = require("../../services/index.services");
+const { decryptIdDataBase } = require("../../helpers/shared.helpers");
 
 module.exports = {
     synchronizeInvoicesStatusPendingJob: async (job) => {
@@ -22,20 +23,22 @@ module.exports = {
 
                 for (const invoiceElement of invoicesNotSynchronized) {
                     const {
-                        codeSale, codePrefix, codeTypeService , invoicePrice, invoiceNumber, bankCodePaymentMethod, 
+                        key, codeSale, codePrefix, codeTypeService , invoicePrice, invoiceNumber, bankCodePaymentMethod, 
                         bankCode, sellerEmail, sellerName, sellerNumberDocument, sellerDocumentType, 
                         clientName, clientEmail, clientNumberDocument, clientDocumentType, synchronizationType
                     } = invoiceElement
 
                     const invoice = {
+                        key,
                         numberInvoice: `${invoiceNumber}`,
                         codeSaleInvoice: codeSale,
                         codePrefixInvoice: codePrefix
                     }
                     switch (synchronizationType) {
+                        case salesConst.TYPE_SYNCHRONIZATION_INVOICES.CREATION_AND_CANCELLATION_INVOICE:
                         case salesConst.TYPE_SYNCHRONIZATION_INVOICES.ONLY_CREATE_INVOICE:
                             invoices.push({
-                                processType: salesConst.TYPE_SYNCHRONIZATION_INVOICES.ONLY_CREATE_INVOICE,
+                                processType: synchronizationType,
                                 data: {
                                     ...invoice,
                                     ivaValueInvoice: 0,
@@ -76,9 +79,6 @@ module.exports = {
                                 }
                             })
                             break;
-                        case salesConst.TYPE_SYNCHRONIZATION_INVOICES.CREATION_AND_CANCELLATION_INVOICE:
-    
-                            break;
     
                         default:
                             throw errorsConst.invoiceErrors.processTypeForInvoiceSynchronizationDoesNotExist
@@ -88,21 +88,20 @@ module.exports = {
                 if (invoices.length > 0) {
                     const { invoicesRegistered, invoicesFailed } = await invoiceServices.createInvoicesService({ invoices })
                     const filteredInvoices = []
-                    invoices.forEach(({ data: invoice }) => {
+                
+                    invoices.forEach(({ data: invoiceElement }) => {
                         const invoiceFound = invoicesRegistered.find(regInvoice => (
-                            regInvoice.invoice.numberInvoice === invoice.numberInvoice &&
-                            regInvoice.invoice.codeSale === invoice.codeSale &&
-                            regInvoice.invoice.codePrefix === invoice.codePrefix
+                            regInvoice.invoice.numberInvoice === invoiceElement.numberInvoice &&
+                            regInvoice.invoice.codeSaleInvoice === invoiceElement.codeSaleInvoice &&
+                            regInvoice.invoice.codePrefixInvoice === invoiceElement.codePrefixInvoice
                         ));
-                        if (invoiceFound) return filteredInvoices.push(invoiceFound.invoice)
-
+                        if (invoiceFound) return filteredInvoices.push(invoiceElement)
                     });
+
                     const updatePromises = filteredInvoices.map(invoiceToUpdate => {
                         return updateInvoiceSynchronizedJobQuery(
                             { 
-                                number: invoiceToUpdate.numberInvoice.toString().padStart(8, '0'),
-                                codeSale: invoiceToUpdate.codeSaleInvoice,
-                                codePrefix: invoiceToUpdate.codePrefixInvoice
+                                id: decryptIdDataBase(invoiceToUpdate.key)
                             },
                             { isSynchronized: true }
                         )

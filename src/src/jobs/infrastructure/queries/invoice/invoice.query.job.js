@@ -16,6 +16,7 @@ const ServiceTypeSchema = require("../../../../models/service-type/service-type.
 const PaymentMethodSchema = require("../../../../models/payment-method/payment-method.model");
 const ResolutionSchema = require("../../../../models/resolution/resolution.model");
 const PrefixSchema = require("../../../../models/prefix/prefix.model");
+const sharedHelpers = require("../../../../helpers/shared.helpers");
 
 module.exports = {
     getInvoicesDetailsNotSynchronizedJobQuery: async () => {
@@ -26,6 +27,7 @@ module.exports = {
                 attributes: [
                     [col('Invoice.synchronizationType'), 'synchronizationType'],
                     [col('Invoice.codeSale'), 'codeSale'],
+                    [col('Invoice.id'), 'key'],
                     [col('ResolutionInvoice->PrefixResolution.code'), 'codePrefix'],
                     [col('InvoiceServiceType.code'), 'codeTypeService'],
                     [col('Invoice.number'), 'invoiceNumber'],
@@ -120,9 +122,10 @@ module.exports = {
                 }
             })
             
-            const invoicesNotSynchronized = invoicesDetails.map(({ invoiceNumber,  ...otherData }) => {
+            const invoicesNotSynchronized = invoicesDetails.map(({ invoiceNumber, key,  ...otherData }) => {
                 return {
                     invoiceNumber: parseInt(invoiceNumber),
+                    key: sharedHelpers.encryptIdDataBase(key),
                     ...otherData
                 }
             })

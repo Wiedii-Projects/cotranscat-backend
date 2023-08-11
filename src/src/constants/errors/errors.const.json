@@ -199,7 +199,7 @@
       }
     }
   },
-  "documentTypeErrors":{
+  "documentTypeErrors": {
     "nameRequired": {
       "code": "DOCT001",
       "message": "The document type name is required"
@@ -208,7 +208,7 @@
       "code": "DOCT002",
       "message": "The document type name must be at least 2 characters long"
     },
-    "queryErrors":{
+    "queryErrors": {
       "createError": {
         "code": "DOCT_001",
         "message": "Something went wrong"
@@ -227,20 +227,20 @@
       }
     }
   },
-  "indicativeNumberErrors":{
-    "numberRequired":{
+  "indicativeNumberErrors": {
+    "numberRequired": {
       "code": "INDN001",
       "message": "The code number is required"
     },
-    "numberSize":{
+    "numberSize": {
       "code": "INDN002",
       "message": "The code number must have a minimum length of 1 character and a maximum length of 10 character"
     },
-    "countryRequired":{
+    "countryRequired": {
       "code": "INDN003",
       "message": "The country is required"
     },
-    "countrySize":{
+    "countrySize": {
       "code": "INDN004",
       "message": "The country must have a minimum length of 1 character and a maximum length of 50 characters"
     },
@@ -263,7 +263,7 @@
       }
     }
   },
-  "departmentErrors":{
+  "departmentErrors": {
     "nameRequired": {
       "code": "DEPT001",
       "message": "Department name is required"
@@ -272,7 +272,7 @@
       "code": "DEPT002",
       "message": "The department name must have a minimum of 1 character and a maximum of 30 characters"
     },
-    "queryErrors":{
+    "queryErrors": {
       "createError": {
         "code": "DEPT_001",
         "message": "Something went wrong"
@@ -291,7 +291,7 @@
       }
     }
   },
-  "municipalityErrors":{
+  "municipalityErrors": {
     "nameRequired": {
       "code": "MUNI001",
       "message": "Municipality name is required"
@@ -300,7 +300,7 @@
       "code": "MUNI002",
       "message": "The municipality must have a minimum length of 1 character and a maximum length of 50 characters"
     },
-    "departmentRequired":{
+    "departmentRequired": {
       "code": "MUNI003",
       "message": "Department is required"
     },
@@ -308,7 +308,7 @@
       "code": "MUNI004",
       "message": "The department already exist"
     },
-    "queryErrors":{
+    "queryErrors": {
       "createError": {
         "code": "MUNI_001",
         "message": "Something went wrong"
@@ -327,7 +327,7 @@
       }
     }
   },
-  "paymentMethodErrors":{
+  "paymentMethodErrors": {
     "nameRequired": {
       "code": "PAYM001",
       "message": "Payment method name is required"
@@ -336,7 +336,7 @@
       "code": "PAYM002",
       "message": "The Payment method name must have a minimum length of 1 character and a maximum length of 100 characters"
     },
-    "queryErrors":{
+    "queryErrors": {
       "createError": {
         "code": "PAYM_001",
         "message": "Something went wrong"
@@ -355,7 +355,7 @@
       }
     }
   },
-  "unitMeasureErrors":{
+  "unitMeasureErrors": {
     "nameRequired": {
       "code": "UNMS001",
       "message": "Unit measure name is required"
@@ -364,7 +364,7 @@
       "code": "UNMS002",
       "message": "The unit measure name must have a minimum length of 1 character and a maximum length of 100 characters"
     },
-    "queryErrors":{
+    "queryErrors": {
       "errorCreateUnitMeasure": {
         "code": "UNMS_001",
         "message": "Something went wrong"
@@ -383,7 +383,7 @@
       }
     }
   },
-  "shippingTypeErrors":{
+  "shippingTypeErrors": {
     "nameRequired": {
       "code": "SHPT001",
       "message": "Shipping type name is required"
@@ -392,7 +392,7 @@
       "code": "SHPT002",
       "message": "The Shipment Type name must have a minimum length of 1 character and a maximum length of 100 characters"
     },
-    "queryErrors":{
+    "queryErrors": {
       "createError": {
         "code": "SHPT_001",
         "message": "Something went wrong"
@@ -420,23 +420,23 @@
       "code": "ADMI002",
       "message": "The administrator's name must have a minimum length of 1 character and a maximum length of 100 characters"
     },
-    "emailRequired":{
+    "emailRequired": {
       "code": "ADMI003",
       "message": "Email is required"
     },
-    "emailInvalid":{
+    "emailInvalid": {
       "code": "ADMI004",
       "message": "Email is invalid"
     },
-    "emailSize":{
+    "emailSize": {
       "code": "ADMI005",
       "message": "The email must have a minimum length of 6 character and a maximum length of 100 characters"
     },
-    "passwordRequired":{
+    "passwordRequired": {
       "code": "ADMI006",
       "message": "Password is required"
     },
-    "passwordSize":{
+    "passwordSize": {
       "code": "ADMI007",
       "message": "The password must have a minimum length of 6 character and a maximum length of 10 characters"
     },
@@ -503,16 +503,16 @@
       }
     }
   },
-  "driverErrors":{
+  "driverErrors": {
     "nickNameRequired": {
       "code": "DRIV001",
       "message": "Nick name is required"
     },
-    "emailRequired":{
+    "emailRequired": {
       "code": "DRIV002",
       "message": "Email is required"
     },
-    "passwordRequired":{
+    "passwordRequired": {
       "code": "DRIV003",
       "message": "Password is required"
     },
@@ -520,15 +520,15 @@
       "code": "DRIV004",
       "message": "The nickName must have a minimum length of 1 character and a maximum length of 100 characters"
     },
-    "emailInvalid":{
+    "emailInvalid": {
       "code": "DRIV005",
       "message": "Email is invalid"
     },
-    "lengthPassword":{
+    "lengthPassword": {
       "code": "DRIV006",
       "message": "The password must have a minimum length of 6 characters and a maximum length of 10 characters"
     },
-    "driverNotExist":{
+    "driverNotExist": {
       "code": "DRIV007",
       "message": "Driver does not exist"
     },
@@ -547,7 +547,7 @@
       }
     }
   },
-  "coordinatorErrors":{
+  "coordinatorErrors": {
     "nickNameRequired": {
       "code": "COOR001",
       "message": "Nick name is required"
@@ -556,19 +556,19 @@
       "code": "COOR002",
       "message": "The coordinator name must have a minimum of 1 character and a maximum of 100 characters"
     },
-    "emailRequired":{
+    "emailRequired": {
       "code": "COOR003",
       "message": "Email is required"
     },
-    "emailInvalid":{
+    "emailInvalid": {
       "code": "COOR004",
       "message": "Email is invalid"
     },
-    "passwordRequired":{
+    "passwordRequired": {
       "code": "COOR005",
       "message": "Password is required"
     },
-    "passwordInvalid":{
+    "passwordInvalid": {
       "code": "COOR006",
       "message": "Password is invalid"
     },
@@ -596,11 +596,11 @@
       "code": "SELL002",
       "message": "The seller name must have a minimum of 1 character and a maximum of 100 characters"
     },
-    "emailRequired":{
+    "emailRequired": {
       "code": "SELL003",
       "message": "Email is required"
     },
-    "emailInvalid":{
+    "emailInvalid": {
       "code": "SELL004",
       "message": "Email is invalid"
     },
@@ -608,7 +608,7 @@
       "code": "SELL005",
       "message": "The email must have a minimum length of 6 character and a maximum length of 100 characters"
     },
-    "passwordRequired":{
+    "passwordRequired": {
       "code": "SELL006",
       "message": "Password is required"
     },
@@ -707,7 +707,7 @@
       }
     }
   },
-  "seatRuler":{
+  "seatRuler": {
     "vehicleHasNoAssignedSeats": {
       "code": "STRL001",
       "message": "The selected vehicle has no assigned seats"
@@ -795,15 +795,15 @@
       }
     }
   },
-  "driverVehicleErrors":{
-    "queryErrors":{
-      "createError":{
+  "driverVehicleErrors": {
+    "queryErrors": {
+      "createError": {
         "code": "DVVH_001",
         "message": "Something went wrong"
       }
     }
   },
-  "travelErrors":{
+  "travelErrors": {
     "idDriverRequired": {
       "code": "TRVL001",
       "message": "The driver is required"
@@ -812,7 +812,7 @@
       "code": "TRVL002",
       "message": "The driver is invalid"
     },
-    "driverNotExist":{
+    "driverNotExist": {
       "code": "TRVL003",
       "message": "Driver does not exist"
     },
@@ -862,45 +862,45 @@
     },
     "hourRequired": {
       "code": "TRVL015",
-        "message": "The hour is required"
+      "message": "The hour is required"
     },
-    "queryErrors":{
-      "createError":{
+    "queryErrors": {
+      "createError": {
         "code": "TRVL_001",
         "message": "Something went wrong"
       },
-      "findError":{
+      "findError": {
         "code": "TRVL_002",
         "message": "Something went wrong"
       },
-      "updateError":{
+      "updateError": {
         "code": "TRVL_003",
         "message": "Something went wrong"
       },
-      "deleteError":{
+      "deleteError": {
         "code": "TRVL_004",
         "message": "Something went wrong"
       }
     }
   },
-  "routeErrors":{
-    "municipalityDepartRequired":{
+  "routeErrors": {
+    "municipalityDepartRequired": {
       "code": "ROUT001",
       "message": "The municipality depart is required"
     },
-    "sameMunicipalityOfArrival":{
+    "sameMunicipalityOfArrival": {
       "code": "ROUT002",
       "message": "The municipality of departure must not be the same as the municipality of arrival"
     },
-    "municipalityDepartDoesNotExist":{
+    "municipalityDepartDoesNotExist": {
       "code": "ROUT003",
       "message": "The outgoing municipality does not exist"
     },
-    "municipalityArriveRequired":{
+    "municipalityArriveRequired": {
       "code": "ROUT004",
       "message": "The municipality of arrival is required"
     },
-    "municipalityArriveDoesNotExist":{
+    "municipalityArriveDoesNotExist": {
       "code": "ROUT005",
       "message": "The municipality of arrival does not exist"
     },
@@ -919,7 +919,7 @@
       }
     }
   },
-  "seatErrors":{
+  "seatErrors": {
     "idSeatInvalid": {
       "code": "SEAT001",
       "message": "The seat is invalid"
@@ -1001,12 +1001,16 @@
         "code": "TICK_001",
         "message": "Something went wrong"
       },
-      "findAllError": {
+      "findAllTicketQuery": {
         "code": "TICK_002",
         "message": "Something went wrong"
       },
       "updateError": {
         "code": "TICK_003",
+        "message": "Something went wrong"
+      },
+      "findAllError": {
+        "code": "TICK_004",
         "message": "Something went wrong"
       }
     }
@@ -1176,6 +1180,10 @@
       "createError": {
         "code": "SHPG_001",
         "message": "Something went wrong"
+      },
+      "findOneError": {
+        "code": "SHPG_002",
+        "message": "Something went wrong"
       }
     }
   },
@@ -1247,6 +1255,10 @@
     "queryErrors": {
       "createError": {
         "code": "MNEY_001",
+        "message": "Something went wrong"
+      },
+      "findOneError": {
+        "code": "MNEY_002",
         "message": "Something went wrong"
       }
     }
@@ -1380,10 +1392,10 @@
     }
   },
   "prefixErrors": {
-  "prefixNotExists": {
-    "code": "PRFX001",
-    "message": "The prefix not exists"
-  },
+    "prefixNotExists": {
+      "code": "PRFX001",
+      "message": "The prefix not exists"
+    },
     "queryErrors": {
       "createError": {
         "code": "PRFX_001",
@@ -1399,16 +1411,16 @@
       }
     }
   },
-  "appErrors":{
+  "appErrors": {
     "letterIsRequired": {
       "code": "APCT001",
       "message": "Letter is required"
     },
-    "": {
+    "serviceTypeConventionNotFound": {
       "code": "APCT002",
-      "message": ""
+      "message": "The service type convention not found"
     },
-    "servicesErrors":{
+    "servicesErrors": {
       "requestBodyToSendIsInvalid": {
         "code": "APCT-001",
         "message": "Something went wrong"
