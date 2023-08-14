@@ -19,6 +19,7 @@ const {
 
 // Constants
 const roleModelConst = require("../../constants/model/role.model.const");
+const { errorsConst } = require("../../constants/index.constants");
 
 module.exports = {
   createDriver: async (req, res) => {
@@ -51,8 +52,9 @@ module.exports = {
           transaction
         );
         await transaction.commit();
+        return responseHelpers.responseSuccess(res, null);
       }
-      return responseHelpers.responseSuccess(res, null);
+      return responseHelpers.responseError(res, 500, errorsConst.driverErrors.driverAlreadyExist);
     } catch (error) {
       if (transaction) await transaction.rollback();
       return responseHelpers.responseError(res, 500, error);

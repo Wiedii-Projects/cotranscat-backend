@@ -29,7 +29,7 @@ module.exports = {
         dateExpirationLicense,
         transitAgency,
         restriction,
-        licensePhoto,  
+        licensePhoto = "",  
         idMunicipalityOfBirth,
         idMunicipalityOfResidence,
         idBloodType,
