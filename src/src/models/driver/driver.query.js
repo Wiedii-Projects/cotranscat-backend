@@ -27,6 +27,10 @@ module.exports = {
       throw errorsConst.driverErrors.queryErrors.create;
     }
   },
+  findOneDriverQuery: async (query) => {
+    const { where } = query;
+    return await Driver.findOne({ where, raw: true, nest: true })
+  },
   findDriverQuery: async (query) => {
     const {
       where,
