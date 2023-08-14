@@ -62,8 +62,11 @@ module.exports = {
   },
 
   getAllDrivers: async (req, res) => {
+    const { offset = 0 } = req.query;
     try {
-      const drivers = await driverQuery.findDriverQuery();
+      const drivers = await driverQuery.findDriverQuery({ 
+        offset: offset*20
+      });
       return responseHelpers.responseSuccess(res, drivers);
     } catch (error) {
       return responseHelpers.responseError(res, 500, error);
@@ -98,5 +101,5 @@ module.exports = {
       if (transaction) await transaction.rollback();
       return responseHelpers.responseError(res, 500, error);
     }
-  },
+  }
 };
