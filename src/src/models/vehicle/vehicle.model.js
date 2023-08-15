@@ -39,6 +39,18 @@ const VehicleSchema = dbConnectionOptions.define(
             type: DataTypes.TINYINT.UNSIGNED,
             field: "height",
             allowNull: false
+        },
+        code: {
+            type: DataTypes.STRING(50),
+            unique: true,
+            field: "code",
+            allowNull: false
+        },
+        internalNumber: {
+            type: DataTypes.STRING(50),
+            unique: true,
+            field: "internalNumber",
+            allowNull: false
         }
     },
     {

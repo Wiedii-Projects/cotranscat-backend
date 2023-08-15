@@ -10,6 +10,7 @@ const { decryptIdDataBase, getNextConsecutiveLetterHelper } = require("../helper
 
 // Models - Queries
 const { vehicleQuery, seatRulerQuery } = require('../models/index.queries');
+const { Op } = require("sequelize");
 
 module.exports = {
     createVehicle: async (req, res) => {
@@ -64,6 +65,23 @@ module.exports = {
                 seatMap[row][column] = { ...seat, price };
             }
             return responseHelpers.responseSuccess(res, { ...vehicleData, seatMap });
+        } catch (error) {
+            return responseHelpers.responseError(res, 500, error);
+        }
+    },
+    filterVehicle: async (req, res) => {
+        const { value } = req.params;
+        try {
+            const [vehicle] = await vehicleQuery.findVehicles({
+                where: {
+                    [Op.or]: [
+                        { "code": value },
+                        { "plate": value },
+                        { "internalNumber": value }
+                      ],
+                }
+            });
+            return responseHelpers.responseSuccess(res, vehicle);
         } catch (error) {
             return responseHelpers.responseError(res, 500, error);
         }
