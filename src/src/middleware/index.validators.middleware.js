@@ -20,5 +20,7 @@ module.exports = {
     serviceTypeValidators: require('./validators/service-type.validator.middleware'),
     prefixValidators: require('./validators/prefix.validator.middleware'),
     resolutionValidators: require('./validators/resolution.validator.middleware'),
-    bankValidators: require('./validators/bank.validator.middleware')
+    bankValidators: require('./validators/bank.validator.middleware'),
+    bloodTypeValidators: require('./validators/bloodType.validator.middleware'),
+    licenseCategoryValidators: require('./validators/licenseCategory.validator.middleware'),
 }
