@@ -604,6 +604,26 @@
       "code": "DRIV019",
       "message": "idLicenseCategory is required"
     },
+    "driverAlreadyExist": {
+      "code": "DRIV020",
+      "message": "driver already exist"
+    },
+    "addressSize": {
+      "code": "DRIV021",
+      "message": "The address must have a minimum length of 1 character and a maximum length of 100 characters"
+    },
+    "licenseNumberSize": {
+      "code": "DRIV022",
+      "message": "The licenseNumber must have a minimum length of 1 character and a maximum length of 50 characters"
+    },
+    "transitAgencySize": {
+      "code": "DRIV023",
+      "message": "The transitAgency must have a minimum length of 1 character and a maximum length of 50 characters"
+    },
+    "restrictionSize": {
+      "code": "DRIV024",
+      "message": "The restriction must have a minimum length of 1 character and a maximum length of 100 characters"
+    },
     "queryErrors": {
       "create": {
         "code": "DRIV_001",
