@@ -113,5 +113,18 @@ module.exports = {
       .custom((value, { req }) => licenseCategoryValidators.validateIdLicenseCategory(req, sharedHelpers.decryptIdDataBase(value), "idLicenseCategory"))
       .custom((value, { req }) => !!req.body.idLicenseCategory).withMessage(new ErrorModel(errorsConst.driverErrors.idLicenseCategory)).bail(),
     sharedValidators.validateError,
+  ],
+  checkAssignVehicle: () => [
+    check("driver", new ErrorModel(errorsConst.driverErrors.idRequired))
+      .isString().custom((value, { req }) => {
+        req.body.idDriver = sharedHelpers.decryptIdDataBase(value)
+        return !!req.body.idDriver
+      }),
+    check("vehicle", new ErrorModel(errorsConst.vehicleErrors.idRequired))
+      .isString().custom((value, { req }) => {
+        req.body.idVehicle = sharedHelpers.decryptIdDataBase(value)
+        return !!req.body.idVehicle
+      }),
+    sharedValidators.validateError,
   ]
 };

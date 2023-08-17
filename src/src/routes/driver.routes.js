@@ -27,4 +27,8 @@ router.put('/:id', [
     driverMiddleware.checkUpdateDriver(),
 ], driverController.updateDriver);
 
+router.post('/assignVehicle', [
+    driverMiddleware.checkAssignVehicle(),
+], driverController.assignVehicle)
+
 module.exports = router;
