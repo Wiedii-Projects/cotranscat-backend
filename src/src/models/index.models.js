@@ -51,12 +51,12 @@ Driver.belongsTo(User, { as: 'UserDriver', foreignKey: { name: 'id', allowNull: 
 User.hasOne(Driver, { as: 'UserDriver', foreignKey: { name: 'id', allowNull: false, primaryKey: true } });
 
 // Relationship Vehicle-DriverVehicle
-Vehicle.hasMany(DriverVehicle, { as: 'Vehicle', foreignKey: { name: 'idVehicle', allowNull: false, primaryKey: true } });
-DriverVehicle.belongsTo(Vehicle, { as: 'Vehicle', foreignKey: { name: 'idVehicle', allowNull: false, primaryKey: true } });
+Vehicle.hasMany(DriverVehicle, { as: 'VehicleDriverVehicle', foreignKey: { name: 'idVehicle', allowNull: false, primaryKey: true } });
+DriverVehicle.belongsTo(Vehicle, { as: 'VehicleDriverVehicle', foreignKey: { name: 'idVehicle', allowNull: false, primaryKey: true } });
 
 // Relationship Driver-DriverVehicle
-Driver.hasMany(DriverVehicle, { as: 'Driver', foreignKey: { name: 'idDriver', allowNull: false, primaryKey: true } });
-DriverVehicle.belongsTo(Driver, { as: 'Driver', foreignKey: { name: 'idDriver', allowNull: false, primaryKey: true } });
+Driver.hasMany(DriverVehicle, { as: 'DriverDriverVehicle', foreignKey: { name: 'idDriver', allowNull: false, primaryKey: true } });
+DriverVehicle.belongsTo(Driver, { as: 'DriverDriverVehicle', foreignKey: { name: 'idDriver', allowNull: false, primaryKey: true } });
 
 // Relationship DriverVehicle-Travel
 Travel.belongsTo(DriverVehicle, { as: 'TravelDriverVehicle', foreignKey: { name: "idDriverVehicle", allowNull: false } });

@@ -113,5 +113,5 @@ module.exports = {
       .custom((value, { req }) => licenseCategoryValidators.validateIdLicenseCategory(req, sharedHelpers.decryptIdDataBase(value), "idLicenseCategory"))
       .custom((value, { req }) => !!req.body.idLicenseCategory).withMessage(new ErrorModel(errorsConst.driverErrors.idLicenseCategory)).bail(),
     sharedValidators.validateError,
-  ],
+  ]
 };
