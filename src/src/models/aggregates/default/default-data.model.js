@@ -95,14 +95,28 @@ module.exports = {
         email: 'client@client.co',
         address: "Mz 12 lote 8 palmeras alta"
     },
-    defaultVehicle: {
+    defaultVehicle: [{
         plate: "ABC001",
         mark: "Atos",
         model: "99",
         price: 35000,
         width: 5,
-        height: 7
+        height: 7,
+        idMunicipality: 1,
+        code: "393",
+        internalNumber: "11012"
     },
+    {
+        plate: "ABC002",
+        mark: "Atos",
+        model: "99",
+        price: 35000,
+        width: 5,
+        height: 7,
+        idMunicipality: 1,
+        code: "102",
+        internalNumber: "11011"
+    }],
     defaultBloodType: [
         { id: 1, name: 'Tipo A+'},
         { id: 2, name: 'Tipo A-'},

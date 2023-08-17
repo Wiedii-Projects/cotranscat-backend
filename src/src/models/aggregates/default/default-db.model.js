@@ -17,7 +17,8 @@ const {
     defaultHeadquarter,
     defaultCountry,
     defaultBloodType,
-    defaultLicenseCategory
+    defaultLicenseCategory,
+    defaultVehicle
 } = require('./default-data.model');
 
 //Const
@@ -218,6 +219,7 @@ class defaultDataBaseModel {
         await this.countDepartment() || defaultDepartment.map(  async(element) => await Department.create( element ) );
         await this.countPaymentMethod() || defaultPaymentMethod.map(  async(element) => await PaymentMethod.create( element ) );
         await this.countMunicipality() || defaultMunicipality.map(  async(element) => await Municipality.create( element ) );
+        await this.countVehicle() || defaultVehicle.map(async (element) => {await Vehicle.create( element )})
         await this.countUnitMeasure() || defaultUnitMeasure.map(  async(element) => await UnitMeasure.create( element ) );
         await this.countShippingType() || defaultShippingType.map(  async(element) => await ShippingType.create( element ) );
         await this.countServiceType() || defaultServiceType.map(  async(element) => await ServiceType.create( element ) );
