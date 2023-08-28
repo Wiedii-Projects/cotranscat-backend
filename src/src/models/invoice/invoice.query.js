@@ -87,7 +87,7 @@ module.exports = {
           }
         ],
         nest: true,
-        attributes: ['number', 'codeSale', 'price', 'date', 'id'],
+        attributes: ['number', 'codeSale', 'price', 'date', 'id', 'isCancelled'],
         order: [['number', 'DESC']],
         limit: 20,
         offset: offset * 20
@@ -96,6 +96,7 @@ module.exports = {
           id: encryptIdDataBase(invoice.id),
           number: invoice.number,
           codeSale: invoice.codeSale,
+          isCancelled: invoice.isCancelled == 1 ? true : false,
           codePrefix: invoice.ResolutionInvoice.PrefixResolution.code,
           price: invoice.price,
           date: invoice.date,
@@ -183,7 +184,7 @@ module.exports = {
         ],
         nest: true,
         raw: true,
-        attributes: ['number', 'price', 'date', 'id', 'codeSale'],
+        attributes: ['number', 'price', 'date', 'id', 'codeSale', 'isCancelled'],
         order: [['number', 'DESC']],
         limit: 20,
         offset: offset * 20
@@ -195,6 +196,7 @@ module.exports = {
           codePrefix: invoice.ResolutionInvoice.PrefixResolution.code,
           price: invoice.price,
           date: invoice.date,
+          date: invoice.isCancelled == 1 ? true : false,
           client: {
             numberDocument: invoice.InvoiceClient.UserClient.numberDocument,
             name: invoice.InvoiceClient.UserClient.name,
@@ -882,7 +884,7 @@ module.exports = {
         ],
         nest: true,
         raw:true,
-        attributes: ['codeSale', 'number', 'price', 'date', 'id'],
+        attributes: ['codeSale', 'number', 'price', 'date', 'id', 'isCancelled'],
         order: [['number', 'DESC']],
         limit: 20,
         offset: offset * 20
@@ -890,6 +892,7 @@ module.exports = {
 
       const allShippingInvoice = allShippingInvoiceResponse.map((shippingInvoice) => ({
           id: encryptIdDataBase(shippingInvoice.id),
+          isCancelled: shippingInvoice.isCancelled == 1 ? true : false,
           number: shippingInvoice.number,
           codeSale: shippingInvoice.codeSale,
           codePrefix: shippingInvoice.ResolutionInvoice.PrefixResolution.code,

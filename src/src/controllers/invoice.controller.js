@@ -371,7 +371,7 @@ module.exports = {
             )
 
             // Create Electronic Invoice
-            optionsQuery = {...optionsQuery, transaction, type: invoiceElectronic.idServiceType }
+            optionsQuery = {...optionsQuery, transaction, type: valueConventionServiceType }
             const { id } = await createNewInvoiceQuery(invoiceElectronic, optionsQuery);
 
             await prefixQuery.updatePrefixQuery(
