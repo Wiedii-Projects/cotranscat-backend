@@ -81,7 +81,8 @@ module.exports = {
             include: [
               {
                 model: Prefix,
-                as: 'PrefixResolution'
+                as: 'PrefixResolution',
+                attributes: ['code', 'isElectronic'],
               }
             ]
           }
@@ -98,6 +99,7 @@ module.exports = {
           codeSale: invoice.codeSale,
           isCancelled: invoice.isCancelled == 1 ? true : false,
           codePrefix: invoice.ResolutionInvoice.PrefixResolution.code,
+          isElectronic: invoice.ResolutionInvoice.PrefixResolution.isElectronic == 1 ? true : false,
           price: invoice.price,
           date: invoice.date,
           tickets: invoice.TicketInvoice.length,
@@ -177,7 +179,7 @@ module.exports = {
               {
                 model: Prefix,
                 as: 'PrefixResolution',
-                attributes: ['code']
+                attributes: ['code', 'isElectronic'],
               }
             ]
           }
@@ -191,12 +193,13 @@ module.exports = {
       })
       .then( (result) => result.map((invoice) => ({
           id: encryptIdDataBase(invoice.id),
+          isCancelled: invoice.isCancelled == 1 ? true : false,
           number: invoice.number,
           codeSale: invoice.codeSale,
           codePrefix: invoice.ResolutionInvoice.PrefixResolution.code,
+          isElectronic: invoice.ResolutionInvoice.PrefixResolution.isElectronic == 1 ? true : false,
           price: invoice.price,
           date: invoice.date,
-          date: invoice.isCancelled == 1 ? true : false,
           client: {
             numberDocument: invoice.InvoiceClient.UserClient.numberDocument,
             name: invoice.InvoiceClient.UserClient.name,
@@ -872,7 +875,8 @@ module.exports = {
             include: [
               {
                 model: Prefix,
-                as: 'PrefixResolution'
+                as: 'PrefixResolution',
+                attributes: ['code', 'isElectronic'],
               }
             ]
           },
@@ -896,6 +900,7 @@ module.exports = {
           number: shippingInvoice.number,
           codeSale: shippingInvoice.codeSale,
           codePrefix: shippingInvoice.ResolutionInvoice.PrefixResolution.code,
+          isElectronic: shippingInvoice.ResolutionInvoice.PrefixResolution.isElectronic == 1 ? true : false,
           price: shippingInvoice.price,
           date: shippingInvoice.date,
           clientSends: {
