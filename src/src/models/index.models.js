@@ -121,6 +121,18 @@ Country.hasMany(Department, { as: 'DepartmentCountry', foreignKey: { name: "idCo
 Municipality.hasMany(Vehicle, { as: 'VehicleMunicipality', foreignKey: { name: "idMunicipality", allowNull: false } });
 Vehicle.belongsTo(Municipality, { as: 'VehicleMunicipality', foreignKey: { name: "idMunicipality", allowNull: false } });
 
+// Relationship BloodType-Vehicle
+Vehicle.belongsTo(TypeBodywork, { as: 'TypeBodyworkVehicle', foreignKey: { name: 'idTypeBodywork', allowNull: false } });
+TypeBodywork.hasOne(Vehicle, { as: 'TypeBodyworkVehicle', foreignKey: { name: 'idTypeBodywork', allowNull: false } });
+
+// Relationship BloodType-Vehicle
+Vehicle.belongsTo(TypeFuel, { as: 'TypeFuelVehicle', foreignKey: { name: 'idTypeFuel', allowNull: false } });
+TypeFuel.hasOne(Vehicle, { as: 'TypeFuelVehicle', foreignKey: { name: 'idTypeFuel', allowNull: false } });
+
+// Relationship BloodType-Vehicle
+Vehicle.belongsTo(TypeVehicle, { as: 'TypeVehicleVehicle', foreignKey: { name: 'idTypeVehicle', allowNull: false } });
+TypeVehicle.hasOne(Vehicle, { as: 'TypeVehicleVehicle', foreignKey: { name: 'idTypeVehicle', allowNull: false } });
+
 // Relationship SeatRuler-Vehicle
 Vehicle.hasMany(SeatRuler, { as: 'SeatRulerVehicle', onDelete: 'CASCADE', foreignKey: { name: "idVehicle", allowNull: false } });
 SeatRuler.belongsTo(Vehicle, { as: 'SeatRulerVehicle', foreignKey: { name: "idVehicle", allowNull: false } });
