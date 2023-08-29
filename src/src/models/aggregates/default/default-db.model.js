@@ -18,7 +18,8 @@ const {
     defaultCountry,
     defaultBloodType,
     defaultLicenseCategory,
-    defaultVehicle
+    defaultVehicle,
+    defaultTrackingStatus
 } = require('./default-data.model');
 
 //Const
@@ -46,6 +47,8 @@ const Bank = require('../../bank/bank.model');
 const Headquarter = require('../../headquarter/headquarter.model');
 const BloodType = require('../../bloodType/bloodType.model');
 const LicenseCategory = require('../../licenseCategory/licenseCategory.model');
+const PaymentMethodBank = require('../../payment-method-bank/payment-method-bank.model');
+const TrackingStatus = require('../../tracking-status/tracking-status.model');
 
 class defaultDataBaseModel {
     constructor() {
@@ -101,7 +104,8 @@ class defaultDataBaseModel {
     }
 
     async getMunicipality () {
-        const [{ name: from }, { name: to }] = defaultMunicipality;
+        const { name: from } = defaultMunicipality[10];
+        const { name: to } = defaultMunicipality[36];
         const [ { id: arrive }, { id: belong } ] = await Promise.all([
             Municipality.findOne({ where: { name: from }}),
             Municipality.findOne({ where: { name: to }})
@@ -209,6 +213,14 @@ class defaultDataBaseModel {
         return await BloodType.count();
     }
 
+    async countPaymentMethodBank() {
+        return await PaymentMethodBank.count();
+    }
+
+    async countTrackingStatus() {
+        return await TrackingStatus.count();
+    }
+
     async createDefaultDataBase() {
         await this.countRole() || Object.values(roleConst).map(async (element) => {await Role.create({type: element})});
         await this.countBloodType() || defaultBloodType.map(async (element) => {await BloodType.create( element )});
@@ -236,6 +248,30 @@ class defaultDataBaseModel {
             for (const bank of defaultBank) {
                 await Bank.create(bank);
             }
+        }
+
+        if (await this.countPaymentMethodBank() === 0) {
+            const paymentMethodBanks = defaultPaymentMethod.map(paymentMethod => {
+                if (paymentMethod.name !== "Transferencia") {
+                    return [
+                        { codePaymentMethod: "01", idPaymentMethod: paymentMethod.id, idBank: 1 },
+                        { codePaymentMethod: "01", idPaymentMethod: paymentMethod.id, idBank: 2 }
+                    ];
+                } else {
+                    return [
+                        { codePaymentMethod: "02", idPaymentMethod: paymentMethod.id, idBank: 1 },
+                        { codePaymentMethod: "00", idPaymentMethod: paymentMethod.id, idBank: 2 }
+                    ];
+                }
+            });
+
+            const flattenedPaymentMethodBanks = paymentMethodBanks.flat();
+
+            await PaymentMethodBank.bulkCreate(flattenedPaymentMethodBanks);
+        }
+        
+        if (await this.countTrackingStatus() === 0) {
+            await TrackingStatus.bulkCreate(defaultTrackingStatus);
         }
 
         const userCreate = await this.countUser();
