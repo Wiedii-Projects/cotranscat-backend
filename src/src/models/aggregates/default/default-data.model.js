@@ -238,6 +238,9 @@ module.exports = {
         { description: salesConst.HEADQUARTERS.TIBU, idMunicipality: 37 },
         { description: salesConst.HEADQUARTERS.CUCUTA, idMunicipality: 11 }
     ],
+    defaultTrackingStatus : [
+        { chronologicalPosition: trackingStatusConst.TRACKING_STATUS.RECEIVED.VALUE_CONVENTION, name: trackingStatusConst.TRACKING_STATUS.RECEIVED.VALUE_STRING, description: "" }
+    ],
     defaultTypeBodywork: [
         { name: 'Sedán', id: 1 },
         { name: 'Hatchback', id: 2 },
