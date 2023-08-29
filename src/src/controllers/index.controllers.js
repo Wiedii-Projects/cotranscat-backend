@@ -24,5 +24,8 @@ module.exports = {
   observationController: require("./observation.controller"),
   resolutionController: require("./resolution.controller"),
   bloodTypeController: require("./bloodType.controller"),
-  licenseCategoryController: require("./licenseCategory.controller")
+  licenseCategoryController: require("./licenseCategory.controller"),
+  typeBodyworkController: require("./typeBodywork.controller"),
+  typeFuelController: require("./typeFuel.controller"),
+  typeVehicleController: require("./typeVehicle.controller"),
 };

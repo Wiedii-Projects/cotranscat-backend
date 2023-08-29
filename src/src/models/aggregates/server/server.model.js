@@ -50,7 +50,10 @@ class ServerModel {
             resolution: '/api/resolution',
             country: '/api/country',
             bloodType: '/api/bloodType',
-            licenseCategory: '/api/licenseCategory'
+            licenseCategory: '/api/licenseCategory',
+            typeBodywork: '/api/typeBodywork',
+            typeFuel: '/api/typeFuel',
+            typeVehicle: '/api/typeVehicle',
         }
         this.dbHost = coreConfigurationsConst.dbHost;
         this.dbs();
@@ -110,6 +113,9 @@ class ServerModel {
         this.app.use(this.paths.country, require('../../../routes/country.routes'));
         this.app.use(this.paths.bloodType, require('../../../routes/bloodType.routes'));
         this.app.use(this.paths.licenseCategory, require('../../../routes/licenseCategory.routes'));
+        this.app.use(this.paths.typeBodywork, require('../../../routes/typeBodywork.routes'));
+        this.app.use(this.paths.typeFuel, require('../../../routes/typeFuel.routes'));
+        this.app.use(this.paths.typeVehicle, require('../../../routes/typeVehicle.routes'));
     }
 
     listen() {

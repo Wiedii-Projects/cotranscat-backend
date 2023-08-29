@@ -1,12 +1,12 @@
 //Models - Default Data
 const {
-    defaultIndicativeNumber, 
-    defaultUser, 
-    defaultDocumentType, 
-    defaultDepartment, 
-    defaultPaymentMethod, 
-    defaultMunicipality, 
-    defaultUnitMeasure, 
+    defaultIndicativeNumber,
+    defaultUser,
+    defaultDocumentType,
+    defaultDepartment,
+    defaultPaymentMethod,
+    defaultMunicipality,
+    defaultUnitMeasure,
     defaultShippingType,
     defaultAdmin,
     defaultServiceType,
@@ -19,7 +19,10 @@ const {
     defaultBloodType,
     defaultLicenseCategory,
     defaultVehicle,
-    defaultTrackingStatus
+    defaultTrackingStatus,
+    defaultTypeBodywork,
+    defaultTypeFuel,
+    defaultTypeVehicle
 } = require('./default-data.model');
 
 //Const
@@ -49,57 +52,60 @@ const BloodType = require('../../bloodType/bloodType.model');
 const LicenseCategory = require('../../licenseCategory/licenseCategory.model');
 const PaymentMethodBank = require('../../payment-method-bank/payment-method-bank.model');
 const TrackingStatus = require('../../tracking-status/tracking-status.model');
+const TypeFuel = require("../../type-fuel/typeFuel.model")
+const TypeBodywork = require("../../type-bodywork/typeBodywork.model")
+const TypeVehicle = require('../../type-vehicle/typeVehicle.model');
 
 class defaultDataBaseModel {
     constructor() {
         this.createDefaultDataBase();
     }
 
-    async getAdminRole(){
+    async getAdminRole() {
         const { ADMIN_ROLE: type } = roleConst;
-        const { id } = await Role.findOne({ where: { type }});
+        const { id } = await Role.findOne({ where: { type } });
         return id;
     }
 
-    async getSellerRole(){
+    async getSellerRole() {
         const { SELLER_ROLE: type } = roleConst;
-        const { id } = await Role.findOne({ where: { type }});
+        const { id } = await Role.findOne({ where: { type } });
         return id;
     }
 
-    async getClientRole(){
+    async getClientRole() {
         const { CLIENT_ROLE: type } = roleConst;
-        const { id } = await Role.findOne({ where: { type }});
+        const { id } = await Role.findOne({ where: { type } });
         return id;
     }
 
-    async getDriverRole(){
+    async getDriverRole() {
         const { DRIVER_ROLE: type } = roleConst;
-        const { id } = await Role.findOne({ where: { type }});
+        const { id } = await Role.findOne({ where: { type } });
         return id;
     }
 
     async getDocumentType() {
         const [{ name }] = defaultDocumentType;
-        const { id } = await DocumentType.findOne({ where: { name }});
+        const { id } = await DocumentType.findOne({ where: { name } });
         return id;
     }
 
-    async getIndicativeNumber () {
+    async getIndicativeNumber() {
         const [{ country }] = defaultIndicativeNumber;
-        const { id } = await IndicativeNumber.findOne({ where: { country }});
+        const { id } = await IndicativeNumber.findOne({ where: { country } });
         return id;
     }
 
-    async getBloodType () {
+    async getBloodType() {
         const [{ name }] = defaultBloodType;
-        const { id } = await BloodType.findOne({ where: { name }});
+        const { id } = await BloodType.findOne({ where: { name } });
         return id;
     }
 
-    async getLicenseCategory () {
+    async getLicenseCategory() {
         const [{ name }] = defaultLicenseCategory;
-        const { id } = await LicenseCategory.findOne({ where: { name }});
+        const { id } = await LicenseCategory.findOne({ where: { name } });
         return id;
     }
 
@@ -110,34 +116,34 @@ class defaultDataBaseModel {
             Municipality.findOne({ where: { name: from }}),
             Municipality.findOne({ where: { name: to }})
         ]);
-        return [ arrive, belong ];
+        return [arrive, belong];
     }
 
-    async getPaymentMethod () {
+    async getPaymentMethod() {
         const [{ name }] = defaultPaymentMethod;
-        const { id } = await PaymentMethod.findOne({ where: { name }});
+        const { id } = await PaymentMethod.findOne({ where: { name } });
         return id;
     }
 
-    async getUnitMeasure () {
+    async getUnitMeasure() {
         const [{ name }] = defaultUnitMeasure;
-        const { id } = await UnitMeasure.findOne({ where: { name }});
+        const { id } = await UnitMeasure.findOne({ where: { name } });
         return id;
     }
 
-    async getUserAdmin (where) {
-        return await User.findOne({where, raw:true});
+    async getUserAdmin(where) {
+        return await User.findOne({ where, raw: true });
     }
 
-    async getShippingType () {
+    async getShippingType() {
         const [{ name }] = defaultShippingType;
-        const { id } = await ShippingType.findOne({ where: { name }});
+        const { id } = await ShippingType.findOne({ where: { name } });
         return id;
     }
 
-    async getFirstBank () {
+    async getFirstBank() {
         const [{ code }] = defaultBank;
-        const { id } = await Bank.findOne({ where: { code }});
+        const { id } = await Bank.findOne({ where: { code } });
         return id;
     }
 
@@ -201,15 +207,15 @@ class defaultDataBaseModel {
         return await Route.count();
     }
 
-    async countBank () {
-        return  await Bank.count();          
+    async countBank() {
+        return await Bank.count();
     }
 
-    async countHeadquarter () {
+    async countHeadquarter() {
         return await Headquarter.count();
     }
 
-    async countBloodType () {
+    async countBloodType() {
         return await BloodType.count();
     }
 
@@ -221,20 +227,35 @@ class defaultDataBaseModel {
         return await TrackingStatus.count();
     }
 
+    async countTypeFuel() {
+        return await TypeFuel.count();
+    }
+
+    async countTypeBodywork() {
+        return await TypeBodywork.count();
+    }
+
+    async countTypeVehicle() {
+        return await TypeVehicle.count();
+    }
+
     async createDefaultDataBase() {
-        await this.countRole() || Object.values(roleConst).map(async (element) => {await Role.create({type: element})});
-        await this.countBloodType() || defaultBloodType.map(async (element) => {await BloodType.create( element )});
-        await this.countLicenseCategory() || defaultLicenseCategory.map(async (element) => {await LicenseCategory.create( element )});
-        await this.countIndicativeNumber() || defaultIndicativeNumber.map(  async(element) => await IndicativeNumber.create( element ) );
-        await this.countDocumentType() || defaultDocumentType.map(  async(element) => await DocumentType.create( element ) );
-        await this.countCountry() || defaultCountry.map(  async(element) => await Country.create( element ) );
-        await this.countDepartment() || defaultDepartment.map(  async(element) => await Department.create( element ) );
-        await this.countPaymentMethod() || defaultPaymentMethod.map(  async(element) => await PaymentMethod.create( element ) );
-        await this.countMunicipality() || defaultMunicipality.map(  async(element) => await Municipality.create( element ) );
-        await this.countVehicle() || defaultVehicle.map(async (element) => {await Vehicle.create( element )})
-        await this.countUnitMeasure() || defaultUnitMeasure.map(  async(element) => await UnitMeasure.create( element ) );
-        await this.countShippingType() || defaultShippingType.map(  async(element) => await ShippingType.create( element ) );
-        await this.countServiceType() || defaultServiceType.map(  async(element) => await ServiceType.create( element ) );
+        await this.countRole() || Object.values(roleConst).map(async (element) => { await Role.create({ type: element }) });
+        await this.countBloodType() || defaultBloodType.map(async (element) => { await BloodType.create(element) });
+        await this.countLicenseCategory() || defaultLicenseCategory.map(async (element) => { await LicenseCategory.create(element) });
+        await this.countIndicativeNumber() || defaultIndicativeNumber.map(async (element) => await IndicativeNumber.create(element));
+        await this.countDocumentType() || defaultDocumentType.map(async (element) => await DocumentType.create(element));
+        await this.countCountry() || defaultCountry.map(async (element) => await Country.create(element));
+        await this.countDepartment() || defaultDepartment.map(async (element) => await Department.create(element));
+        await this.countPaymentMethod() || defaultPaymentMethod.map(async (element) => await PaymentMethod.create(element));
+        await this.countMunicipality() || defaultMunicipality.map(async (element) => await Municipality.create(element));
+        await this.countTypeFuel() || defaultTypeFuel.map(async (element) => await TypeFuel.create(element));
+        await this.countTypeBodywork() || defaultTypeBodywork.map(async (element) => await TypeBodywork.create(element));
+        await this.countTypeVehicle() || defaultTypeVehicle.map(async (element) => await TypeVehicle.create(element));
+        await this.countVehicle() || defaultVehicle.map(async (element) => { await Vehicle.create(element) });
+        await this.countUnitMeasure() || defaultUnitMeasure.map(async (element) => await UnitMeasure.create(element));
+        await this.countShippingType() || defaultShippingType.map(async (element) => await ShippingType.create(element));
+        await this.countServiceType() || defaultServiceType.map(async (element) => await ServiceType.create(element));
         const [idMunicipality, idMunicipalityArrive] = await this.getMunicipality();
         await this.countRoute() || await Route.create({ idMunicipalityDepart: idMunicipality, idMunicipalityArrive });
 
@@ -269,16 +290,15 @@ class defaultDataBaseModel {
 
             await PaymentMethodBank.bulkCreate(flattenedPaymentMethodBanks);
         }
-        
         if (await this.countTrackingStatus() === 0) {
             await TrackingStatus.bulkCreate(defaultTrackingStatus);
         }
 
         const userCreate = await this.countUser();
 
-        if( !userCreate ){
-            const [ admin, seller, client, driver ] = defaultUser;
-            const [ 
+        if (!userCreate) {
+            const [admin, seller, client, driver] = defaultUser;
+            const [
                 indicativeNumber,
                 idAdminRole,
                 idSellerRole,
@@ -305,39 +325,39 @@ class defaultDataBaseModel {
                 this.getBloodType(),
                 this.getLicenseCategory()
             ]);
-            const [ userAdmin, userSeller, userClient, userDriver ] = await Promise.all ([
-                User.create({ 
-                    ...admin, 
-                    idRole: idAdminRole, 
-                    idDocumentType, 
-                    idIndicativePhone: indicativeNumber, 
+            const [userAdmin, userSeller, userClient, userDriver] = await Promise.all([
+                User.create({
+                    ...admin,
+                    idRole: idAdminRole,
+                    idDocumentType,
+                    idIndicativePhone: indicativeNumber,
                     idPaymentMethod,
                     idUnitMeasure,
                     idShippingType
                 }),
-                User.create({ 
-                    ...seller, 
-                    idRole: idSellerRole, 
-                    idDocumentType, 
-                    idIndicativePhone: indicativeNumber, 
+                User.create({
+                    ...seller,
+                    idRole: idSellerRole,
+                    idDocumentType,
+                    idIndicativePhone: indicativeNumber,
                     idPaymentMethod,
                     idUnitMeasure,
                     idShippingType
                 }),
-                User.create({ 
-                    ...client, 
-                    idRole: idClientRole, 
-                    idDocumentType, 
-                    idIndicativePhone: indicativeNumber, 
+                User.create({
+                    ...client,
+                    idRole: idClientRole,
+                    idDocumentType,
+                    idIndicativePhone: indicativeNumber,
                     idPaymentMethod,
                     idUnitMeasure,
                     idShippingType
                 }),
-                User.create({ 
-                    ...driver, 
-                    idRole: idDriverRole, 
-                    idDocumentType, 
-                    idIndicativePhone: indicativeNumber, 
+                User.create({
+                    ...driver,
+                    idRole: idDriverRole,
+                    idDocumentType,
+                    idIndicativePhone: indicativeNumber,
                     idPaymentMethod,
                     idUnitMeasure,
                     idShippingType
@@ -347,21 +367,21 @@ class defaultDataBaseModel {
             await Promise.all([
                 Admin.create({ ...defaultAdmin, id: userAdmin.id }),
                 Seller.create({ ...defaultSeller, id: userSeller.id, idBank }),
-                Client.create({ 
-                    ...defaultClient, 
-                    idIndicativePhoneWhatsApp: indicativeNumber, 
+                Client.create({
+                    ...defaultClient,
+                    idIndicativePhoneWhatsApp: indicativeNumber,
                     idMunicipality,
-                    id: userClient.id 
+                    id: userClient.id
                 }),
-                Driver.create({ 
-                    ...defaultDriver, 
-                    id: userDriver.id, 
-                    idBloodType, 
+                Driver.create({
+                    ...defaultDriver,
+                    id: userDriver.id,
+                    idBloodType,
                     idLicenseCategory,
                     idMunicipalityOfBirth: idMunicipality,
                     idMunicipalityOfResidence: idMunicipality
                 }),
-            ]); 
+            ]);
         };
     }
 }

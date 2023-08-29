@@ -105,6 +105,17 @@ module.exports = {
       return responseHelpers.responseError(res, 500, error);
     }
   },
+
+  inactiveDriver: async (req, res) => {
+    const { driver: { state }, decryptId: id } = req.body;
+    try {
+      await driverQuery.updateDriver({ state: !state }, { id });
+      return responseHelpers.responseSuccess(res, null);
+    } catch (error) {
+      return responseHelpers.responseError(res, 500, error);
+    }
+  },
+
   assignVehicle: async (req, res) => {
     const { idDriver, idVehicle } = req.body;
     try {
