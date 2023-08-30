@@ -1,5 +1,5 @@
 // Constants
-const { salesConst } = require("../../../constants/index.constants");
+const { salesConst, trackingStatusConst } = require("../../../constants/index.constants");
 
 module.exports = {
     defaultDocumentType: [ 
@@ -81,85 +81,129 @@ module.exports = {
     defaultDriver: {
         email: 'driver@driver.co',
         nickName: 'userDriver',
-        password: process.env.PASSWORD_ADMIN_ROOT
+        password: process.env.PASSWORD_ADMIN_ROOT,
+        dateOfBirth: '1999-09-01',
+        address: 'Manzana xxx lote xxx palmxxe',
+        licenseNumber: '12344321',
+        dateOfLicenseIssuance: '2020-01-05',
+        dateExpirationLicense: '2026-01-04',
+        transitAgency: 'agencia de transito xx',
+        restriction: 'debe usar lentes a la hora de conducir'
     },
     defaultClient: {
         numberPhoneWhatsapp: '3052627086',
         email: 'client@client.co',
         address: "Mz 12 lote 8 palmeras alta"
     },
-    defaultVehicle: {
+    defaultVehicle: [{
         plate: "ABC001",
         mark: "Atos",
         model: "99",
         price: 35000,
         width: 5,
-        height: 7
+        height: 7,
+        idMunicipality: 1,
+        code: "393",
+        internalNumber: "11012"
     },
+    {
+        plate: "ABC002",
+        mark: "Atos",
+        model: "99",
+        price: 35000,
+        width: 5,
+        height: 7,
+        idMunicipality: 1,
+        code: "102",
+        internalNumber: "11011"
+    }],
+    defaultBloodType: [
+        { id: 1, name: 'Tipo A+'},
+        { id: 2, name: 'Tipo A-'},
+        { id: 3, name: 'Tipo O+'},
+        { id: 4, name: 'Tipo O-'},
+        { id: 5, name: 'Tipo B+'},
+        { id: 6, name: 'Tipo B-'},
+        { id: 7, name: 'Tipo AB+'},
+        { id: 8, name: 'Tipo AB-'}
+    ],
+    defaultLicenseCategory: [
+        { id: 1, name: 'A1'},
+        { id: 2, name: 'A2'},
+        { id: 3, name: 'B1'},
+        { id: 4, name: 'B2'},
+        { id: 5, name: 'B3'},
+        { id: 6, name: 'C1'},
+        { id: 7, name: 'C2'},
+        { id: 8, name: 'C3'}
+    ],
+    defaultCountry: [
+        { id: 1, name: 'Colombia'},
+        { id: 2, name: 'Venezuela'},
+        { id: 3, name: 'Ecuador'},
+    ],
     defaultDepartment : [
-        { name: 'Amazonas' },
-        { name: 'Antioquia' },
-        { name: 'Arauca' },
-        { name: 'Atlántico' },
-        { name: 'Bolívar' },
-        { name: 'Boyacá' },
-        { name: 'Caldas' },
-        { name: 'Caquetá' },
-        { name: 'Casanare' },
-        { name: 'Cauca' },
-        { name: 'Cesar' },
-        { name: 'Chocó' },
-        { name: 'Norte de Santander'}
+        { id: 1, idCountry: "1", name: 'Amazonas' },
+        { id: 2, idCountry: "1", name: 'Antioquia' },
+        { id: 3, idCountry: "1", name: 'Arauca' },
+        { id: 4, idCountry: "1", name: 'Atlántico' },
+        { id: 5, idCountry: "1", name: 'Bolívar' },
+        { id: 6, idCountry: "1", name: 'Boyacá' },
+        { id: 7, idCountry: "1", name: 'Caldas' },
+        { id: 8, idCountry: "1", name: 'Caquetá' },
+        { id: 9, idCountry: "1", name: 'Casanare' },
+        { id: 10, idCountry: "1", name: 'Chocó' },
+        { id: 11, idCountry: "1", name: 'Cauca' },
+        { id: 12, idCountry: "1", name: 'Cesar' },
+        { id: 13, idCountry: "1", name: 'Norte de Santander'}
     ],
     defaultPaymentMethod : [
-        { name: 'Transferencia' },
-        { name: 'Efectivo' },
-        { name: 'Tarjeta Crédito' },
-        { name: 'Crédito' },
-        { name: 'Contraentrega' },
-        { name: 'Crédito Cliente' }
+        { id: 1, name: 'Transferencia' },
+        { id: 2, name: 'Efectivo' },
+        { id: 3, name: 'Crédito' },
+        { id: 4, name: 'Contraentrega' }
     ],
     defaultMunicipality : [
-        { idDepartment: "13" , name: 'Abrego' },
-        { idDepartment: "13" , name: 'Arboledas' },
-        { idDepartment: "13" , name: 'Bochalema' },
-        { idDepartment: "13" , name: 'Bucarasica' },
-        { idDepartment: "13" , name: 'Cachira' },
-        { idDepartment: "13" , name: 'Cacota' },
-        { idDepartment: "13" , name: 'Chinacota' },
-        { idDepartment: "13" , name: 'Chitaga' },
-        { idDepartment: "13" , name: 'Convencion' },
-        { idDepartment: "13" , name: 'Cucutilla' },
-        { idDepartment: "13" , name: 'Cucuta' },
-        { idDepartment: "13" , name: 'Durania' },
-        { idDepartment: "13" , name: 'El Carmen' },
-        { idDepartment: "13" , name: 'El Tarra' },
-        { idDepartment: "13" , name: 'El Zulia' },
-        { idDepartment: "13" , name: 'Gramalote' },
-        { idDepartment: "13" , name: 'Hacari' },
-        { idDepartment: "13" , name: 'Herran' },
-        { idDepartment: "13" , name: 'La Esperanza' },
-        { idDepartment: "13" , name: 'La Playa' },
-        { idDepartment: "13" , name: 'Labateca' },
-        { idDepartment: "13" , name: 'Los Patios' },
-        { idDepartment: "13" , name: 'Lourdes' },
-        { idDepartment: "13" , name: 'Mutiscua' },
-        { idDepartment: "13" , name: 'Ocana' },
-        { idDepartment: "13" , name: 'Pamplona' },
-        { idDepartment: "13" , name: 'Pamplonita' },
-        { idDepartment: "13" , name: 'Puerto Santander' },
-        { idDepartment: "13" , name: 'Ragonvalia' },
-        { idDepartment: "13" , name: 'Salazar' },
-        { idDepartment: "13" , name: 'San Calixto' },
-        { idDepartment: "13" , name: 'San Cayetano' },
-        { idDepartment: "13" , name: 'Santiago' },
-        { idDepartment: "13" , name: 'Sardinata' },
-        { idDepartment: "13" , name: 'Silos' },
-        { idDepartment: "13" , name: 'Teorama' },
-        { idDepartment: "13" , name: 'Tibu' },
-        { idDepartment: "13" , name: 'Toledo' },
-        { idDepartment: "13" , name: 'Villa Caro' },
-        { idDepartment: "13" , name: 'Villa Del Rosario' }
+        {  id: 1, idDepartment: "13" , name: 'Abrego' },
+        {  id: 2, idDepartment: "13" , name: 'Arboledas' },
+        {  id: 3, idDepartment: "13" , name: 'Bochalema' },
+        {  id: 4, idDepartment: "13" , name: 'Bucarasica' },
+        {  id: 5, idDepartment: "13" , name: 'Cachira' },
+        {  id: 6, idDepartment: "13" , name: 'Cacota' },
+        {  id: 7, idDepartment: "13" , name: 'Chinacota' },
+        {  id: 8, idDepartment: "13" , name: 'Chitaga' },
+        {  id: 9, idDepartment: "13" , name: 'Convencion' },
+        {  id: 10, idDepartment: "13" , name: 'Cucutilla' },
+        {  id: 11, idDepartment: "13" , name: 'Cucuta' },
+        {  id: 12, idDepartment: "13" , name: 'Durania' },
+        {  id: 13, idDepartment: "13" , name: 'El Carmen' },
+        {  id: 14, idDepartment: "13" , name: 'El Tarra' },
+        {  id: 15, idDepartment: "13" , name: 'El Zulia' },
+        {  id: 16, idDepartment: "13" , name: 'Gramalote' },
+        {  id: 17, idDepartment: "13" , name: 'Hacari' },
+        {  id: 18, idDepartment: "13" , name: 'Herran' },
+        {  id: 19, idDepartment: "13" , name: 'La Esperanza' },
+        {  id: 20, idDepartment: "13" , name: 'La Playa' },
+        {  id: 21, idDepartment: "13" , name: 'Labateca' },
+        {  id: 22, idDepartment: "13" , name: 'Los Patios' },
+        {  id: 23, idDepartment: "13" , name: 'Lourdes' },
+        {  id: 24, idDepartment: "13" , name: 'Mutiscua' },
+        {  id: 25, idDepartment: "13" , name: 'Ocana' },
+        {  id: 26, idDepartment: "13" , name: 'Pamplona' },
+        {  id: 27, idDepartment: "13" , name: 'Pamplonita' },
+        {  id: 28, idDepartment: "13" , name: 'Puerto Santander' },
+        {  id: 29, idDepartment: "13" , name: 'Ragonvalia' },
+        {  id: 30, idDepartment: "13" , name: 'Salazar' },
+        {  id: 31, idDepartment: "13" , name: 'San Calixto' },
+        {  id: 32, idDepartment: "13" , name: 'San Cayetano' },
+        {  id: 33, idDepartment: "13" , name: 'Santiago' },
+        {  id: 34, idDepartment: "13" , name: 'Sardinata' },
+        {  id: 35, idDepartment: "13" , name: 'Silos' },
+        {  id: 36, idDepartment: "13" , name: 'Teorama' },
+        {  id: 37, idDepartment: "13" , name: 'Tibu' },
+        {  id: 38, idDepartment: "13" , name: 'Toledo' },
+        {  id: 39, idDepartment: "13" , name: 'Villa Caro' },
+        {  id: 40, idDepartment: "13" , name: 'Villa Del Rosario' }
     ],
     defaultUnitMeasure:[
         { name : "kg" },
@@ -181,11 +225,14 @@ module.exports = {
         { type: salesConst.TYPE_SERVICE.SHIPPING.VALUE_CONVENTION, code: "PORREM" },
     ],
     defaultBank: [
-        { code: "01", description: "Tibu general cash register", idMunicipality: 37 },
-        { code: "02", description: "Cúcuta general cash register", idMunicipality: 11 }
+        { id: 1, code: "02", description: "Cúcuta general cash register", idMunicipality: 11 },
+        { id: 2, code: "01", description: "Tibu general cash register", idMunicipality: 37 }
     ],
     defaultHeadquarter: [
         { description: salesConst.HEADQUARTERS.TIBU, idMunicipality: 37 },
         { description: salesConst.HEADQUARTERS.CUCUTA, idMunicipality: 11 }
+    ],
+    defaultTrackingStatus : [
+        { chronologicalPosition: trackingStatusConst.TRACKING_STATUS.RECEIVED.VALUE_CONVENTION, name: trackingStatusConst.TRACKING_STATUS.RECEIVED.VALUE_STRING, description: "" }
     ]
 }

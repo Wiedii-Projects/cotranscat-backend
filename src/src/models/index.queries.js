@@ -4,6 +4,7 @@ module.exports = {
   roleQuery: require("./role/role.query"),
   indicativeNumberQuery: require("./indicative-number/indicative-number.query"),
   departmentQuery: require("./department/department.query"),
+  countryQuery: require("./country/country.query"),
   municipalityQuery: require("./municipality/municipality.query"),
   paymentMethodQuery: require("./payment-method/payment-method.query"),
   unitMeasureQuery: require("./unit-measure/unit-measure.query"),
@@ -29,5 +30,7 @@ module.exports = {
   prefixQuery: require('./prefix/prefix.query'),
   resolutionQuery: require('./resolution/resolution.query'),
   bankQuery: require('./bank/bank.query'),
-  moneyTransferQuery: require("./money-transfer/money-transfer.query")
+  moneyTransferQuery: require("./money-transfer/money-transfer.query"),
+  bloodTypeQuery: require("./bloodType/bloodType.query"),
+  licenseCategoryQuery: require("./licenseCategory/licenseCategory.query")
 };

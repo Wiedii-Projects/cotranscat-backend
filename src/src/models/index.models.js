@@ -33,6 +33,9 @@ const MoneyTransfer = require('./money-transfer/money-transfer.model')
 const Prefix = require('./prefix/prefix.model')
 const Resolution = require('./resolution/resolution.model')
 const MoneyTransferTracker = require('./money-transfer-tracker/money-transfer-tracker.model')
+const Country = require('./country/country.model')
+const BloodType = require('./bloodType/bloodType.model')
+const LicenseCategory = require('./licenseCategory/licenseCategory.model')
 
 // Relationships BD
 
@@ -48,16 +51,32 @@ Driver.belongsTo(User, { as: 'UserDriver', foreignKey: { name: 'id', allowNull: 
 User.hasOne(Driver, { as: 'UserDriver', foreignKey: { name: 'id', allowNull: false, primaryKey: true } });
 
 // Relationship Vehicle-DriverVehicle
-Vehicle.hasMany(DriverVehicle, { as: 'Vehicle', foreignKey: { name: 'idVehicle', allowNull: false, primaryKey: true } });
-DriverVehicle.belongsTo(Vehicle, { as: 'Vehicle', foreignKey: { name: 'idVehicle', allowNull: false, primaryKey: true } });
+Vehicle.hasMany(DriverVehicle, { as: 'VehicleDriverVehicle', foreignKey: { name: 'idVehicle', allowNull: false, primaryKey: true } });
+DriverVehicle.belongsTo(Vehicle, { as: 'VehicleDriverVehicle', foreignKey: { name: 'idVehicle', allowNull: false, primaryKey: true } });
 
 // Relationship Driver-DriverVehicle
-Driver.hasMany(DriverVehicle, { as: 'Driver', foreignKey: { name: 'idDriver', allowNull: false, primaryKey: true } });
-DriverVehicle.belongsTo(Driver, { as: 'Driver', foreignKey: { name: 'idDriver', allowNull: false, primaryKey: true } });
+Driver.hasMany(DriverVehicle, { as: 'DriverDriverVehicle', foreignKey: { name: 'idDriver', allowNull: false, primaryKey: true } });
+DriverVehicle.belongsTo(Driver, { as: 'DriverDriverVehicle', foreignKey: { name: 'idDriver', allowNull: false, primaryKey: true } });
 
 // Relationship DriverVehicle-Travel
 Travel.belongsTo(DriverVehicle, { as: 'TravelDriverVehicle', foreignKey: { name: "idDriverVehicle", allowNull: false } });
 DriverVehicle.hasMany(Travel, { as: 'TravelDriverVehicle', foreignKey: { name: "idDriverVehicle", allowNull: false } });
+
+// Relationship BloodType-Driver
+Driver.belongsTo(BloodType, { as: 'BloodTypeDriver', foreignKey: { name: 'idBloodType', allowNull: false } });
+BloodType.hasOne(Driver, { as: 'BloodTypeDriver', foreignKey: { name: 'idBloodType', allowNull: false } });
+
+// Relationship Driver-Municipality-Birth
+Driver.belongsTo(Municipality, { as: 'DriverMunicipalityBirth', foreignKey: { name: "idMunicipalityOfBirth", allowNull: false } });
+Municipality.hasMany(Driver, { as: 'DriverMunicipalityBirth', foreignKey: { name: "idMunicipalityOfBirth", allowNull: false } });
+
+// Relationship Driver-Municipality-Residence
+Driver.belongsTo(Municipality, { as: 'DriverMunicipalityResidence', foreignKey: { name: "idMunicipalityOfResidence", allowNull: true } });
+Municipality.hasMany(Driver, { as: 'DriverMunicipalityResidence', foreignKey: { name: "idMunicipalityOfResidence", allowNull: true } });
+
+// Relationship LicenseCategory-Driver
+Driver.belongsTo(LicenseCategory, { as: 'LicenseCategoryDriver', foreignKey: { name: 'idLicenseCategory', allowNull: false } });
+LicenseCategory.hasOne(Driver, { as: 'LicenseCategoryDriver', foreignKey: { name: 'idLicenseCategory', allowNull: false } });
 
 // Relationship Client-idIndicativePhoneWhatsApp
 Client.belongsTo(IndicativeNumber, { as: 'ClientIndicativeNumberWhatsApp', foreignKey: { name: "idIndicativePhoneWhatsApp", allowNull: false } });
@@ -90,6 +109,10 @@ User.hasOne(Coordinator, { as: 'UserCoordinator', foreignKey: { name: 'id', allo
 // Relationship Municipality-Department
 Municipality.belongsTo(Department, { as: 'MunicipalityDepartment', foreignKey: { name: "idDepartment", allowNull: false } });
 Department.hasMany(Municipality, { as: 'MunicipalityDepartment', foreignKey: { name: "idDepartment", allowNull: false } });
+
+// Relationship Department-Country
+Department.belongsTo(Country, { as: 'DepartmentCountry', foreignKey: { name: "idCountry", allowNull: false } });
+Country.hasMany(Department, { as: 'DepartmentCountry', foreignKey: { name: "idCountry", allowNull: false } });
 
 // Relationship Vehicle-Municipality
 Municipality.hasMany(Vehicle, { as: 'VehicleMunicipality', foreignKey: { name: "idMunicipality", allowNull: false } });
@@ -266,5 +289,8 @@ module.exports = {
   MoneyTransfer,
   Prefix,
   Resolution,
-  MoneyTransferTracker
+  MoneyTransferTracker,
+  Country,
+  BloodType,
+  LicenseCategory
 };

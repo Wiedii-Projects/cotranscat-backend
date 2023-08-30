@@ -19,4 +19,7 @@ router.get('/:id', [
     vehicleMiddleware.checkGetVehicle(),
 ], vehicleController.getVehicle)
 
+router.get('/filter/:value', [
+], vehicleController.filterVehicle)
+
 module.exports = router

@@ -4,6 +4,7 @@ module.exports = {
   userController: require("./user/user.controller"),
   indicativeNumberController: require("./indicative-number.controller"),
   departmentController: require("./department.controller"),
+  countryController: require("./country.controller"),
   municipalityController: require("./municipality.controller"),
   paymentMethodController: require("./payment-method.controller"),
   unitMeasureController: require("./unit-measure.controller"),
@@ -21,5 +22,7 @@ module.exports = {
   seatController: require("./seat.controller"),
   invoiceController: require("./invoice.controller"),
   observationController: require("./observation.controller"),
-  resolutionController: require("./resolution.controller")
+  resolutionController: require("./resolution.controller"),
+  bloodTypeController: require("./bloodType.controller"),
+  licenseCategoryController: require("./licenseCategory.controller")
 };

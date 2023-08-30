@@ -15,10 +15,14 @@ const {
   userQuery,
   roleQuery,
   driverQuery,
+  vehicleQuery,
+  driverVehicleQuery,
 } = require("../../models/index.queries");
 
 // Constants
 const roleModelConst = require("../../constants/model/role.model.const");
+const { errorsConst } = require("../../constants/index.constants");
+const { Op } = require("sequelize");
 
 module.exports = {
   createDriver: async (req, res) => {
@@ -51,8 +55,9 @@ module.exports = {
           transaction
         );
         await transaction.commit();
+        return responseHelpers.responseSuccess(res, null);
       }
-      return responseHelpers.responseSuccess(res, null);
+      return responseHelpers.responseError(res, 500, errorsConst.driverErrors.driverAlreadyExist);
     } catch (error) {
       if (transaction) await transaction.rollback();
       return responseHelpers.responseError(res, 500, error);
@@ -60,8 +65,11 @@ module.exports = {
   },
 
   getAllDrivers: async (req, res) => {
+    const { offset = 0 } = req.query;
     try {
-      const drivers = await driverQuery.findDriverQuery();
+      const drivers = await driverQuery.findDriverQuery({
+        offset: offset * 20
+      });
       return responseHelpers.responseSuccess(res, drivers);
     } catch (error) {
       return responseHelpers.responseError(res, 500, error);
@@ -79,8 +87,8 @@ module.exports = {
 
   updateDriver: async (req, res) => {
     const { decryptId: id } = req.body;
-    const userData = extractUserDataHelper(req.body);
-    const { password, ...driverData } = extractDriverDataHelper(req.body);
+    const userData = userHelpers.extractUserDataHelper(req.body);
+    const { password, ...driverData } = userHelpers.extractDriverDataHelper(req.body);
     let transaction;
     try {
       transaction = await dbConnectionOptions.transaction();
@@ -97,4 +105,30 @@ module.exports = {
       return responseHelpers.responseError(res, 500, error);
     }
   },
+  assignVehicle: async (req, res) => {
+    const { idDriver, idVehicle } = req.body;
+    try {
+      const [driverExist, vehicleExist] = await Promise.all([
+        driverQuery.findOneDriverQuery({ where: { id: idDriver } }),
+        vehicleQuery.findOneVehicleQuery({ where: { id: idVehicle } })
+      ]);
+      if (driverExist && vehicleExist) {
+        const driverAlreadyAssigned = await driverVehicleQuery.findOneDriverVehicleQuery({
+          where: {
+            [Op.or]: [
+              { "idDriver": idDriver },
+              { "idVehicle": idVehicle }
+            ],
+          }
+        });
+        if( driverAlreadyAssigned ) return responseHelpers.responseError(res, 400, errorsConst.driverErrors.driverAlreadyAssigned)
+        await driverVehicleQuery.createDriverVehicle({ idDriver, idVehicle });
+        return responseHelpers.responseSuccess(res, null);
+      }
+      return driverExist ? responseHelpers.responseError(res, 400, errorsConst.vehicleErrors.vehicleDoesNotExist) :
+        responseHelpers.responseError(res, 400, errorsConst.driverErrors.driverNotExist);
+    } catch (error) {
+      return responseHelpers.responseError(res, 500, error);
+    }
+  }
 };
