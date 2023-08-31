@@ -15,6 +15,10 @@ router.post('/', [
     vehicleMiddleware.checkCreateVehicle(),
 ], vehicleController.createVehicle)
 
+router.get('/filter/travel/', [
+    vehicleMiddleware.checkGetVehiclesByStateTravel()
+], vehicleController.findVehiclesByStateTravel)
+
 router.get('/:id', [
     vehicleMiddleware.checkGetVehicle(),
 ], vehicleController.getVehicle)

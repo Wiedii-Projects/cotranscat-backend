@@ -85,5 +85,22 @@ module.exports = {
         } catch (error) {
             return responseHelpers.responseError(res, 500, error);
         }
+    },
+    findVehiclesByStateTravel: async (req, res) => {
+        const { internalNumber } = req.query;
+        
+        try {
+            const vehicles = await vehicleQuery.findVehiclesByStateTravel({
+                where: {
+                    internalNumber: {
+                        [Op.like]: `%${internalNumber}%`
+                    }
+
+                }
+            });
+            return responseHelpers.responseSuccess(res, vehicles);
+        } catch (error) {
+            return responseHelpers.responseError(res, 500, error);
+        }
     }
 }

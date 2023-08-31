@@ -53,5 +53,17 @@ module.exports = {
         sharedValidators.validateError,
         check('vehicle', new ErrorModel(errorsConst.vehicleErrors.vehicleDoesNotExist)).custom((value) => value),
         sharedValidators.validateError,
-    ])
+    ]),
+    checkGetVehiclesByStateTravel: () => {
+        return [
+            check('internalNumber')
+            .notEmpty()
+            .withMessage(new ErrorModel(errorsConst.vehicleErrors.internalNumberRequired))
+            .bail()
+            .isInt( { min: 0})
+            .withMessage(new ErrorModel(errorsConst.vehicleErrors.internalNumberInvalid))
+            .bail(),
+            sharedValidators.validateError
+        ]
+    }
 }
