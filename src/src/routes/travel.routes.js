@@ -45,4 +45,9 @@ router.delete('/:id', [
     sharedCheckMiddleware.checkId()
 ], travelController.deleteTravel);
 
+router.get('/all/byRangeDate', [
+    //TODO: implementation of role permission validation
+    travelMiddleware.checkRangeDate()
+], travelController.getAllTravelsByRangeDate);
+
 module.exports = router;

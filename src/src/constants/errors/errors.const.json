@@ -968,6 +968,26 @@
       "code": "TRVL015",
       "message": "The hour is required"
     },
+    "initialDateTravelRequired": {
+      "code": "TRVL016",
+      "message": "The initial date travel is required"
+    },
+    "initialDateTravelInvalid": {
+      "code": "TRVL017",
+      "message": "The initial date travel is invalid"
+    },
+    "finalDateTravelRequired": {
+      "code": "TRVL018",
+      "message": "The final date travel is required"
+    },
+    "finalDateTravelInvalid": {
+      "code": "TRVL019",
+      "message": "The final date travel is invalid"
+    },
+    "rangeTravelInvalid": {
+      "code": "TRVL020",
+      "message": "The range date travel is invalid"
+    },
     "queryErrors": {
       "createError": {
         "code": "TRVL_001",

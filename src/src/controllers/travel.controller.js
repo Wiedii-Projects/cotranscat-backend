@@ -7,6 +7,15 @@ const { dbConnectionOptions } = require('../constants/core/core-configurations.c
 // Helpers
 const { responseHelpers, sharedHelpers } = require('../helpers/index.helpers');
 
+// Libraries
+const { Op } = require('sequelize');
+const { v4: uuidv4 } = require('uuid');
+const dayjs = require('dayjs');
+require('dayjs/locale/es');
+const localizedFormat = require('dayjs/plugin/localizedFormat');
+const localeData = require('dayjs/plugin/localeData');
+dayjs.locale('es');
+
 // Models - Queries
 const { travelQuery, driverVehicleQuery, seatRulerQuery, seatQuery, userQuery } = require('../models/index.queries');
 
@@ -157,6 +166,65 @@ module.exports = {
                 return responseHelpers.responseSuccess(res, vehiclesAvailable);
             }
             return responseHelpers.responseSuccess(res, []);
+        } catch (error) {
+            return responseHelpers.responseError(res, 500, error);
+        }
+    },
+    getAllTravelsByRangeDate: async (req, res) => {
+        try {
+            const travels = await travelQuery.findTravels({
+                where: {
+                    date: {
+                        [Op.between]: [req.query.initialDate, req.query.finalDate]
+                    }
+                }
+            });
+            const travelsFormatted = travels.map(({ id, date, time, TravelDriverVehicle: { VehicleDriverVehicle, DriverDriverVehicle } }) => ({
+                travel: {
+                    id: sharedHelpers.encryptIdDataBase(id),
+                    date,
+                    time
+                },
+                driver: {
+                    id: sharedHelpers.encryptIdDataBase(DriverDriverVehicle.id),
+                    name: DriverDriverVehicle.UserDriver.name,
+                    lastName: DriverDriverVehicle.UserDriver.lastName
+                },
+                vehicle: {
+                    id: sharedHelpers.encryptIdDataBase(VehicleDriverVehicle.id)
+                }
+            }))
+            
+            dayjs.extend(localizedFormat);
+            dayjs.extend(localeData);
+
+            const hours = Array.from({ length: 16 }, (_, i) => i + 4);
+            const days = dayjs.weekdays().map(day => day.charAt(0).toUpperCase() + day.slice(1));
+        
+            const transformedData = hours.map(hour => ({
+                id: dayjs().hour(hour).minute(0).format('h:mm A'),
+                nestedDroppables: days.map((day, index) => {
+                    const travelData = travelsFormatted.find(item => {
+                        const travelDate = dayjs(`${item.travel.date} ${item.travel.time}`);
+                        return travelDate.day() === index && travelDate.hour() === hour;
+                    });
+        
+                    return {
+                        id: `${day} ${dayjs().hour(hour).minute(0).format('h:mm A')}`,
+                        day,
+                        items: travelData ? [
+                            {
+                                id: uuidv4(),
+                                content: `VEHICLE - ${travelData.vehicle.id}`,
+                                name: `${travelData.driver.name} ${travelData.driver.lastName}`,
+                                idTravel: travelData.travel.id,
+                            },
+                        ] : [],
+                    };
+                }),
+            }));
+        
+            return responseHelpers.responseSuccess(res, transformedData);
         } catch (error) {
             return responseHelpers.responseError(res, 500, error);
         }
