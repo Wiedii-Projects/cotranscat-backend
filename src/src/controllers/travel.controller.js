@@ -191,7 +191,9 @@ module.exports = {
                     lastName: DriverDriverVehicle.UserDriver.lastName
                 },
                 vehicle: {
-                    id: sharedHelpers.encryptIdDataBase(VehicleDriverVehicle.id)
+                    id: sharedHelpers.encryptIdDataBase(VehicleDriverVehicle.id),
+                    internalNumber: VehicleDriverVehicle.internalNumber,
+                    plate: VehicleDriverVehicle.plate
                 }
             }))
             
@@ -215,7 +217,7 @@ module.exports = {
                         items: travelData ? [
                             {
                                 id: uuidv4(),
-                                content: `VEHICLE - ${travelData.vehicle.id}`,
+                                content: `${travelData.vehicle.internalNumber} - ${travelData.vehicle.plate}`,
                                 name: `${travelData.driver.name} ${travelData.driver.lastName}`,
                                 idTravel: travelData.travel.id,
                             },

@@ -62,8 +62,7 @@ module.exports = {
                         include: [
                             { 
                                 model: Vehicle, 
-                                as: 'VehicleDriverVehicle', 
-                                attributes: ['id', 'plate', 'mark', 'model', 'price', 'width', 'height']
+                                as: 'VehicleDriverVehicle'
                                 
                             },
                             { 
