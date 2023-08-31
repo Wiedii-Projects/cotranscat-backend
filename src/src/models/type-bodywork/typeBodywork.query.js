@@ -24,7 +24,7 @@ module.exports = {
             return await TypeBodywork.findAll({
                 where,
                 raw: true
-            }).then(typeBodywork => typeBodywork.map(({ id, name, idDepartment }) => ({
+            }).then(typeBodywork => typeBodywork.map(({ id, name }) => ({
                 id: sharedHelpers.encryptIdDataBase(id),
                 name
             })))

@@ -24,7 +24,7 @@ module.exports = {
             return await TypeVehicle.findAll({
                 where,
                 raw: true
-            }).then(typeVehicle => typeVehicle.map(({ id, name, idDepartment }) => ({
+            }).then(typeVehicle => typeVehicle.map(({ id, name }) => ({
                 id: sharedHelpers.encryptIdDataBase(id),
                 name
             })))
