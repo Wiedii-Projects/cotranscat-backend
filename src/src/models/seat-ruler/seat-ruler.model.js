@@ -30,7 +30,7 @@ const SeatRulerSchema = dbConnectionOptions.define(
         indexes: [
             {
                 unique: true,
-                fields: ["row", "column", "idVehicle"]
+                fields: ["row", "column", "idTemplateVehicle"]
             }
         ]
     }
