@@ -2,10 +2,11 @@
 const { errorsConst } = require('../../constants/index.constants');
 
 // Models
-const { Vehicle, DriverVehicle } = require('./../index.models');
+const { Vehicle, DriverVehicle, StateVehicle } = require('./../index.models');
 
 // Helpers
 const { encryptIdDataBase } = require('../../helpers/shared.helpers');
+const { Op } = require('sequelize');
 
 module.exports = {
     createVehicle: async (values, options = {}) => {
@@ -52,11 +53,21 @@ module.exports = {
                 include = [
                     { 
                         model: DriverVehicle, 
-                        as: 'VehicleDriverVehicle'
-                        // TODO:  Implement condition for state vehicle on travel
+                        as: 'VehicleDriverVehicle',
+                        required: true, 
+                        include: [
+                            {
+                                model: StateVehicle,
+                                as: 'DriverVehicleStateVehicle',
+                                where : {
+                                    type: 0
+                                }
+                            }
+                        ]
                     }
                 ]
             } = query;
+            
             const vehiclesAvailable = await Vehicle.findAll({
                 where,
                 attributes,
