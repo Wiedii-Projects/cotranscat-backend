@@ -4,4 +4,5 @@ module.exports = {
     COORDINATOR_ROLE: 2,
     DRIVER_ROLE: 3,
     SELLER_ROLE: 4,
+    OWNER_ROLE: 5
 }

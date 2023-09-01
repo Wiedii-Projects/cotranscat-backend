@@ -13,6 +13,7 @@ const {
     defaultSeller,
     defaultClient,
     defaultDriver,
+    defaultOwner,
     defaultBank,
     defaultHeadquarter,
     defaultCountry,
@@ -22,7 +23,8 @@ const {
     defaultTrackingStatus,
     defaultTypeBodywork,
     defaultTypeFuel,
-    defaultTypeVehicle
+    defaultTypeVehicle,
+    defaultStateVehicle
 } = require('./default-data.model');
 
 //Const
@@ -55,6 +57,8 @@ const TrackingStatus = require('../../tracking-status/tracking-status.model');
 const TypeFuel = require("../../type-fuel/typeFuel.model")
 const TypeBodywork = require("../../type-bodywork/typeBodywork.model")
 const TypeVehicle = require('../../type-vehicle/typeVehicle.model');
+const StateVehicle = require('../../state-vehicle/stateVehicle.model');
+const Owner = require('../../owner/owner.model');
 
 class defaultDataBaseModel {
     constructor() {
@@ -85,6 +89,12 @@ class defaultDataBaseModel {
         return id;
     }
 
+    async getOwnerRole() {
+        const { OWNER_ROLE: type } = roleConst;
+        const { id } = await Role.findOne({ where: { type } });
+        return id;
+    }
+
     async getDocumentType() {
         const [{ name }] = defaultDocumentType;
         const { id } = await DocumentType.findOne({ where: { name } });
@@ -109,12 +119,12 @@ class defaultDataBaseModel {
         return id;
     }
 
-    async getMunicipality () {
+    async getMunicipality() {
         const { name: from } = defaultMunicipality[10];
         const { name: to } = defaultMunicipality[36];
-        const [ { id: arrive }, { id: belong } ] = await Promise.all([
-            Municipality.findOne({ where: { name: from }}),
-            Municipality.findOne({ where: { name: to }})
+        const [{ id: arrive }, { id: belong }] = await Promise.all([
+            Municipality.findOne({ where: { name: from } }),
+            Municipality.findOne({ where: { name: to } })
         ]);
         return [arrive, belong];
     }
@@ -239,37 +249,66 @@ class defaultDataBaseModel {
         return await TypeVehicle.count();
     }
 
+    async countStateVehicle() {
+        return await StateVehicle.count();
+    }
+
     async createDefaultDataBase() {
-        await this.countRole() || Object.values(roleConst).map(async (element) => { await Role.create({ type: element }) });
-        await this.countBloodType() || defaultBloodType.map(async (element) => { await BloodType.create(element) });
-        await this.countLicenseCategory() || defaultLicenseCategory.map(async (element) => { await LicenseCategory.create(element) });
-        await this.countIndicativeNumber() || defaultIndicativeNumber.map(async (element) => await IndicativeNumber.create(element));
-        await this.countDocumentType() || defaultDocumentType.map(async (element) => await DocumentType.create(element));
-        await this.countCountry() || defaultCountry.map(async (element) => await Country.create(element));
-        await this.countDepartment() || defaultDepartment.map(async (element) => await Department.create(element));
-        await this.countPaymentMethod() || defaultPaymentMethod.map(async (element) => await PaymentMethod.create(element));
-        await this.countMunicipality() || defaultMunicipality.map(async (element) => await Municipality.create(element));
-        await this.countTypeFuel() || defaultTypeFuel.map(async (element) => await TypeFuel.create(element));
-        await this.countTypeBodywork() || defaultTypeBodywork.map(async (element) => await TypeBodywork.create(element));
-        await this.countTypeVehicle() || defaultTypeVehicle.map(async (element) => await TypeVehicle.create(element));
-        await this.countVehicle() || defaultVehicle.map(async (element) => { await Vehicle.create(element) });
-        await this.countUnitMeasure() || defaultUnitMeasure.map(async (element) => await UnitMeasure.create(element));
-        await this.countShippingType() || defaultShippingType.map(async (element) => await ShippingType.create(element));
-        await this.countServiceType() || defaultServiceType.map(async (element) => await ServiceType.create(element));
+        let creationArray = [];
+        const [stateVehicle, role, bloodType, licenseCategory, indicativeNumber, documentType, country, department, paymentMethod, municipality,
+            typeFuel, typeBodywork, typeVehicle, vehicle, unitMeasure, shippingType, serviceType, headquarter, bank, trackingStatus
+        ] = await Promise.all([
+            this.countStateVehicle(),
+            this.countRole(),
+            this.countBloodType(),
+            this.countLicenseCategory(),
+            this.countIndicativeNumber(),
+            this.countDocumentType(),
+            this.countCountry(),
+            this.countDepartment(),
+            this.countPaymentMethod(),
+            this.countMunicipality(),
+            this.countTypeFuel(),
+            this.countTypeBodywork(),
+            this.countTypeVehicle(),
+            this.countVehicle(),
+            this.countUnitMeasure(),
+            this.countShippingType(),
+            this.countServiceType(),
+            this.countHeadquarter(),
+            this.countBank(),
+            this.countTrackingStatus()
+        ]);
+        if (!stateVehicle) creationArray.push(StateVehicle.bulkCreate(defaultStateVehicle));
+        if (!role) Object.values(roleConst).map((element) => creationArray.push(Role.create({ type: element })));
+        if (!bloodType) BloodType.bulkCreate(defaultBloodType);
+        if (!licenseCategory) LicenseCategory.bulkCreate(defaultLicenseCategory);
+        if (!indicativeNumber) creationArray.push(IndicativeNumber.bulkCreate(defaultIndicativeNumber));
+        if (!documentType) creationArray.push(DocumentType.bulkCreate(defaultDocumentType));
+        if (!country) creationArray.push(Country.bulkCreate(defaultCountry));
+        if (!department) creationArray.push(Department.bulkCreate(defaultDepartment));
+        if (!paymentMethod) creationArray.push(PaymentMethod.bulkCreate(defaultPaymentMethod));
+        if (!typeFuel) creationArray.push(TypeFuel.bulkCreate(defaultTypeFuel));
+        if (!typeBodywork) creationArray.push(TypeBodywork.bulkCreate(defaultTypeBodywork));
+        if (!typeVehicle) creationArray.push(TypeVehicle.bulkCreate(defaultTypeVehicle));
+        if (!unitMeasure) creationArray.push(UnitMeasure.bulkCreate(defaultUnitMeasure));
+        if (!shippingType) creationArray.push(ShippingType.bulkCreate(defaultShippingType));
+        if (!serviceType) creationArray.push(ServiceType.bulkCreate(defaultServiceType));
+        if (!trackingStatus) creationArray.push(TrackingStatus.bulkCreate(defaultTrackingStatus));
+
+        await Promise.all(creationArray);
+
+        creationArray = [];
+
+        if (!municipality) await Municipality.bulkCreate(defaultMunicipality);
+        if (!vehicle) creationArray.push(Vehicle.bulkCreate(defaultVehicle));
+        if (!headquarter) creationArray.push(Headquarter.bulkCreate(defaultHeadquarter));
+        if (!bank) creationArray.push(Bank.bulkCreate(defaultBank));
+
+        await Promise.all(creationArray);
+
         const [idMunicipality, idMunicipalityArrive] = await this.getMunicipality();
         await this.countRoute() || await Route.create({ idMunicipalityDepart: idMunicipality, idMunicipalityArrive });
-
-        if (await this.countHeadquarter() === 0) {
-            for (const element of defaultHeadquarter) {
-                await Headquarter.create(element)
-            }
-        }
-
-        if (await this.countBank() === 0) {
-            for (const bank of defaultBank) {
-                await Bank.create(bank);
-            }
-        }
 
         if (await this.countPaymentMethodBank() === 0) {
             const paymentMethodBanks = defaultPaymentMethod.map(paymentMethod => {
@@ -290,78 +329,30 @@ class defaultDataBaseModel {
 
             await PaymentMethodBank.bulkCreate(flattenedPaymentMethodBanks);
         }
-        if (await this.countTrackingStatus() === 0) {
-            await TrackingStatus.bulkCreate(defaultTrackingStatus);
-        }
 
         const userCreate = await this.countUser();
 
         if (!userCreate) {
-            const [admin, seller, client, driver] = defaultUser;
-            const [
-                indicativeNumber,
-                idAdminRole,
-                idSellerRole,
-                idClientRole,
-                idDriverRole,
-                idDocumentType,
-                idPaymentMethod,
-                idUnitMeasure,
-                idShippingType,
-                idBank,
-                idBloodType,
-                idLicenseCategory
-            ] = await Promise.all([
+            const [admin, seller, client, driver, owner] = defaultUser;
+            const [ idIndicativePhone, idAdminRole, idSellerRole, idClientRole, idDriverRole, idOwnerRole, idDocumentType, idBank, idBloodType, idLicenseCategory] = 
+            await Promise.all([
                 this.getIndicativeNumber(),
                 this.getAdminRole(),
                 this.getSellerRole(),
                 this.getClientRole(),
                 this.getDriverRole(),
+                this.getOwnerRole(),
                 this.getDocumentType(),
-                this.getPaymentMethod(),
-                this.getUnitMeasure(),
-                this.getShippingType(),
                 this.getFirstBank(),
                 this.getBloodType(),
                 this.getLicenseCategory()
             ]);
-            const [userAdmin, userSeller, userClient, userDriver] = await Promise.all([
-                User.create({
-                    ...admin,
-                    idRole: idAdminRole,
-                    idDocumentType,
-                    idIndicativePhone: indicativeNumber,
-                    idPaymentMethod,
-                    idUnitMeasure,
-                    idShippingType
-                }),
-                User.create({
-                    ...seller,
-                    idRole: idSellerRole,
-                    idDocumentType,
-                    idIndicativePhone: indicativeNumber,
-                    idPaymentMethod,
-                    idUnitMeasure,
-                    idShippingType
-                }),
-                User.create({
-                    ...client,
-                    idRole: idClientRole,
-                    idDocumentType,
-                    idIndicativePhone: indicativeNumber,
-                    idPaymentMethod,
-                    idUnitMeasure,
-                    idShippingType
-                }),
-                User.create({
-                    ...driver,
-                    idRole: idDriverRole,
-                    idDocumentType,
-                    idIndicativePhone: indicativeNumber,
-                    idPaymentMethod,
-                    idUnitMeasure,
-                    idShippingType
-                })
+            const [userAdmin, userSeller, userClient, userDriver, userOwner] = await Promise.all([
+                User.create({ ...admin, idRole: idAdminRole, idDocumentType, idIndicativePhone }),
+                User.create({ ...seller, idRole: idSellerRole, idDocumentType, idIndicativePhone }),
+                User.create({ ...client, idRole: idClientRole, idDocumentType, idIndicativePhone }),
+                User.create({ ...driver, idRole: idDriverRole, idDocumentType, idIndicativePhone }),
+                User.create({ ...owner, idRole: idOwnerRole, idDocumentType, idIndicativePhone })
             ]);
 
             await Promise.all([
@@ -369,7 +360,7 @@ class defaultDataBaseModel {
                 Seller.create({ ...defaultSeller, id: userSeller.id, idBank }),
                 Client.create({
                     ...defaultClient,
-                    idIndicativePhoneWhatsApp: indicativeNumber,
+                    idIndicativePhoneWhatsApp: idIndicativePhone,
                     idMunicipality,
                     id: userClient.id
                 }),
@@ -381,6 +372,12 @@ class defaultDataBaseModel {
                     idMunicipalityOfBirth: idMunicipality,
                     idMunicipalityOfResidence: idMunicipality
                 }),
+                Owner.create({
+                    ...defaultOwner,
+                    id: userOwner.id,
+                    idIndicativePhoneWhatsApp: idIndicativePhone,
+                    idMunicipalityOfResidence: idMunicipality
+                })
             ]);
         };
     }

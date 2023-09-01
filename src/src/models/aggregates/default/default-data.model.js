@@ -67,6 +67,12 @@ module.exports = {
         name: "DRIVER", 
         lastName: "USER",
         numberPhone: "3052627087",
+    },
+    {
+        numberDocument: "0000000004",
+        name: "OWNER", 
+        lastName: "USER",
+        numberPhone: "3052627087",
     }],
     defaultAdmin: {
             email: 'admi@admin.co',
@@ -90,6 +96,16 @@ module.exports = {
         transitAgency: 'agencia de transito xx',
         restriction: 'debe usar lentes a la hora de conducir'
     },
+    defaultOwner: {
+        email: 'owner@owner.co',
+        address: 'Manzana xxx lote xxx palmxxe',
+        numberPhoneWhatsapp: "3052627087"
+    },
+    defaultStateVehicle: [
+        { id: 1, type: 0 },
+        { id: 2, type: 1 },
+        { id: 3, type: 2 },
+    ],
     defaultClient: {
         numberPhoneWhatsapp: '3052627086',
         email: 'client@client.co',
@@ -107,7 +123,20 @@ module.exports = {
         internalNumber: "11012",
         idTypeBodywork: 1,
         idTypeFuel: 2,
-        idTypeVehicle: 3
+        idTypeVehicle: 3,
+        code: '123',
+        mileage: '1000000',
+        motorNumber: '321',
+        rerecordingMotor: true,
+        chassisNumber: '12344',
+        rerecordingChassis: false,
+        serialNumber: '44123',
+        rerecordingSerialNumber: true,
+        SOATExpiration: '2000-02-16',
+        mechanicalTechnicianExpiration: '2023-02-16',
+        SOATPhoto: '',
+        mechanicalTechnicianPhoto: '',
+        propertyCardPhoto: '',
     },
     {
         plate: "ABC002",
@@ -121,7 +150,20 @@ module.exports = {
         internalNumber: "11011",
         idTypeBodywork: 4,
         idTypeFuel: 4,
-        idTypeVehicle: 4
+        idTypeVehicle: 4,
+        code: '1231',
+        mileage: '10000001',
+        motorNumber: '3211',
+        rerecordingMotor: true,
+        chassisNumber: '123441',
+        rerecordingChassis: false,
+        serialNumber: '441231',
+        rerecordingSerialNumber: true,
+        SOATExpiration: '2008-02-16',
+        mechanicalTechnicianExpiration: '2027-02-16',
+        SOATPhoto: '',
+        mechanicalTechnicianPhoto: '',
+        propertyCardPhoto: '',
     }],
     defaultBloodType: [
         { id: 1, name: 'Tipo A+'},

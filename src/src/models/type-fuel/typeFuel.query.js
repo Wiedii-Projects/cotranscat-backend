@@ -24,7 +24,7 @@ module.exports = {
             return await TypeFuel.findAll({
                 where,
                 raw: true
-            }).then(typeFuel => typeFuel.map(({ id, name, idDepartment }) => ({
+            }).then(typeFuel => typeFuel.map(({ id, name }) => ({
                 id: sharedHelpers.encryptIdDataBase(id),
                 name
             })))
