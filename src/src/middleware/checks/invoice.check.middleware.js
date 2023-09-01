@@ -63,6 +63,11 @@ module.exports = {
                 .withMessage(new ErrorModel(errorsConst.invoiceErrors.paymentMethodRequired)),
             check("price").optional({checkFalsy: false})
                 .isFloat().withMessage(new ErrorModel(errorsConst.invoiceErrors.priceRequired)),
+            check("isElectronic")
+                    .isBoolean()
+                    .withMessage(new ErrorModel(errorsConst.invoiceErrors.isElectronicRequired))
+                    .bail(),
+            sharedValidators.validateError,
             check("tickets")
                 .isArray()
                 .isLength({min: 1})
@@ -91,6 +96,11 @@ module.exports = {
     },
     checkCreateMoneyTransfer: () => [
         ...sharedCheckMiddleware.checkJwt(),
+        check("isElectronic")
+            .isBoolean()
+            .withMessage(new ErrorModel(errorsConst.invoiceErrors.isElectronicRequired))
+            .bail(),
+        sharedValidators.validateError,
         check("idClientSends")
             .isString()
             .withMessage(new ErrorModel(errorsConst.invoiceErrors.clientRequired))
@@ -177,6 +187,11 @@ module.exports = {
                 .withMessage(new ErrorModel(errorsConst.shippingErrors.contentRequired))
                 .bail(),
             sharedValidators.validateError,
+            check("isElectronic")
+                .isBoolean()
+                .withMessage(new ErrorModel(errorsConst.invoiceErrors.isElectronicRequired))
+                .bail(),
+            sharedValidators.validateError,
             check('isHomeDelivery')
                 .customSanitizer((value) => {
                     if (typeof value === 'string') return parseInt(value, 10)
@@ -246,6 +261,38 @@ module.exports = {
     checkGetAllShippingInvoice: () => {
         return [
             ...sharedCheckMiddleware.checkJwt(),
+        ]
+    },
+    checkCancelationInvoice: () => {
+        return [
+            ...sharedCheckMiddleware.checkJwt(),
+            check('idInvoice', new ErrorModel(errorsConst.invoiceErrors.invoiceRequired))
+                .custom((value, { req }) => invoiceValidators.validateInvoiceIsCancelled({ id: sharedHelpers.decryptIdDataBase(value) }, req))
+                .custom((_, { req }) => !!req.body.invoice)
+                .withMessage(new ErrorModel(errorsConst.invoiceErrors.invoiceNotGenerated))
+                .bail()
+                .custom((_, { req }) => req.body.isCancelledInvoice === true)
+                .withMessage(new ErrorModel(errorsConst.invoiceErrors.invoiceIsAlreadyCancelled))
+                .bail(),
+            sharedValidators.validateError
+        ]
+    },
+    checkCreateElectronicInvoice: () => {
+        return [
+            ...sharedCheckMiddleware.checkJwt(),
+            check('idInvoice', new ErrorModel(errorsConst.invoiceErrors.invoiceRequired))
+                .custom((value, { req }) => invoiceValidators.validateInvoiceIsCancelled({ id: sharedHelpers.decryptIdDataBase(value) }, req))
+                .custom((value, { req }) => !!req.body.invoice)
+                .withMessage(new ErrorModel(errorsConst.invoiceErrors.invoiceNotGenerated))
+                .bail()
+                .custom((_, { req }) => req.body.isCancelledInvoice === true)
+                .withMessage(new ErrorModel(errorsConst.invoiceErrors.invoiceIsAlreadyCancelled))
+                .bail()
+                .custom((value, { req }) => invoiceValidators.validateInvoiceIsElectronic({ id: sharedHelpers.decryptIdDataBase(value) }, req))
+                .custom((_, { req }) => req.body.isInvoiceElectronic === false)
+                .withMessage(new ErrorModel(errorsConst.invoiceErrors.invoiceIsAlreadyElectronic))
+                .bail(),
+            sharedValidators.validateError
         ]
     }
 }

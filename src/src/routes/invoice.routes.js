@@ -45,4 +45,12 @@ router.get('/travel/:idInvoice', [
     invoiceMiddleware.checkGetInvoiceTravel()
 ], invoiceController.getInvoiceTravel);
 
+router.post('/cancelation', [
+    invoiceMiddleware.checkCancelationInvoice()
+], invoiceController.cancelationInvoice);
+
+router.post('/electronic/create', [
+    invoiceMiddleware.checkCreateElectronicInvoice()
+], invoiceController.createElectronicInvoice);
+
 module.exports = router;

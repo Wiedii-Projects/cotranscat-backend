@@ -42,6 +42,37 @@ module.exports = {
           }))
         });
     } catch {
+      throw errorsConst.ticketErrors.queryErrors.findAllTicketQuery;
+    }
+  },
+  findAllQuery: async( query ) => {
+    try {
+      const {
+        where,
+        attributes = [
+          'id', 'number', 'code', 'numberPhone', 'passengerName', 'idSeat', 'idInvoice'
+        ]
+      } = query;
+
+      const ticketsFound = await Ticket.findAll({ 
+        where,
+        attributes,
+        raw: true
+      })
+      
+      let tickets = []
+      tickets = ticketsFound.map((result) => ({
+        id: sharedHelpers.encryptIdDataBase(result.id),
+        number: result.number,
+        code: result.code,
+        numberPhone: result.numberPhone,
+        passengerName: result.passengerName,
+        idSeat: sharedHelpers.encryptIdDataBase(result.idSeat),
+        idInvoice: sharedHelpers.encryptIdDataBase(result.idInvoice),
+      }))
+
+      return tickets
+    } catch {
       throw errorsConst.ticketErrors.queryErrors.findAllError;
     }
   }

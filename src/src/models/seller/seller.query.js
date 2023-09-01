@@ -81,7 +81,7 @@ module.exports = {
       throw errorsConst.sellerErrors.queryErrors.findError;
     }
   },
-  getPrefixesOfResolutionByBankSellerQuery: async (idSeller, idServiceType) => {
+  getPrefixesOfResolutionByBankSellerQuery: async (idSeller, idServiceType, isElectronic) => {
     try {
       const resolutionsFound = await Seller.findAll({
         attributes: [],
@@ -104,7 +104,10 @@ module.exports = {
                     attributes: ['dateOfIssuance', 'initialRange', 'finalRange']
                   }
                 ],
-                where: { idServiceType }
+                where: { 
+                  idServiceType,
+                  isElectronic
+                }
               }
             ],
             order: [[{ model: Resolution, as: 'PrefixResolution' }, 'dateOfIssuance']],

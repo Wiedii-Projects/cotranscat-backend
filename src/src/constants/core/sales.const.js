@@ -21,8 +21,8 @@ module.exports = {
         }
     },
     TYPE_SYNCHRONIZATION_INVOICES: {
-        CREATE_INVOICE: 1,
-        CANCEL_INVOICE: 2,
-        CREATE_ELECTRONIC_INVOICE: 3
+        ONLY_CREATE_INVOICE: 1,
+        ONLY_CANCEL_INVOICE: 2,
+        CREATION_AND_CANCELLATION_INVOICE: 3
     }
 }

@@ -55,6 +55,17 @@ const { createNewTicketQuery } = require("../ticket/ticket.query");
           key: "id",
         }
       },
+      observation: {
+        type: DataTypes.STRING,
+        field: "observation",
+        defaultValue: ""
+      },
+      isCancelled: {
+        type: DataTypes.BOOLEAN,
+        field: "isCancelled",
+        defaultValue: false,
+        allowNull: false
+      }
     },
     {
       tableName: "invoice",
@@ -70,7 +81,6 @@ const { createNewTicketQuery } = require("../ticket/ticket.query");
   
   InvoiceSchema.beforeValidate(async(register) => {
     register.date = new Date();
-    register.synchronizationType = salesConst.TYPE_SYNCHRONIZATION_INVOICES.CREATE_INVOICE
   });
 
   InvoiceSchema.afterCreate(async(register, options) => {

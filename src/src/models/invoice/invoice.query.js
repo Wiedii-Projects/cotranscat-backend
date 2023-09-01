@@ -81,13 +81,14 @@ module.exports = {
             include: [
               {
                 model: Prefix,
-                as: 'PrefixResolution'
+                as: 'PrefixResolution',
+                attributes: ['code', 'isElectronic'],
               }
             ]
           }
         ],
         nest: true,
-        attributes: ['number', 'codeSale', 'price', 'date', 'id'],
+        attributes: ['number', 'codeSale', 'price', 'date', 'id', 'isCancelled'],
         order: [['number', 'DESC']],
         limit: 20,
         offset: offset * 20
@@ -96,7 +97,9 @@ module.exports = {
           id: encryptIdDataBase(invoice.id),
           number: invoice.number,
           codeSale: invoice.codeSale,
+          isCancelled: invoice.isCancelled == 1 ? true : false,
           codePrefix: invoice.ResolutionInvoice.PrefixResolution.code,
+          isElectronic: invoice.ResolutionInvoice.PrefixResolution.isElectronic == 1 ? true : false,
           price: invoice.price,
           date: invoice.date,
           tickets: invoice.TicketInvoice.length,
@@ -176,23 +179,25 @@ module.exports = {
               {
                 model: Prefix,
                 as: 'PrefixResolution',
-                attributes: ['code']
+                attributes: ['code', 'isElectronic'],
               }
             ]
           }
         ],
         nest: true,
         raw: true,
-        attributes: ['number', 'price', 'date', 'id', 'codeSale'],
+        attributes: ['number', 'price', 'date', 'id', 'codeSale', 'isCancelled'],
         order: [['number', 'DESC']],
         limit: 20,
         offset: offset * 20
       })
       .then( (result) => result.map((invoice) => ({
           id: encryptIdDataBase(invoice.id),
+          isCancelled: invoice.isCancelled == 1 ? true : false,
           number: invoice.number,
           codeSale: invoice.codeSale,
           codePrefix: invoice.ResolutionInvoice.PrefixResolution.code,
+          isElectronic: invoice.ResolutionInvoice.PrefixResolution.isElectronic == 1 ? true : false,
           price: invoice.price,
           date: invoice.date,
           client: {
@@ -225,7 +230,17 @@ module.exports = {
             'id',
             'number',
             'date',
-            'price'
+            'price',
+            'idServiceType',
+            'isSynchronized',
+            'synchronizationType',
+            "idPaymentMethod",
+            "codeSale",
+            "idClient",
+            "idSeller",
+            "number",
+            "idResolution",
+            "isCancelled"
           ],
           raw: true,
           nest: true
@@ -233,9 +248,19 @@ module.exports = {
           .then((result) => {
           const invoice = {
               id: encryptIdDataBase(result.id),
+              idServiceType: encryptIdDataBase(result.idServiceType),
               number: result.number,
               date: result.date,
               price: result.price,
+              isSynchronized: result.isSynchronized,
+              synchronizationType: result.synchronizationType,
+              idPaymentMethod: encryptIdDataBase(result.idPaymentMethod),
+              codeSale: result.codeSale,
+              idClient: encryptIdDataBase(result.idClient),
+              idSeller: encryptIdDataBase(result.idSeller),
+              number: result.number,
+              idResolution: encryptIdDataBase(result.idResolution),
+              isCancelled: result.isCancelled
           };
           return invoice;
         })
@@ -850,7 +875,8 @@ module.exports = {
             include: [
               {
                 model: Prefix,
-                as: 'PrefixResolution'
+                as: 'PrefixResolution',
+                attributes: ['code', 'isElectronic'],
               }
             ]
           },
@@ -862,7 +888,7 @@ module.exports = {
         ],
         nest: true,
         raw:true,
-        attributes: ['codeSale', 'number', 'price', 'date', 'id'],
+        attributes: ['codeSale', 'number', 'price', 'date', 'id', 'isCancelled'],
         order: [['number', 'DESC']],
         limit: 20,
         offset: offset * 20
@@ -870,9 +896,11 @@ module.exports = {
 
       const allShippingInvoice = allShippingInvoiceResponse.map((shippingInvoice) => ({
           id: encryptIdDataBase(shippingInvoice.id),
+          isCancelled: shippingInvoice.isCancelled == 1 ? true : false,
           number: shippingInvoice.number,
           codeSale: shippingInvoice.codeSale,
           codePrefix: shippingInvoice.ResolutionInvoice.PrefixResolution.code,
+          isElectronic: shippingInvoice.ResolutionInvoice.PrefixResolution.isElectronic == 1 ? true : false,
           price: shippingInvoice.price,
           date: shippingInvoice.date,
           clientSends: {
@@ -895,5 +923,76 @@ module.exports = {
     } catch {
       throw errorsConst.invoiceErrors.queryErrors.findAllError;
     }
-  }
+  },
+  updateInvoiceQuery: async (where, update, transaction) => {
+    try {
+      return await Invoice.update(update, { where, transaction });
+    } catch {
+      throw errorsConst.invoiceErrors.queryErrors.updateError;
+    }
+  },
+  findInvoiceElectronicQuery: async(query = {}) => {
+    try {
+        const { 
+          where
+        } = query;
+        return await Invoice.findOne({
+          include: [
+            {
+              model: Resolution,
+              as: 'ResolutionInvoice',
+              attributes: [],
+              include: [
+                {
+                  model: Prefix,
+                  as: 'PrefixResolution',
+                  attributes: ['isElectronic']
+                }
+              ]
+            }
+          ],
+          where,
+          attributes: [
+            'id',
+            'number',
+            'date',
+            'price',
+            'idServiceType',
+            'isSynchronized',
+            'synchronizationType',
+            "idPaymentMethod",
+            "codeSale",
+            "idClient",
+            "idSeller",
+            "number",
+            "idResolution",
+            "isCancelled"
+          ],
+          raw: true,
+          nest: true
+        })
+          .then((result) => {
+          const invoice = {
+              id: encryptIdDataBase(result.id),
+              idServiceType: encryptIdDataBase(result.idServiceType),
+              number: result.number,
+              date: result.date,
+              price: result.price,
+              isSynchronized: result.isSynchronized,
+              synchronizationType: result.synchronizationType,
+              idPaymentMethod: encryptIdDataBase(result.idPaymentMethod),
+              codeSale: result.codeSale,
+              idClient: encryptIdDataBase(result.idClient),
+              idSeller: encryptIdDataBase(result.idSeller),
+              number: result.number,
+              idResolution: encryptIdDataBase(result.idResolution),
+              isCancelled: result.isCancelled,
+              isElectronic: result.ResolutionInvoice.PrefixResolution.isElectronic
+          };
+          return invoice;
+        })
+    } catch {
+        throw errorsConst.invoiceErrors.queryErrors.findAllError;
+    }
+  },
 }

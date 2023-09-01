@@ -19,6 +19,12 @@ const PrefixSchema = dbConnectionOptions.define(
             type: DataTypes.STRING(10),
             allowNull: false,
             field: "currentConsecutive",
+        },
+        isElectronic: {
+            type: DataTypes.BOOLEAN,
+            field: "isElectronic",
+            defaultValue: false,
+            allowNull: false
         }
     },
     {
