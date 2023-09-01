@@ -1623,6 +1623,66 @@
       }
     }
   },
+  "stateVehicleErrors": {
+    "queryErrors": {
+      "createError": {
+        "code": "STTV_001",
+        "message": "Something went wrong"
+      },
+      "findAllError": {
+        "code": "STTV_002",
+        "message": "Something went wrong"
+      },
+      "updateError": {
+        "code": "STTV_003",
+        "message": "Something went wrong"
+      },
+      "deleteError": {
+        "code": "STTV_004",
+        "message": "Something went wrong"
+      }
+    }
+  },
+  "templateVehicleErrors": {
+    "queryErrors": {
+      "createError": {
+        "code": "TMPV_001",
+        "message": "Something went wrong"
+      },
+      "findAllError": {
+        "code": "TMPV_002",
+        "message": "Something went wrong"
+      },
+      "updateError": {
+        "code": "TMPV_003",
+        "message": "Something went wrong"
+      },
+      "deleteError": {
+        "code": "TMPV_004",
+        "message": "Something went wrong"
+      }
+    }
+  },
+  "ownerErrors": {
+    "queryErrors": {
+      "createError": {
+        "code": "OWNR_001",
+        "message": "Something went wrong"
+      },
+      "findAllError": {
+        "code": "OWNR_002",
+        "message": "Something went wrong"
+      },
+      "updateError": {
+        "code": "OWNR_003",
+        "message": "Something went wrong"
+      },
+      "deleteError": {
+        "code": "OWNR_004",
+        "message": "Something went wrong"
+      }
+    }
+  },
   "appErrors": {
     "letterIsRequired": {
       "code": "APCT001",
