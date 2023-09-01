@@ -36,6 +36,9 @@ const MoneyTransferTracker = require('./money-transfer-tracker/money-transfer-tr
 const Country = require('./country/country.model')
 const BloodType = require('./bloodType/bloodType.model')
 const LicenseCategory = require('./licenseCategory/licenseCategory.model')
+const TypeBodywork = require('./type-bodywork/typeBodywork.model');
+const TypeFuel = require('./type-fuel/typeFuel.model');
+const TypeVehicle = require('./type-vehicle/typeVehicle.model');
 
 // Relationships BD
 
@@ -292,5 +295,8 @@ module.exports = {
   MoneyTransferTracker,
   Country,
   BloodType,
-  LicenseCategory
+  LicenseCategory,
+  TypeBodywork,
+  TypeFuel,
+  TypeVehicle
 };

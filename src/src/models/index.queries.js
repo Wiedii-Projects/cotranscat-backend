@@ -32,5 +32,8 @@ module.exports = {
   bankQuery: require('./bank/bank.query'),
   moneyTransferQuery: require("./money-transfer/money-transfer.query"),
   bloodTypeQuery: require("./bloodType/bloodType.query"),
-  licenseCategoryQuery: require("./licenseCategory/licenseCategory.query")
+  licenseCategoryQuery: require("./licenseCategory/licenseCategory.query"),
+  typeBodyworkQuery: require("./type-bodywork/typeBodywork.query"),
+  typeFuelQuery: require("./type-fuel/typeFuel.query"),
+  typeVehicleQuery: require("./type-vehicle/typeVehicle.query"),
 };
