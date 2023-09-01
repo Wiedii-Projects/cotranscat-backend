@@ -796,6 +796,14 @@
       "code": "VEHI014",
       "message": "Vehicle is required"
     },
+    "internalNumberInvalid": {
+      "code": "VEHI015",
+      "message": "The internal number is invalid"
+    },
+    "internalNumberRequired": {
+      "code": "VEHI016",
+      "message": "The internal number is required"
+    },
     "queryErrors": {
       "createdError": {
         "code": "VEHI_001",
@@ -807,6 +815,10 @@
       },
       "deleteError": {
         "code": "VEHI_003",
+        "message": "Something went wrong"
+      },
+      "findVehiclesByStateTravel": {
+        "code": "VEHI_004",
         "message": "Something went wrong"
       }
     }
