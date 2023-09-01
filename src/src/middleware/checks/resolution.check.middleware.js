@@ -32,6 +32,11 @@ module.exports = {
                 .withMessage(new ErrorModel(errorsConst.resolutionErrors.idRouteInvalid))
                 .bail(),
             sharedValidators.validateError,
+            check("isElectronic")
+                .isBoolean()
+                .withMessage(new ErrorModel(errorsConst.resolutionErrors.isElectronicRequired))
+                .bail(),
+            sharedValidators.validateError,
             check("idServiceTypeAssociated")
                 .isString()
                 .withMessage(new ErrorModel(errorsConst.resolutionErrors.idServiceTypeRequired))

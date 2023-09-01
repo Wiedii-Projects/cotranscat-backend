@@ -15,11 +15,11 @@ module.exports = {
     createResolution: async (req, res) => {
         const { 
             currentConsecutive, TNSPrefix, bank, idServiceType, number, DIANPrefix, initialRange, 
-            finalRange, idRoute, date, headquarter
+            finalRange, idRoute, date, headquarter, isElectronic
         } = req.body;
 
         let transaction;
-        const prefix = extractPrefixDataHelper({ currentConsecutive, TNSPrefix, idBank: bank.id, idServiceType, idHeadquarter: headquarter.id });
+        const prefix = extractPrefixDataHelper({ currentConsecutive, TNSPrefix, idBank: bank.id, idServiceType, idHeadquarter: headquarter.id, isElectronic });
         let resolution = extractResolutionDataHelper({ number, DIANPrefix, initialRange, finalRange, idRoute, date });
         try {
             transaction = await dbConnectionOptions.transaction();

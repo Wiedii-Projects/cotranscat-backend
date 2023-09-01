@@ -36,9 +36,18 @@ const TicketSchema = dbConnectionOptions.define(
     idSeat: {
       type: DataTypes.INTEGER,
       allowNull: false,
-      unique: true,
       references: {
         model: "seat",
+        key: "id",
+      },
+      onUpdate: "CASCADE",
+      onDelete: "CASCADE",
+    },
+    idInvoice: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+      references: {
+        model: "invoice",
         key: "id",
       },
       onUpdate: "CASCADE",
@@ -47,6 +56,13 @@ const TicketSchema = dbConnectionOptions.define(
   },
   {
       tableName: "ticket",
+      indexes: [
+        {
+          unique: true,
+          fields: ['idSeat', 'idInvoice'],
+          name: "uniqueSeatInvoiceByTypePrefix"
+        }
+      ]
   }
 );
 

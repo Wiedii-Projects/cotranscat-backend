@@ -2,7 +2,7 @@
 const { errorsConst } = require('../../constants/index.constants');
 
 // Models
-const { Vehicle } = require('./../index.models');
+const { Vehicle, DriverVehicle } = require('./../index.models');
 
 // Helpers
 const { encryptIdDataBase } = require('../../helpers/shared.helpers');
@@ -42,6 +42,40 @@ module.exports = {
             return await Vehicle.destroy({ where })
         } catch {
             throw errorsConst.vehicleErrors.queryErrors.deleteError
+        }
+    },
+    findVehiclesByStateTravel: async (query = {}) => {
+        try {
+            const { 
+                where,
+                attributes = ['id', 'internalNumber', 'plate', 'mark'],
+                include = [
+                    { 
+                        model: DriverVehicle, 
+                        as: 'VehicleDriverVehicle'
+                        // TODO:  Implement condition for state vehicle on travel
+                    }
+                ]
+            } = query;
+            const vehiclesAvailable = await Vehicle.findAll({
+                where,
+                attributes,
+                include,
+                raw: true,
+                nest: true
+            })
+
+            const vehicles = vehiclesAvailable.map(({ id, internalNumber, plate, mark, VehicleDriverVehicle: { id: idDriverVehicle } }) => ({
+                id: encryptIdDataBase(id),
+                internalNumber,
+                plate,
+                mark,
+                idDriverVehicle: encryptIdDataBase(idDriverVehicle)
+            }))
+
+            return vehicles
+        } catch {
+            throw errorsConst.vehicleErrors.queryErrors.findError
         }
     }
 }

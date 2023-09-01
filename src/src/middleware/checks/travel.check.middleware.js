@@ -3,6 +3,7 @@ const { errorsConst } = require('../../constants/index.constants');
 
 // Libraries
 const { check } = require('express-validator');
+const dayjs = require('dayjs');
 
 // Check - middleware
 
@@ -148,5 +149,36 @@ module.exports = {
             .withMessage(new ErrorModel(errorsConst.travelErrors.invalidTime))
             .bail(),
         sharedValidators.validateError
+    ],
+    checkRangeDate: () => [
+        // TODO: validate role,
+            check('initialDate')
+            .custom((value) => {
+                if (typeof value !== 'string')
+                    throw new ErrorModel(errorsConst.travelErrors.initialDateTravelRequired)
+                return true;
+            })
+            .bail()
+            .isDate()
+            .withMessage(new ErrorModel(errorsConst.travelErrors.initialDateTravelInvalid))
+            .bail(),
+        sharedValidators.validateError,
+        check('finalDate')
+        .custom((value) => {
+            if (typeof value !== 'string')
+                throw new ErrorModel(errorsConst.travelErrors.finalDateTravelRequired)
+            return true;
+        })
+        .bail()
+        .isDate()
+        .withMessage(new ErrorModel(errorsConst.travelErrors.finalDateTravelInvalid))
+        .bail()
+        .custom((value, { req }) => {
+            if (dayjs(req.query.initialDate).isAfter(value)) 
+                throw new ErrorModel(errorsConst.travelErrors.rangeTravelInvalid)
+            return true;
+        })
+        .bail(),
+    sharedValidators.validateError
     ]
 }
