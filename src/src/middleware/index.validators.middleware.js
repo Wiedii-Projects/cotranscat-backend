@@ -23,4 +23,5 @@ module.exports = {
     bankValidators: require('./validators/bank.validator.middleware'),
     bloodTypeValidators: require('./validators/bloodType.validator.middleware'),
     licenseCategoryValidators: require('./validators/licenseCategory.validator.middleware'),
+    driverVehicleValidators: require('./validators/driver-vehicle.validator.middleware')
 }
