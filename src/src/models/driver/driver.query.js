@@ -50,7 +50,8 @@ module.exports = {
         "idMunicipalityOfBirth",
         "idMunicipalityOfResidence",
         "idBloodType",
-        "idLicenseCategory"
+        "idLicenseCategory",
+        "state"
       ],
       offset = 0,
       limit = 20,
@@ -178,6 +179,7 @@ module.exports = {
             UserDriver: {
               UserDocumentType,
               UserIndicativePhone,
+              state,
               ...user
             },
             id,
@@ -237,7 +239,7 @@ module.exports = {
                 id: DriverDriverVehicle.VehicleDriverVehicle.id ?
                   sharedHelpers.encryptIdDataBase(DriverDriverVehicle.VehicleDriverVehicle):
                   null
-              }
+              },
             };
           }
         )

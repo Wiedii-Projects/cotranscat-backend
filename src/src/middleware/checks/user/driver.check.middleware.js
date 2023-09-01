@@ -68,6 +68,10 @@ module.exports = {
   ],
   checkUpdateDriver: () => [
     ...sharedCheckMiddleware.checkId(),
+    check("decryptId", new ErrorModel(errorsConst.driverErrors.driverNotExist)).bail()
+      .custom((id, { req }) => driverValidator.validateDriver(req, id)).bail()
+      .custom((_, { req }) => !!req.body.driver),
+    sharedValidators.validateError,
     ...sharedCheckMiddleware.checkUpdateUser(),
     check("nickName").optional({ checkFalsy: false })
       .isString().withMessage(new ErrorModel(errorsConst.driverErrors.nickNameRequired)).bail()

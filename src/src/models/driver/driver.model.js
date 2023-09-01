@@ -75,7 +75,7 @@ const DriverSchema = dbConnectionOptions.define(
     state: {
       type: DataTypes.BOOLEAN,
       field: "state",
-      defaultValue: false,
+      defaultValue: true,
     }
   },
   {

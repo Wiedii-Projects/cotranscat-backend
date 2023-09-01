@@ -27,6 +27,10 @@ router.put('/:id', [
     driverMiddleware.checkUpdateDriver(),
 ], driverController.updateDriver);
 
+router.put('/inactiveDriver/:id', [
+    driverMiddleware.checkDriverExist(),
+], driverController.inactiveDriver)
+
 router.post('/assignVehicle', [
     driverMiddleware.checkAssignVehicle(),
 ], driverController.assignVehicle)

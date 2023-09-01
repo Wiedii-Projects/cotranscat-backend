@@ -104,7 +104,10 @@ module.exports = {
         height: 7,
         idMunicipality: 1,
         code: "393",
-        internalNumber: "11012"
+        internalNumber: "11012",
+        idTypeBodywork: 1,
+        idTypeFuel: 2,
+        idTypeVehicle: 3
     },
     {
         plate: "ABC002",
@@ -115,7 +118,10 @@ module.exports = {
         height: 7,
         idMunicipality: 1,
         code: "102",
-        internalNumber: "11011"
+        internalNumber: "11011",
+        idTypeBodywork: 4,
+        idTypeFuel: 4,
+        idTypeVehicle: 4
     }],
     defaultBloodType: [
         { id: 1, name: 'Tipo A+'},
@@ -232,7 +238,25 @@ module.exports = {
         { description: salesConst.HEADQUARTERS.TIBU, idMunicipality: 37 },
         { description: salesConst.HEADQUARTERS.CUCUTA, idMunicipality: 11 }
     ],
-    defaultTrackingStatus : [
-        { chronologicalPosition: trackingStatusConst.TRACKING_STATUS.RECEIVED.VALUE_CONVENTION, name: trackingStatusConst.TRACKING_STATUS.RECEIVED.VALUE_STRING, description: "" }
+    defaultTypeBodywork: [
+        { name: 'Sedán', id: 1 },
+        { name: 'Hatchback', id: 2 },
+        { name: 'SUV', id: 3 },
+        { name: 'Crossover', id: 4 },
+        { name: 'Todoterreno', id: 5 }
+    ],
+    defaultTypeFuel: [
+        { name: 'Gasolina', id: 1 },
+        { name: 'Diésel', id: 2 },
+        { name: 'Etanol', id: 3 },
+        { name: 'Biodiésel', id: 4 },
+        { name: 'Gas natural comprimido (GNC)', id: 5 }
+    ],
+    defaultTypeVehicle: [
+        { name: 'Automóvil de pasajeros', id: 1 },
+        { name: 'Autobús', id: 2 },
+        { name: 'Camioneta', id: 3 },
+        { name: 'Autobús escolar', id: 4 },
+        { name: 'Vehículo todoterreno (ATV)', id: 5 }
     ]
 }
