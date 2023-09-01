@@ -51,7 +51,72 @@ const VehicleSchema = dbConnectionOptions.define(
             unique: true,
             field: "internalNumber",
             allowNull: false
-        }
+        },
+        code: {
+            type: DataTypes.STRING(50),
+            field: "code",
+            allowNull: false
+        },
+        mileage: {
+            type: DataTypes.STRING(50),
+            field: "mileage",
+            allowNull: false
+        },
+        motorNumber: {
+            type: DataTypes.STRING(50),
+            field: "motorNumber",
+            allowNull: false
+        },
+        rerecordingMotor: {
+            type: DataTypes.BOOLEAN,
+            field: "rerecordingMotor",
+            defaultValue: false
+        },
+        chassisNumber: {
+            type: DataTypes.STRING(50),
+            field: "chassisNumber",
+            allowNull: false
+        },
+        rerecordingChassis: {
+            type: DataTypes.BOOLEAN,
+            field: "rerecordingChassis",
+            defaultValue: false
+        },
+        serialNumber: {
+            type: DataTypes.STRING(50),
+            field: "serialNumber",
+            allowNull: false
+        },
+        rerecordingSerialNumber: {
+            type: DataTypes.BOOLEAN,
+            field: "rerecordingSerialNumber",
+            defaultValue: false
+        },
+        SOATExpiration: {
+            type: DataTypes.DATE,
+            field: "SOATExpiration",
+            allowNull: false
+        },
+        mechanicalTechnicianExpiration: {
+            type: DataTypes.DATE,
+            field: "mechanicalTechnicianExpiration",
+            allowNull: false
+        },
+        SOATPhoto: {
+            type: DataTypes.STRING(100),
+            field: "SOATPhoto",
+            allowNull: ""
+        },
+        mechanicalTechnicianPhoto: {
+            type: DataTypes.STRING(100),
+            field: "mechanicalTechnicianPhoto",
+            allowNull: ""
+        },
+        propertyCardPhoto: {
+            type: DataTypes.STRING(100),
+            field: "propertyCardPhoto",
+            allowNull: ""
+        },
     },
     {
         tableName: "vehicle",
