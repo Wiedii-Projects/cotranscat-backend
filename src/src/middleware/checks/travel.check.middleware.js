@@ -11,32 +11,26 @@ const dayjs = require('dayjs');
 const sharedHelpers = require('../../helpers/shared.helpers');
 
 // Validators - middleware
-const { sharedValidators, driverValidator, vehicleValidator, travelValidator, routeValidator } = require('../index.validators.middleware');
+const { 
+    sharedValidators, driverValidator, vehicleValidator, travelValidator, routeValidator, 
+    driverVehicleValidators
+} = require('../index.validators.middleware');
 
 // Models
 const { ErrorModel } = require("../../models/index.models");
 
 module.exports = {
     checkCreateTravel: () => [
-        check('driver')
-            .isString().withMessage(new ErrorModel(errorsConst.travelErrors.idDriverRequired)).bail()
-            .custom((id, { req }) => req.body.idDriver = sharedHelpers.decryptIdDataBase(id)).withMessage(new ErrorModel(errorsConst.travelErrors.idDriverInvalid)),
-        sharedValidators.validateError,
-        check('idDriver', new ErrorModel(errorsConst.travelErrors.driverNotExist))
-            .custom((id, { req }) => driverValidator.validateDriver(req, { id })),
-        sharedValidators.validateError,
-        check('driver', new ErrorModel(errorsConst.travelErrors.driverNotExist))
-            .custom((value) => !!value),
-        sharedValidators.validateError,
-        check('vehicle')
-            .isString().withMessage(new ErrorModel(errorsConst.travelErrors.idVehicleRequired)).bail()
-            .custom((id, { req }) => req.body.idVehicle = sharedHelpers.decryptIdDataBase(id)).withMessage(new ErrorModel(errorsConst.travelErrors.idVehicleInvalid)),
-        sharedValidators.validateError,
-        check('idVehicle', new ErrorModel(errorsConst.travelErrors.vehicleDoesNotExist))
-            .custom((id, { req }) => vehicleValidator.validateVehicle(req, { where: { id } })),
-        sharedValidators.validateError,
-        check('vehicle', new ErrorModel(errorsConst.travelErrors.vehicleDoesNotExist))
-            .custom((value) => !!value),
+        check('idDriverVehicle')
+            .isString()
+            .withMessage(new ErrorModel(errorsConst.travelErrors.idDriverVehicleRequired))
+            .bail()
+            .custom((id, { req }) => req.body.idDriverVehicleToCreate = sharedHelpers.decryptIdDataBase(id))
+            .withMessage(new ErrorModel(errorsConst.travelErrors.idDriverVehicleInvalid)),
+            sharedValidators.validateError,
+        check('idDriverVehicleToCreate', new ErrorModel(errorsConst.travelErrors.driverVehicleNotExist))
+            .custom((id, { req }) => driverVehicleValidators.validateDriverVehicle(req, { id }))
+            .custom((_, { req }) => req.body.driverVehicle ? true : false ),
         sharedValidators.validateError,
         check('route')
             .isString().withMessage(new ErrorModel(errorsConst.travelErrors.idRouteRequired)).bail()

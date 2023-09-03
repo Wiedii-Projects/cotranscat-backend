@@ -2,7 +2,7 @@
 const { errorsConst } = require('../../constants/index.constants');
 
 // Models
-const { Vehicle, DriverVehicle, StateVehicle } = require('./../index.models');
+const { Vehicle, DriverVehicle, TemplateVehicle, SeatRuler, StateVehicle } = require('./../index.models');
 
 // Helpers
 const { encryptIdDataBase } = require('../../helpers/shared.helpers');
@@ -88,5 +88,27 @@ module.exports = {
         } catch {
             throw errorsConst.vehicleErrors.queryErrors.findError
         }
+    },
+    getSeatRulesByVehicle: async (query) => {
+        const {
+            where,
+            include = [
+                {
+                    model: TemplateVehicle,
+                    as: 'VehicleTemplateVehicle',
+                    include: [
+                        {
+                            model: SeatRuler,
+                            as: 'SeatRulerTemplateVehicle'
+                        }
+                    ]
+                }
+            ]
+        } = query;
+        return await Vehicle.findOne({
+            where,
+            include,
+            nest: true
+        })
     }
 }
