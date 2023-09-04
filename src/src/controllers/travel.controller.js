@@ -83,7 +83,7 @@ module.exports = {
         const { travelExist: { driver: { id }, vehicle: { VehicleMunicipality, plate }}, } = req.body;
 
         try {
-            const [{ name, lastName}] = await userQuery.findUserQuery({ where: { id } });
+            const [{ name, lastName}] = await userQuery.findUserQuery({ where: { id: sharedHelpers.decryptIdDataBase(id) } });
             return responseHelpers.responseSuccess(res, {
                 driver: {
                     name: name,
