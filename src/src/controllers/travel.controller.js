@@ -17,32 +17,34 @@ const localeData = require('dayjs/plugin/localeData');
 dayjs.locale('es');
 
 // Models - Queries
-const { travelQuery, driverVehicleQuery, seatRulerQuery, seatQuery, userQuery } = require('../models/index.queries');
+const { travelQuery, seatQuery, userQuery, vehicleQuery } = require('../models/index.queries');
 
 module.exports = {
     createTravel: async (req, res) => {
-        const { idDriver, idVehicle, date, time, idRoute, vehicle } = req.body;
-        let transaction;
+        const { price, driverVehicle: { id: idDriverVehicle, idVehicle }, date, time, idRoute } = req.body;
+        let transaction
+
         try {
             transaction = await dbConnectionOptions.transaction();
-            const [driverVehicle] = await driverVehicleQuery.createDriverVehicle({ idDriver, idVehicle }, transaction)
             
             const [travel, isCreated] = await travelQuery.createTravel({
-                idDriverVehicle: driverVehicle.id, date, time, idRoute
+                idDriverVehicle, date, time, idRoute
             }, transaction);
 
             if (isCreated) {
-                const vehicleSeatRules = await seatRulerQuery.getSeatRulers({ where: { idVehicle: idVehicle } });
+                const vehicleSeatRules = await vehicleQuery.getSeatRulesByVehicle({ where: { id: idVehicle } });
 
-                if (vehicleSeatRules.length === 0) throw errorsConst.seatRuler.vehicleHasNoAssignedSeats
+                const seatRules = vehicleSeatRules?.VehicleTemplateVehicle?.SeatRulerTemplateVehicle
 
-                for (let indexSeatRule = 0; indexSeatRule < vehicleSeatRules.length; indexSeatRule++) {
-                    const seatRule = vehicleSeatRules[indexSeatRule];
+                if (!seatRules || seatRules.length === 0) throw errorsConst.seatRuler.vehicleHasNoAssignedSeats
+
+                for (let indexSeatRule = 0; indexSeatRule < seatRules.length; indexSeatRule++) {
+                    const seatRule = seatRules[indexSeatRule];
                     await seatQuery.createSeat({
                         idTravel: travel.id,
                         column: seatRule.column,
                         row: seatRule.row,
-                        price: vehicle.price,
+                        price: price,
                         state: 0,
                         name: seatRule.name
                     }, transaction)
@@ -81,7 +83,7 @@ module.exports = {
         const { travelExist: { driver: { id }, vehicle: { VehicleMunicipality, plate }}, } = req.body;
 
         try {
-            const [{ name, lastName}] = await userQuery.findUserQuery({ where: { id } });
+            const [{ name, lastName}] = await userQuery.findUserQuery({ where: { id: sharedHelpers.decryptIdDataBase(id) } });
             return responseHelpers.responseSuccess(res, {
                 driver: {
                     name: name,

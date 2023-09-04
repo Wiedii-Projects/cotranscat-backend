@@ -1000,6 +1000,18 @@
       "code": "TRVL020",
       "message": "The range date travel is invalid"
     },
+    "idDriverVehicleRequired": {
+      "code": "TRVL021",
+      "message": "The identify of the driver vehicle is required"
+    },
+    "idDriverVehicleInvalid": {
+      "code": "TRVL022",
+      "message": "The identify of the driver vehicle is invalid"
+    },
+    "driverVehicleNotExist": {
+      "code": "TRVL023",
+      "message": "Driver vehicle does not exist"
+    },
     "queryErrors": {
       "createError": {
         "code": "TRVL_001",

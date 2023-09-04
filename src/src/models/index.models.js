@@ -346,5 +346,6 @@ module.exports = {
   TypeVehicle,
   Owner,
   StateVehicle,
-  PhotoVehicle
+  PhotoVehicle,
+  TemplateVehicle
 };
