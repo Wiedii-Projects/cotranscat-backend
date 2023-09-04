@@ -42,6 +42,8 @@ const TypeVehicle = require('./type-vehicle/typeVehicle.model');
 const Owner = require('./owner/owner.model');
 const StateVehicle = require('./state-vehicle/stateVehicle.model');
 const TemplateVehicle = require('./template-vehicle/templateVehicle.model');
+const PhotoVehicle = require('./photo-vehicle/photoVehicle.model');
+const PhotoDocumentOwner = require('./photo-document-owner/photoDocumentOwner.model');
 
 // Relationships BD
 
@@ -140,17 +142,13 @@ TypeFuel.hasMany(Vehicle, { as: 'VehicleTypeFuel', foreignKey: { name: "idTypeFu
 Vehicle.belongsTo(TypeBodywork, { as: 'VehicleTypeBodywork', foreignKey: { name: "idTypeBodywork", allowNull: false } });
 TypeBodywork.hasMany(Vehicle, { as: 'VehicleTypeBodywork', foreignKey: { name: "idTypeBodywork", allowNull: false } });
 
-// Relationship BloodType-Vehicle
-Vehicle.belongsTo(TypeBodywork, { as: 'TypeBodyworkVehicle', foreignKey: { name: 'idTypeBodywork', allowNull: false } });
-TypeBodywork.hasOne(Vehicle, { as: 'TypeBodyworkVehicle', foreignKey: { name: 'idTypeBodywork', allowNull: false } });
+// Relationship PhotoVehicle-Vehicle
+Vehicle.hasMany(PhotoVehicle, { as: 'VehiclePhotoVehicle', foreignKey: { name: "idVehicle", allowNull: false } });
+PhotoVehicle.belongsTo(Vehicle, { as: 'VehiclePhotoVehicle', foreignKey: { name: "idVehicle", allowNull: false } });
 
-// Relationship BloodType-Vehicle
-Vehicle.belongsTo(TypeFuel, { as: 'TypeFuelVehicle', foreignKey: { name: 'idTypeFuel', allowNull: false } });
-TypeFuel.hasOne(Vehicle, { as: 'TypeFuelVehicle', foreignKey: { name: 'idTypeFuel', allowNull: false } });
-
-// Relationship BloodType-Vehicle
-Vehicle.belongsTo(TypeVehicle, { as: 'TypeVehicleVehicle', foreignKey: { name: 'idTypeVehicle', allowNull: false } });
-TypeVehicle.hasOne(Vehicle, { as: 'TypeVehicleVehicle', foreignKey: { name: 'idTypeVehicle', allowNull: false } });
+// Relationship PhotoDocumentOwner-Owner
+Owner.hasMany(PhotoDocumentOwner, { as: 'OwnerPhotoDocumentOwner', foreignKey: { name: "idOwner", allowNull: false } });
+PhotoDocumentOwner.belongsTo(Owner, { as: 'OwnerPhotoDocumentOwner', foreignKey: { name: "idOwner", allowNull: false } });
 
 // Relationship DriverVehicle-StateVehicle
 StateVehicle.hasMany(DriverVehicle, { as: 'DriverVehicleStateVehicle', foreignKey: { name: "idStateVehicle", allowNull: false } });
@@ -347,5 +345,6 @@ module.exports = {
   TypeFuel,
   TypeVehicle,
   Owner,
-  StateVehicle
+  StateVehicle,
+  PhotoVehicle
 };
