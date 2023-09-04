@@ -49,7 +49,7 @@ module.exports = {
     },
     validateTravelDriverVehicle: async (id, req) => {
         try {
-            const [{ id: idTravel, TravelDriverVehicle: { Vehicle: vehicle, Driver: driver }, ...travel }] = await travelQuery.findTravels({ 
+            const vehiclesFound = await travelQuery.findTravels({
                 where: { id },
                 include: [
                     {
@@ -57,9 +57,9 @@ module.exports = {
                         as: 'TravelDriverVehicle',
                         attributes: [],
                         include: [
-                            { 
-                                model: Vehicle, 
-                                as: 'Vehicle',
+                            {
+                                model: Vehicle,
+                                as: 'VehicleDriverVehicle',
                                 include: [
                                     {
                                         model: Municipality,
@@ -67,25 +67,36 @@ module.exports = {
                                     }
                                 ]
                             },
-                            { 
-                                model: Driver, 
-                                as: 'Driver',
+                            {
+                                model: Driver,
+                                as: 'DriverDriverVehicle',
                             },
                         ]
                     },
                 ],
             });
+
+
+            const {
+                id: idTravel,
+                TravelDriverVehicle: {
+                    VehicleDriverVehicle: { id: idVehicle, ...vehicle },
+                    DriverDriverVehicle: { id: idDriver, ...driver },
+                },
+                ...travel
+            } = vehiclesFound[0];
+
             req.body.travelExist = {
                 id: sharedHelpers.encryptIdDataBase(idTravel),
                 ...travel,
                 driver: {
-                    id: sharedHelpers.encryptIdDataBase(driver.id),
+                    id: sharedHelpers.encryptIdDataBase(idDriver),
                     ...driver,
                 },
                 vehicle: {
-                    id: sharedHelpers.encryptIdDataBase(vehicle.id),
+                    id: sharedHelpers.encryptIdDataBase(idVehicle),
                     ...vehicle,
-                } 
+                }
             };
             req.body.idTravel = id;
         } catch {
