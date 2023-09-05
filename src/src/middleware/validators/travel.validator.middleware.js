@@ -29,17 +29,18 @@ module.exports = {
     },
     validateTravelId: async (id, req) => {
         try {
-            const [{ id: idTravel, TravelDriverVehicle: { Vehicle, Driver }, ...travel }] = await travelQuery.findTravels({ where: { id } });
+            const [{ id: idTravel, TravelDriverVehicle: { VehicleDriverVehicle, DriverDriverVehicle }, ...travel }] = await travelQuery.findTravels({ where: { id } });
+
             req.body.travelExist = {
                 id: sharedHelpers.encryptIdDataBase(idTravel),
                 ...travel,
                 driver: {
-                    id: sharedHelpers.encryptIdDataBase(Driver.id),
-                    ...Driver,
+                    id: sharedHelpers.encryptIdDataBase(DriverDriverVehicle.id),
+                    ...DriverDriverVehicle,
                 },
                 vehicle: {
-                    id: sharedHelpers.encryptIdDataBase(Vehicle.id),
-                    ...Vehicle,
+                    id: sharedHelpers.encryptIdDataBase(VehicleDriverVehicle.id),
+                    ...VehicleDriverVehicle,
                 }
             };
             req.body.idTravel = id;

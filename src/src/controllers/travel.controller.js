@@ -133,12 +133,12 @@ module.exports = {
             let vehiclesAvailable = []
             const travelFound = await travelQuery.findTravels({ where: { date, time, idRoute: sharedHelpers.decryptIdDataBase(route.id) } });
 
-            const travelFoundDataCleaned = travelFound.map(({ id, TravelDriverVehicle: { Vehicle }, ...travel }) => ({
+            const travelFoundDataCleaned = travelFound.map(({ id, TravelDriverVehicle: { VehicleDriverVehicle }, ...travel }) => ({
                 id: sharedHelpers.encryptIdDataBase(id),
                 ...travel,
                 vehicle: {
-                    ...Vehicle,
-                    id: sharedHelpers.encryptIdDataBase(Vehicle.id)
+                    ...VehicleDriverVehicle,
+                    id: sharedHelpers.encryptIdDataBase(VehicleDriverVehicle.id)
                 }
             }))
 

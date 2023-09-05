@@ -341,7 +341,7 @@ module.exports = {
                           include: [
                             {
                               model: Vehicle,
-                              as: 'Vehicle',
+                              as: 'VehicleDriverVehicle',
                               attributes: ['plate', 'mark', 'model'],
                               include: [
                                 {
@@ -401,11 +401,11 @@ module.exports = {
                 time: result.TicketInvoice.TicketSeat.TravelSeat.time,
               },
               vehicle: {
-                plate: result.TicketInvoice.TicketSeat.TravelSeat.TravelDriverVehicle.Vehicle.plate,
-                mark: result.TicketInvoice.TicketSeat.TravelSeat.TravelDriverVehicle.Vehicle.mark,
-                model: result.TicketInvoice.TicketSeat.TravelSeat.TravelDriverVehicle.Vehicle.model,
+                plate: result.TicketInvoice.TicketSeat.TravelSeat.TravelDriverVehicle.VehicleDriverVehicle.plate,
+                mark: result.TicketInvoice.TicketSeat.TravelSeat.TravelDriverVehicle.VehicleDriverVehicle.mark,
+                model: result.TicketInvoice.TicketSeat.TravelSeat.TravelDriverVehicle.VehicleDriverVehicle.model,
                 vehicleMunicipality: {
-                  name: result.TicketInvoice.TicketSeat.TravelSeat.TravelDriverVehicle.Vehicle.VehicleMunicipality.name
+                  name: result.TicketInvoice.TicketSeat.TravelSeat.TravelDriverVehicle.VehicleDriverVehicle.VehicleMunicipality.name
                 }
               }
           };
