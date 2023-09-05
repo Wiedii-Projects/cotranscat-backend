@@ -107,9 +107,9 @@ module.exports = {
         }
     },
     updateTravel: async(req, res) => {
-        const { decryptId: id, date, time, idDriver, idVehicle, idRoute} = req.body;
+        const { decryptId: id, date, time, idDriverVehicleToCreate: idDriverVehicle, idRoute} = req.body;
         try {
-            await travelQuery.updateTravel({date, time, idDriver, idVehicle, idRoute}, {id});
+            await travelQuery.updateTravel({date, time, idDriverVehicle, idRoute}, {id});
             return responseHelpers.responseSuccess(res, null);
         } catch (error) {
             return responseHelpers.responseError(res, 500, error);

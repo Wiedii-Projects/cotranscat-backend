@@ -920,29 +920,29 @@
     }
   },
   "travelErrors": {
-    "idDriverRequired": {
+    "": {
       "code": "TRVL001",
-      "message": "The driver is required"
+      "message": ""
     },
-    "idDriverInvalid": {
+    "": {
       "code": "TRVL002",
-      "message": "The driver is invalid"
+      "message": ""
     },
-    "driverNotExist": {
+    "": {
       "code": "TRVL003",
-      "message": "Driver does not exist"
+      "message": ""
     },
-    "idVehicleRequired": {
+    "": {
       "code": "TRVL004",
-      "message": "The vehicle is required"
+      "message": ""
     },
-    "idVehicleInvalid": {
+    "": {
       "code": "TRVL005",
-      "message": "The vehicle is invalid"
+      "message": ""
     },
-    "vehicleDoesNotExist": {
+    "": {
       "code": "TRVL006",
-      "message": "The vehicle does not exist"
+      "message": ""
     },
     "idRouteRequired": {
       "code": "TRVL007",
