@@ -73,25 +73,18 @@ module.exports = {
 
     checkUpdateTravel: () => [
         // TODO: validate role,
-        check('driver').optional({ checkFalsy: false })
-            .isString().withMessage(new ErrorModel(errorsConst.travelErrors.idDriverRequired)).bail()
-            .custom((id, { req }) => req.body.idDriver = sharedHelpers.decryptIdDataBase(id)).withMessage(new ErrorModel(errorsConst.travelErrors.idDriverInvalid)),
+        check('idDriverVehicle')
+            .optional({ checkFalsy: false })
+            .isString()
+            .withMessage(new ErrorModel(errorsConst.travelErrors.idDriverVehicleRequired))
+            .bail()
+            .custom((id, { req }) => req.body.idDriverVehicleToCreate = sharedHelpers.decryptIdDataBase(id))
+            .withMessage(new ErrorModel(errorsConst.travelErrors.idDriverVehicleInvalid)),
         sharedValidators.validateError,
-        check('idDriver', new ErrorModel(errorsConst.travelErrors.driverNotExist)).optional({ checkFalsy: false })
-            .custom((id, { req }) => driverValidator.validateDriver(req, { id })),
-        sharedValidators.validateError,
-        check('driver', new ErrorModel(errorsConst.travelErrors.driverNotExist)).optional({ checkFalsy: false })
-            .custom((value) => !!value),
-        sharedValidators.validateError,
-        check('vehicle').optional({ checkFalsy: false })
-            .isString().withMessage(new ErrorModel(errorsConst.travelErrors.idVehicleRequired)).bail()
-            .custom((id, { req }) => req.body.idVehicle = sharedHelpers.decryptIdDataBase(id)).withMessage(new ErrorModel(errorsConst.travelErrors.idVehicleInvalid)),
-        sharedValidators.validateError,
-        check('idVehicle', new ErrorModel(errorsConst.travelErrors.vehicleDoesNotExist)).optional({ checkFalsy: false })
-            .custom((id, { req }) => vehicleValidator.validateVehicle(req, { where: { id } })),
-        sharedValidators.validateError,
-        check('vehicle', new ErrorModel(errorsConst.travelErrors.vehicleDoesNotExist)).optional({ checkFalsy: false })
-            .custom((value) => !!value),
+        check('idDriverVehicleToCreate', new ErrorModel(errorsConst.travelErrors.driverVehicleNotExist))
+            .optional({ checkFalsy: false })
+            .custom((id, { req }) => driverVehicleValidators.validateDriverVehicle(req, { id }))
+            .custom((_, { req }) => req.body.driverVehicle ? true : false),
         sharedValidators.validateError,
         check('route').optional({ checkFalsy: false })
             .isString().withMessage(new ErrorModel(errorsConst.travelErrors.idRouteRequired)).bail()
