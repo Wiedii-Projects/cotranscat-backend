@@ -167,5 +167,19 @@ module.exports = {
         })
         .bail(),
     sharedValidators.validateError
+    ],
+    checkTravelByDate: () => [
+        // TODO: validate role,
+        check('date')
+            .custom((value) => {
+                if (typeof value !== 'string')
+                    throw new ErrorModel(errorsConst.travelErrors.dateTravelRequired)
+                return true;
+            })
+            .bail()
+            .isDate()
+            .withMessage(new ErrorModel(errorsConst.travelErrors.dateTravelInvalid))
+            .bail(),
+        sharedValidators.validateError
     ]
 }

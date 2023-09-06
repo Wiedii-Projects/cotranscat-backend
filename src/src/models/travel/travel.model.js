@@ -29,6 +29,16 @@ const TravelSchema = dbConnectionOptions.define(
       onUpdate: "CASCADE",
       onDelete: "CASCADE",
     },
+    manifestNumber: {
+        type: DataTypes.STRING(12),
+        field: 'manifestNumber',
+        allowNull: false
+    },
+    manifestObservation: {
+        type: DataTypes.STRING,
+        field: "manifestObservation",
+        defaultValue: ""
+    },
   },
   {
     tableName: "travel",

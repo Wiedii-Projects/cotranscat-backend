@@ -17,7 +17,7 @@ const localeData = require('dayjs/plugin/localeData');
 dayjs.locale('es');
 
 // Models - Queries
-const { travelQuery, seatQuery, userQuery, vehicleQuery } = require('../models/index.queries');
+const { travelQuery, seatQuery, userQuery, vehicleQuery, invoiceQuery } = require('../models/index.queries');
 
 module.exports = {
     createTravel: async (req, res) => {
@@ -229,6 +229,48 @@ module.exports = {
             }));
         
             return responseHelpers.responseSuccess(res, transformedData);
+        } catch (error) {
+            return responseHelpers.responseError(res, 500, error);
+        }
+    },
+    getManifestTravelsByDate: async (req, res) => {
+        const { date } = req.query
+        
+        try {
+            const travelsFound = await travelQuery.findManifestTravels({
+                where: {
+                    date: {
+                        [Op.between]: [`${date} 00:00:00`, `${date} 23:59:59`]
+                    }
+                }
+            })
+
+            const manifestTravels = travelsFound.map(
+                ({
+                    id, date, time, TravelSeat, TravelShipping,
+                    TravelDriverVehicle: { VehicleDriverVehicle, DriverDriverVehicle }
+                }) => ({
+                    travel: {
+                        id: sharedHelpers.encryptIdDataBase(id),
+                        date,
+                        time,
+                        ticketsSales: TravelSeat.filter(({ TicketSeat }) => TicketSeat !== null).length,
+                        totalSeat: TravelSeat.length,
+                        totalShipping: TravelShipping.length
+                    },
+                    driver: {
+                        id: sharedHelpers.encryptIdDataBase(DriverDriverVehicle.id),
+                        name: DriverDriverVehicle.UserDriver.name,
+                        lastName: DriverDriverVehicle.UserDriver.lastName
+                    },
+                    vehicle: {
+                        id: sharedHelpers.encryptIdDataBase(VehicleDriverVehicle.id),
+                        internalNumber: VehicleDriverVehicle.internalNumber,
+                        plate: VehicleDriverVehicle.plate
+                    }
+                }))
+
+            return responseHelpers.responseSuccess(res, manifestTravels);
         } catch (error) {
             return responseHelpers.responseError(res, 500, error);
         }
