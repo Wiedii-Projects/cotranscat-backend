@@ -300,6 +300,10 @@ Municipality.hasOne(Owner, { as: 'MunicipalityOwner', foreignKey: { name: 'idMun
 Owner.belongsTo(IndicativeNumber, { as: 'IndicativeNumberOwner', foreignKey: { name: 'idIndicativePhoneWhatsApp', allowNull: false } });
 IndicativeNumber.hasOne(Owner, { as: 'IndicativeNumberOwner', foreignKey: { name: 'idIndicativePhoneWhatsApp', allowNull: false } });
 
+// Relationship Travel-Shipping
+Travel.hasMany(Shipping, { as: 'TravelShipping', foreignKey: { name: 'idTravel' } });
+Shipping.belongsTo(Travel, { as: 'TravelShipping', foreignKey: { name: 'idTravel' } });
+
 module.exports = {
   // Aggregates Models
   ServerModel: require("./aggregates/server/server.model"),

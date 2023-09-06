@@ -50,4 +50,9 @@ router.get('/all/byRangeDate', [
     travelMiddleware.checkRangeDate()
 ], travelController.getAllTravelsByRangeDate);
 
+router.get('/all/manifest/byDate', [
+    //TODO: implementation of role permission validation
+    travelMiddleware.checkTravelByDate()
+], travelController.getManifestTravelsByDate);
+
 module.exports = router;

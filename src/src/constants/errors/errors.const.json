@@ -920,13 +920,13 @@
     }
   },
   "travelErrors": {
-    "": {
+    "dateTravelRequired": {
       "code": "TRVL001",
-      "message": ""
+      "message": "The date travel is required"
     },
-    "": {
+    "dateTravelInvalid": {
       "code": "TRVL002",
-      "message": ""
+      "message": "The date travel is invalid"
     },
     "": {
       "code": "TRVL003",
