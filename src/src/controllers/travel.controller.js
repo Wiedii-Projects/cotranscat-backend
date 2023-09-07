@@ -278,10 +278,29 @@ module.exports = {
         }
     },
     getAllManifestTravels: async (req, res) => {
-        const { offset = 0 } = req.query;
+        const { offset = 0, valueFilter = "" } = req.query;
         try {
             const travelsFound = await travelQuery.findManifestTravels({
-                offset: offset * 20
+                offset: offset * 20,
+                where: {
+                    [Op.or]: [
+                        {
+                            manifestNumber: {
+                                [Op.like]: `%${valueFilter}%`,
+                            },
+                        },
+                        {
+                            date: {
+                                [Op.like]: `%${valueFilter}%`,
+                            },
+                        },
+                        {
+                            '$TravelDriverVehicle.VehicleDriverVehicle.plate$': {
+                                [Op.like]: `%${valueFilter}%`,
+                            },
+                        },
+                    ],
+                },
             });
 
             const manifestTravels = travelsFound.map(
