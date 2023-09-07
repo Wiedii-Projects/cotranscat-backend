@@ -24,7 +24,9 @@ module.exports = {
         const { price, driverVehicle: { id: idDriverVehicle, idVehicle }, date, time, idRoute } = req.body;
         let transaction
 
+        
         try {
+            const vehicle = await vehicleQuery.findOneVehicleQuery({ where: { id: idVehicle } });
             transaction = await dbConnectionOptions.transaction();
             
             const [travel, isCreated] = await travelQuery.createTravel({
@@ -44,7 +46,7 @@ module.exports = {
                         idTravel: travel.id,
                         column: seatRule.column,
                         row: seatRule.row,
-                        price: price,
+                        price: vehicle.price,
                         state: 0,
                         name: seatRule.name
                     }, transaction)
