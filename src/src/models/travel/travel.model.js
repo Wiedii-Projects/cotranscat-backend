@@ -51,4 +51,10 @@ const TravelSchema = dbConnectionOptions.define(
   }
 );
 
+TravelSchema.beforeValidate(async(register) => {
+  let maxNumber = await TravelSchema.max('manifestNumber');
+  const nextMaxNumber = maxNumber ? parseInt(maxNumber) + 1 : 1;
+  register.manifestNumber = nextMaxNumber.toString().padStart(12, '0');
+});
+
 module.exports = TravelSchema;

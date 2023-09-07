@@ -24,7 +24,9 @@ module.exports = {
         const { price, driverVehicle: { id: idDriverVehicle, idVehicle }, date, time, idRoute } = req.body;
         let transaction
 
+        
         try {
+            const vehicle = await vehicleQuery.findOneVehicleQuery({ where: { id: idVehicle } });
             transaction = await dbConnectionOptions.transaction();
             
             const [travel, isCreated] = await travelQuery.createTravel({
@@ -44,13 +46,13 @@ module.exports = {
                         idTravel: travel.id,
                         column: seatRule.column,
                         row: seatRule.row,
-                        price: price,
+                        price: vehicle.price,
                         state: 0,
                         name: seatRule.name
                     }, transaction)
                 }
             }
-            
+
             await transaction.commit();
             return responseHelpers.responseSuccess(res, null);
         } catch (error) {
@@ -267,6 +269,46 @@ module.exports = {
                         id: sharedHelpers.encryptIdDataBase(VehicleDriverVehicle.id),
                         internalNumber: VehicleDriverVehicle.internalNumber,
                         plate: VehicleDriverVehicle.plate
+                    }
+                }))
+
+            return responseHelpers.responseSuccess(res, manifestTravels);
+        } catch (error) {
+            return responseHelpers.responseError(res, 500, error);
+        }
+    },
+    getAllManifestTravels: async (req, res) => {
+        const { offset = 0 } = req.query;
+        try {
+            const travelsFound = await travelQuery.findManifestTravels({
+                offset: offset * 20
+            });
+
+            const manifestTravels = travelsFound.map(
+                ({
+                    id, date, time, manifestNumber,
+                    TravelDriverVehicle: { VehicleDriverVehicle, DriverDriverVehicle },
+                    TravelRoute: {id: idRoute, MunicipalityDepart: { name: nameMunicipalityDepart}, MunicipalityArrive: { name: nameMunicipalityArrive}}
+                }) => ({
+                    travel: {
+                        id: sharedHelpers.encryptIdDataBase(id),
+                        date,
+                        time,
+                        manifestNumber
+                    },
+                    driver: {
+                        id: sharedHelpers.encryptIdDataBase(DriverDriverVehicle.id),
+                        name: DriverDriverVehicle.UserDriver.name,
+                        lastName: DriverDriverVehicle.UserDriver.lastName
+                    },
+                    vehicle: {
+                        id: sharedHelpers.encryptIdDataBase(VehicleDriverVehicle.id),
+                        internalNumber: VehicleDriverVehicle.internalNumber,
+                        plate: VehicleDriverVehicle.plate
+                    },
+                    route: {
+                        id: sharedHelpers.encryptIdDataBase(idRoute),
+                        name: `${nameMunicipalityDepart} - ${nameMunicipalityArrive}`
                     }
                 }))
 
