@@ -52,7 +52,7 @@ module.exports = {
                     }, transaction)
                 }
             }
-            
+
             await transaction.commit();
             return responseHelpers.responseSuccess(res, null);
         } catch (error) {
@@ -269,6 +269,46 @@ module.exports = {
                         id: sharedHelpers.encryptIdDataBase(VehicleDriverVehicle.id),
                         internalNumber: VehicleDriverVehicle.internalNumber,
                         plate: VehicleDriverVehicle.plate
+                    }
+                }))
+
+            return responseHelpers.responseSuccess(res, manifestTravels);
+        } catch (error) {
+            return responseHelpers.responseError(res, 500, error);
+        }
+    },
+    getAllManifestTravels: async (req, res) => {
+        const { offset = 0 } = req.query;
+        try {
+            const travelsFound = await travelQuery.findManifestTravels({
+                offset: offset * 20
+            });
+
+            const manifestTravels = travelsFound.map(
+                ({
+                    id, date, time, manifestNumber,
+                    TravelDriverVehicle: { VehicleDriverVehicle, DriverDriverVehicle },
+                    TravelRoute: {id: idRoute, MunicipalityDepart: { name: nameMunicipalityDepart}, MunicipalityArrive: { name: nameMunicipalityArrive}}
+                }) => ({
+                    travel: {
+                        id: sharedHelpers.encryptIdDataBase(id),
+                        date,
+                        time,
+                        manifestNumber
+                    },
+                    driver: {
+                        id: sharedHelpers.encryptIdDataBase(DriverDriverVehicle.id),
+                        name: DriverDriverVehicle.UserDriver.name,
+                        lastName: DriverDriverVehicle.UserDriver.lastName
+                    },
+                    vehicle: {
+                        id: sharedHelpers.encryptIdDataBase(VehicleDriverVehicle.id),
+                        internalNumber: VehicleDriverVehicle.internalNumber,
+                        plate: VehicleDriverVehicle.plate
+                    },
+                    route: {
+                        id: sharedHelpers.encryptIdDataBase(idRoute),
+                        name: `${nameMunicipalityDepart} - ${nameMunicipalityArrive}`
                     }
                 }))
 

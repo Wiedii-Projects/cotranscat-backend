@@ -157,5 +157,65 @@ module.exports = {
         } catch {
             throw errorsConst.travelErrors.queryErrors.findError;
         }
+    },
+    findManifestTravels: async (query = {}) => {
+        try {
+            const {
+                where,
+                attributes = ['id', 'time', 'date', 'manifestNumber'],
+                include = [
+                    {
+                        model: DriverVehicle,
+                        as: 'TravelDriverVehicle',
+                        include: [
+                            { 
+                                model: Vehicle, 
+                                as: 'VehicleDriverVehicle'
+                                
+                            },
+                            { 
+                                model: Driver, 
+                                as: 'DriverDriverVehicle', 
+                                include: [
+                                    {
+                                        model: User, 
+                                        as: 'UserDriver'
+                                    }
+                                ]
+                            },
+                        ]
+                    },
+                    {
+                        model: Route,
+                        as: 'TravelRoute',
+                        include: [
+                            {
+                                model: Municipality,
+                                as: 'MunicipalityDepart',
+                            },
+                            {
+                                model: Municipality,
+                                as: 'MunicipalityArrive',
+                            }
+                        ]
+                    }
+                ],
+                order = [['date', 'ASC']],
+                offset = 0,
+                limit = 20
+            } = query;
+            return await Travel.findAll({
+                where,
+                attributes,
+                raw: true,
+                nest: true,
+                include,
+                offset,
+                order,
+                limit
+            });
+        } catch {
+            throw errorsConst.travelErrors.queryErrors.findError;
+        }
     }
 }
