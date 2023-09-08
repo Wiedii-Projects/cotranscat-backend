@@ -254,5 +254,5 @@ module.exports = {
     } catch {
       throw errorsConst.driverErrors.queryErrors.updateError;
     }
-  },
+  }
 };
