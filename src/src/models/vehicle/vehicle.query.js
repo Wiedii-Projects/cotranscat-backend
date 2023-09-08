@@ -110,5 +110,32 @@ module.exports = {
             include,
             nest: true
         })
+    },
+    findAllAvailableVehiclesAndDriverVehicleQuery: async (query) => {
+        const {
+            where
+        } = query;
+
+        return await Vehicle.findAll({
+            include: [
+                {
+                    model: DriverVehicle,
+                    as: "VehicleDriverVehicle",
+                    required: false,
+                    include: [
+                        {
+                            model: StateVehicle,
+                            as: "DriverVehicleStateVehicle",
+                            where: {
+                                type: 0
+                            },
+                        }
+                    ]
+                }
+            ],
+            where,
+            raw: true,
+            nest: true
+        })
     }
 }

@@ -15,5 +15,5 @@ module.exports = {
     findOneDriverVehicleQuery: async (query) => {
         const { where } = query;
         return await DriverVehicle.findOne({ where, raw: true, nest: true })
-      },
+    }
 };

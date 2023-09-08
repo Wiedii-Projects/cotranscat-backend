@@ -102,5 +102,33 @@ module.exports = {
         } catch (error) {
             return responseHelpers.responseError(res, 500, error);
         }
+    },
+    findAllVehiclesAvailableToTravel: async (req, res) => {
+        const { valueFilter = '' } = req.query;
+
+        try {
+            const vehicles = await vehicleQuery.findAllAvailableVehiclesAndDriverVehicleQuery({
+                where: {
+                    [Op.or]: [
+                        {
+                            internalNumber: {
+                                [Op.like]: `%${valueFilter}%`
+                            }
+                        },
+                        {
+                            plate: {
+                                [Op.like]: `%${valueFilter}%`
+                            }
+                        }
+                    ],
+                    isMaintenance: 0
+                }
+            },{
+                
+            });
+            return responseHelpers.responseSuccess(res, vehicles);
+        } catch (error) {
+            return responseHelpers.responseError(res, 500, error);
+        }
     }
 }

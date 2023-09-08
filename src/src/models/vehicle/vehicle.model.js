@@ -117,6 +117,11 @@ const VehicleSchema = dbConnectionOptions.define(
             field: "propertyCardPhoto",
             allowNull: ""
         },
+        isMaintenance: {
+            type: DataTypes.BOOLEAN,
+            field: "isMaintenance",
+            allowNull: false
+        }
     },
     {
         tableName: "vehicle",
