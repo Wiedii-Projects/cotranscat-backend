@@ -280,34 +280,34 @@ module.exports = {
     getAllManifestTravels: async (req, res) => {
         const { offset = 0, valueFilter = "" } = req.query;
         try {
-            const travelsFound = await travelQuery.findManifestTravels({
-                offset: offset * 20,
-                where: {
-                    [Op.or]: [
-                        {
-                            manifestNumber: {
-                                [Op.like]: `%${valueFilter}%`,
-                            },
-                        },
-                        {
-                            date: {
-                                [Op.like]: `%${valueFilter}%`,
-                            },
-                        },
-                        {
-                            '$TravelDriverVehicle.VehicleDriverVehicle.plate$': {
-                                [Op.like]: `%${valueFilter}%`,
-                            },
-                        },
-                    ],
-                },
-            });
+            const [travelsFound, countManifestTravels] = await Promise.all([
+                valueFilter ?
+                travelQuery.findManifestTravels({
+                    offset: offset * 20,
+                    where: {
+                        [Op.or]: [
+                            { manifestNumber: { [Op.like]: `%${valueFilter}%` }, },
+                            { date: { [Op.like]: `%${valueFilter}%` } },
+                            { '$TravelDriverVehicle.VehicleDriverVehicle.plate$': { [Op.like]: `%${valueFilter}%` } },
+                        ],
+                    },
+                }) : travelQuery.findManifestTravels({ offset: offset * 20 }),
+                travelQuery.countTravel({
+                    where: {
+                        [Op.or]: [
+                            { manifestNumber: { [Op.like]: `%${valueFilter}%` }, },
+                            { date: { [Op.like]: `%${valueFilter}%` } },
+                            { '$TravelDriverVehicle.VehicleDriverVehicle.plate$': { [Op.like]: `%${valueFilter}%` } },
+                        ],
+                    },
+                })
+            ]);
 
             const manifestTravels = travelsFound.map(
                 ({
                     id, date, time, manifestNumber,
                     TravelDriverVehicle: { VehicleDriverVehicle, DriverDriverVehicle },
-                    TravelRoute: {id: idRoute, MunicipalityDepart: { name: nameMunicipalityDepart}, MunicipalityArrive: { name: nameMunicipalityArrive}}
+                    TravelRoute: { id: idRoute, MunicipalityDepart: { name: nameMunicipalityDepart }, MunicipalityArrive: { name: nameMunicipalityArrive } }
                 }) => ({
                     travel: {
                         id: sharedHelpers.encryptIdDataBase(id),
@@ -331,7 +331,7 @@ module.exports = {
                     }
                 }))
 
-            return responseHelpers.responseSuccess(res, manifestTravels);
+            return responseHelpers.responseSuccess(res, { manifestTravels, countManifestTravels });
         } catch (error) {
             return responseHelpers.responseError(res, 500, error);
         }

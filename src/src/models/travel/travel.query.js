@@ -158,6 +158,14 @@ module.exports = {
             throw errorsConst.travelErrors.queryErrors.findError;
         }
     },
+    countTravel: async (query = {}) => {
+        try {
+            const { where } = query;
+            return await Travel.count(where)
+        } catch {
+            throw errorsConst.travelErrors.queryErrors.countError;
+        }
+    },
     findManifestTravels: async (query = {}) => {
         try {
             const {

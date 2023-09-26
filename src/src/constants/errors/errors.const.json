@@ -1084,6 +1084,10 @@
       "deleteError": {
         "code": "TRVL_004",
         "message": "Something went wrong"
+      },
+      "countError": {
+        "code": "TRVL_005",
+        "message": "Something went wrong"
       }
     }
   },
