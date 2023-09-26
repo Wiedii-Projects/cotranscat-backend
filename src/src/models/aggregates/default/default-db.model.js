@@ -24,7 +24,9 @@ const {
     defaultTypeBodywork,
     defaultTypeFuel,
     defaultTypeVehicle,
-    defaultStateVehicle
+    defaultStateVehicle,
+    defaultTemplateVehicle,
+    defaultSeatRuler
 } = require('./default-data.model');
 
 //Const
@@ -59,6 +61,8 @@ const TypeBodywork = require("../../type-bodywork/typeBodywork.model")
 const TypeVehicle = require('../../type-vehicle/typeVehicle.model');
 const StateVehicle = require('../../state-vehicle/stateVehicle.model');
 const Owner = require('../../owner/owner.model');
+const TemplateVehicle = require('../../template-vehicle/templateVehicle.model');
+const SeatRuler = require('../../seat-ruler/seat-ruler.model');
 
 class defaultDataBaseModel {
     constructor() {
@@ -253,10 +257,18 @@ class defaultDataBaseModel {
         return await StateVehicle.count();
     }
 
+    async countTemplateVehicle() {
+        return await TemplateVehicle.count();
+    }
+
+    async countSeatRuler() {
+        return await SeatRuler.count();
+    }
+
     async createDefaultDataBase() {
         let creationArray = [];
         const [stateVehicle, role, bloodType, licenseCategory, indicativeNumber, documentType, country, department, paymentMethod, municipality,
-            typeFuel, typeBodywork, typeVehicle, vehicle, unitMeasure, shippingType, serviceType, headquarter, bank, trackingStatus
+            typeFuel, typeBodywork, typeVehicle, vehicle, unitMeasure, shippingType, serviceType, headquarter, bank, trackingStatus, templateVehicle, seatRuler
         ] = await Promise.all([
             this.countStateVehicle(),
             this.countRole(),
@@ -277,8 +289,11 @@ class defaultDataBaseModel {
             this.countServiceType(),
             this.countHeadquarter(),
             this.countBank(),
-            this.countTrackingStatus()
+            this.countTrackingStatus(),
+            this.countTemplateVehicle(),
+            this.countSeatRuler()
         ]);
+        if (!templateVehicle) creationArray.push(TemplateVehicle.bulkCreate(defaultTemplateVehicle))
         if (!stateVehicle) creationArray.push(StateVehicle.bulkCreate(defaultStateVehicle));
         if (!role) Object.values(roleConst).map((element) => creationArray.push(Role.create({ type: element })));
         if (!bloodType) BloodType.bulkCreate(defaultBloodType);
@@ -301,9 +316,9 @@ class defaultDataBaseModel {
         creationArray = [];
 
         if (!municipality) await Municipality.bulkCreate(defaultMunicipality);
-        if (!vehicle) creationArray.push(Vehicle.bulkCreate(defaultVehicle));
         if (!headquarter) creationArray.push(Headquarter.bulkCreate(defaultHeadquarter));
         if (!bank) creationArray.push(Bank.bulkCreate(defaultBank));
+        if (!seatRuler) creationArray.push(SeatRuler.bulkCreate(defaultSeatRuler));
 
         await Promise.all(creationArray);
 
@@ -380,6 +395,8 @@ class defaultDataBaseModel {
                 })
             ]);
         };
+
+        if (!vehicle) creationArray.push(Vehicle.bulkCreate(defaultVehicle));
     }
 }
 
