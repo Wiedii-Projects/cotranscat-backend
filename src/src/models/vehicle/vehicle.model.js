@@ -30,16 +30,6 @@ const VehicleSchema = dbConnectionOptions.define(
             field: "price",
             allowNull: false
         },
-        width: {
-            type: DataTypes.TINYINT.UNSIGNED,
-            field: "width",
-            allowNull: false
-        },
-        height: {
-            type: DataTypes.TINYINT.UNSIGNED,
-            field: "height",
-            allowNull: false
-        },
         code: {
             type: DataTypes.STRING(50),
             unique: true,
@@ -105,22 +95,22 @@ const VehicleSchema = dbConnectionOptions.define(
         SOATPhoto: {
             type: DataTypes.STRING(100),
             field: "SOATPhoto",
-            allowNull: ""
+            defaultValue: ""
         },
         mechanicalTechnicianPhoto: {
             type: DataTypes.STRING(100),
             field: "mechanicalTechnicianPhoto",
-            allowNull: ""
+            defaultValue: ""
         },
         propertyCardPhoto: {
             type: DataTypes.STRING(100),
             field: "propertyCardPhoto",
-            allowNull: ""
+            defaultValue: ""
         },
         isMaintenance: {
             type: DataTypes.BOOLEAN,
             field: "isMaintenance",
-            allowNull: false
+            defaultValue: false
         }
     },
     {

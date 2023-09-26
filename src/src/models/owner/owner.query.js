@@ -24,7 +24,7 @@ module.exports = {
             return await Owner.findAll({
                 where,
                 raw: true
-            }).then(owner => owner.map(({ id, name }) => ({
+            }).then(owner => owner.map(({ id, numberPhoneWhatsapp, address, email }) => ({
                 id: sharedHelpers.encryptIdDataBase(id),
                 numberPhoneWhatsapp,
                 address,

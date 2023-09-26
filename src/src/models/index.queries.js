@@ -36,4 +36,8 @@ module.exports = {
   typeBodyworkQuery: require("./type-bodywork/typeBodywork.query"),
   typeFuelQuery: require("./type-fuel/typeFuel.query"),
   typeVehicleQuery: require("./type-vehicle/typeVehicle.query"),
+  typeFuelQuery: require("./type-fuel/typeFuel.query"),
+  typeBodyworkQuery: require("./type-bodywork/typeBodywork.query"),
+  templateVehicleQuery: require("./template-vehicle/templateVehicle.query"),
+  ownerQuery: require("./owner/owner.query"),
 };

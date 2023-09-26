@@ -159,8 +159,8 @@ TemplateVehicle.hasMany(SeatRuler, { as: 'SeatRulerTemplateVehicle', foreignKey:
 SeatRuler.belongsTo(TemplateVehicle, { as: 'SeatRulerTemplateVehicle', foreignKey: { name: "idTemplateVehicle", allowNull: false } });
 
 // Relationship Vehicle-TemplateVehicle
-TemplateVehicle.hasMany(Vehicle, { as: 'VehicleTemplateVehicle', foreignKey: { name: "idTemplateVehicle", allowNull: true } });
-Vehicle.belongsTo(TemplateVehicle, { as: 'VehicleTemplateVehicle', foreignKey: { name: "idTemplateVehicle", allowNull: true } });
+TemplateVehicle.hasMany(Vehicle, { as: 'VehicleTemplateVehicle', foreignKey: { name: "idTemplateVehicle", allowNull: false } });
+Vehicle.belongsTo(TemplateVehicle, { as: 'VehicleTemplateVehicle', foreignKey: { name: "idTemplateVehicle", allowNull: false } });
 
 // Relationship Route-MunicipalityDepart
 Route.belongsTo(Municipality, { as: 'MunicipalityDepart', foreignKey: { name: 'idMunicipalityDepart', allowNull: false } });
@@ -297,6 +297,10 @@ Municipality.hasOne(Owner, { as: 'MunicipalityOwner', foreignKey: { name: 'idMun
 // Relationship IndicativeNumber-Owner
 Owner.belongsTo(IndicativeNumber, { as: 'IndicativeNumberOwner', foreignKey: { name: 'idIndicativePhoneWhatsApp', allowNull: false } });
 IndicativeNumber.hasOne(Owner, { as: 'IndicativeNumberOwner', foreignKey: { name: 'idIndicativePhoneWhatsApp', allowNull: false } });
+
+// Relationship Owner-Vehicle
+Vehicle.belongsTo(Owner, { as: 'OwnerVehicle', foreignKey: { name: 'idOwner', allowNull: false } });
+Owner.hasMany(Vehicle, { as: 'OwnerVehicle', foreignKey: { name: 'idOwner', allowNull: false } });
 
 // Relationship Travel-Shipping
 Travel.hasMany(Shipping, { as: 'TravelShipping', foreignKey: { name: 'idTravel' } });

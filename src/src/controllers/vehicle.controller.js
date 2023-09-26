@@ -14,37 +14,11 @@ const { Op } = require("sequelize");
 
 module.exports = {
     createVehicle: async (req, res) => {
-        const { vehicle, municipality, seatingMatrix, ...newVehicle } = req.body;
-        let transaction;
+        const { vehicle, municipality, typeVehicle, typeFuel, typeBodywork, templateVehicle, owner, ...newVehicle } = req.body;
         try {
-            transaction = await dbConnectionOptions.transaction();
-
-            const vehicle = await vehicleQuery.createVehicle({
-                width: seatingMatrix[0].length,
-                height: seatingMatrix.length,
-                ...newVehicle
-            }, { transaction });
-
-            let initialLetter = "A"
-            for (let row = 0; row < seatingMatrix.length; row++) {
-                let consecutiveChair = 1
-                for (let column = 0; column < seatingMatrix[row].length; column++) {
-                    if (seatingMatrix[row][column]) {
-                        await seatRulerQuery.createSeatRuler({
-                            idVehicle: vehicle.id,
-                            name: `${initialLetter}${(consecutiveChair)}`,
-                            row,
-                            column
-                        }, { transaction });
-                        consecutiveChair++
-                    }
-                }
-                initialLetter = getNextConsecutiveLetterHelper(initialLetter)
-            }
-            await transaction.commit();
+            await vehicleQuery.createVehicle(newVehicle);
             return responseHelpers.responseSuccess(res, null);
         } catch (error) {
-            if (transaction) await transaction.rollback();
             return responseHelpers.responseError(res, 500, error);
         }
     },
