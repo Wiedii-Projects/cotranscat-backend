@@ -42,14 +42,49 @@ module.exports = {
             .exists().notEmpty().withMessage(new ErrorModel(errorsConst.vehicleErrors.priceRequired)).bail()
             .isDecimal({ decimal_digits: '0,2' }).withMessage(new ErrorModel(errorsConst.vehicleErrors.priceInvalid)),
         sharedValidators.validateError,
-        check('seatingMatrix')
-            .isArray().withMessage(new ErrorModel(errorsConst.vehicleErrors.seatingMatrixRequired)).bail()
-            .custom((value) => value?.length > 3).withMessage(new ErrorModel(errorsConst.vehicleErrors.heightInvalid))
-            .custom(([value]) => value?.length > 2).withMessage(new ErrorModel(errorsConst.vehicleErrors.widthInvalid)),
+        check('internalNumber', new ErrorModel(errorsConst.vehicleErrors.internalNumberRequired)).notEmpty(),
+        check('mileage', new ErrorModel(errorsConst.vehicleErrors.mileageRequired)).notEmpty(),
+        check('motorNumber', new ErrorModel(errorsConst.vehicleErrors.motorNumberRequired)).notEmpty(),
+        check('chassisNumber', new ErrorModel(errorsConst.vehicleErrors.chassisNumberRequired)).notEmpty(),
+        check('serialNumber', new ErrorModel(errorsConst.vehicleErrors.serialNumberRequired)).notEmpty(),
+        check('SOATExpiration', new ErrorModel(errorsConst.vehicleErrors.SOATExpirationRequired)).isDate(),
+        check('mechanicalTechnicianExpiration', new ErrorModel(errorsConst.vehicleErrors.mechanicalTechnicianExpirationRequired)).isDate(),
+        sharedValidators.validateError,
+        check('typeVehicle')
+            .isString().withMessage(new ErrorModel(errorsConst.vehicleErrors.typeVehicleRequired)).bail()
+            .custom(async (value, { req }) => await vehicleValidator.validateTypeVehicle(value, req)),
+        sharedValidators.validateError,
+        check('idTypeVehicle').custom((value) => !!value).withMessage(new ErrorModel(errorsConst.vehicleErrors.typeVehicleInvalid)).bail(),
+        sharedValidators.validateError,
+        check('typeFuel')
+            .isString().withMessage(new ErrorModel(errorsConst.vehicleErrors.typeFuelRequired)).bail()
+            .custom(async (value, { req }) => await vehicleValidator.validateTypeFuel(value, req)),
+        sharedValidators.validateError,
+        check('idTypeFuel').custom((value) => !!value).withMessage(new ErrorModel(errorsConst.vehicleErrors.typeFuelInvalid)).bail(),
+        sharedValidators.validateError,
+        check('typeBodywork')
+            .isString().withMessage(new ErrorModel(errorsConst.vehicleErrors.typeBodyworkRequired)).bail()
+            .custom(async (value, { req }) => await vehicleValidator.validateTypeBodywork(value, req)),
+        sharedValidators.validateError,
+        check('idTypeBodywork').custom((value) => !!value).withMessage(new ErrorModel(errorsConst.vehicleErrors.typeBodyworkInvalid)).bail(),
+        sharedValidators.validateError,
+        check('templateVehicle')
+            .isString().withMessage(new ErrorModel(errorsConst.vehicleErrors.templateVehicleRequired)).bail()
+            .custom(async (value, { req }) => await vehicleValidator.validateTemplateVehicle(value, req)),
+        sharedValidators.validateError,
+        check('idTemplateVehicle').custom((value, { req }) => !!value).withMessage(new ErrorModel(errorsConst.vehicleErrors.templateVehicleInvalid)).bail(),
+        sharedValidators.validateError,
+        check('owner')
+            .isString().withMessage(new ErrorModel(errorsConst.vehicleErrors.ownerRequired)).bail()
+            .custom(async (value, { req }) => await vehicleValidator.validateOwner(value, req)),
+        sharedValidators.validateError,
+        check('idOwner').custom((value) => !!value).withMessage(new ErrorModel(errorsConst.vehicleErrors.ownerInvalid)).bail(),
+        sharedValidators.validateError,
+        check('code', new ErrorModel(errorsConst.vehicleErrors.codeRequired)).isString(),
         sharedValidators.validateError,
     ]),
     checkGetVehicle: () => ([
-        check('id').custom(async (value, { req }) => await vehicleValidator.validateVehicle(req, { where: { id:  sharedHelpers.decryptIdDataBase(value) } })),
+        check('id').custom(async (value, { req }) => await vehicleValidator.validateVehicle(req, { where: { id: sharedHelpers.decryptIdDataBase(value) } })),
         sharedValidators.validateError,
         check('vehicle', new ErrorModel(errorsConst.vehicleErrors.vehicleDoesNotExist)).custom((value) => value),
         sharedValidators.validateError,
@@ -57,12 +92,12 @@ module.exports = {
     checkGetVehiclesByStateTravel: () => {
         return [
             check('internalNumber')
-            .notEmpty()
-            .withMessage(new ErrorModel(errorsConst.vehicleErrors.internalNumberRequired))
-            .bail()
-            .isInt( { min: 0})
-            .withMessage(new ErrorModel(errorsConst.vehicleErrors.internalNumberInvalid))
-            .bail(),
+                .notEmpty()
+                .withMessage(new ErrorModel(errorsConst.vehicleErrors.internalNumberRequired))
+                .bail()
+                .isInt({ min: 0 })
+                .withMessage(new ErrorModel(errorsConst.vehicleErrors.internalNumberInvalid))
+                .bail(),
             sharedValidators.validateError
         ]
     }

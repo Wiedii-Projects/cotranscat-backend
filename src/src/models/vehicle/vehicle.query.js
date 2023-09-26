@@ -20,7 +20,7 @@ module.exports = {
         try {
             const { 
                 where,
-                attributes = ['id', 'plate', 'mark', 'model', 'price', 'width', 'height']
+                attributes = ['id', 'plate', 'mark', 'model', 'price']
             } = query;
             return await Vehicle.findAll({
                 where,
