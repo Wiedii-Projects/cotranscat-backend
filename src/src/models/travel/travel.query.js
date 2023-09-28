@@ -158,15 +158,7 @@ module.exports = {
             throw errorsConst.travelErrors.queryErrors.findError;
         }
     },
-    countTravel: async (query = {}) => {
-        try {
-            const { where } = query;
-            return await Travel.count(where)
-        } catch {
-            throw errorsConst.travelErrors.queryErrors.countError;
-        }
-    },
-    findManifestTravels: async (query = {}) => {
+    findManifestTravelsPaginator: async (query = {}) => {
         try {
             const {
                 where,
@@ -209,8 +201,8 @@ module.exports = {
                     }
                 ],
                 order = [['date', 'ASC']],
-                offset = 0,
-                limit = 20
+                offset,
+                limit
             } = query;
             return await Travel.findAll({
                 where,
