@@ -28,4 +28,5 @@ module.exports = {
   typeBodyworkController: require("./typeBodywork.controller"),
   typeFuelController: require("./typeFuel.controller"),
   typeVehicleController: require("./typeVehicle.controller"),
+  ownerController: require("./user/owner.controller")
 };
