@@ -1,6 +1,3 @@
-// Constants
-const { errorsConst } = require('../constants/index.constants');
-
 // DB Connections
 const { dbConnectionOptions } = require('../constants/core/core-configurations.const');
 
@@ -17,36 +14,31 @@ const localeData = require('dayjs/plugin/localeData');
 dayjs.locale('es');
 
 // Models - Queries
-const { travelQuery, seatQuery, userQuery, vehicleQuery, invoiceQuery } = require('../models/index.queries');
+const { travelQuery, seatQuery, userQuery, vehicleQuery, seatRulerQuery } = require('../models/index.queries');
 
 module.exports = {
     createTravel: async (req, res) => {
-        const { price, driverVehicle: { id: idDriverVehicle, idVehicle }, date, time, idRoute } = req.body;
+        const { driverVehicle: { id: idDriverVehicle, idVehicle }, date, time, idRoute } = req.body;
         let transaction
 
         
         try {
-            const vehicle = await vehicleQuery.findOneVehicleQuery({ where: { id: idVehicle } });
             transaction = await dbConnectionOptions.transaction();
             
             const [travel, isCreated] = await travelQuery.createTravel({
                 idDriverVehicle, date, time, idRoute
             }, transaction);
 
-            if (isCreated) {
-                const vehicleSeatRules = await vehicleQuery.getSeatRulesByVehicle({ where: { id: idVehicle } });
-
-                const seatRules = vehicleSeatRules?.VehicleTemplateVehicle?.SeatRulerTemplateVehicle
-
-                if (!seatRules || seatRules.length === 0) throw errorsConst.seatRuler.vehicleHasNoAssignedSeats
-
+            if (!isCreated) {
+                const { idTemplateVehicle, price } = await vehicleQuery.findOneVehicleQuery({ where: { id: idVehicle }})
+                const seatRules = await seatRulerQuery.getSeatRulers({ where: { idTemplateVehicle } })
                 for (let indexSeatRule = 0; indexSeatRule < seatRules.length; indexSeatRule++) {
                     const seatRule = seatRules[indexSeatRule];
                     await seatQuery.createSeat({
                         idTravel: travel.id,
                         column: seatRule.column,
                         row: seatRule.row,
-                        price: vehicle.price,
+                        price: price,
                         state: 0,
                         name: seatRule.name
                     }, transaction)
@@ -135,11 +127,13 @@ module.exports = {
             let vehiclesAvailable = []
             const travelFound = await travelQuery.findTravels({ where: { date, time, idRoute: sharedHelpers.decryptIdDataBase(route.id) } });
 
-            const travelFoundDataCleaned = travelFound.map(({ id, TravelDriverVehicle: { VehicleDriverVehicle }, ...travel }) => ({
+            const travelFoundDataCleaned = travelFound.map(({ id, TravelDriverVehicle: { VehicleDriverVehicle: { VehicleTemplateVehicle, ...VehicleDriverVehicle } }, ...travel }) => ({
                 id: sharedHelpers.encryptIdDataBase(id),
                 ...travel,
                 vehicle: {
                     ...VehicleDriverVehicle,
+                    width: VehicleTemplateVehicle.width,
+                    height: VehicleTemplateVehicle.height,
                     id: sharedHelpers.encryptIdDataBase(VehicleDriverVehicle.id)
                 }
             }))
@@ -295,7 +289,8 @@ module.exports = {
             const offset = pagination*5;
             const filterTravelByValue = [];
             filterTravelByValue.push(...[ { manifestNumber: { [Op.like]: `%${valueFilter}%` }, },  { '$TravelDriverVehicle.VehicleDriverVehicle.plate$': { [Op.like]: `%${valueFilter}%` } } ]);
-            if(valueFilter instanceof Date) filterTravelByValue.push({ date: { [Op.like]: `%${valueFilter}%` } })
+            const date = new Date(valueFilter)
+            if(!isNaN(date) && date instanceof Date) filterTravelByValue.push({ date: date })
             const travelsFound = await travelQuery.findManifestTravelsPaginator({ offset, where: { [Op.or]:  filterTravelByValue }, limit: 5 });
             const manifestTravels = travelsFound.map(
                 ({

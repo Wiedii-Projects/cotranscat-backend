@@ -3,7 +3,7 @@ const { errorsConst } = require('../../constants/index.constants');
 const sharedHelpers = require('../../helpers/shared.helpers');
 
 // Models
-const { Travel, DriverVehicle, Driver, Vehicle, Route, Municipality, User, Seat, Shipping, Ticket } = require('../index.models');
+const { Travel, DriverVehicle, Driver, Vehicle, Route, Municipality, User, Seat, Shipping, Ticket, TemplateVehicle } = require('../index.models');
 
 module.exports = {
     createTravel: async (where, transaction) => {
@@ -62,7 +62,13 @@ module.exports = {
                         include: [
                             { 
                                 model: Vehicle, 
-                                as: 'VehicleDriverVehicle'
+                                as: 'VehicleDriverVehicle',
+                                include: [
+                                    {
+                                        model: TemplateVehicle, 
+                                        as: 'VehicleTemplateVehicle'
+                                    }
+                                ]
                                 
                             },
                             { 
