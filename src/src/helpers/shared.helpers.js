@@ -1,7 +1,7 @@
 // Constants
 const { dbConnectionOptions } = require("../constants/core/core-configurations.const");
 const {
-  coreConfigurationsConst, errorsConst, salesConst
+  coreConfigurationsConst, errorsConst
 } = require("../constants/index.constants");
 
 // Libraries

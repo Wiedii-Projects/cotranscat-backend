@@ -59,4 +59,8 @@ router.get('/all/manifest', [
     //TODO: implementation of role permission validation
 ], travelController.getAllManifestTravels);
 
+router.get('/all/manifest/count', [
+    //TODO: implementation of role permission validation
+], travelController.countGetAllManifestTravels);
+
 module.exports = router;
