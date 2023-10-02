@@ -860,6 +860,14 @@
       "code": "VEHI030",
       "message": "The code is required"
     },
+    "numberRequired": {
+      "code": "VEHI031",
+      "message": "The number is required"
+    },
+    "codeBodyWorkRequired": {
+      "code": "VEHI032",
+      "message": "The code bodyWork is required"
+    },
     "queryErrors": {
       "createdError": {
         "code": "VEHI_001",
@@ -1736,6 +1744,34 @@
     }
   },
   "ownerErrors": {
+    "numberPhoneWhatsappRequired": {
+      "code": "OWNR001",
+      "message": "Number phone whatsapp is required"
+    },
+    "emailRequired": {
+      "code": "OWNR002",
+      "message": "Email is required"
+    },
+    "addressRequired": {
+      "code": "OWNR003",
+      "message": "Address is required"
+    },
+    "idIndicativePhoneWhatsAppRequired": {
+      "code": "OWNR004",
+      "message": "The indicative number WhatsApp is required"
+    },
+    "idIndicativePhoneWhatsAppInvalid": {
+      "code": "OWNR005",
+      "message": "The indicative number WhatsApp invalid"
+    },
+    "idMunicipalityRequired": {
+      "code": "OWNR006",
+      "message": "The municipality is required"
+    },
+    "idMunicipalityInvalid": {
+      "code": "OWNR007",
+      "message": "The municipality invalid"
+    },
     "queryErrors": {
       "createError": {
         "code": "OWNR_001",

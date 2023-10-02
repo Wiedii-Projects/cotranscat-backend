@@ -54,6 +54,7 @@ class ServerModel {
             typeBodywork: '/api/typeBodywork',
             typeFuel: '/api/typeFuel',
             typeVehicle: '/api/typeVehicle',
+            owner: '/api/owner',
         }
         this.dbHost = coreConfigurationsConst.dbHost;
         this.dbs();
@@ -116,6 +117,7 @@ class ServerModel {
         this.app.use(this.paths.typeBodywork, require('../../../routes/typeBodywork.routes'));
         this.app.use(this.paths.typeFuel, require('../../../routes/typeFuel.routes'));
         this.app.use(this.paths.typeVehicle, require('../../../routes/typeVehicle.routes'));
+        this.app.use(this.paths.owner, require('../../../routes/owner.routes'));
     }
 
     listen() {

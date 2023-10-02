@@ -5,13 +5,14 @@ const { errorsConst } = require('../../constants/index.constants');
 const sharedHelpers = require('../../helpers/shared.helpers');
 
 // Models
-const { Owner } = require('../index.models');
+const { Owner, User, DocumentType, IndicativeNumber, Municipality, Department } = require('../index.models');
 
 module.exports = {
-    createOwnerQuery: async (where) => {
+    createOwnerQuery: async (where, transaction) => {
         try {
             return await Owner.findOrCreate({
-                where
+                where,
+                transaction
             });
         } catch {
             throw errorsConst.ownerErrors.queryErrors.createError
@@ -23,13 +24,35 @@ module.exports = {
             const { where } = query;
             return await Owner.findAll({
                 where,
-                raw: true
-            }).then(owner => owner.map(({ id, numberPhoneWhatsapp, address, email }) => ({
-                id: sharedHelpers.encryptIdDataBase(id),
-                numberPhoneWhatsapp,
-                address,
-                email
-            })))
+                raw: true,
+                nest: true,
+                attributes: [ 'numberPhoneWhatsapp', 'email', 'address', 'id' ], 
+                include: [{
+                    model: User,
+                    as: 'UserOwner',
+                    attributes: [ 'numberDocument', 'name', 'lastName', 'numberPhone', 'state' ],
+                    include : [{
+                        model: DocumentType, 
+                        as: "UserDocumentType"
+                    }, 
+                    {
+                        model: IndicativeNumber, 
+                        as: "UserIndicativePhone"
+                    }]
+                },
+                {
+                    model: IndicativeNumber, 
+                    as: "IndicativeNumberOwner"
+                },
+                {
+                    model: Municipality, 
+                    as: "MunicipalityOwner",
+                    include: [{
+                        model: Department,
+                        as: "MunicipalityDepartment"
+                    }]
+                }
+            ]})
         } catch {
             throw errorsConst.ownerErrors.queryErrors.findAllError
         }
