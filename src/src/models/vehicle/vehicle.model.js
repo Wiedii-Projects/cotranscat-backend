@@ -42,9 +42,15 @@ const VehicleSchema = dbConnectionOptions.define(
             field: "internalNumber",
             allowNull: false
         },
-        code: {
+        number: {
             type: DataTypes.STRING(50),
-            field: "code",
+            unique: true,
+            field: "number",
+            allowNull: false
+        },
+        codeBodyWork: {
+            type: DataTypes.STRING(50),
+            field: "codeBodyWork",
             allowNull: false
         },
         mileage: {

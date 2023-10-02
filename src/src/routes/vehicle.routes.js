@@ -16,7 +16,6 @@ router.post('/', [
 ], vehicleController.createVehicle)
 
 router.get('/filter/travel/', [
-    vehicleMiddleware.checkGetVehiclesByStateTravel()
 ], vehicleController.findVehiclesByStateTravel)
 
 router.get('/filter/all/availableVehicleToTravel/', [

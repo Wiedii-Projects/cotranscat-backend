@@ -1,12 +1,9 @@
 // Constants
 const { errorsConst } = require("../constants/index.constants");
 
-// DB Connections
-const { dbConnectionOptions } = require("../constants/core/core-configurations.const");
-
 // Helpers
 const { responseHelpers } = require('../helpers/index.helpers');
-const { decryptIdDataBase, getNextConsecutiveLetterHelper } = require("../helpers/shared.helpers");
+const { decryptIdDataBase } = require("../helpers/shared.helpers");
 
 // Models - Queries
 const { vehicleQuery, seatRulerQuery } = require('../models/index.queries');
@@ -26,10 +23,10 @@ module.exports = {
         const [{ id }, { vehicle }] = [req.params, req.body]
         try {
             const vehicleSeatRules = await seatRulerQuery.getSeatRulers({ where: { idVehicle: decryptIdDataBase(id) } });
-            
+
             if (vehicleSeatRules.length === 0) throw errorsConst.seatRuler.vehicleHasNoAssignedSeats
 
-            const { width, height, price,...vehicleData } = vehicle
+            const { width, height, price, ...vehicleData } = vehicle
             const seatMap = new Array(height);
             for (let i = 0; i < height; i++) {
                 seatMap[i] = new Array(width).fill(null);
@@ -52,7 +49,7 @@ module.exports = {
                         { "code": value },
                         { "plate": value },
                         { "internalNumber": value }
-                      ],
+                    ],
                 }
             });
             return responseHelpers.responseSuccess(res, vehicle);
@@ -61,16 +58,17 @@ module.exports = {
         }
     },
     findVehiclesByStateTravel: async (req, res) => {
-        const { internalNumber } = req.query;
-        
+        const { valueFilter= '' } = req.query;
+
         try {
             const vehicles = await vehicleQuery.findVehiclesByStateTravel({
                 where: {
-                    internalNumber: {
-                        [Op.like]: `%${internalNumber}%`
-                    }
-
-                }
+                    [Op.or]: [
+                        { internalNumber: { [Op.like]: `%${valueFilter}%` } },
+                        { plate: { [Op.like]: `%${valueFilter}%` } },
+                        { code: { [Op.like]: `%${valueFilter}%` } }
+                    ]
+                },
             });
             return responseHelpers.responseSuccess(res, vehicles);
         } catch (error) {
@@ -79,7 +77,6 @@ module.exports = {
     },
     findAllVehiclesAvailableToTravel: async (req, res) => {
         const { valueFilter = '' } = req.query;
-
         try {
             const vehicles = await vehicleQuery.findAllAvailableVehiclesAndDriverVehicleQuery({
                 where: {
@@ -97,8 +94,6 @@ module.exports = {
                     ],
                     isMaintenance: 0
                 }
-            },{
-                
             });
             return responseHelpers.responseSuccess(res, vehicles);
         } catch (error) {
