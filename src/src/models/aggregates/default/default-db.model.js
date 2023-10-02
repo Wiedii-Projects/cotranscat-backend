@@ -26,7 +26,10 @@ const {
     defaultTypeVehicle,
     defaultStateVehicle,
     defaultTemplateVehicle,
-    defaultSeatRuler
+    defaultSeatRuler,
+    defaultDriverVehicle,
+    defaultTravel,
+    defaultSeat
 } = require('./default-data.model');
 
 //Const
@@ -63,6 +66,9 @@ const StateVehicle = require('../../state-vehicle/stateVehicle.model');
 const Owner = require('../../owner/owner.model');
 const TemplateVehicle = require('../../template-vehicle/templateVehicle.model');
 const SeatRuler = require('../../seat-ruler/seat-ruler.model');
+const DriverVehicle = require('../../driver-vehicle/driver-vehicle.model');
+const Travel = require('../../travel/travel.model');
+const Seat = require('../../seat/seat.model');
 
 class defaultDataBaseModel {
     constructor() {
@@ -265,10 +271,23 @@ class defaultDataBaseModel {
         return await SeatRuler.count();
     }
 
+    async countDriverVehicle() {
+        return await DriverVehicle.count();
+    }
+
+    async countTravel() {
+        return await Travel.count();
+    }
+
+    async countSeat() {
+        return await Seat.count();
+    }
+
     async createDefaultDataBase() {
         let creationArray = [];
         const [stateVehicle, role, bloodType, licenseCategory, indicativeNumber, documentType, country, department, paymentMethod, municipality,
-            typeFuel, typeBodywork, typeVehicle, vehicle, unitMeasure, shippingType, serviceType, headquarter, bank, trackingStatus, templateVehicle, seatRuler
+            typeFuel, typeBodywork, typeVehicle, vehicle, unitMeasure, shippingType, serviceType, headquarter, bank, trackingStatus, templateVehicle, seatRuler,
+            driverVehicle, travel, seat
         ] = await Promise.all([
             this.countStateVehicle(),
             this.countRole(),
@@ -291,7 +310,10 @@ class defaultDataBaseModel {
             this.countBank(),
             this.countTrackingStatus(),
             this.countTemplateVehicle(),
-            this.countSeatRuler()
+            this.countSeatRuler(),
+            this.countDriverVehicle(),
+            this.countTravel(),
+            this.countSeat()
         ]);
         if (!templateVehicle) creationArray.push(TemplateVehicle.bulkCreate(defaultTemplateVehicle))
         if (!stateVehicle) creationArray.push(StateVehicle.bulkCreate(defaultStateVehicle));
@@ -349,19 +371,19 @@ class defaultDataBaseModel {
 
         if (!userCreate) {
             const [admin, seller, client, driver, owner] = defaultUser;
-            const [ idIndicativePhone, idAdminRole, idSellerRole, idClientRole, idDriverRole, idOwnerRole, idDocumentType, idBank, idBloodType, idLicenseCategory] = 
-            await Promise.all([
-                this.getIndicativeNumber(),
-                this.getAdminRole(),
-                this.getSellerRole(),
-                this.getClientRole(),
-                this.getDriverRole(),
-                this.getOwnerRole(),
-                this.getDocumentType(),
-                this.getFirstBank(),
-                this.getBloodType(),
-                this.getLicenseCategory()
-            ]);
+            const [idIndicativePhone, idAdminRole, idSellerRole, idClientRole, idDriverRole, idOwnerRole, idDocumentType, idBank, idBloodType, idLicenseCategory] =
+                await Promise.all([
+                    this.getIndicativeNumber(),
+                    this.getAdminRole(),
+                    this.getSellerRole(),
+                    this.getClientRole(),
+                    this.getDriverRole(),
+                    this.getOwnerRole(),
+                    this.getDocumentType(),
+                    this.getFirstBank(),
+                    this.getBloodType(),
+                    this.getLicenseCategory()
+                ]);
             const [userAdmin, userSeller, userClient, userDriver, userOwner] = await Promise.all([
                 User.create({ ...admin, idRole: idAdminRole, idDocumentType, idIndicativePhone }),
                 User.create({ ...seller, idRole: idSellerRole, idDocumentType, idIndicativePhone }),
@@ -394,9 +416,11 @@ class defaultDataBaseModel {
                     idMunicipalityOfResidence: idMunicipality
                 })
             ]);
+            if (!vehicle) await Vehicle.bulkCreate(defaultVehicle);
+            if (!driverVehicle) await DriverVehicle.create({ ...defaultDriverVehicle, idDriver: userDriver.id });
+            if (!travel) await Travel.bulkCreate(defaultTravel);
         };
-
-        if (!vehicle) creationArray.push(Vehicle.bulkCreate(defaultVehicle));
+        if(!seat) await Seat.bulkCreate(defaultSeat)
     }
 }
 

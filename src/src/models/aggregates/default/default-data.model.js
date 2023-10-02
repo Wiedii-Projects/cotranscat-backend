@@ -83,15 +83,21 @@ module.exports = {
     defaultTemplateVehicle: [
         {
             id: 1,
-            name: 'Minibús'
+            name: 'Minibús',
+            width: 3,
+            height: 4
         },
         {
             id: 2,
-            name: 'Autobús articulado'
+            name: 'Autobús articulado',
+            width: 3,
+            height: 4
         },
         {
             id: 3,
-            name: 'Autobús de dos pisos'
+            name: 'Autobús de dos pisos',
+            width: 3,
+            height: 4
         }
     ],
     defaultSeatRuler: [
@@ -176,6 +182,195 @@ module.exports = {
         transitAgency: 'agencia de transito xx',
         restriction: 'debe usar lentes a la hora de conducir'
     },
+    defaultDriverVehicle: {
+        id: 1,
+        idVehicle: 1,
+        idStateVehicle: 1
+    },
+    defaultTravel: [
+        {
+            date: new Date(),
+            time: "12:00",
+            idDriverVehicle: 1,
+            manifestNumber: 12010,
+            manifestObservation: 12010,
+            idRoute: 1,
+            id: 1
+        },
+        {
+            date: new Date(),
+            time: "13:00",
+            idDriverVehicle: 1,
+            manifestNumber: 12010,
+            manifestObservation: 12010,
+            idRoute: 1,
+            id: 2
+        }
+    ],
+    defaultSeat: [
+        {
+            id: 1,
+            row: 0,
+            column: 1,
+            price: 35000,
+            state: 0,
+            name: 'A1',
+            idTravel: 1
+        },
+        {
+            id: 2,
+            name: 'A2',
+            row: 0,
+            column: 2,
+            price: 35000,
+            state: 0,
+            idTravel: 1
+        },
+        {
+            id: 3,
+            name: 'B1',
+            row: 1,
+            column: 0,
+            price: 35000,
+            state: 0,
+            idTravel: 1
+        },
+        {
+            id: 4,
+            name: 'B2',
+            row: 1,
+            column: 1,
+            price: 35000,
+            state: 0,
+            idTravel: 1
+        },
+        {
+            id: 5,
+            name: 'C1',
+            row: 2,
+            column: 0,
+            price: 35000,
+            state: 0,
+            idTravel: 1
+        },
+        {
+            id: 6,
+            name: 'C2',
+            row: 2,
+            column: 1,
+            price: 35000,
+            state: 0,
+            idTravel: 1
+        },
+        {
+            id: 7,
+            name: 'D1',
+            row: 3,
+            column: 0,
+            price: 35000,
+            state: 0,
+            idTravel: 1
+        },
+        {
+            id: 8,
+            name: 'D2',
+            row: 3,
+            column: 1,
+            price: 35000,
+            state: 0,
+            idTravel: 1
+        },
+        {
+            id: 9,
+            name: 'D3',
+            row: 3,
+            column: 2,
+            price: 35000,
+            state: 0,
+            idTravel: 1
+        },
+        {
+            id: 10,
+            row: 0,
+            column: 1,
+            price: 35000,
+            state: 0,
+            name: 'A1',
+            idTravel: 2
+        },
+        {
+            id: 11,
+            name: 'A2',
+            row: 0,
+            column: 2,
+            price: 35000,
+            state: 0,
+            idTravel: 2
+        },
+        {
+            id: 12,
+            name: 'B1',
+            row: 1,
+            column: 0,
+            price: 35000,
+            state: 0,
+            idTravel: 2
+        },
+        {
+            id: 13,
+            name: 'B2',
+            row: 1,
+            column: 1,
+            price: 35000,
+            state: 0,
+            idTravel: 2
+        },
+        {
+            id: 14,
+            name: 'C1',
+            row: 2,
+            column: 0,
+            price: 35000,
+            state: 0,
+            idTravel: 2
+        },
+        {
+            id: 15,
+            name: 'C2',
+            row: 2,
+            column: 1,
+            price: 35000,
+            state: 0,
+            idTravel: 2
+        },
+        {
+            id: 16,
+            name: 'D1',
+            row: 3,
+            column: 0,
+            price: 35000,
+            state: 0,
+            idTravel: 2
+        },
+        {
+            id: 17,
+            name: 'D2',
+            row: 3,
+            column: 1,
+            price: 35000,
+            state: 0,
+            idTravel: 2
+        },
+        {
+            id: 18,
+            name: 'D3',
+            row: 3,
+            column: 2,
+            price: 35000,
+            state: 0,
+            idTravel: 2
+        }
+    ],
     defaultOwner: {
         email: 'owner@owner.co',
         address: 'Manzana xxx lote xxx palmxxe',
@@ -192,6 +387,7 @@ module.exports = {
         address: "Mz 12 lote 8 palmeras alta"
     },
     defaultVehicle: [{
+        id: 1,
         plate: "ABC001",
         mark: "Atos",
         model: "99",
@@ -222,6 +418,7 @@ module.exports = {
         idTemplateVehicle: 1,
     },
     {
+        id: 2,
         plate: "ABC002",
         mark: "Atos",
         model: "99",
