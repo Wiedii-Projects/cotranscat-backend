@@ -17,6 +17,7 @@ module.exports = {
         }
     },
     extractUserDataHelper: ({ idDocumentType, numberDocument, name, lastName, idIndicativePhone, numberPhone }) => ({ idDocumentType, numberDocument, name, lastName, idIndicativePhone, numberPhone }),
+    extractOwnerDataHelper: ({ numberPhoneWhatsapp, address, email, idMunicipalityOfResidence, idIndicativePhoneWhatsApp }) => ({ numberPhoneWhatsapp, address, email, idMunicipalityOfResidence, idIndicativePhoneWhatsApp }),
     extractClientDataHelper: ({ idMunicipality, idIndicativePhoneWhatsApp, numberPhoneWhatsapp, email, address }) => ({ idMunicipality, idIndicativePhoneWhatsApp, numberPhoneWhatsapp, email, address }),
     extractDriverDataHelper: ({ 
         nickName, 
