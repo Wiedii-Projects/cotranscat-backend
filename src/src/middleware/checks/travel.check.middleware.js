@@ -181,5 +181,14 @@ module.exports = {
             .withMessage(new ErrorModel(errorsConst.travelErrors.dateTravelInvalid))
             .bail(),
         sharedValidators.validateError
+    ],
+    checkCreateManifestNumber: () => [
+        // TODO: validate role,
+        check('decryptId', new ErrorModel(errorsConst.travelErrors.idTravelInvalid))
+            .custom((id, { req }) => travelValidator.validateTravel(req, { id })),
+        sharedValidators.validateError,
+        check('travel', new ErrorModel(errorsConst.travelErrors.travelDoesNotExist))
+            .custom((value) => !!value),
+        sharedValidators.validateError,
     ]
 }

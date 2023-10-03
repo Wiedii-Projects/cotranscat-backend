@@ -316,5 +316,16 @@ module.exports = {
         } catch (error) {
             return responseHelpers.responseError(res, 500, error);
         }
+    },
+    createManifestNumber: async (req, res) => {
+        const { decryptId: id } = req.body;
+        try {
+            let maxNumber = await travelQuery.maxManifestNumberTravel();
+            const nextMaxNumber = maxNumber ? parseInt(maxNumber) + 1 : 1;
+            await travelQuery.updateTravel({manifestNumber: nextMaxNumber.toString().padStart(12, '0') }, {id});
+            return responseHelpers.responseSuccess(res, null);
+        } catch (error) {
+            return responseHelpers.responseError(res, 500, error);
+        }
     }
 }

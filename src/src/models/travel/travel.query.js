@@ -223,5 +223,12 @@ module.exports = {
         } catch {
             throw errorsConst.travelErrors.queryErrors.findError;
         }
+    },
+    maxManifestNumberTravel: async () => {
+        try {
+            return await Travel.max('manifestNumber');
+        } catch {
+            throw errorsConst.travelErrors.queryErrors.updateError;
+        }
     }
 }
