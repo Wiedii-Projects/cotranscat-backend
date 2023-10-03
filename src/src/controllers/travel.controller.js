@@ -287,12 +287,19 @@ module.exports = {
     getAllManifestTravels: async (req, res) => {
         const { offset: pagination = 0, valueFilter = "" } = req.query;
         try {
-            const offset = pagination*5;
+            const offset = pagination * 5;
             const filterTravelByValue = [];
-            filterTravelByValue.push(...[ { manifestNumber: { [Op.like]: `%${valueFilter}%` }, },  { '$TravelDriverVehicle.VehicleDriverVehicle.plate$': { [Op.like]: `%${valueFilter}%` } } ]);
+            filterTravelByValue.push(...[{ manifestNumber: { [Op.like]: `%${valueFilter}%` }, }, { '$TravelDriverVehicle.VehicleDriverVehicle.plate$': { [Op.like]: `%${valueFilter}%` } }]);
             const date = new Date(valueFilter)
-            if(!isNaN(date) && date instanceof Date) filterTravelByValue.push({ date: date })
-            const travelsFound = await travelQuery.findManifestTravelsPaginator({ offset, where: { [Op.or]:  filterTravelByValue }, limit: 5 });
+            if (!isNaN(date) && date instanceof Date) filterTravelByValue.push({ date: date })
+            const travelsFound = await travelQuery.findManifestTravelsPaginator({
+                offset, where: {
+                    [Op.and]: [
+                        { manifestNumber: { [Op.not]: "" } },
+                        { [Op.or]: filterTravelByValue }
+                    ]
+                }, limit: 5
+            });
             const manifestTravels = travelsFound.map(
                 ({
                     id, date, time, manifestNumber,
