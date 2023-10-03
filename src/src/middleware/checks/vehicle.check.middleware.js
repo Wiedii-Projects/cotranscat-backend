@@ -43,6 +43,7 @@ module.exports = {
             .isDecimal({ decimal_digits: '0,2' }).withMessage(new ErrorModel(errorsConst.vehicleErrors.priceInvalid)),
         sharedValidators.validateError,
         check('internalNumber', new ErrorModel(errorsConst.vehicleErrors.internalNumberRequired)).notEmpty(),
+        check('number', new ErrorModel(errorsConst.vehicleErrors.numberRequired)).notEmpty(),
         check('mileage', new ErrorModel(errorsConst.vehicleErrors.mileageRequired)).notEmpty(),
         check('motorNumber', new ErrorModel(errorsConst.vehicleErrors.motorNumberRequired)).notEmpty(),
         check('chassisNumber', new ErrorModel(errorsConst.vehicleErrors.chassisNumberRequired)).notEmpty(),
@@ -82,23 +83,13 @@ module.exports = {
         sharedValidators.validateError,
         check('code', new ErrorModel(errorsConst.vehicleErrors.codeRequired)).isString(),
         sharedValidators.validateError,
+        check('codeBodyWork', new ErrorModel(errorsConst.vehicleErrors.codeBodyWorkRequired)).isString(),
+        sharedValidators.validateError,
     ]),
     checkGetVehicle: () => ([
         check('id').custom(async (value, { req }) => await vehicleValidator.validateVehicle(req, { where: { id: sharedHelpers.decryptIdDataBase(value) } })),
         sharedValidators.validateError,
         check('vehicle', new ErrorModel(errorsConst.vehicleErrors.vehicleDoesNotExist)).custom((value) => value),
         sharedValidators.validateError,
-    ]),
-    checkGetVehiclesByStateTravel: () => {
-        return [
-            check('internalNumber')
-                .notEmpty()
-                .withMessage(new ErrorModel(errorsConst.vehicleErrors.internalNumberRequired))
-                .bail()
-                .isInt({ min: 0 })
-                .withMessage(new ErrorModel(errorsConst.vehicleErrors.internalNumberInvalid))
-                .bail(),
-            sharedValidators.validateError
-        ]
-    }
+    ])
 }
