@@ -32,7 +32,7 @@ const TravelSchema = dbConnectionOptions.define(
     manifestNumber: {
         type: DataTypes.STRING(12),
         field: 'manifestNumber',
-        allowNull: false
+        defaultValue: ""
     },
     manifestObservation: {
         type: DataTypes.STRING,

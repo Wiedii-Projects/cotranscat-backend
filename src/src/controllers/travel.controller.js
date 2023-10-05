@@ -235,9 +235,10 @@ module.exports = {
         try {
             const travelsFound = await travelQuery.findManifestTravels({
                 where: {
-                    date: {
-                        [Op.between]: [`${date} 00:00:00`, `${date} 23:59:59`]
-                    }
+                    [Op.and]: [
+                        { manifestNumber: "" },
+                        { date: { [Op.between]: [`${date} 00:00:00`, `${date} 23:59:59`] } }
+                    ]
                 }
             })
 
