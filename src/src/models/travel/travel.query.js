@@ -53,8 +53,29 @@ module.exports = {
         try {
             const {
                 where,
-                attributes = ['id', 'time', 'date'],
+                attributes = ['id', 'time', 'date', 'manifestNumber', 'manifestObservation'],
                 include = [
+                    {
+                        model: Shipping,
+                        as: 'TravelShipping',
+                    },
+                    {
+                        model: Route,
+                        as: 'TravelRoute',
+                        attributes: ['idMunicipalityDepart', 'idMunicipalityArrive'],
+                        include: [
+                            {
+                                model: Municipality,
+                                as: 'MunicipalityDepart',
+                                attributes: ['name'],
+                            },
+                            {
+                                model: Municipality,
+                                as: 'MunicipalityArrive',
+                                attributes: ['name'],
+                            }
+                        ]
+                    },
                     {
                         model: DriverVehicle,
                         as: 'TravelDriverVehicle',

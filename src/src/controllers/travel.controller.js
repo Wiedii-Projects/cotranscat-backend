@@ -14,7 +14,8 @@ const localeData = require('dayjs/plugin/localeData');
 dayjs.locale('es');
 
 // Models - Queries
-const { travelQuery, seatQuery, userQuery, vehicleQuery, seatRulerQuery } = require('../models/index.queries');
+const { travelQuery, seatQuery, userQuery, vehicleQuery, seatRulerQuery, shippingQuery, invoiceQuery, clientQuery } = require('../models/index.queries');
+const { Ticket, Invoice, Resolution } = require('../models/index.models');
 
 module.exports = {
     createTravel: async (req, res) => {
@@ -88,14 +89,6 @@ module.exports = {
                     municipality: VehicleMunicipality.name
                 }
             });
-        } catch (error) {
-            return responseHelpers.responseError(res, 500, error);
-        }
-    },
-    getTravel: async(req, res) => {
-        const { travel } = req.body;
-        try {
-            return responseHelpers.responseSuccess(res, travel);
         } catch (error) {
             return responseHelpers.responseError(res, 500, error);
         }
@@ -272,31 +265,54 @@ module.exports = {
             return responseHelpers.responseError(res, 500, error);
         }
     },
-    countGetAllManifestTravels: async (req, res) => {
-        const { valueFilter = "" } = req.query;
+    createManifestNumber: async (req, res) => {
+        const { decryptId: id } = req.body;
         try {
-            const filterTravelByValue = [];
-            filterTravelByValue.push(...[ { manifestNumber: { [Op.like]: `%${valueFilter}%` }, },  { '$TravelDriverVehicle.VehicleDriverVehicle.plate$': { [Op.like]: `%${valueFilter}%` } } ]);
-            if(valueFilter instanceof Date) filterTravelByValue.push({ date: { [Op.like]: `%${valueFilter}%` } })
-            const travelsFound = await travelQuery.findManifestTravelsPaginator({ where: { [Op.or]:  filterTravelByValue }});
-            return responseHelpers.responseSuccess(res, travelsFound.length );
+            let maxNumber = await travelQuery.maxManifestNumberTravel();
+            const nextMaxNumber = maxNumber ? parseInt(maxNumber) + 1 : 1;
+            await travelQuery.updateTravel({manifestNumber: nextMaxNumber.toString().padStart(12, '0') }, {id});
+            return responseHelpers.responseSuccess(res, null);
+        } catch (error) {
+            return responseHelpers.responseError(res, 500, error);
+        }
+    },
+    countGetAllManifestTravels: async (req, res) => {
+        const { valueFilter = "", date } = req.query;
+        try {
+            const travelsFound = await travelQuery.findManifestTravelsPaginator({
+                where: {
+                    [Op.and]: [
+                        { manifestNumber: { [Op.not]: "" } },
+                        {
+                            [Op.or]: [
+                                { manifestNumber: { [Op.like]: `%${valueFilter}%` }, },
+                                { '$TravelDriverVehicle.VehicleDriverVehicle.plate$': { [Op.like]: `%${valueFilter}%` } }
+                            ]
+                        },
+                        { date }
+                    ]
+                }
+            });
+            return responseHelpers.responseSuccess(res, travelsFound.length);
         } catch (error) {
             return responseHelpers.responseError(res, 500, error);
         }
     },
     getAllManifestTravels: async (req, res) => {
-        const { offset: pagination = 0, valueFilter = "" } = req.query;
+        const { offset: pagination = 0, valueFilter = "", date } = req.query;
         try {
             const offset = pagination * 5;
-            const filterTravelByValue = [];
-            filterTravelByValue.push(...[{ manifestNumber: { [Op.like]: `%${valueFilter}%` }, }, { '$TravelDriverVehicle.VehicleDriverVehicle.plate$': { [Op.like]: `%${valueFilter}%` } }]);
-            const date = new Date(valueFilter)
-            if (!isNaN(date) && date instanceof Date) filterTravelByValue.push({ date: date })
             const travelsFound = await travelQuery.findManifestTravelsPaginator({
                 offset, where: {
                     [Op.and]: [
                         { manifestNumber: { [Op.not]: "" } },
-                        { [Op.or]: filterTravelByValue }
+                        {
+                            [Op.or]: [
+                                { manifestNumber: { [Op.like]: `%${valueFilter}%` }, },
+                                { '$TravelDriverVehicle.VehicleDriverVehicle.plate$': { [Op.like]: `%${valueFilter}%` } }
+                            ]
+                        },
+                        { date }
                     ]
                 }, limit: 5
             });
@@ -317,15 +333,66 @@ module.exports = {
             return responseHelpers.responseError(res, 500, error);
         }
     },
-    createManifestNumber: async (req, res) => {
-        const { decryptId: id } = req.body;
+    getTravel: async (req, res) => {
+        const { travel } = req.body;
+        travel.shipping = [];
+        travel.priceShipping = 0;
+        travel.priceSeat = 0;
         try {
-            let maxNumber = await travelQuery.maxManifestNumberTravel();
-            const nextMaxNumber = maxNumber ? parseInt(maxNumber) + 1 : 1;
-            await travelQuery.updateTravel({manifestNumber: nextMaxNumber.toString().padStart(12, '0') }, {id});
-            return responseHelpers.responseSuccess(res, null);
+            const [seat, shipping] = await Promise.all([
+                seatQuery.findSeat({
+                    where: {
+                        idTravel: sharedHelpers.decryptIdDataBase(travel.id),
+                        state: 1
+                    },
+                    include: [{
+                        model: Ticket,
+                        as: 'TicketSeat',
+                        required: true,
+                        include: [
+                            {
+                                model: Invoice,
+                                as: 'TicketInvoice',
+                                include: [
+                                    {
+                                        model: Resolution,
+                                        as: 'ResolutionInvoice'
+                                    }
+                                ]
+                            }
+                        ]
+                    }]
+                }),
+                shippingQuery.findAllShippingQuery({ where: { idTravel: sharedHelpers.decryptIdDataBase(travel.id) } })
+            ])
+            const [invoice, user] = await Promise.all([
+                invoiceQuery.findAllInvoiceQuery({ where: { id: { [Op.in]: shipping.map((value) => value.idInvoice) } } }),
+                clientQuery.findClientQuery({ where: { id: { [Op.in]: shipping.map((value) => value.idClientReceives) } } })
+            ])
+            for (let i = 0; i < invoice.length; i++) {
+                travel.priceShipping += parseFloat(invoice[i].price);
+                travel.shipping.push({
+                    number: invoice[i].number,
+                    prefix: invoice[i].ResolutionInvoice.DIANPrefix,
+                    clientName: user[i].UserClient.name,
+                    clientLastName: user[i].UserClient.lastName,
+                    municipalityArrive: travel.route.municipalityArrive,
+                })
+            }
+            travel.seat = seat.map((value) => {
+                travel.priceSeat += parseFloat(value.price);
+                return {
+                    name: value.name,
+                    price: value.price,
+                    municipalityArrive: travel.route.municipalityArrive,
+                    passengerName: value.TicketSeat.passengerName,
+                    prefix: value.TicketSeat.TicketInvoice.ResolutionInvoice.DIANPrefix,
+                    number: value.TicketSeat.TicketInvoice.number
+                }
+            });
+            return responseHelpers.responseSuccess(res, travel);
         } catch (error) {
             return responseHelpers.responseError(res, 500, error);
         }
-    }
+    },
 }

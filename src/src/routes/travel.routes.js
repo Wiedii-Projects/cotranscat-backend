@@ -10,7 +10,7 @@ const { Router } = require("express");
 
 const router = Router();
 
-router.get('/vehiclesAvailableToTravel',[
+router.get('/vehiclesAvailableToTravel', [
     //TODO: implementation of role permission validation
     travelMiddleware.checkVehiclesAvailableToTravel()
 ], travelController.getVehiclesAvailableToTravel);
@@ -57,10 +57,12 @@ router.get('/all/manifest/byDate', [
 
 router.get('/all/manifest', [
     //TODO: implementation of role permission validation
+    travelMiddleware.checkTravelByDate()
 ], travelController.getAllManifestTravels);
 
 router.get('/all/manifest/count', [
     //TODO: implementation of role permission validation
+    travelMiddleware.checkTravelByDate()
 ], travelController.countGetAllManifestTravels);
 
 router.put('/createManifestNumber/:id', [

@@ -18,14 +18,28 @@ module.exports = {
   countShippingInvoiceQuery: async(where = {}) => {
     return await Shipping.count(where)
   },
+  findAllShippingQuery: async (query = {}) => {
+    try {
+      const {
+        where,
+      } = query;
+      return await Shipping.findAll({
+        where,
+        raw: true,
+        nest: true
+      })
+    } catch {
+      throw errorsConst.shippingErrors.queryErrors.findAllError;
+    }
+  },
   findOneQuery: async (query) => {
     const {
       where,
-      attribute = [ 
-        'id', 'dateDeparture', 'timeDeparture', 'weight', 'depth', 'width', 'high', 'declaredValue', 
-        'insuranceCost', 'costShipping', 'content', 'isHomeDelivery', 'idUnitMeasure', 'idShippingType', 
+      attribute = [
+        'id', 'dateDeparture', 'timeDeparture', 'weight', 'depth', 'width', 'high', 'declaredValue',
+        'insuranceCost', 'costShipping', 'content', 'isHomeDelivery', 'idUnitMeasure', 'idShippingType',
         'idClientReceives', 'idInvoice'
-    ],
+      ],
     } = query;
     try {
       const shippingFound = await Shipping.findOne({

@@ -995,4 +995,25 @@ module.exports = {
         throw errorsConst.invoiceErrors.queryErrors.findAllError;
     }
   },
+  findAllInvoiceQuery: async (query) => {
+    try {
+      const {
+        where,
+        include = [
+          {
+            model: Resolution,
+            as: 'ResolutionInvoice'
+          }
+        ]
+      } = query;
+      return await Invoice.findAll({
+        where,
+        include,
+        raw: 1,
+        nest: 1
+      })
+    } catch {
+      throw errorsConst.invoiceErrors.queryErrors.findAllError;
+    }
+  }
 }

@@ -1408,6 +1408,10 @@
       "findOneError": {
         "code": "SHPG_002",
         "message": "Something went wrong"
+      },
+      "findAllError": {
+        "code": "SHPG_003",
+        "message": "Something went wrong"
       }
     }
   },

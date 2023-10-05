@@ -10,19 +10,50 @@ const { sharedHelpers } = require('../../helpers/index.helpers');
 module.exports = {
     validateTravel: async (req, where) => {
         try {
-            const [{ id, TravelDriverVehicle: { VehicleDriverVehicle, DriverDriverVehicle }, ...travel }] = await travelQuery.findTravels({where})
+            const [{ id, TravelDriverVehicle: {
+                VehicleDriverVehicle: {
+                    VehicleTemplateVehicle,
+                    ...VehicleDriverVehicle
+                },
+                DriverDriverVehicle: {
+                    UserDriver,
+                    ...DriverDriverVehicle
+                },
+                
+            }, TravelRoute: { MunicipalityDepart, MunicipalityArrive }, TravelShipping, ...travel }] = await travelQuery.findTravels({ where })
             req.body.travel = {
                 id: sharedHelpers.encryptIdDataBase(id),
                 ...travel,
                 driver: {
-                    ...Driver,
-                    id: sharedHelpers.encryptIdDataBase(DriverDriverVehicle.id)
+                    ...DriverDriverVehicle,
+                    id: sharedHelpers.encryptIdDataBase(DriverDriverVehicle.id),
+                    UserDriver: {
+                        ...UserDriver,
+                        id: sharedHelpers.encryptIdDataBase(UserDriver.id),
+                        idIndicativePhone: sharedHelpers.encryptIdDataBase(UserDriver.idIndicativePhone),
+                        idRole: sharedHelpers.encryptIdDataBase(UserDriver.idRole),
+                        idDocumentType: sharedHelpers.encryptIdDataBase(UserDriver.idDocumentType)
+                    }
                 },
                 vehicle: {
-                    ...Vehicle,
-                    id: sharedHelpers.encryptIdDataBase(VehicleDriverVehicle.id)
+                    ...VehicleDriverVehicle,
+                    id: sharedHelpers.encryptIdDataBase(VehicleDriverVehicle.id),
+                    idMunicipality: sharedHelpers.encryptIdDataBase(VehicleDriverVehicle.idMunicipality),
+                    idTypeVehicle: sharedHelpers.encryptIdDataBase(VehicleDriverVehicle.idTypeVehicle),
+                    idTypeFuel: sharedHelpers.encryptIdDataBase(VehicleDriverVehicle.idTypeFuel),
+                    idTypeBodywork: sharedHelpers.encryptIdDataBase(VehicleDriverVehicle.idTypeBodywork),
+                    idTemplateVehicle: sharedHelpers.encryptIdDataBase(VehicleDriverVehicle.idTemplateVehicle),
+                    idOwner: sharedHelpers.encryptIdDataBase(VehicleDriverVehicle.idOwner),
+                    VehicleTemplateVehicle: {
+                        ...VehicleTemplateVehicle,
+                        id: sharedHelpers.encryptIdDataBase(VehicleTemplateVehicle.id)
+                    }
+                },
+                route: {
+                    municipalityDepart: MunicipalityDepart.name, 
+                    municipalityArrive: MunicipalityArrive.name
                 }
-            };
+            }
         } catch {
             req.body.travel = false;
         }
