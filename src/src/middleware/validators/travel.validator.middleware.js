@@ -20,7 +20,7 @@ module.exports = {
                     ...DriverDriverVehicle
                 },
                 
-            }, TravelRoute: { MunicipalityDepart, MunicipalityArrive }, TravelShipping, ...travel }] = await travelQuery.findTravels({ where })
+            }, TravelRoute: { MunicipalityDepart, MunicipalityArrive }, ...travel }] = await travelQuery.findTravels({ where })
             req.body.travel = {
                 id: sharedHelpers.encryptIdDataBase(id),
                 ...travel,

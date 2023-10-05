@@ -1,6 +1,5 @@
 // Constants
 const { errorsConst } = require('../../constants/index.constants');
-const sharedHelpers = require('../../helpers/shared.helpers');
 
 // Models
 const { Travel, DriverVehicle, Driver, Vehicle, Route, Municipality, User, Seat, Shipping, Ticket, TemplateVehicle } = require('../index.models');
@@ -55,10 +54,6 @@ module.exports = {
                 where,
                 attributes = ['id', 'time', 'date', 'manifestNumber', 'manifestObservation'],
                 include = [
-                    {
-                        model: Shipping,
-                        as: 'TravelShipping',
-                    },
                     {
                         model: Route,
                         as: 'TravelRoute',
@@ -250,6 +245,50 @@ module.exports = {
             return await Travel.max('manifestNumber');
         } catch {
             throw errorsConst.travelErrors.queryErrors.updateError;
+        }
+    },
+    findOneTravel: async (query) => {
+        try {
+            const { where } = query;
+            return await Travel.findOne({
+                where,
+                nest: true,
+                raw: true
+            });
+
+        } catch (error) {
+            throw errorsConst.travelErrors.queryErrors.findError;
+        }
+    },
+    findAllTravelAvailable: async (query) => {
+        try {
+            const {
+                where,
+                attributes = ['id', 'time'],
+                include = [
+                    {
+                        model: DriverVehicle,
+                        as: 'TravelDriverVehicle',
+                        attributes: [],
+                        include: [
+                            { 
+                                model: Vehicle, 
+                                as: 'VehicleDriverVehicle',
+                                attributes: ['internalNumber']
+                            }
+                        ]
+                    }
+                ],
+            } = query;
+            return await Travel.findAll({
+                raw: true,
+                nest: true,
+                where,
+                attributes,
+                include
+            });
+        } catch {
+            throw errorsConst.travelErrors.queryErrors.findError;
         }
     }
 }

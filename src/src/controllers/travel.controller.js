@@ -22,16 +22,16 @@ module.exports = {
         const { driverVehicle: { id: idDriverVehicle, idVehicle }, date, time, idRoute } = req.body;
         let transaction
 
-        
+
         try {
             transaction = await dbConnectionOptions.transaction();
-            
+
             const [travel, isCreated] = await travelQuery.createTravel({
                 idDriverVehicle, date, time, idRoute
             }, transaction);
 
             if (!isCreated) {
-                const { idTemplateVehicle, price } = await vehicleQuery.findOneVehicleQuery({ where: { id: idVehicle }})
+                const { idTemplateVehicle, price } = await vehicleQuery.findOneVehicleQuery({ where: { id: idVehicle } })
                 const seatRules = await seatRulerQuery.getSeatRulers({ where: { idTemplateVehicle } })
                 for (let indexSeatRule = 0; indexSeatRule < seatRules.length; indexSeatRule++) {
                     const seatRule = seatRules[indexSeatRule];
@@ -53,7 +53,7 @@ module.exports = {
             return responseHelpers.responseError(res, 500, error);
         }
     },
-    getAllTravels: async(req, res) => {
+    getAllTravels: async (req, res) => {
         try {
             const travels = await travelQuery.findTravels();
             const travel = travels.map(({ id, TravelDriverVehicle: { Vehicle, Driver }, ...travel }) => ({
@@ -73,12 +73,12 @@ module.exports = {
             return responseHelpers.responseError(res, 500, error);
         }
     },
-    getDriverVehicleTravel: async(req, res) => {
-    
-        const { travelExist: { driver: { id }, vehicle: { VehicleMunicipality, plate }}, } = req.body;
+    getDriverVehicleTravel: async (req, res) => {
+
+        const { travelExist: { driver: { id }, vehicle: { VehicleMunicipality, plate } }, } = req.body;
 
         try {
-            const [{ name, lastName}] = await userQuery.findUserQuery({ where: { id: sharedHelpers.decryptIdDataBase(id) } });
+            const [{ name, lastName }] = await userQuery.findUserQuery({ where: { id: sharedHelpers.decryptIdDataBase(id) } });
             return responseHelpers.responseSuccess(res, {
                 driver: {
                     name: name,
@@ -93,19 +93,19 @@ module.exports = {
             return responseHelpers.responseError(res, 500, error);
         }
     },
-    updateTravel: async(req, res) => {
-        const { decryptId: id, date, time, idDriverVehicleToCreate: idDriverVehicle, idRoute} = req.body;
+    updateTravel: async (req, res) => {
+        const { decryptId: id, date, time, idDriverVehicleToCreate: idDriverVehicle, idRoute } = req.body;
         try {
-            await travelQuery.updateTravel({date, time, idDriverVehicle, idRoute}, {id});
+            await travelQuery.updateTravel({ date, time, idDriverVehicle, idRoute }, { id });
             return responseHelpers.responseSuccess(res, null);
         } catch (error) {
             return responseHelpers.responseError(res, 500, error);
         }
     },
-    deleteTravel: async(req, res) => {
+    deleteTravel: async (req, res) => {
         const { decryptId: id } = req.body;
         try {
-            await travelQuery.deleteTravel({id});
+            await travelQuery.deleteTravel({ id });
             return responseHelpers.responseSuccess(res, null);
         } catch (error) {
             return responseHelpers.responseError(res, 500, error);
@@ -114,7 +114,7 @@ module.exports = {
     getVehiclesAvailableToTravel: async (req, res) => {
         const { date, time } = req.query
         const { route } = req.body
-        
+
         try {
 
             let vehiclesAvailable = []
@@ -187,13 +187,13 @@ module.exports = {
                     plate: VehicleDriverVehicle.plate
                 }
             }))
-            
+
             dayjs.extend(localizedFormat);
             dayjs.extend(localeData);
 
             const hours = Array.from({ length: 16 }, (_, i) => i + 4);
             const days = dayjs.weekdays().map(day => day.charAt(0).toUpperCase() + day.slice(1));
-        
+
             const transformedData = hours.map(hour => ({
                 id: dayjs().hour(hour).minute(0).format('h:mm A'),
                 nestedDroppables: days.map((day, index) => {
@@ -201,7 +201,7 @@ module.exports = {
                         const travelDate = dayjs(`${item.travel.date} ${item.travel.time}`);
                         return travelDate.day() === index && travelDate.hour() === hour;
                     });
-        
+
                     return {
                         id: `${day} ${dayjs().hour(hour).minute(0).format('h:mm A')}`,
                         day,
@@ -216,7 +216,7 @@ module.exports = {
                     };
                 }),
             }));
-        
+
             return responseHelpers.responseSuccess(res, transformedData);
         } catch (error) {
             return responseHelpers.responseError(res, 500, error);
@@ -224,7 +224,7 @@ module.exports = {
     },
     getManifestTravelsByDate: async (req, res) => {
         const { date } = req.query
-        
+
         try {
             const travelsFound = await travelQuery.findManifestTravels({
                 where: {
@@ -270,7 +270,7 @@ module.exports = {
         try {
             let maxNumber = await travelQuery.maxManifestNumberTravel();
             const nextMaxNumber = maxNumber ? parseInt(maxNumber) + 1 : 1;
-            await travelQuery.updateTravel({manifestNumber: nextMaxNumber.toString().padStart(12, '0') }, {id});
+            await travelQuery.updateTravel({ manifestNumber: nextMaxNumber.toString().padStart(12, '0') }, { id });
             return responseHelpers.responseSuccess(res, null);
         } catch (error) {
             return responseHelpers.responseError(res, 500, error);
@@ -391,6 +391,29 @@ module.exports = {
                 }
             });
             return responseHelpers.responseSuccess(res, travel);
+        } catch (error) {
+            return responseHelpers.responseError(res, 500, error);
+        }
+    },
+    listVehicleAvailableToTravel: async (req, res) => {
+        const { decryptId } = req.body;
+        try {
+            const travel = await travelQuery.findOneTravel({ id: decryptId });
+            const tripThatGoingOut = await travelQuery.findAllTravelAvailable({ where: { date: travel.date, id: { [Op.not]: decryptId }, idRoute: travel.idRoute, time: { [Op.gte]: travel.time } } });
+            const [seatAvailableToTravel, seatTotalToTravel, vehicleAvailableToTravel] = [[], [], []];
+            const travelAvailable = tripThatGoingOut.map((value) => {
+                seatAvailableToTravel.push(seatQuery.countSeat({ where: { idTravel: value.id, state: 0 } }))
+                seatTotalToTravel.push(seatQuery.countSeat({ where: { idTravel: value.id } })) 
+                return {
+                    internalNumber: value.TravelDriverVehicle.VehicleDriverVehicle.internalNumber,
+                    idTravel: sharedHelpers.encryptIdDataBase(value.id),
+                    time: value.time
+                }
+            })
+            const available = await Promise.all(seatAvailableToTravel);
+            const total = await Promise.all(seatTotalToTravel);
+            for (let i = 0; i < travelAvailable.length; i++) vehicleAvailableToTravel.push({ ...travelAvailable[i], available: available[i], total: total[i] })
+            return responseHelpers.responseSuccess(res, vehicleAvailableToTravel);
         } catch (error) {
             return responseHelpers.responseError(res, 500, error);
         }
