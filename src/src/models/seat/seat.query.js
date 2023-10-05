@@ -36,5 +36,15 @@ module.exports = {
         } catch {
             throw errorsConst.seatErrors.queryErrors.findAllError;
         }
+    },
+    countSeat: async (query = {}) => {
+        try {
+            const {  
+                where
+            } = query;
+            return Seat.count({ where })
+        } catch {
+            throw errorsConst.seatErrors.queryErrors.findAllError;
+        }
     }
 }

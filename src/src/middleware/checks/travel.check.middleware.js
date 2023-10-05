@@ -11,8 +11,8 @@ const dayjs = require('dayjs');
 const sharedHelpers = require('../../helpers/shared.helpers');
 
 // Validators - middleware
-const { 
-    sharedValidators, driverValidator, vehicleValidator, travelValidator, routeValidator, 
+const {
+    sharedValidators, driverValidator, vehicleValidator, travelValidator, routeValidator,
     driverVehicleValidators
 } = require('../index.validators.middleware');
 
@@ -27,10 +27,10 @@ module.exports = {
             .bail()
             .custom((id, { req }) => req.body.idDriverVehicleToCreate = sharedHelpers.decryptIdDataBase(id))
             .withMessage(new ErrorModel(errorsConst.travelErrors.idDriverVehicleInvalid)),
-            sharedValidators.validateError,
+        sharedValidators.validateError,
         check('idDriverVehicleToCreate', new ErrorModel(errorsConst.travelErrors.driverVehicleNotExist))
             .custom((id, { req }) => driverVehicleValidators.validateDriverVehicle(req, { id }))
-            .custom((_, { req }) => req.body.driverVehicle ? true : false ),
+            .custom((_, { req }) => req.body.driverVehicle ? true : false),
         sharedValidators.validateError,
         check('route')
             .isString().withMessage(new ErrorModel(errorsConst.travelErrors.idRouteRequired)).bail()
@@ -56,8 +56,8 @@ module.exports = {
     checkGetDriverVehicleTravel: () => [
         check('travel')
             .isString().withMessage(new ErrorModel(errorsConst.travelErrors.idTravelInvalid)).bail()
-            .custom((value, {req}) => travelValidator.validateTravelDriverVehicle(sharedHelpers.decryptIdDataBase(value), req))
-            .custom((_, {req}) => !!req.body.travelExist).withMessage(new ErrorModel(errorsConst.travelErrors.travelDoesNotExist)),
+            .custom((value, { req }) => travelValidator.validateTravelDriverVehicle(sharedHelpers.decryptIdDataBase(value), req))
+            .custom((_, { req }) => !!req.body.travelExist).withMessage(new ErrorModel(errorsConst.travelErrors.travelDoesNotExist)),
         sharedValidators.validateError,
     ],
 
@@ -139,7 +139,7 @@ module.exports = {
     ],
     checkRangeDate: () => [
         // TODO: validate role,
-            check('initialDate')
+        check('initialDate')
             .custom((value) => {
                 if (typeof value !== 'string')
                     throw new ErrorModel(errorsConst.travelErrors.initialDateTravelRequired)
@@ -151,22 +151,22 @@ module.exports = {
             .bail(),
         sharedValidators.validateError,
         check('finalDate')
-        .custom((value) => {
-            if (typeof value !== 'string')
-                throw new ErrorModel(errorsConst.travelErrors.finalDateTravelRequired)
-            return true;
-        })
-        .bail()
-        .isDate()
-        .withMessage(new ErrorModel(errorsConst.travelErrors.finalDateTravelInvalid))
-        .bail()
-        .custom((value, { req }) => {
-            if (dayjs(req.query.initialDate).isAfter(value)) 
-                throw new ErrorModel(errorsConst.travelErrors.rangeTravelInvalid)
-            return true;
-        })
-        .bail(),
-    sharedValidators.validateError
+            .custom((value) => {
+                if (typeof value !== 'string')
+                    throw new ErrorModel(errorsConst.travelErrors.finalDateTravelRequired)
+                return true;
+            })
+            .bail()
+            .isDate()
+            .withMessage(new ErrorModel(errorsConst.travelErrors.finalDateTravelInvalid))
+            .bail()
+            .custom((value, { req }) => {
+                if (dayjs(req.query.initialDate).isAfter(value))
+                    throw new ErrorModel(errorsConst.travelErrors.rangeTravelInvalid)
+                return true;
+            })
+            .bail(),
+        sharedValidators.validateError
     ],
     checkTravelByDate: () => [
         // TODO: validate role,
@@ -183,6 +183,15 @@ module.exports = {
         sharedValidators.validateError
     ],
     checkCreateManifestNumber: () => [
+        // TODO: validate role,
+        check('decryptId', new ErrorModel(errorsConst.travelErrors.idTravelInvalid))
+            .custom((id, { req }) => travelValidator.validateTravel(req, { id })),
+        sharedValidators.validateError,
+        check('travel', new ErrorModel(errorsConst.travelErrors.travelDoesNotExist))
+            .custom((value) => !!value),
+        sharedValidators.validateError,
+    ],
+    checkListVehicleAvailableToTravel: () => [
         // TODO: validate role,
         check('decryptId', new ErrorModel(errorsConst.travelErrors.idTravelInvalid))
             .custom((id, { req }) => travelValidator.validateTravel(req, { id })),

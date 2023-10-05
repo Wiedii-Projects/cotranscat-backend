@@ -71,4 +71,10 @@ router.put('/createManifestNumber/:id', [
     travelMiddleware.checkCreateManifestNumber()
 ], travelController.createManifestNumber);
 
+router.get('/listVehicleAvailableToTravel/:id', [
+    //TODO: implementation of role permission validation
+    sharedCheckMiddleware.checkId(),
+    travelMiddleware.checkListVehicleAvailableToTravel()
+], travelController.listVehicleAvailableToTravel);
+
 module.exports = router;
