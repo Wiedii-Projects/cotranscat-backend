@@ -63,4 +63,10 @@ router.get('/all/manifest/count', [
     //TODO: implementation of role permission validation
 ], travelController.countGetAllManifestTravels);
 
+router.put('/createManifestNumber/:id', [
+    //TODO: implementation of role permission validation
+    sharedCheckMiddleware.checkId(),
+    travelMiddleware.checkCreateManifestNumber()
+], travelController.createManifestNumber);
+
 module.exports = router;

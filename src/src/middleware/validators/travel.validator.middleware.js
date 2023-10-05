@@ -10,17 +10,17 @@ const { sharedHelpers } = require('../../helpers/index.helpers');
 module.exports = {
     validateTravel: async (req, where) => {
         try {
-            const [{ id, TravelDriverVehicle: { Vehicle, Driver }, ...travel }] = await travelQuery.findTravels({where})
+            const [{ id, TravelDriverVehicle: { VehicleDriverVehicle, DriverDriverVehicle }, ...travel }] = await travelQuery.findTravels({where})
             req.body.travel = {
                 id: sharedHelpers.encryptIdDataBase(id),
                 ...travel,
                 driver: {
                     ...Driver,
-                    id: sharedHelpers.encryptIdDataBase(Driver.id)
+                    id: sharedHelpers.encryptIdDataBase(DriverDriverVehicle.id)
                 },
                 vehicle: {
                     ...Vehicle,
-                    id: sharedHelpers.encryptIdDataBase(Vehicle.id)
+                    id: sharedHelpers.encryptIdDataBase(VehicleDriverVehicle.id)
                 }
             };
         } catch {
