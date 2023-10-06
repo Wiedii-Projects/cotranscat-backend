@@ -75,5 +75,8 @@ module.exports = {
     } catch {
       throw errorsConst.ticketErrors.queryErrors.findAllError;
     }
+  },
+  updateTicketQuery: async(update, where, transaction) => {
+    await Ticket.update(update, { where, transaction });
   }
 };

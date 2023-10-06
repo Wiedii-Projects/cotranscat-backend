@@ -1076,6 +1076,22 @@
       "code": "TRVL023",
       "message": "Driver vehicle does not exist"
     },
+    "travelAssignedDoesNotExist": {
+      "code": "TRVL024",
+      "message": "The travel assigned does not exist"
+    },
+    "dateDifferentCurrentTravel": {
+      "code": "TRVL025",
+      "message": "The assigned trip has a different date than the current trip, please place a trip that departs on the same day to make the exchange."
+    },
+    "timeDifferentCurrentTravel": {
+      "code": "TRVL026",
+      "message": "The assigned trip has a shorter time than the current trip, please place a trip that departs at the same time or later to make the exchange."
+    },
+    "routeDifferentCurrentTravel": {
+      "code": "TRVL027",
+      "message": "The route must be the same to perform the trip exchange, please check it and try again."
+    },
     "queryErrors": {
       "createError": {
         "code": "TRVL_001",
