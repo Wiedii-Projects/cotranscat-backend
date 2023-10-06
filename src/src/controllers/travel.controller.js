@@ -299,23 +299,18 @@ module.exports = {
         }
     },
     getAllManifestTravels: async (req, res) => {
-        const { offset: pagination = 0, valueFilter = "", date } = req.query;
+        const { offset: pagination = 0, valueFilter = "" } = req.query;
+        const queryFilterTravel = [];
+        queryFilterTravel.push({ manifestNumber: { [Op.not]: "" } });
+        const offset = pagination * 5;
         try {
-            const offset = pagination * 5;
-            const travelsFound = await travelQuery.findManifestTravelsPaginator({
-                offset, where: {
-                    [Op.and]: [
-                        { manifestNumber: { [Op.not]: "" } },
-                        {
-                            [Op.or]: [
-                                { manifestNumber: { [Op.like]: `%${valueFilter}%` }, },
-                                { '$TravelDriverVehicle.VehicleDriverVehicle.plate$': { [Op.like]: `%${valueFilter}%` } }
-                            ]
-                        },
-                        { date }
-                    ]
-                }, limit: 5
-            });
+            if(valueFilter) {
+                queryFilterTravel.push({ manifestNumber: { [Op.like]: `%${valueFilter}%` } });
+                queryFilterTravel.push({ '$TravelDriverVehicle.VehicleDriverVehicle.plate$': { [Op.like]: `%${valueFilter}%` } });
+            }
+            const dateValidRegex = /^\d{4}-\d{2}-\d{2}$/;
+            if(dateValidRegex.test(valueFilter)) queryFilterTravel.push({ date: valueFilter })
+            const travelsFound = await travelQuery.findManifestTravelsPaginator({ offset, where: { [Op.or]: queryFilterTravel }, limit: 5 });
             const manifestTravels = travelsFound.map(
                 ({
                     id, date, time, manifestNumber,
