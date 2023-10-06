@@ -277,22 +277,17 @@ module.exports = {
         }
     },
     countGetAllManifestTravels: async (req, res) => {
-        const { valueFilter = "", date } = req.query;
+        const { valueFilter = "" } = req.query;
+        const queryFilterTravel = [];
         try {
-            const travelsFound = await travelQuery.findManifestTravelsPaginator({
-                where: {
-                    [Op.and]: [
-                        { manifestNumber: { [Op.not]: "" } },
-                        {
-                            [Op.or]: [
-                                { manifestNumber: { [Op.like]: `%${valueFilter}%` }, },
-                                { '$TravelDriverVehicle.VehicleDriverVehicle.plate$': { [Op.like]: `%${valueFilter}%` } }
-                            ]
-                        },
-                        { date }
-                    ]
-                }
-            });
+            if(valueFilter) {
+                queryFilterTravel.push({ manifestNumber: { [Op.like]: `%${valueFilter}%` } });
+                queryFilterTravel.push({ '$TravelDriverVehicle.VehicleDriverVehicle.plate$': { [Op.like]: `%${valueFilter}%` } });
+            }
+            const dateValidRegex = /^\d{4}-\d{2}-\d{2}$/;
+            if(dateValidRegex.test(valueFilter)) queryFilterTravel.push({ date: valueFilter })
+            const travelsFound = await travelQuery.findManifestTravelsPaginator({ where: { [Op.and]: [{ manifestNumber: { [Op.not]: "" } }, 
+                queryFilterTravel.length && { [Op.or]: queryFilterTravel }] } });
             return responseHelpers.responseSuccess(res, travelsFound.length);
         } catch (error) {
             return responseHelpers.responseError(res, 500, error);
@@ -310,7 +305,8 @@ module.exports = {
             }
             const dateValidRegex = /^\d{4}-\d{2}-\d{2}$/;
             if(dateValidRegex.test(valueFilter)) queryFilterTravel.push({ date: valueFilter })
-            const travelsFound = await travelQuery.findManifestTravelsPaginator({ offset, where: { [Op.or]: queryFilterTravel }, limit: 5 });
+            const travelsFound = await travelQuery.findManifestTravelsPaginator({ offset, where: { [Op.and]: [{ manifestNumber: { [Op.not]: "" } }, 
+            queryFilterTravel.length && { [Op.or]: queryFilterTravel }] }, limit: 5 });
             const manifestTravels = travelsFound.map(
                 ({
                     id, date, time, manifestNumber,
@@ -418,26 +414,23 @@ module.exports = {
         let transaction;
         const changeSeatTicket = []
         try {
+            transaction = await dbConnectionOptions.transaction();
             const [seatCurrentTravel, seatTravelAssigned] = await Promise.all([
                 seatQuery.findSeat(
                     { 
                         where: { idTravel: travel.id },
-                        include: [{
-                            model: Ticket,
-                            as: 'TicketSeat',
-                            required: true
-                        }]
+                        include: [{ model: Ticket, as: 'TicketSeat', required: true }]
                     }
                 ),
-                seatQuery.findSeat( {  where: { idTravel: travelAssigned.id, state: 0 } } )
+                seatQuery.findSeat( {  where: { idTravel: travelAssigned.id, state: 0 } } ),
+                shippingQuery.updateShippingQuery({ idTravel: travelAssigned.id }, {idTravel: travel.id }, transaction)
             ]);
-            transaction = await dbConnectionOptions.transaction();
-            changeSeatTicket.push(shippingQuery.updateShippingQuery({ idTravel: travelAssigned.id }, {idTravel: travel.id }, transaction))
-            for (let index = 0; index < seatCurrentTravel.length; index++) {
-                if(index+1>seatTravelAssigned.length) break;
-                changeSeatTicket.push(ticketQuery.updateTicketQuery({ idSeat: seatTravelAssigned[index].id }, { id: seatCurrentTravel[index].TicketSeat.id }, transaction))
-                changeSeatTicket.push(seatQuery.updateSeat({ state: 0 },{ id: seatCurrentTravel[index].id }, transaction))
-                changeSeatTicket.push(seatQuery.updateSeat({ state: 1 },{ id: seatTravelAssigned[index].id }, transaction))
+            for (let index = 0; index < seatCurrentTravel.length && index < seatTravelAssigned.length; index++) {
+                const [currentSeat, assignedSeat] = [seatCurrentTravel[index], seatTravelAssigned[index]];
+
+                changeSeatTicket.push(ticketQuery.updateTicketQuery({ idSeat: assignedSeat.id }, { id: currentSeat.TicketSeat.id }, transaction))
+                changeSeatTicket.push(seatQuery.updateSeat({ state: 0 },{ id: currentSeat.id }, transaction))
+                changeSeatTicket.push(seatQuery.updateSeat({ state: 1 },{ id: assignedSeat.id }, transaction))
             }
             await Promise.all(changeSeatTicket);
             await transaction.commit();
