@@ -2,7 +2,7 @@
 const { errorsConst } = require("../../../../constants/index.constants");
 
 // Libraries
-const { col, literal, Op, where } = require("sequelize");
+const { col, Op, where } = require("sequelize");
 
 // Models
 const BankSchema = require("../../../../models/bank/bank.model");
