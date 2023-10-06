@@ -57,10 +57,7 @@ router.get('/all/manifest/byDate', [
 
 router.get('/all/manifest', travelController.getAllManifestTravels);
 
-router.get('/all/manifest/count', [
-    //TODO: implementation of role permission validation
-    travelMiddleware.checkTravelByDate()
-], travelController.countGetAllManifestTravels);
+router.get('/all/manifest/count', travelController.countGetAllManifestTravels);
 
 router.put('/createManifestNumber/:id', [
     //TODO: implementation of role permission validation
