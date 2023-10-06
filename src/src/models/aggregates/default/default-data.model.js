@@ -418,6 +418,8 @@ module.exports = {
         isMaintenance: false,
         idOwner: 19,
         idTemplateVehicle: 1,
+        number: 2,
+        codeBodyWork: 1
     },
     {
         id: 2,
@@ -451,6 +453,8 @@ module.exports = {
         isMaintenance: false,
         idOwner: 19,
         idTemplateVehicle: 1,
+        number: 3,
+        codeBodyWork: 1
     }],
     defaultBloodType: [
         { id: 1, name: 'Tipo A+' },
@@ -478,19 +482,19 @@ module.exports = {
         { id: 3, name: 'Ecuador' },
     ],
     defaultDepartment: [
-        { id: 1, idCountry: "1", name: 'Amazonas' },
-        { id: 2, idCountry: "1", name: 'Antioquia' },
-        { id: 3, idCountry: "1", name: 'Arauca' },
-        { id: 4, idCountry: "1", name: 'Atlántico' },
-        { id: 5, idCountry: "1", name: 'Bolívar' },
-        { id: 6, idCountry: "1", name: 'Boyacá' },
-        { id: 7, idCountry: "1", name: 'Caldas' },
-        { id: 8, idCountry: "1", name: 'Caquetá' },
-        { id: 9, idCountry: "1", name: 'Casanare' },
-        { id: 10, idCountry: "1", name: 'Chocó' },
-        { id: 11, idCountry: "1", name: 'Cauca' },
-        { id: 12, idCountry: "1", name: 'Cesar' },
-        { id: 13, idCountry: "1", name: 'Norte de Santander' }
+        { id: 1, idCountry: 1, name: 'Amazonas' },
+        { id: 2, idCountry: 1, name: 'Antioquia' },
+        { id: 3, idCountry: 1, name: 'Arauca' },
+        { id: 4, idCountry: 1, name: 'Atlántico' },
+        { id: 5, idCountry: 1, name: 'Bolívar' },
+        { id: 6, idCountry: 1, name: 'Boyacá' },
+        { id: 7, idCountry: 1, name: 'Caldas' },
+        { id: 8, idCountry: 1, name: 'Caquetá' },
+        { id: 9, idCountry: 1, name: 'Casanare' },
+        { id: 10, idCountry: 1, name: 'Chocó' },
+        { id: 11, idCountry: 1, name: 'Cauca' },
+        { id: 12, idCountry: 1, name: 'Cesar' },
+        { id: 13, idCountry: 1, name: 'Norte de Santander' }
     ],
     defaultPaymentMethod: [
         { id: 1, name: 'Transferencia' },

@@ -2,7 +2,7 @@
 const { errorsConst } = require("../../../../constants/index.constants");
 
 // Libraries
-const { col } = require("sequelize");
+const { col, Op, where } = require("sequelize");
 
 // Models
 const BankSchema = require("../../../../models/bank/bank.model");
@@ -118,7 +118,10 @@ module.exports = {
                     }
                 ],
                 where: {
-                    isSynchronized: false
+                    isSynchronized: false,
+                    [Op.and]: [
+                      where(col('InvoicePaymentMethod.PaymentMethodBank.idBank'), '=', col('InvoiceSeller.idBank'))
+                    ]
                 }
             })
             
