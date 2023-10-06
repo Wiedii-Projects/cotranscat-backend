@@ -72,6 +72,10 @@ module.exports = {
     }
   },
   updateShippingQuery: async(update, where, transaction) => {
-    await Shipping.update(update, { where, transaction });
+    try {
+      await Shipping.update(update, { where, transaction });
+    } catch (error) {
+      throw errorsConst.shippingErrors.queryErrors.updateError;
+    }
   }
 }

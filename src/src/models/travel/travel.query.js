@@ -222,7 +222,7 @@ module.exports = {
                         ]
                     }
                 ],
-                order = [['date', 'ASC']],
+                order = [['date', 'DESC']],
                 offset,
                 limit
             } = query;
