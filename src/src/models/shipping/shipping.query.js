@@ -70,5 +70,8 @@ module.exports = {
     } catch {
       throw errorsConst.shippingErrors.queryErrors.findOneError;
     }
+  },
+  updateShippingQuery: async(update, where, transaction) => {
+    await Shipping.update(update, { where, transaction });
   }
 }

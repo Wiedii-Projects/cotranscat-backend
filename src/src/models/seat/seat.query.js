@@ -2,7 +2,7 @@
 const { errorsConst } = require("../../constants/index.constants");
 
 // Models
-const { Seat, Client } = require("../index.models");
+const { Seat } = require("../index.models");
 
 module.exports = {
     createSeat: async (data, transaction) => {
@@ -12,9 +12,9 @@ module.exports = {
             throw errorsConst.seatErrors.queryErrors.createError;
         }
     },
-    updateSeat: async (update, where) => {
+    updateSeat: async (update, where, transaction) => {
         try {
-            return await Seat.update(update, { where });
+            return await Seat.update(update, { where, transaction });
         } catch {
             throw errorsConst.seatErrors.queryErrors.updateError
         }

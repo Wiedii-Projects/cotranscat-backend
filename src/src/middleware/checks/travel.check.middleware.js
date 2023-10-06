@@ -12,7 +12,7 @@ const sharedHelpers = require('../../helpers/shared.helpers');
 
 // Validators - middleware
 const {
-    sharedValidators, driverValidator, vehicleValidator, travelValidator, routeValidator,
+    sharedValidators, travelValidator, routeValidator,
     driverVehicleValidators
 } = require('../index.validators.middleware');
 
@@ -194,10 +194,34 @@ module.exports = {
     checkListVehicleAvailableToTravel: () => [
         // TODO: validate role,
         check('decryptId', new ErrorModel(errorsConst.travelErrors.idTravelInvalid))
-            .custom((id, { req }) => travelValidator.validateTravel(req, { id })),
+            .custom((id, { req }) => travelValidator.validateTravelExist(req, { id })),
         sharedValidators.validateError,
         check('travel', new ErrorModel(errorsConst.travelErrors.travelDoesNotExist))
             .custom((value) => !!value),
+        sharedValidators.validateError,
+    ],
+    checkAssignTravelAnotherVehicle: () => [
+        // TODO: validate role,
+        check('decryptId', new ErrorModel(errorsConst.travelErrors.idTravelInvalid))
+            .custom((id, { req }) => travelValidator.validateTravelExist(req, { id })),
+        sharedValidators.validateError,
+        check('travel', new ErrorModel(errorsConst.travelErrors.travelDoesNotExist))
+            .custom((value) => !!value),
+        sharedValidators.validateError,
+        check('idTravel', new ErrorModel(errorsConst.travelErrors.idTravelInvalid))
+            .custom((id, { req }) => travelValidator.validateTravelExist(req, { id: sharedHelpers.decryptIdDataBase(id) }, 'travelAssigned')),
+        sharedValidators.validateError,
+        check('travelAssigned', new ErrorModel(errorsConst.travelErrors.travelAssignedDoesNotExist))
+            .custom((value) => !!value),
+        sharedValidators.validateError,
+        check('travelAssigned', new ErrorModel(errorsConst.travelErrors.dateDifferentCurrentTravel))
+            .custom((value, {req}) => !(value.date!==req.body.travel.date)),
+        sharedValidators.validateError,
+        check('travelAssigned', new ErrorModel(errorsConst.travelErrors.timeDifferentCurrentTravel))
+            .custom((value, {req}) => !!(value.time>=req.body.travel.time)),
+        sharedValidators.validateError,
+        check('travelAssigned', new ErrorModel(errorsConst.travelErrors.routeDifferentCurrentTravel))
+            .custom((value, {req}) => !!(value.idRoute===req.body.travel.idRoute)),
         sharedValidators.validateError,
     ]
 }

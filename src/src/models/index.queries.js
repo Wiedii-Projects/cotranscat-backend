@@ -40,4 +40,5 @@ module.exports = {
   typeBodyworkQuery: require("./type-bodywork/typeBodywork.query"),
   templateVehicleQuery: require("./template-vehicle/templateVehicle.query"),
   ownerQuery: require("./owner/owner.query"),
+  ticketQuery: require("./ticket/ticket.query")
 };

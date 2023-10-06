@@ -134,5 +134,12 @@ module.exports = {
         } catch {
             req.body.travelExist = false;
         }
+    },
+    validateTravelExist: async(req, where, travel = 'travel') => {
+        try {
+            req.body[travel] = await travelQuery.findOneTravel({where});
+        } catch {
+            req.body[travel] = false;
+        }
     }
 }

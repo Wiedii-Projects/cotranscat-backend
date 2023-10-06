@@ -14,7 +14,7 @@ const localeData = require('dayjs/plugin/localeData');
 dayjs.locale('es');
 
 // Models - Queries
-const { travelQuery, seatQuery, userQuery, vehicleQuery, seatRulerQuery, shippingQuery, invoiceQuery, clientQuery } = require('../models/index.queries');
+const { travelQuery, seatQuery, userQuery, vehicleQuery, seatRulerQuery, shippingQuery, invoiceQuery, clientQuery, ticketQuery } = require('../models/index.queries');
 const { Ticket, Invoice, Resolution } = require('../models/index.models');
 
 module.exports = {
@@ -418,4 +418,38 @@ module.exports = {
             return responseHelpers.responseError(res, 500, error);
         }
     },
+    assignTravelAnotherVehicle: async (req, res) => {
+        const { travel, travelAssigned } = req.body;
+        let transaction;
+        const changeSeatTicket = []
+        try {
+            const [seatCurrentTravel, seatTravelAssigned] = await Promise.all([
+                seatQuery.findSeat(
+                    { 
+                        where: { idTravel: travel.id },
+                        include: [{
+                            model: Ticket,
+                            as: 'TicketSeat',
+                            required: true
+                        }]
+                    }
+                ),
+                seatQuery.findSeat( {  where: { idTravel: travelAssigned.id, state: 0 } } )
+            ]);
+            transaction = await dbConnectionOptions.transaction();
+            changeSeatTicket.push(shippingQuery.updateShippingQuery({ idTravel: travelAssigned.id }, {idTravel: travel.id }, transaction))
+            for (let index = 0; index < seatCurrentTravel.length; index++) {
+                if(index+1>seatTravelAssigned.length) break;
+                changeSeatTicket.push(ticketQuery.updateTicketQuery({ idSeat: seatTravelAssigned[index].id }, { id: seatCurrentTravel[index].TicketSeat.id }, transaction))
+                changeSeatTicket.push(seatQuery.updateSeat({ state: 0 },{ id: seatCurrentTravel[index].id }, transaction))
+                changeSeatTicket.push(seatQuery.updateSeat({ state: 1 },{ id: seatTravelAssigned[index].id }, transaction))
+            }
+            await Promise.all(changeSeatTicket);
+            await transaction.commit();
+            return responseHelpers.responseSuccess(res, null);
+        } catch (error) {
+            if (transaction) await transaction.rollback();
+            return responseHelpers.responseError(res, 500, error);
+        }
+    }
 }
