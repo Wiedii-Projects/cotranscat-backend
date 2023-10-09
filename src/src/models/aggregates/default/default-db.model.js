@@ -349,15 +349,15 @@ class defaultDataBaseModel {
 
         if (await this.countPaymentMethodBank() === 0) {
             const paymentMethodBanks = defaultPaymentMethod.map(paymentMethod => {
-                if (paymentMethod.name !== "Transferencia") {
-                    return [
-                        { codePaymentMethod: "01", idPaymentMethod: paymentMethod.id, idBank: 1 },
-                        { codePaymentMethod: "01", idPaymentMethod: paymentMethod.id, idBank: 2 }
-                    ];
-                } else {
+                if (paymentMethod.name === defaultPaymentMethod[0].name || paymentMethod.name === defaultPaymentMethod[1].name) {
                     return [
                         { codePaymentMethod: "02", idPaymentMethod: paymentMethod.id, idBank: 1 },
                         { codePaymentMethod: "00", idPaymentMethod: paymentMethod.id, idBank: 2 }
+                    ];
+                } else {
+                    return [
+                        { codePaymentMethod: "01", idPaymentMethod: paymentMethod.id, idBank: 1 },
+                        { codePaymentMethod: "01", idPaymentMethod: paymentMethod.id, idBank: 2 }
                     ];
                 }
             });
