@@ -13,6 +13,9 @@ const {
 } = require('../helpers/shared.helpers');
 const { extractInvoice, extractInvoiceMoneyTransfer, extractInvoiceShipping } = require('../helpers/invoice.helpers');
 
+// Libraries
+const { Op, col, Sequelize } = require('sequelize');
+
 // Queries
 const { createNewInvoiceQuery, findInvoiceShippingQuery, updateInvoiceQuery } = require('../models/invoice/invoice.query');
 const { findServiceTypeQuery } = require('../models/service-type/service-type.query');
@@ -59,10 +62,10 @@ module.exports = {
         try {
             const [{ id: idServiceType }] = await findServiceTypeQuery({ where: { type: TYPE_SERVICE.MONEY_TRANSFER.VALUE_CONVENTION } });
             let [invoice, count] = await Promise.all([
-                invoiceQuery.findAllMoneyTransferInvoiceQuery({ 
-                    where: { 
+                invoiceQuery.findAllMoneyTransferInvoiceQuery({
+                    where: {
                         idServiceType
-                    }, 
+                    },
                     offset: page
                 }),
                 invoiceQuery.countInvoiceQuery({ idServiceType })
@@ -72,30 +75,100 @@ module.exports = {
             return responseHelpers.responseError(res, 500, error);
         }
     },
-    getAllInvoiceTravel: async(req, res) => {
-        const { page = 0 } = req.query;
+    getAllInvoiceTravel: async (req, res) => {
+        const { page = 0, filterType, filterValue, startDate, endDate } = req.query;
+
         try {
             const [{ id: idServiceType }] = await findServiceTypeQuery({ where: { type: TYPE_SERVICE.PASSAGE.VALUE_CONVENTION } });
-            let [invoice, count] = await Promise.all([
-                invoiceQuery.findAllTravelInvoiceQuery({ 
-                    where: { 
-                        idServiceType
-                    }, 
-                    offset: page
-                }),
-                invoiceQuery.countInvoiceQuery({ idServiceType })
-            ]);
+
+            let whereInvoice = {
+                idServiceType
+            };
+
+            let countRegisterFound = 0
+
+            if (filterType) {
+                switch (filterType) {
+                    case 'clientName':
+                        whereInvoice = {
+                            ...whereInvoice,
+                            [Op.and]: [
+                                Sequelize.where(col('InvoiceClient.UserClient.name'), 'LIKE', `%${filterValue}%`)
+                            ]
+                        };
+                        break;
+                    case 'clientNumberDocument':
+                        whereInvoice = {
+                            ...whereInvoice,
+                            [Op.and]: [
+                                Sequelize.where(col('InvoiceClient.UserClient.numberDocument'), 'LIKE', `%${filterValue}%`)
+                            ]
+                        };
+                        break;
+                    case 'sellerName':
+                        whereInvoice = {
+                            ...whereInvoice,
+                            [Op.and]: [
+                                Sequelize.where(col('InvoiceSeller.UserSeller.name'), 'LIKE', `%${filterValue}%`)
+                            ]
+                        };
+                        break;
+                    case 'price':
+                        whereInvoice = {
+                            ...whereInvoice,
+                            [Op.and]: [
+                                Sequelize.where(col('Invoice.price'), '=', parseFloat(filterValue))
+                            ]
+                        };
+                        break;
+                    case 'dateRange':
+                        whereInvoice = {
+                            ...whereInvoice,
+                            [Op.and]: [
+                                Sequelize.where(col('Invoice.date'), '>=', startDate),
+                                Sequelize.where(col('Invoice.date'), '<=', endDate),
+                            ],
+                        };
+                        break;
+                }
+            } else {
+                countRegisterFound = await invoiceQuery.countInvoiceQuery({ idServiceType })
+            }
+
+            let invoice = await invoiceQuery.findAllTravelInvoiceQuery({
+                where: whereInvoice,
+                offset: page
+            })
+            
             let rows = [];
             for (const value of invoice) {
-                const route = await travelQuery.findRouteToTravel({ id: value.idTravel });
-                rows.push({
-                    ...route,
-                    ...value,
-                    idTravel: undefined
-                })
+                let whereTravel = {
+                    id: value.idTravel
+                };
+
+                if (filterType && filterType === 'municipalityArrive') {
+                    whereTravel = {
+                        ...whereTravel,
+                        [Op.and]: [
+                            Sequelize.where(col('TravelRoute.MunicipalityArrive.name'), 'LIKE', `%${filterValue}%`)
+                        ]
+                    };
+                }
+                const route = await travelQuery.findRouteToTravel(whereTravel);
+                if (route.municipalityDepart !== "" && route.municipalityArrive !== "") {
+                    rows.push({
+                        ...route,
+                        ...value,
+                        idTravel: undefined
+                    })
+                }
             }
-            return responseHelpers.responseSuccess(res, { count, rows });
-        } catch (error){
+
+            if (filterType && filterType === 'municipalityArrive') countRegisterFound = rows.length
+            else countRegisterFound = invoice.length
+
+            return responseHelpers.responseSuccess(res, { count: countRegisterFound, rows });
+        } catch (error) {
             return responseHelpers.responseError(res, 500, error);
         }
     },
@@ -126,9 +199,9 @@ module.exports = {
             invoice.synchronizationType = salesConst.TYPE_SYNCHRONIZATION_INVOICES.ONLY_CREATE_INVOICE
 
             transaction = await dbConnectionOptions.transaction();
-            
+
             const { id } = await createNewInvoiceQuery(invoice, { transaction, moneyTransfer, type });
-            
+
             await prefixQuery.updatePrefixQuery(
                 { id: decryptIdDataBase(idPrefix) },
                 { currentConsecutive: numberRaw },
@@ -147,32 +220,32 @@ module.exports = {
         const { tickets, user: { id: idSeller }, price, decryptId: idClient, priceSeat, idPaymentMethod, isElectronic } = req.body;
         try {
             const [{ id: idServiceType, type }] = await  findServiceTypeQuery({ where: { type: TYPE_SERVICE.PASSAGE.VALUE_CONVENTION } });
-            
+
             const resolutionsFound = await sellerQuery.getPrefixesOfResolutionByBankSellerQuery(sharedHelpers.decryptIdDataBase(idSeller), idServiceType, isElectronic);
             const { numberFormatted: number, numberRaw, idPrefix, idResolution }  = await sharedHelpers.getPrefixAndInvoiceNumberNewRegister(resolutionsFound)
-            
+
             let invoice = extractInvoice({
                 price: price ? price*tickets.length : priceSeat,
                 idServiceType,
                 idPaymentMethod,
                 codeSale: salesConst.SALES_CODE.SALES_INVOICE,
                 idClient,
-                idSeller, 
+                idSeller,
                 number,
                 idResolution
             });
 
             invoice.synchronizationType = salesConst.TYPE_SYNCHRONIZATION_INVOICES.ONLY_CREATE_INVOICE
-            
+
             transaction = await dbConnectionOptions.transaction();
-            const { id } = await createNewInvoiceQuery(invoice, { transaction, tickets, price: invoice.price/tickets.length, type });            
-            
+            const { id } = await createNewInvoiceQuery(invoice, { transaction, tickets, price: invoice.price/tickets.length, type });
+
             await prefixQuery.updatePrefixQuery(
                 { id: decryptIdDataBase(idPrefix) },
                 { currentConsecutive: numberRaw },
                 transaction
             )
-            
+
             await transaction.commit();
 
             return responseHelpers.responseSuccess(res, encryptIdDataBase(id));
@@ -190,10 +263,10 @@ module.exports = {
                 findPaymentMethodQuery({ where: { name: PAYMENT_METHOD.CASH } }),
                 findServiceTypeQuery({ where: { type: TYPE_SERVICE.SHIPPING.VALUE_CONVENTION } })
             ]);
-            
+
             const resolutionsFound = await sellerQuery.getPrefixesOfResolutionByBankSellerQuery(sharedHelpers.decryptIdDataBase(idSeller), idServiceType, isElectronic);
             const { numberFormatted: number, numberRaw, idPrefix, idResolution } = await sharedHelpers.getPrefixAndInvoiceNumberNewRegister(resolutionsFound)
-            
+
             let invoice = extractInvoice({
                 price,
                 idServiceType,
@@ -208,7 +281,7 @@ module.exports = {
             invoice.synchronizationType = salesConst.TYPE_SYNCHRONIZATION_INVOICES.ONLY_CREATE_INVOICE
 
             transaction = await dbConnectionOptions.transaction();
-            
+
             const { id } = await createNewInvoiceQuery(invoice, { transaction, shipping, type });
 
             await prefixQuery.updatePrefixQuery(
@@ -219,7 +292,7 @@ module.exports = {
 
             await transaction.commit();
             return responseHelpers.responseSuccess(res, encryptIdDataBase(id));
-            
+
         } catch (error){
             if (transaction) await transaction.rollback();
             return responseHelpers.responseError(res, 500, error);
@@ -242,13 +315,13 @@ module.exports = {
                 filterSearch = { number: numberInvoice, codeSale }
                 let whereCodePrefix = { code: codePrefix }
                 const [prefixFound] = await prefixQuery.findPrefixQuery({ where: { code: codePrefix } });
-                
+
                 if (!prefixFound) throw errorsConst.prefixErrors.prefixNotExists
                 if (salesConst.SALES_CODE.SALES_INVOICE !== codeSale) throw errorsConst.invoiceErrors.codeSaleNotExist
                 if (!filterSearch) throw errorsConst.shippingErrors.filterValueInvalid
 
                 shippingInvoice = await findInvoiceShippingQuery(filterSearch, whereCodePrefix)
-                
+
             }
             if (shippingInvoice) {
                 const {invoiceDetails} = shippingInvoice
@@ -321,7 +394,7 @@ module.exports = {
                 case TYPE_SERVICE.SHIPPING.VALUE_CONVENTION:
                     let shippingInvoice = await shippingQuery.findOneQuery({ where: { idInvoice: decryptIdDataBase(invoice.id) } })
                     shippingInvoice.idClientReceives = decryptIdDataBase(shippingInvoice.idClientReceives)
-                    
+
                     let shipping = extractInvoiceShipping(shippingInvoice);
                     optionsQuery.shipping = shipping
                     break;
@@ -331,7 +404,7 @@ module.exports = {
                     let moneyTransfer = extractInvoiceMoneyTransfer(moneyTransferFound);
                     optionsQuery.moneyTransfer = moneyTransfer
                     break;
-            
+
                 default:
                     throw errorsConst.appErrors.serviceTypeConventionNotFound
             }
