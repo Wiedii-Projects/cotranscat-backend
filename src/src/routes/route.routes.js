@@ -13,6 +13,8 @@ router.post('/', [
     routeMiddleware.checkCreateRoute(),
 ], routeController.createRoute);
 
-router.get('/', routeController.getAllRoute);
+router.get('/', [
+    routeMiddleware.checkGetAllRouteAccordingHeadquarter(),
+], routeController.getAllRoute);
 
 module.exports = router;
