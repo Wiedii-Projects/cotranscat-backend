@@ -127,8 +127,22 @@ module.exports = {
                             [Op.and]: [
                                 Sequelize.where(col('Invoice.date'), '>=', startDate),
                                 Sequelize.where(col('Invoice.date'), '<=', endDate),
-                            ],
+                            ]
                         };
+
+                        if (filterValue) {
+                            whereInvoice = {
+                                ...whereInvoice,
+                                [Op.or]: [
+                                    Sequelize.where(col('InvoiceClient.UserClient.name'), 'LIKE', `%${filterValue}%`),
+                                    Sequelize.where(col('InvoiceClient.UserClient.numberDocument'), 'LIKE', `%${filterValue}%`),
+                                    Sequelize.where(col('InvoiceSeller.UserSeller.name'), 'LIKE', `%${filterValue}%`)
+                                ]
+                            }
+                        }
+                        break;
+                        
+                    default:
                         break;
                 }
             } else {
