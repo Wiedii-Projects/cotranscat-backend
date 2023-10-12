@@ -13,7 +13,8 @@ const sharedHelpers = require('../../helpers/shared.helpers');
 // Validators - middleware
 const {
     sharedValidators, travelValidator, routeValidator,
-    driverVehicleValidators
+    driverVehicleValidators,
+    vehicleValidator
 } = require('../index.validators.middleware');
 
 // Models
@@ -223,5 +224,31 @@ module.exports = {
         check('travelAssigned', new ErrorModel(errorsConst.travelErrors.routeDifferentCurrentTravel))
             .custom((value, {req}) => !!(value.idRoute===req.body.travel.idRoute)),
         sharedValidators.validateError,
-    ]
+    ],
+    checkCreateByIdVehicleTravel: () => [
+        check('idVehicle').custom(async (value, { req }) => await vehicleValidator.validateVehicle(req, { where: { id: sharedHelpers.decryptIdDataBase(value) } })),
+        sharedValidators.validateError,
+        check('vehicle', new ErrorModel(errorsConst.vehicleErrors.vehicleDoesNotExist))
+            .custom((value) => value),
+        sharedValidators.validateError,
+        check('route')
+            .isString().withMessage(new ErrorModel(errorsConst.travelErrors.idRouteRequired)).bail()
+            .custom((id, { req }) => req.body.idRoute = sharedHelpers.decryptIdDataBase(id)).withMessage(new ErrorModel(errorsConst.travelErrors.idRouteInvalid)),
+        sharedValidators.validateError,
+        check('idRoute', new ErrorModel(errorsConst.travelErrors.routeDoesNotExist))
+            .custom((id, { req }) => routeValidator.validateRoute(req, { where: { id } })),
+        sharedValidators.validateError,
+        check('route', new ErrorModel(errorsConst.travelErrors.routeDoesNotExist))
+            .custom((value) => !!value),
+        sharedValidators.validateError,
+        check('date', new ErrorModel(errorsConst.travelErrors.invalidDate))
+            .isDate(),
+        sharedValidators.validateError,
+        check('time', new ErrorModel(errorsConst.travelErrors.invalidTime))
+            .isTime({
+                hourFormat: 'hour24',
+                mode: 'withSeconds'
+            }),
+        sharedValidators.validateError,
+    ],
 }

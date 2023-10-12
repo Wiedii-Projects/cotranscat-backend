@@ -77,4 +77,9 @@ router.get('/assignTravelAnotherVehicle/:id', [
     travelMiddleware.checkAssignTravelAnotherVehicle()
 ], travelController.assignTravelAnotherVehicle);
 
+router.post('/byVehicle/', [
+    //TODO: implementation of role permission validation
+    travelMiddleware.checkCreateByIdVehicleTravel()
+], travelController.createByIdVehicleTravel);
+
 module.exports = router;
