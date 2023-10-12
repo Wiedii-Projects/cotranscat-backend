@@ -1,6 +1,9 @@
 // Constants
 const { errorsConst } = require('../../constants/index.constants');
 
+// Libraries
+const { col } = require('sequelize');
+
 // Models
 const { Travel, DriverVehicle, Driver, Vehicle, Route, Municipality, User, Seat, Shipping, Ticket, TemplateVehicle } = require('../index.models');
 
@@ -19,7 +22,11 @@ module.exports = {
                 raw: true,
                 nest: true,
                 where,
-                attributes: ['idRoute'],
+                attributes: [
+                    'idRoute',
+                    [col('TravelRoute.MunicipalityDepart.name'), 'municipalityDepart'],
+                    [col('TravelRoute.MunicipalityArrive.name'), 'municipalityArrive'],
+                ],
                 include: [
                     {
                         model: Route,
@@ -41,8 +48,8 @@ module.exports = {
                 ]
             })
             .then((result) => ({
-                municipalityDepart: result.TravelRoute.MunicipalityDepart.name,
-                municipalityArrive: result.TravelRoute.MunicipalityArrive.name
+                municipalityDepart: result?.TravelRoute?.MunicipalityDepart?.name || "",
+                municipalityArrive: result?.TravelRoute?.MunicipalityArrive?.name || ""
             }));
         } catch {
             throw errorsConst.travelErrors.queryErrors.findError;

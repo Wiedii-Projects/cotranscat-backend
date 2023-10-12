@@ -4,6 +4,9 @@ const { errorsConst } = require("../../constants/index.constants");
 // Helpers
 const { encryptIdDataBase } = require("../../helpers/shared.helpers");
 
+// Libraries
+const { col } = require("sequelize");
+
 // Models
 const { 
   Seller, Ticket, Seat, Travel, Route, Client, DocumentType, User, Municipality, DriverVehicle, Vehicle, 
@@ -30,6 +33,31 @@ module.exports = {
       } = query;
       return await Invoice.findAll({
         where,
+        attributes: [
+          'number',
+          'codeSale',
+          [col('Invoice.price'), 'invoicePrice'],
+          [col('Invoice.date'), 'invoiceDate'],
+          'id',
+          'isCancelled',
+          [col('InvoiceClient.id'), 'InvoiceClient.id'],
+          [col('InvoiceClient.UserClient.id'), 'InvoiceClient.UserClient.id'],
+          [col('InvoiceClient.UserClient.numberDocument'), 'InvoiceClient.UserClient.numberDocument'],
+          [col('InvoiceClient.UserClient.name'), 'InvoiceClient.UserClient.name'],
+          [col('InvoiceClient.UserClient.lastName'), 'InvoiceClient.UserClient.lastName'],
+          [col('InvoiceSeller.id'), 'InvoiceSeller.id'],
+          [col('InvoiceSeller.UserSeller.id'), 'InvoiceSeller.UserSeller.id'],
+          [col('InvoiceSeller.UserSeller.name'), 'InvoiceSeller.UserSeller.name'],
+          [col('InvoiceSeller.UserSeller.lastName'), 'InvoiceSeller.UserSeller.lastName'],
+          [col('TicketInvoice.id'), 'TicketInvoice.id'],
+          [col('TicketInvoice.TicketSeat.id'), 'TicketInvoice.TicketSeat.id'],
+          [col('TicketInvoice.TicketSeat.TravelSeat.id'), 'TicketInvoice.TicketSeat.TravelSeat.id'],
+          [col('ResolutionInvoice.id'), 'ResolutionInvoice.id'],
+          [col('ResolutionInvoice.idPrefix'), 'ResolutionInvoice.idPrefix'],
+          [col('ResolutionInvoice.PrefixResolution.id'), 'ResolutionInvoice.PrefixResolution.id'],
+          [col('ResolutionInvoice.PrefixResolution.code'), 'ResolutionInvoice.PrefixResolution.code'],
+          [col('ResolutionInvoice.PrefixResolution.isElectronic'), 'ResolutionInvoice.PrefixResolution.isElectronic'],
+        ],
         include: [
           {
             model: Client,
@@ -39,7 +67,7 @@ module.exports = {
               {
                 model: User,
                 as: 'UserClient',
-                attributes: ['numberDocument', 'name', 'lastName'],
+                attributes: ['numberDocument', 'name', 'lastName']
               }
             ]
           },
@@ -51,7 +79,7 @@ module.exports = {
               {
                 model: User,
                 as: 'UserSeller',
-                attributes: ['name', 'lastName'],
+                attributes: ['name', 'lastName']
               }
             ]
           },
@@ -88,10 +116,8 @@ module.exports = {
           }
         ],
         nest: true,
-        attributes: ['number', 'codeSale', 'price', 'date', 'id', 'isCancelled'],
-        order: [['number', 'DESC']],
-        limit: 20,
-        offset: offset * 20
+        order: [['date', 'DESC']],
+        offset: offset * 50
       })
       .then( (result) => result.map((invoice) => ({
           id: encryptIdDataBase(invoice.id),
@@ -100,8 +126,8 @@ module.exports = {
           isCancelled: invoice.isCancelled == 1 ? true : false,
           codePrefix: invoice.ResolutionInvoice.PrefixResolution.code,
           isElectronic: invoice.ResolutionInvoice.PrefixResolution.isElectronic == 1 ? true : false,
-          price: invoice.price,
-          date: invoice.date,
+          price: invoice.dataValues.invoicePrice,
+          date: invoice.dataValues.invoiceDate,
           tickets: invoice.TicketInvoice.length,
           idTravel: invoice.TicketInvoice[0].TicketSeat.TravelSeat.id,
           client: {
