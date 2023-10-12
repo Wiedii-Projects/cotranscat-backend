@@ -137,5 +137,44 @@ module.exports = {
             raw: true,
             nest: true
         })
+    },
+    findAllAvailableVehiclesAndDriverVehicleWithSeatQuery: async (query) => {
+        const {
+            where
+        } = query;
+
+        return await Vehicle.findAll({
+            include: [
+                {
+                    model: DriverVehicle,
+                    as: "VehicleDriverVehicle",
+                    required: false,
+                    include: [
+                        {
+                            model: StateVehicle,
+                            as: "DriverVehicleStateVehicle",
+                            where: {
+                                [Op.or]: [
+                                    { type: 0 },
+                                    { type: 2 }
+                                ]
+                            },
+                        }
+                    ]
+                },
+                {
+                    model: TemplateVehicle,
+                    as: "VehicleTemplateVehicle",
+                    include: [
+                        {
+                            model: SeatRuler,
+                            as: "SeatRulerTemplateVehicle"
+                        }
+                    ]
+                }
+            ],
+            where,
+            nest: true
+        })
     }
 }

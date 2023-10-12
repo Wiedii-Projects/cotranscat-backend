@@ -116,20 +116,51 @@ module.exports = {
         const { route } = req.body
 
         try {
-
-            let vehiclesAvailable = []
+            let vehiclesExcludedFromQuery = []
             const travelFound = await travelQuery.findTravels({ where: { date, time, idRoute: sharedHelpers.decryptIdDataBase(route.id) } });
 
-            const travelFoundDataCleaned = travelFound.map(({ id, TravelDriverVehicle: { VehicleDriverVehicle: { VehicleTemplateVehicle, ...VehicleDriverVehicle } }, ...travel }) => ({
-                id: sharedHelpers.encryptIdDataBase(id),
-                ...travel,
-                vehicle: {
-                    ...VehicleDriverVehicle,
-                    width: VehicleTemplateVehicle.width,
-                    height: VehicleTemplateVehicle.height,
-                    id: sharedHelpers.encryptIdDataBase(VehicleDriverVehicle.id)
+            const travelFoundDataCleaned = travelFound.map(({ id, TravelDriverVehicle: { VehicleDriverVehicle: { VehicleTemplateVehicle, ...VehicleDriverVehicle } }, ...travel }) => {
+                vehiclesExcludedFromQuery.push(VehicleDriverVehicle.id)
+                return {
+                    id: sharedHelpers.encryptIdDataBase(id),
+                    ...travel,
+                    vehicle: {
+                        ...VehicleDriverVehicle,
+                        width: VehicleTemplateVehicle.width,
+                        height: VehicleTemplateVehicle.height,
+                        id: sharedHelpers.encryptIdDataBase(VehicleDriverVehicle.id)
+                    }
                 }
+            })
+            
+            
+            const otherVehiclesAvailable = await vehicleQuery.findAllAvailableVehiclesAndDriverVehicleWithSeatQuery({where: {
+                id: {
+                    [Op.ne]: vehiclesExcludedFromQuery
+                }
+            }})
+
+            const otherVehiclesAvailableCleaned = otherVehiclesAvailable.map(({
+                id, internalNumber, plate, mark, model, code,
+                VehicleTemplateVehicle:{ width, height , SeatRulerTemplateVehicle}
+            }
+            ) => ({
+                vehicle: {
+                    id: sharedHelpers.encryptIdDataBase(id),
+                    plate,
+                    mark,
+                    model,
+                    internalNumber,
+                    code,
+                    width,
+                    height,
+                },
+                totalSeatsAvailable: SeatRulerTemplateVehicle.length,
+                idTravel: null,
+                isAssociatedToTravel: false
             }))
+
+            let vehiclesAvailable = [...otherVehiclesAvailableCleaned]
 
             for (let indexTravelFound = 0; indexTravelFound < travelFoundDataCleaned.length; indexTravelFound++) {
                 const travel = travelFoundDataCleaned[indexTravelFound];
@@ -149,10 +180,13 @@ module.exports = {
                             mark: vehicle.mark,
                             model: vehicle.model,
                             width: vehicle.width,
-                            height: vehicle.height
+                            height: vehicle.height,
+                            internalNumber: vehicle.internalNumber,
+                            code: vehicle.code
                         },
                         totalSeatsAvailable: responseSeat.length,
-                        travel: travel.id
+                        idTravel: travel.id,
+                        isAssociatedToTravel: true
                     })
                 return responseHelpers.responseSuccess(res, vehiclesAvailable);
             }
