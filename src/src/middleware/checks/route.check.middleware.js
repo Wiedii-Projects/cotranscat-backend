@@ -11,7 +11,8 @@ const { check } = require('express-validator');
 const { ErrorModel } = require("../../models/index.models");
 
 //Validators
-const { sharedValidators, municipalityValidators } = require('../index.validators.middleware');
+const { sharedValidators, municipalityValidators, sellerValidators } = require('../index.validators.middleware');
+const sharedCheckMiddleware = require('./shared.check.middleware');
 
 module.exports = {
     checkCreateRoute: () => {
@@ -34,4 +35,16 @@ module.exports = {
             sharedValidators.validateError,
         ]
     },
+    checkGetAllRouteAccordingHeadquarter: () => {
+        return [
+            ...sharedCheckMiddleware.checkJwt(),
+            check('user')
+                .custom((value, { req }) => sellerValidators.validateSellerAndBankAssociated(req, { where: { id: sharedHelpers.decryptIdDataBase(value.id) } }))
+                .custom((_, { req }) => !!req.body.bankAssociatedBySeller)
+                .withMessage(new ErrorModel(errorsConst.sellerErrors.userHasNoAssociatedHeadquarter))
+                .bail(),
+            sharedValidators.validateError,
+            
+        ]
+    }
 }

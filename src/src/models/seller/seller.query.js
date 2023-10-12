@@ -150,5 +150,27 @@ module.exports = {
     } catch {
       throw errorsConst.sellerErrors.queryErrors.getPrefixesOfResolutionByBankSellerError;
     }
+  },
+  findSellerBankAssociatedQuery: async (query = {}) => {
+    const {
+      where,
+      attributes = ["id", "nickName", "email"]
+    } = query
+    try {
+      return await Seller.findOne({
+        where,
+        attributes,
+        raw: true,
+        nest: true,
+        include: [
+          {
+            model: Bank,
+            as: "BankSeller"
+          }
+        ]
+      })
+    } catch {
+      throw errorsConst.sellerErrors.queryErrors.findSellerBankAssociatedError;
+    }
   }
 };

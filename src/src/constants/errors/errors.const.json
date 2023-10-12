@@ -716,6 +716,10 @@
       "code": "SELL007",
       "message": "The password must have a minimum length of 6 character and a maximum length of 10 characters"
     },
+    "userHasNoAssociatedHeadquarter": {
+      "code": "SELL007",
+      "message": "User has no associated headquarter"
+    },
     "queryErrors": {
       "createError": {
         "code": "SELL_001",
@@ -729,7 +733,7 @@
         "code": "SELL_003",
         "message": "Something went wrong"
       },
-      "": {
+      "findSellerBankAssociatedError": {
         "code": "SELL_004",
         "message": "Something went wrong"
       },

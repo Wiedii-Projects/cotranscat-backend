@@ -18,8 +18,9 @@ module.exports = {
     },
 
     getAllRoute: async (req, res) => {
+        const { bankAssociatedBySeller: { bank} } = req.body
         try {
-            const resp = await routeQuery.findRouteQuery()
+            const resp = await routeQuery.findRouteQuery({where: {idMunicipalityDepart: bank.idMunicipality}})
             return responseHelpers.responseSuccess(res, resp);
         } catch (error) {
             return responseHelpers.responseError(res, 500, error);
