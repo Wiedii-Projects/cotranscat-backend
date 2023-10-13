@@ -64,9 +64,18 @@ module.exports = {
             check("price").optional({checkFalsy: false})
                 .isFloat().withMessage(new ErrorModel(errorsConst.invoiceErrors.priceRequired)),
             check("isElectronic")
-                    .isBoolean()
-                    .withMessage(new ErrorModel(errorsConst.invoiceErrors.isElectronicRequired))
-                    .bail(),
+                .isBoolean()
+                .withMessage(new ErrorModel(errorsConst.invoiceErrors.isElectronicRequired))
+                .bail()
+                .custom((value, { req }) => {
+                    if (value) {
+                        if (req.body.idClient.email) return true
+                        else return false
+
+                    } else return true
+                })
+                .withMessage(new ErrorModel(errorsConst.invoiceErrors.emailClientRequiredForElectronicInvoice))
+                .bail(),
             sharedValidators.validateError,
             check("tickets")
                 .isArray()
@@ -96,7 +105,7 @@ module.exports = {
     },
     checkCreateMoneyTransfer: () => [
         ...sharedCheckMiddleware.checkJwt(),
-        check("isElectronic")
+check("isElectronic")
             .isBoolean()
             .withMessage(new ErrorModel(errorsConst.invoiceErrors.isElectronicRequired))
             .bail(),
