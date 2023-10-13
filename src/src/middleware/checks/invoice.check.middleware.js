@@ -105,7 +105,7 @@ module.exports = {
     },
     checkCreateMoneyTransfer: () => [
         ...sharedCheckMiddleware.checkJwt(),
-check("isElectronic")
+        check("isElectronic")
             .isBoolean()
             .withMessage(new ErrorModel(errorsConst.invoiceErrors.isElectronicRequired))
             .bail(),

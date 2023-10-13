@@ -1312,6 +1312,10 @@
       "code": "INVO015",
       "message": "Invoice is already electronic"
     },
+    "emailClientRequiredForElectronicInvoice": {
+      "code": "INVO016",
+      "message": "customer's email is required for the creation of the electronic invoice"
+    },
     "queryErrors": {
       "createError": {
         "code": "INVO_001",
