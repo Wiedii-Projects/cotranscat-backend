@@ -884,6 +884,10 @@
       "findVehiclesByStateTravel": {
         "code": "VEHI_004",
         "message": "Something went wrong"
+      },
+      "findOneVehicleQuery": {
+        "code": "VEHI_005",
+        "message": "Something went wrong"
       }
     }
   },
@@ -979,6 +983,10 @@
     "queryErrors": {
       "createError": {
         "code": "DVVH_001",
+        "message": "Something went wrong"
+      },
+      "findOneDriverVehicleByStateQuery": {
+        "code": "DVVH_002",
         "message": "Something went wrong"
       }
     }

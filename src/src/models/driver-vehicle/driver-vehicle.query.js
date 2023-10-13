@@ -20,22 +20,26 @@ module.exports = {
         return await DriverVehicle.findOne({ where, raw: true, nest: true })
     },
     findOneDriverVehicleByStateQuery: async (query, state) => {
-        const { where } = query;
-        return await DriverVehicle.findOne({ 
-            where, 
-            include: [
-                {
-                    model: StateVehicle,
-                    as: "DriverVehicleStateVehicle",
-                    where: {
-                        [Op.or]: [
-                            ...state
-                        ]
-                    },
-                }
-            ],
-            raw: true, 
-            nest: true 
-        })
+        try {
+            const { where } = query;
+            return await DriverVehicle.findOne({ 
+                where, 
+                include: [
+                    {
+                        model: StateVehicle,
+                        as: "DriverVehicleStateVehicle",
+                        where: {
+                            [Op.or]: [
+                                ...state
+                            ]
+                        },
+                    }
+                ],
+                raw: true, 
+                nest: true 
+            })
+        } catch (error) {
+            throw errorsConst.driverVehicleErrors.queryErrors.findOneDriverVehicleByStateQuery
+        }
     }
-};
+}

@@ -36,8 +36,12 @@ module.exports = {
     },
     findOneVehicleQuery: async (query) => {
         const { where } = query;
+        try {
         return await Vehicle.findOne({ where, raw: true, nest: true })
-      },
+        } catch (error) {
+            throw errorsConst.vehicleErrors.queryErrors.findOneVehicleQuery
+        }
+    },
     deleteVehicle: async (where) => {
         try {
             return await Vehicle.destroy({ where })
