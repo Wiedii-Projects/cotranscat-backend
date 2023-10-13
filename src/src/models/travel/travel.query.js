@@ -297,5 +297,12 @@ module.exports = {
         } catch {
             throw errorsConst.travelErrors.queryErrors.findError;
         }
+    },
+    createTravelQuery: async (where, transaction) => {
+        try {
+            return await Travel.create(where, { transaction });
+        } catch {
+            throw errorsConst.travelErrors.queryErrors.createError;
+        }
     }
 }

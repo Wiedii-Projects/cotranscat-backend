@@ -14,7 +14,7 @@ const localeData = require('dayjs/plugin/localeData');
 dayjs.locale('es');
 
 // Models - Queries
-const { travelQuery, seatQuery, userQuery, vehicleQuery, seatRulerQuery, shippingQuery, invoiceQuery, clientQuery, ticketQuery } = require('../models/index.queries');
+const { travelQuery, seatQuery, userQuery, vehicleQuery, seatRulerQuery, shippingQuery, invoiceQuery, clientQuery, ticketQuery, driverVehicleQuery, driverQuery, stateVehicleQuery } = require('../models/index.queries');
 const { Ticket, Invoice, Resolution } = require('../models/index.models');
 
 module.exports = {
@@ -116,20 +116,50 @@ module.exports = {
         const { route } = req.body
 
         try {
-
-            let vehiclesAvailable = []
+            let vehiclesExcludedFromQuery = []
             const travelFound = await travelQuery.findTravels({ where: { date, time, idRoute: sharedHelpers.decryptIdDataBase(route.id) } });
 
-            const travelFoundDataCleaned = travelFound.map(({ id, TravelDriverVehicle: { VehicleDriverVehicle: { VehicleTemplateVehicle, ...VehicleDriverVehicle } }, ...travel }) => ({
-                id: sharedHelpers.encryptIdDataBase(id),
-                ...travel,
-                vehicle: {
-                    ...VehicleDriverVehicle,
-                    width: VehicleTemplateVehicle.width,
-                    height: VehicleTemplateVehicle.height,
-                    id: sharedHelpers.encryptIdDataBase(VehicleDriverVehicle.id)
+            const travelFoundDataCleaned = travelFound.map(({ id, TravelDriverVehicle: { VehicleDriverVehicle: { VehicleTemplateVehicle, ...VehicleDriverVehicle } }, ...travel }) => {
+                vehiclesExcludedFromQuery.push(VehicleDriverVehicle.id)
+                return {
+                    id: sharedHelpers.encryptIdDataBase(id),
+                    ...travel,
+                    vehicle: {
+                        ...VehicleDriverVehicle,
+                        width: VehicleTemplateVehicle.width,
+                        height: VehicleTemplateVehicle.height,
+                        id: sharedHelpers.encryptIdDataBase(VehicleDriverVehicle.id)
+                    }
                 }
+            })
+                        
+            const otherVehiclesAvailable = await vehicleQuery.findAllAvailableVehiclesAndDriverVehicleWithSeatQuery({where: {
+                id: {
+                    [Op.notIn]:  vehiclesExcludedFromQuery
+                }
+            }})
+            
+            const otherVehiclesAvailableCleaned = otherVehiclesAvailable.map(({
+                id, internalNumber, plate, mark, model, code,
+                VehicleTemplateVehicle:{ width, height , SeatRulerTemplateVehicle}
+            }
+            ) => ({
+                vehicle: {
+                    id: sharedHelpers.encryptIdDataBase(id),
+                    plate,
+                    mark,
+                    model,
+                    internalNumber,
+                    code,
+                    width,
+                    height,
+                },
+                totalSeatsAvailable: SeatRulerTemplateVehicle.length,
+                idTravel: null,
+                isAssociatedToTravel: false
             }))
+
+            let vehiclesAvailable = [...otherVehiclesAvailableCleaned]
 
             for (let indexTravelFound = 0; indexTravelFound < travelFoundDataCleaned.length; indexTravelFound++) {
                 const travel = travelFoundDataCleaned[indexTravelFound];
@@ -149,14 +179,16 @@ module.exports = {
                             mark: vehicle.mark,
                             model: vehicle.model,
                             width: vehicle.width,
-                            height: vehicle.height
+                            height: vehicle.height,
+                            internalNumber: vehicle.internalNumber,
+                            code: vehicle.code
                         },
                         totalSeatsAvailable: responseSeat.length,
-                        travel: travel.id
+                        idTravel: travel.id,
+                        isAssociatedToTravel: true
                     })
-                return responseHelpers.responseSuccess(res, vehiclesAvailable);
             }
-            return responseHelpers.responseSuccess(res, []);
+                        return responseHelpers.responseSuccess(res, vehiclesAvailable);
         } catch (error) {
             return responseHelpers.responseError(res, 500, error);
         }
@@ -439,5 +471,63 @@ module.exports = {
             if (transaction) await transaction.rollback();
             return responseHelpers.responseError(res, 500, error);
         }
-    }
+    },
+
+    createByIdVehicleTravel: async (req, res) => {
+
+        const { vehicle, date, time, idRoute } = req.body;
+
+        let transaction;
+        try {
+            transaction = await dbConnectionOptions.transaction();
+            const verifyDiverVehicle = await driverVehicleQuery.findOneDriverVehicleByStateQuery({ where: { idVehicle: sharedHelpers.decryptIdDataBase(vehicle.id) } }, [{ type: 0 }, { type: 2 }])
+
+            let idDriverVehicleTemp
+            if (verifyDiverVehicle) {
+                idDriverVehicleTemp = verifyDiverVehicle.id
+            } else {
+                const driverTemp = await driverQuery.findOneDriverQuery({ where: { email: "driver@driver.co" } });
+                const [stateVehicleAvailable] = await stateVehicleQuery.findStateVehicleQuery({ where: { type: 0 } });
+                const [newDriverVehicle] = await driverVehicleQuery.createDriverVehicle({
+                    idDriver: driverTemp.id,
+                    idVehicle: sharedHelpers.decryptIdDataBase(vehicle.id),
+                    idStateVehicle: sharedHelpers.decryptIdDataBase(stateVehicleAvailable.id)
+                }, transaction);
+
+                idDriverVehicleTemp = newDriverVehicle.id
+            }
+
+            const isOldTravel = await travelQuery.findOneTravel({ where: { idDriverVehicle: idDriverVehicleTemp, date, time, idRoute } })
+
+            let travelId
+            if (!isOldTravel) {
+                const travel = await travelQuery.createTravelQuery({
+                    idDriverVehicle: idDriverVehicleTemp, date, time, idRoute
+                }, transaction);
+
+                const { idTemplateVehicle, price } = await vehicleQuery.findOneVehicleQuery({ where: { id: sharedHelpers.decryptIdDataBase(vehicle.id) } })
+                const seatRules = await seatRulerQuery.getSeatRulers({ where: { idTemplateVehicle } })
+                for (let indexSeatRule = 0; indexSeatRule < seatRules.length; indexSeatRule++) {
+                    const seatRule = seatRules[indexSeatRule];
+                    await seatQuery.createSeat({
+                        idTravel: travel.id,
+                        column: seatRule.column,
+                        row: seatRule.row,
+                        price: price,
+                        state: 0,
+                        name: seatRule.name
+                    }, transaction)
+                }
+                travelId = travel.id
+            } else {
+                travelId = isOldTravel.id
+            }
+
+            await transaction.commit();
+            return responseHelpers.responseSuccess(res, sharedHelpers.encryptIdDataBase(travelId));
+        } catch (error) {
+            if (transaction) await transaction.rollback();
+            return responseHelpers.responseError(res, 500, error);
+        }
+    },
 }

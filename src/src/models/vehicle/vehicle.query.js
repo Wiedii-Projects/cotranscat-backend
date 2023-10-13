@@ -36,8 +36,12 @@ module.exports = {
     },
     findOneVehicleQuery: async (query) => {
         const { where } = query;
+        try {
         return await Vehicle.findOne({ where, raw: true, nest: true })
-      },
+        } catch (error) {
+            throw errorsConst.vehicleErrors.queryErrors.findOneVehicleQuery
+        }
+    },
     deleteVehicle: async (where) => {
         try {
             return await Vehicle.destroy({ where })
@@ -135,6 +139,45 @@ module.exports = {
             ],
             where,
             raw: true,
+            nest: true
+        })
+    },
+    findAllAvailableVehiclesAndDriverVehicleWithSeatQuery: async (query) => {
+        const {
+            where
+        } = query;
+
+        return await Vehicle.findAll({
+            include: [
+                {
+                    model: DriverVehicle,
+                    as: "VehicleDriverVehicle",
+                    required: false,
+                    include: [
+                        {
+                            model: StateVehicle,
+                            as: "DriverVehicleStateVehicle",
+                            where: {
+                                [Op.or]: [
+                                    { type: 0 },
+                                    { type: 2 }
+                                ]
+                            },
+                        }
+                    ]
+                },
+                {
+                    model: TemplateVehicle,
+                    as: "VehicleTemplateVehicle",
+                    include: [
+                        {
+                            model: SeatRuler,
+                            as: "SeatRulerTemplateVehicle"
+                        }
+                    ]
+                }
+            ],
+            where,
             nest: true
         })
     }
