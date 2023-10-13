@@ -132,13 +132,13 @@ module.exports = {
                     }
                 }
             })
-            
+                        
             const otherVehiclesAvailable = await vehicleQuery.findAllAvailableVehiclesAndDriverVehicleWithSeatQuery({where: {
                 id: {
-                    [Op.ne]: vehiclesExcludedFromQuery
+                    [Op.notIn]:  vehiclesExcludedFromQuery
                 }
             }})
-
+            
             const otherVehiclesAvailableCleaned = otherVehiclesAvailable.map(({
                 id, internalNumber, plate, mark, model, code,
                 VehicleTemplateVehicle:{ width, height , SeatRulerTemplateVehicle}
@@ -188,7 +188,7 @@ module.exports = {
                         isAssociatedToTravel: true
                     })
             }
-            return responseHelpers.responseSuccess(res, vehiclesAvailable);
+                        return responseHelpers.responseSuccess(res, vehiclesAvailable);
         } catch (error) {
             return responseHelpers.responseError(res, 500, error);
         }
