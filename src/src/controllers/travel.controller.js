@@ -133,7 +133,6 @@ module.exports = {
                 }
             })
             
-            
             const otherVehiclesAvailable = await vehicleQuery.findAllAvailableVehiclesAndDriverVehicleWithSeatQuery({where: {
                 id: {
                     [Op.ne]: vehiclesExcludedFromQuery
@@ -188,9 +187,8 @@ module.exports = {
                         idTravel: travel.id,
                         isAssociatedToTravel: true
                     })
-                return responseHelpers.responseSuccess(res, vehiclesAvailable);
             }
-            return responseHelpers.responseSuccess(res, []);
+            return responseHelpers.responseSuccess(res, vehiclesAvailable);
         } catch (error) {
             return responseHelpers.responseError(res, 500, error);
         }
