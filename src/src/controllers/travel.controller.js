@@ -479,30 +479,32 @@ module.exports = {
 
         let transaction;
         try {
-                transaction = await dbConnectionOptions.transaction();
-        const verifyDiverVehicle = await driverVehicleQuery.findOneDriverVehicleByStateQuery({ where: { idVehicle: sharedHelpers.decryptIdDataBase(vehicle.id) } }, [{type: 0}, {type: 2}])
-        
-        let  idDriverVehicleTemp 
-        if (verifyDiverVehicle) {
-            idDriverVehicleTemp = verifyDiverVehicle.id
-        } else {
-            const driverTemp = await driverQuery.findOneDriverQuery({ where: { email: "driver@driver.co" } });
-            const [stateVehicleAvailable] = await stateVehicleQuery.findStateVehicleQuery({ where: { type: 0 } });
-            const [newDriverVehicle] = await driverVehicleQuery.createDriverVehicle({ 
-                idDriver: driverTemp.id, 
-                idVehicle: sharedHelpers.decryptIdDataBase(vehicle.id), 
-                idStateVehicle: sharedHelpers.decryptIdDataBase(stateVehicleAvailable.id) 
-            }, transaction);
-            
-            idDriverVehicleTemp = newDriverVehicle.id
-        }
-        
+            transaction = await dbConnectionOptions.transaction();
+            const verifyDiverVehicle = await driverVehicleQuery.findOneDriverVehicleByStateQuery({ where: { idVehicle: sharedHelpers.decryptIdDataBase(vehicle.id) } }, [{ type: 0 }, { type: 2 }])
 
-            const [travel, isCreated] = await travelQuery.createTravel({
-                idDriverVehicle: idDriverVehicleTemp, date, time, idRoute
-            }, transaction);
+            let idDriverVehicleTemp
+            if (verifyDiverVehicle) {
+                idDriverVehicleTemp = verifyDiverVehicle.id
+            } else {
+                const driverTemp = await driverQuery.findOneDriverQuery({ where: { email: "driver@driver.co" } });
+                const [stateVehicleAvailable] = await stateVehicleQuery.findStateVehicleQuery({ where: { type: 0 } });
+                const [newDriverVehicle] = await driverVehicleQuery.createDriverVehicle({
+                    idDriver: driverTemp.id,
+                    idVehicle: sharedHelpers.decryptIdDataBase(vehicle.id),
+                    idStateVehicle: sharedHelpers.decryptIdDataBase(stateVehicleAvailable.id)
+                }, transaction);
 
-            if (!isCreated) {
+                idDriverVehicleTemp = newDriverVehicle.id
+            }
+
+            const isOldTravel = await travelQuery.findOneTravel({ where: { idDriverVehicle: idDriverVehicleTemp, date, time, idRoute } })
+
+            let travelId
+            if (!isOldTravel) {
+                const travel = await travelQuery.createTravelQuery({
+                    idDriverVehicle: idDriverVehicleTemp, date, time, idRoute
+                }, transaction);
+
                 const { idTemplateVehicle, price } = await vehicleQuery.findOneVehicleQuery({ where: { id: sharedHelpers.decryptIdDataBase(vehicle.id) } })
                 const seatRules = await seatRulerQuery.getSeatRulers({ where: { idTemplateVehicle } })
                 for (let indexSeatRule = 0; indexSeatRule < seatRules.length; indexSeatRule++) {
@@ -516,10 +518,13 @@ module.exports = {
                         name: seatRule.name
                     }, transaction)
                 }
+                travelId = travel.id
+            } else {
+                travelId = isOldTravel.id
             }
 
             await transaction.commit();
-            return responseHelpers.responseSuccess(res, null);
+            return responseHelpers.responseSuccess(res, sharedHelpers.encryptIdDataBase(travelId));
         } catch (error) {
             if (transaction) await transaction.rollback();
             return responseHelpers.responseError(res, 500, error);
