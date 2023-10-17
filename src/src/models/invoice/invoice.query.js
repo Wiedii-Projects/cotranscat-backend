@@ -145,8 +145,7 @@ module.exports = {
           }
         }))
       );
-    } catch  (e){
-      console.log(e)
+    } catch {
       throw errorsConst.invoiceErrors.queryErrors.findAllError;
     }
   },
