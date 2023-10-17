@@ -41,6 +41,7 @@ module.exports = {
           'id',
           'isCancelled',
           [col('InvoiceClient.id'), 'InvoiceClient.id'],
+          [col('InvoiceClient.email'), 'InvoiceClient.email'],
           [col('InvoiceClient.UserClient.id'), 'InvoiceClient.UserClient.id'],
           [col('InvoiceClient.UserClient.numberDocument'), 'InvoiceClient.UserClient.numberDocument'],
           [col('InvoiceClient.UserClient.name'), 'InvoiceClient.UserClient.name'],
@@ -62,7 +63,7 @@ module.exports = {
           {
             model: Client,
             as: 'InvoiceClient',
-            attributes: ['id'],
+            attributes: ['id', 'email'],
             include: [
               {
                 model: User,
@@ -119,7 +120,7 @@ module.exports = {
         order: [['date', 'DESC']],
         offset: offset * 50
       })
-      .then( (result) => result.map((invoice) => ({
+        .then((result) => result.map((invoice) => ({
           id: encryptIdDataBase(invoice.id),
           number: invoice.number,
           codeSale: invoice.codeSale,
@@ -134,6 +135,7 @@ module.exports = {
             numberDocument: invoice.InvoiceClient.UserClient.numberDocument,
             name: invoice.InvoiceClient.UserClient.name,
             lastName: invoice.InvoiceClient.UserClient.lastName,
+            email: invoice.InvoiceClient.email
           },
           seller: {
             name: invoice.InvoiceSeller.UserSeller.name,
