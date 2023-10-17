@@ -122,22 +122,38 @@ module.exports = {
                         };
                         break;
                     case 'dateRange':
-                        whereInvoice = {
-                            ...whereInvoice,
-                            [Op.and]: [
-                                Sequelize.where(col('Invoice.date'), '>=', startDate),
-                                Sequelize.where(col('Invoice.date'), '<=', endDate),
-                            ]
-                        };
-
                         if (filterValue) {
-                            whereInvoice = {
-                                ...whereInvoice,
-                                [Op.or]: [
-                                    Sequelize.where(col('InvoiceClient.UserClient.name'), 'LIKE', `%${filterValue}%`),
-                                    Sequelize.where(col('InvoiceClient.UserClient.numberDocument'), 'LIKE', `%${filterValue}%`),
-                                    Sequelize.where(col('InvoiceSeller.UserSeller.name'), 'LIKE', `%${filterValue}%`)
-                                ]
+
+                            const containsDash = filterValue.includes("-");
+                            if (!containsDash) {
+                                whereInvoice = {
+                                    ...whereInvoice,
+                                    [Op.and]: [
+                                        Sequelize.where(col('Invoice.date'), '>=', startDate),
+                                        Sequelize.where(col('Invoice.date'), '<=', endDate),
+                                    ],
+                                    [Op.or]: [
+                                        Sequelize.where(col('InvoiceClient.UserClient.name'), 'REGEXP', `${filterValue}`),
+                                        Sequelize.where(col('InvoiceClient.UserClient.numberDocument'), 'REGEXP', `${filterValue}`),
+                                        Sequelize.where(col('InvoiceSeller.UserSeller.name'), 'REGEXP', `${filterValue}`),
+                                        Sequelize.where(col('Invoice.number'), 'REGEXP', `${filterValue}`)
+                                    ]
+                                }
+                            } else {
+                                let parametersFilter = []
+                                filterValue.split("-").map((item, index) => {
+                                    if (index === 0) parametersFilter.push(Sequelize.where(col('Invoice.codeSale'), 'REGEXP', `${item}`))
+                                    if (index === 1) parametersFilter.push(Sequelize.where(col('ResolutionInvoice.PrefixResolution.code'), `${item}`))
+                                    if (index === 2) parametersFilter.push(Sequelize.where(col('Invoice.number'), 'REGEXP', `${item}`))
+                                })
+                                whereInvoice = {
+                                    ...whereInvoice,
+                                    [Op.and]: [
+                                        ...parametersFilter,
+                                        Sequelize.where(col('Invoice.date'), '>=', startDate),
+                                        Sequelize.where(col('Invoice.date'), '<=', endDate),
+                                    ]
+                                }
                             }
                         }
                         break;

@@ -34,8 +34,8 @@ module.exports = {
       return await Invoice.findAll({
         where,
         attributes: [
-          'number',
-          'codeSale',
+          [col('Invoice.number'), 'invoiceNumber'],
+          [col('Invoice.codeSale'), 'invoiceCodeSale'],
           [col('Invoice.price'), 'invoicePrice'],
           [col('Invoice.date'), 'invoiceDate'],
           'id',
@@ -122,20 +122,22 @@ module.exports = {
       })
         .then((result) => result.map((invoice) => ({
           id: encryptIdDataBase(invoice.id),
-          number: invoice.number,
-          codeSale: invoice.codeSale,
+          number: invoice.dataValues.invoiceNumber,
+          codeSale: invoice.dataValues.invoiceCodeSale,
+          price: invoice.dataValues.invoicePrice,
+          date: invoice.dataValues.invoiceDate,
+          name: invoice.InvoiceClient.UserClient.name,
           isCancelled: invoice.isCancelled == 1 ? true : false,
           codePrefix: invoice.ResolutionInvoice.PrefixResolution.code,
           isElectronic: invoice.ResolutionInvoice.PrefixResolution.isElectronic == 1 ? true : false,
-          price: invoice.dataValues.invoicePrice,
-          date: invoice.dataValues.invoiceDate,
           tickets: invoice.TicketInvoice.length,
           idTravel: invoice.TicketInvoice[0].TicketSeat.TravelSeat.id,
           client: {
             numberDocument: invoice.InvoiceClient.UserClient.numberDocument,
             name: invoice.InvoiceClient.UserClient.name,
             lastName: invoice.InvoiceClient.UserClient.lastName,
-            email: invoice.InvoiceClient.email
+            email: invoice.InvoiceClient.email,
+            id: encryptIdDataBase(invoice.InvoiceClient.id)
           },
           seller: {
             name: invoice.InvoiceSeller.UserSeller.name,
