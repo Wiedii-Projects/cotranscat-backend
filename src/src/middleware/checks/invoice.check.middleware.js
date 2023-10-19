@@ -105,11 +105,6 @@ module.exports = {
     },
     checkCreateMoneyTransfer: () => [
         ...sharedCheckMiddleware.checkJwt(),
-        check("isElectronic")
-            .isBoolean()
-            .withMessage(new ErrorModel(errorsConst.invoiceErrors.isElectronicRequired))
-            .bail(),
-        sharedValidators.validateError,
         check("idClientSends")
             .isString()
             .withMessage(new ErrorModel(errorsConst.invoiceErrors.clientRequired))
@@ -130,6 +125,20 @@ module.exports = {
             .custom((value, {req}) => clientValidator.validateClient(req, {id: sharedHelpers.decryptIdDataBase(value)}, "clientReceives"))
             .custom((value, {req}) => !!req.body.clientReceives)
             .withMessage(new ErrorModel(errorsConst.moneyTransferErrors.clientReceivesNotExist))
+            .bail(),
+        sharedValidators.validateError,
+        check("isElectronic")
+            .isBoolean()
+            .withMessage(new ErrorModel(errorsConst.invoiceErrors.isElectronicRequired))
+            .bail()
+            .custom((value, { req }) => {
+                if (value) {
+                    if (req.body.clientSend.email) return true
+                    else return false
+
+                } else return true
+            })
+            .withMessage(new ErrorModel(errorsConst.invoiceErrors.emailClientRequiredForElectronicInvoice))
             .bail(),
         sharedValidators.validateError,
         check('amountMoney').isDecimal({ decimal_digits: '0,2' }).withMessage(new ErrorModel(errorsConst.moneyTransferErrors.amountMoneyRequired)).bail(),
@@ -196,11 +205,6 @@ module.exports = {
                 .withMessage(new ErrorModel(errorsConst.shippingErrors.contentRequired))
                 .bail(),
             sharedValidators.validateError,
-            check("isElectronic")
-                .isBoolean()
-                .withMessage(new ErrorModel(errorsConst.invoiceErrors.isElectronicRequired))
-                .bail(),
-            sharedValidators.validateError,
             check('isHomeDelivery')
                 .customSanitizer((value) => {
                     if (typeof value === 'string') return parseInt(value, 10)
@@ -219,6 +223,22 @@ module.exports = {
                 .custom((value, {req}) => clientValidator.validateClient(req, {id: sharedHelpers.decryptIdDataBase(value)}, "clientSend"))
                 .custom((value, {req}) => !!req.body.clientSend)
                 .withMessage(new ErrorModel(errorsConst.invoiceErrors.clientNotExist))
+                .bail(),
+            sharedValidators.validateError,
+            check("isElectronic")
+                .isBoolean()
+                .withMessage(new ErrorModel(errorsConst.invoiceErrors.isElectronicRequired))
+                .bail()
+                .withMessage(new ErrorModel(errorsConst.invoiceErrors.isElectronicRequired))
+                .bail()
+                .custom((value, { req }) => {
+                    if (value) {
+                        if (req.body.clientSend.email) return true
+                        else return false
+    
+                    } else return true
+                })
+                .withMessage(new ErrorModel(errorsConst.invoiceErrors.emailClientRequiredForElectronicInvoice))
                 .bail(),
             sharedValidators.validateError,
             check("idClientReceives")
