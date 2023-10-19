@@ -151,17 +151,44 @@ module.exports = {
   },
   findAllMoneyTransferInvoiceQuery: async (query) => {
     try {
-      const { 
+      const {
         where,
         offset
       } = query;
-      return await Invoice.findAll({
+      const allMoneyTransferInvoiceResponse = await Invoice.findAll({
         where,
+        attributes: [
+          [col('Invoice.number'), 'invoiceNumber'],
+          [col('Invoice.codeSale'), 'invoiceCodeSale'],
+          [col('Invoice.price'), 'invoicePrice'],
+          [col('Invoice.date'), 'invoiceDate'],
+          'id',
+          'isCancelled',
+          [col('InvoiceClient.id'), 'InvoiceClient.id'],
+          [col('InvoiceClient.email'), 'InvoiceClient.email'],
+          [col('InvoiceClient.UserClient.id'), 'InvoiceClient.UserClient.id'],
+          [col('InvoiceClient.UserClient.numberDocument'), 'InvoiceClient.UserClient.numberDocument'],
+          [col('InvoiceClient.UserClient.name'), 'InvoiceClient.UserClient.name'],
+          [col('InvoiceClient.UserClient.lastName'), 'InvoiceClient.UserClient.lastName'],
+          [col('InvoiceSeller.id'), 'InvoiceSeller.id'],
+          [col('InvoiceSeller.UserSeller.id'), 'InvoiceSeller.UserSeller.id'],
+          [col('InvoiceSeller.UserSeller.name'), 'InvoiceSeller.UserSeller.name'],
+          [col('InvoiceSeller.UserSeller.lastName'), 'InvoiceSeller.UserSeller.lastName'],
+          [col('MoneyTransferInvoice.MoneyTransferClient.UserClient.numberDocument'), 'MoneyTransferInvoice.MoneyTransferClient.UserClient.numberDocument'],
+          [col('MoneyTransferInvoice.MoneyTransferClient.UserClient.name'), 'MoneyTransferInvoice.MoneyTransferClient.UserClient.name'],
+          [col('MoneyTransferInvoice.MoneyTransferClient.UserClient.lastName'), 'MoneyTransferInvoice.MoneyTransferClient.UserClient.lastName'],
+          [col('MoneyTransferInvoice.MoneyTransferClient.ClientMunicipality.name'), 'MoneyTransferInvoice.MoneyTransferClient.ClientMunicipality.name'],
+          [col('ResolutionInvoice.id'), 'ResolutionInvoice.id'],
+          [col('ResolutionInvoice.idPrefix'), 'ResolutionInvoice.idPrefix'],
+          [col('ResolutionInvoice.PrefixResolution.id'), 'ResolutionInvoice.PrefixResolution.id'],
+          [col('ResolutionInvoice.PrefixResolution.code'), 'ResolutionInvoice.PrefixResolution.code'],
+          [col('ResolutionInvoice.PrefixResolution.isElectronic'), 'ResolutionInvoice.PrefixResolution.isElectronic']
+        ],
         include: [
           {
             model: Client,
             as: 'InvoiceClient',
-            attributes: ['id'],
+            attributes: ['id', 'email'],
             include: [
               {
                 model: User,
@@ -196,6 +223,11 @@ module.exports = {
                     model: User,
                     as: 'UserClient',
                     attributes: ['numberDocument', 'name', 'lastName'],
+                  },
+                  {
+                    model: Municipality,
+                    as: 'ClientMunicipality',
+                    attributes: ['name'],
                   }
                 ]
               }
@@ -216,35 +248,42 @@ module.exports = {
         ],
         nest: true,
         raw: true,
-        attributes: ['number', 'price', 'date', 'id', 'codeSale', 'isCancelled'],
-        order: [['number', 'DESC']],
-        limit: 20,
-        offset: offset * 20
+        order: [['date', 'DESC']],
+        offset: offset * 50
       })
-      .then( (result) => result.map((invoice) => ({
-          id: encryptIdDataBase(invoice.id),
-          isCancelled: invoice.isCancelled == 1 ? true : false,
-          number: invoice.number,
-          codeSale: invoice.codeSale,
-          codePrefix: invoice.ResolutionInvoice.PrefixResolution.code,
-          isElectronic: invoice.ResolutionInvoice.PrefixResolution.isElectronic == 1 ? true : false,
-          price: invoice.price,
-          date: invoice.date,
-          client: {
-            numberDocument: invoice.InvoiceClient.UserClient.numberDocument,
-            name: invoice.InvoiceClient.UserClient.name,
-            lastName: invoice.InvoiceClient.UserClient.lastName,
-          },
-          seller: {
-            name: invoice.InvoiceSeller.UserSeller.name,
-            lastName: invoice.InvoiceSeller.UserSeller.lastName,
-          },
-          clientReceives: {
-            ...invoice.MoneyTransferInvoice.MoneyTransferClient.UserClient,
-            id: undefined
-          }
-        }))
-      );
+
+      const allMoneyTransferInvoice = allMoneyTransferInvoiceResponse.map((invoice) => ({
+        id: encryptIdDataBase(invoice.id),
+        isCancelled: invoice.isCancelled == 1 ? true : false,
+        number: invoice.invoiceNumber,
+        codeSale: invoice.invoiceCodeSale,
+        codePrefix: invoice.ResolutionInvoice.PrefixResolution.code,
+        isElectronic: invoice.ResolutionInvoice.PrefixResolution.isElectronic == 1 ? true : false,
+        price: invoice.invoicePrice,
+        date: invoice.invoiceDate,
+        client: {
+          numberDocument: invoice.InvoiceClient.UserClient.numberDocument,
+          name: invoice.InvoiceClient.UserClient.name,
+          lastName: invoice.InvoiceClient.UserClient.lastName,
+          email: invoice.InvoiceClient.email,
+          id: encryptIdDataBase(invoice.InvoiceClient.id)
+        },
+        seller: {
+          name: invoice.InvoiceSeller.UserSeller.name,
+          lastName: invoice.InvoiceSeller.UserSeller.lastName,
+        },
+        clientReceives: {
+          ...invoice.MoneyTransferInvoice.MoneyTransferClient.UserClient,
+          id: undefined
+        },
+        municipalityArrive: {
+          ...invoice.MoneyTransferInvoice.MoneyTransferClient.ClientMunicipality,
+          id: undefined
+        }
+      }))
+
+      return allMoneyTransferInvoice
+
     } catch {
       throw errorsConst.invoiceErrors.queryErrors.findAllError;
     }
@@ -849,17 +888,47 @@ module.exports = {
       }
     }
   },
-  findAllShippingInvoiceQuery: async (query, whereServiceType) => {
+  findAllShippingInvoiceQuery: async (query) => {
     try {
-      const { 
-        offset
+      const {
+        offset,
+        where
       } = query;
       const allShippingInvoiceResponse = await Invoice.findAll({
+        where,
+        attributes: [
+          [col('Invoice.number'), 'invoiceNumber'],
+          [col('Invoice.codeSale'), 'invoiceCodeSale'],
+          [col('Invoice.price'), 'invoicePrice'],
+          [col('Invoice.date'), 'invoiceDate'],
+          'id',
+          'isCancelled',
+          [col('InvoiceClient.id'), 'InvoiceClient.id'],
+          [col('InvoiceClient.email'), 'InvoiceClient.email'],
+          [col('InvoiceClient.UserClient.id'), 'InvoiceClient.UserClient.id'],
+          [col('InvoiceClient.UserClient.numberDocument'), 'InvoiceClient.UserClient.numberDocument'],
+          [col('InvoiceClient.UserClient.name'), 'InvoiceClient.UserClient.name'],
+          [col('InvoiceClient.UserClient.lastName'), 'InvoiceClient.UserClient.lastName'],
+          [col('InvoiceSeller.id'), 'InvoiceSeller.id'],
+          [col('InvoiceSeller.UserSeller.id'), 'InvoiceSeller.UserSeller.id'],
+          [col('InvoiceSeller.UserSeller.name'), 'InvoiceSeller.UserSeller.name'],
+          [col('InvoiceSeller.UserSeller.lastName'), 'InvoiceSeller.UserSeller.lastName'],
+          [col('InvoiceShipping.idTravel'), 'InvoiceShipping.idTravel'],
+          [col('InvoiceShipping.ClientShipping.UserClient.numberDocument'), 'InvoiceShipping.ClientShipping.UserClient.numberDocument'],
+          [col('InvoiceShipping.ClientShipping.UserClient.name'), 'InvoiceShipping.ClientShipping.UserClient.name'],
+          [col('InvoiceShipping.ClientShipping.UserClient.lastName'), 'InvoiceShipping.ClientShipping.UserClient.lastName'],
+          [col('InvoiceShipping.ClientShipping.ClientMunicipality.name'), 'InvoiceShipping.ClientShipping.ClientMunicipality.name'],
+          [col('ResolutionInvoice.id'), 'ResolutionInvoice.id'],
+          [col('ResolutionInvoice.idPrefix'), 'ResolutionInvoice.idPrefix'],
+          [col('ResolutionInvoice.PrefixResolution.id'), 'ResolutionInvoice.PrefixResolution.id'],
+          [col('ResolutionInvoice.PrefixResolution.code'), 'ResolutionInvoice.PrefixResolution.code'],
+          [col('ResolutionInvoice.PrefixResolution.isElectronic'), 'ResolutionInvoice.PrefixResolution.isElectronic']
+        ],
         include: [
           {
             model: Client,
             as: 'InvoiceClient',
-            attributes: ['id'],
+            attributes: ['id', 'email'],
             include: [
               {
                 model: User,
@@ -893,6 +962,11 @@ module.exports = {
                     model: User,
                     as: 'UserClient',
                     attributes: ['numberDocument', 'name', 'lastName'],
+                  },
+                  {
+                    model: Municipality,
+                    as: 'ClientMunicipality',
+                    attributes: ['name'],
                   }
                 ]
               }
@@ -909,47 +983,43 @@ module.exports = {
                 attributes: ['code', 'isElectronic'],
               }
             ]
-          },
-          {
-            model: ServiceType,
-            as: 'InvoiceServiceType',
-            where: whereServiceType
           }
         ],
         nest: true,
-        raw:true,
-        attributes: ['codeSale', 'number', 'price', 'date', 'id', 'isCancelled'],
-        order: [['number', 'DESC']],
-        limit: 20,
-        offset: offset * 20
+        raw: true,
+        order: [['date', 'DESC']],
+        offset: offset * 50
       })
 
       const allShippingInvoice = allShippingInvoiceResponse.map((shippingInvoice) => ({
-          id: encryptIdDataBase(shippingInvoice.id),
-          isCancelled: shippingInvoice.isCancelled == 1 ? true : false,
-          number: shippingInvoice.number,
-          codeSale: shippingInvoice.codeSale,
-          codePrefix: shippingInvoice.ResolutionInvoice.PrefixResolution.code,
-          isElectronic: shippingInvoice.ResolutionInvoice.PrefixResolution.isElectronic == 1 ? true : false,
-          price: shippingInvoice.price,
-          date: shippingInvoice.date,
-          clientSends: {
-            numberDocument: shippingInvoice.InvoiceClient.UserClient.numberDocument,
-            name: shippingInvoice.InvoiceClient.UserClient.name,
-            lastName: shippingInvoice.InvoiceClient.UserClient.lastName,
-          },
-          seller: {
-            name: shippingInvoice.InvoiceSeller.UserSeller.name,
-            lastName: shippingInvoice.InvoiceSeller.UserSeller.lastName,
-          },
-          clientReceives: {
-            numberDocument: shippingInvoice.InvoiceShipping.ClientShipping.UserClient.numberDocument,
-            name: shippingInvoice.InvoiceShipping.ClientShipping.UserClient.name,
-            lastName: shippingInvoice.InvoiceShipping.ClientShipping.UserClient.lastName
-          }
-        }))
-     
-     return allShippingInvoice
+        id: encryptIdDataBase(shippingInvoice.id),
+        isCancelled: shippingInvoice.isCancelled == 1 ? true : false,
+        number: shippingInvoice.invoiceNumber,
+        codeSale: shippingInvoice.invoiceCodeSale,
+        codePrefix: shippingInvoice.ResolutionInvoice.PrefixResolution.code,
+        isElectronic: shippingInvoice.ResolutionInvoice.PrefixResolution.isElectronic == 1 ? true : false,
+        price: shippingInvoice.invoicePrice,
+        date: shippingInvoice.invoiceDate,
+        clientSends: {
+          numberDocument: shippingInvoice.InvoiceClient.UserClient.numberDocument,
+          name: shippingInvoice.InvoiceClient.UserClient.name,
+          lastName: shippingInvoice.InvoiceClient.UserClient.lastName,
+          email: shippingInvoice.InvoiceClient.email,
+          id: encryptIdDataBase(shippingInvoice.InvoiceClient.id)
+        },
+        seller: {
+          name: shippingInvoice.InvoiceSeller.UserSeller.name,
+          lastName: shippingInvoice.InvoiceSeller.UserSeller.lastName,
+        },
+        clientReceives: {
+          numberDocument: shippingInvoice.InvoiceShipping.ClientShipping.UserClient.numberDocument,
+          name: shippingInvoice.InvoiceShipping.ClientShipping.UserClient.name,
+          lastName: shippingInvoice.InvoiceShipping.ClientShipping.UserClient.lastName
+        },
+        idTravel: shippingInvoice.InvoiceShipping.idTravel ? encryptIdDataBase(shippingInvoice.InvoiceShipping.idTravel) : null
+      }))
+
+      return allShippingInvoice
     } catch {
       throw errorsConst.invoiceErrors.queryErrors.findAllError;
     }

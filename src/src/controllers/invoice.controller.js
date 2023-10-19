@@ -58,20 +58,118 @@ module.exports = {
         }
     },
     getAllInvoiceMoneyTransfer: async(req, res) => {
-        const { page = 0 } = req.query;
+        const { page = 0, filterType, filterValue, startDate, endDate } = req.query;
         try {
             const [{ id: idServiceType }] = await findServiceTypeQuery({ where: { type: TYPE_SERVICE.MONEY_TRANSFER.VALUE_CONVENTION } });
-            let [invoice, count] = await Promise.all([
-                invoiceQuery.findAllMoneyTransferInvoiceQuery({
-                    where: {
-                        idServiceType
-                    },
-                    offset: page
-                }),
-                invoiceQuery.countInvoiceQuery({ idServiceType })
-            ]);
-            return responseHelpers.responseSuccess(res, { count, invoice });
-        } catch (error){
+
+            let whereInvoice = {
+                idServiceType
+            };
+            let countRegisterFound = 0
+
+            if (filterType) {
+                switch (filterType) {
+                    case 'clientName':
+                        whereInvoice = {
+                            ...whereInvoice,
+                            [Op.and]: [
+                                Sequelize.where(col('InvoiceClient.UserClient.name'), 'LIKE', `%${filterValue}%`)
+                            ]
+                        };
+                        break;
+                    case 'clientNumberDocument':
+                        whereInvoice = {
+                            ...whereInvoice,
+                            [Op.and]: [
+                                Sequelize.where(col('InvoiceClient.UserClient.numberDocument'), 'LIKE', `%${filterValue}%`)
+                            ]
+                        };
+                        break;
+                    case 'sellerName':
+                        whereInvoice = {
+                            ...whereInvoice,
+                            [Op.and]: [
+                                Sequelize.where(col('InvoiceSeller.UserSeller.name'), 'LIKE', `%${filterValue}%`)
+                            ]
+                        };
+                        break;
+                    case 'price':
+                        whereInvoice = {
+                            ...whereInvoice,
+                            [Op.and]: [
+                                Sequelize.where(col('Invoice.price'), '=', parseFloat(filterValue))
+                            ]
+                        };
+                        break;
+                    case 'dateRange':
+                        if (filterValue) {
+                            const containsDash = filterValue.includes("-");
+                            if (!containsDash) {
+                                whereInvoice = {
+                                    ...whereInvoice,
+                                    [Op.and]: [
+                                        Sequelize.where(col('Invoice.date'), '>=', startDate),
+                                        Sequelize.where(col('Invoice.date'), '<=', endDate),
+                                    ],
+                                    [Op.or]: [
+                                        Sequelize.where(col('InvoiceClient.UserClient.name'), 'REGEXP', `${filterValue}`),
+                                        Sequelize.where(col('InvoiceClient.UserClient.numberDocument'), 'REGEXP', `${filterValue}`),
+                                        Sequelize.where(col('InvoiceSeller.UserSeller.name'), 'REGEXP', `${filterValue}`),
+                                        Sequelize.where(col('Invoice.number'), 'REGEXP', `${filterValue}`)
+                                    ]
+                                }
+                            } else {
+                                let parametersFilter = []
+                                filterValue.split("-").map((item, index) => {
+                                    if (index === 0) parametersFilter.push(Sequelize.where(col('Invoice.codeSale'), 'REGEXP', `${item}`))
+                                    if (index === 1) parametersFilter.push(Sequelize.where(col('ResolutionInvoice.PrefixResolution.code'), `${item}`))
+                                    if (index === 2) parametersFilter.push(Sequelize.where(col('Invoice.number'), 'REGEXP', `${item}`))
+                                })
+                                whereInvoice = {
+                                    ...whereInvoice,
+                                    [Op.and]: [
+                                        ...parametersFilter,
+                                        Sequelize.where(col('Invoice.date'), '>=', startDate),
+                                        Sequelize.where(col('Invoice.date'), '<=', endDate),
+                                    ]
+                                }
+                            }
+                        } else {
+                            whereInvoice = {
+                                ...whereInvoice,
+                                [Op.and]: [
+                                    Sequelize.where(col('Invoice.date'), '>=', startDate),
+                                    Sequelize.where(col('Invoice.date'), '<=', endDate),
+                                ]
+                            }
+                        }
+                        break;
+
+                    case 'municipalityArrive':
+                        whereInvoice = {
+                            ...whereInvoice,
+                            [Op.and]: [
+                                Sequelize.where(col('MoneyTransferInvoice.MoneyTransferClient.ClientMunicipality.name'), 'LIKE', `%${filterValue}%`)
+                            ]
+                        };
+                        break;
+
+                    default:
+                        break;
+                }
+            } else {
+                countRegisterFound = await invoiceQuery.countInvoiceQuery({ idServiceType })
+            }
+
+            const moneyTransferInvoices = await invoiceQuery.findAllMoneyTransferInvoiceQuery({
+                where: whereInvoice,
+                offset: page
+            })
+
+            if (filterType) countRegisterFound = moneyTransferInvoices.length
+
+            return responseHelpers.responseSuccess(res, { countRegisterFound, moneyTransferInvoices });
+        } catch (error) {
             return responseHelpers.responseError(res, 500, error);
         }
     },
@@ -123,7 +221,6 @@ module.exports = {
                         break;
                     case 'dateRange':
                         if (filterValue) {
-
                             const containsDash = filterValue.includes("-");
                             if (!containsDash) {
                                 whereInvoice = {
@@ -154,6 +251,14 @@ module.exports = {
                                         Sequelize.where(col('Invoice.date'), '<=', endDate),
                                     ]
                                 }
+                            }
+                        } else {
+                            whereInvoice = {
+                                ...whereInvoice,
+                                [Op.and]: [
+                                    Sequelize.where(col('Invoice.date'), '>=', startDate),
+                                    Sequelize.where(col('Invoice.date'), '<=', endDate),
+                                ]
                             }
                         }
                         break;
@@ -364,16 +469,143 @@ module.exports = {
         }
     },
     getAllInvoiceShipping: async (req, res) => {
-        const { page = 0 } = req.query;
+        const { page = 0, filterType, filterValue, startDate, endDate } = req.query;
         try {
-            let [shippingInvoices, counterShipping] = await Promise.all([
-                invoiceQuery.findAllShippingInvoiceQuery({ offset: page },  {
-                    type: salesConst.TYPE_SERVICE.SHIPPING.VALUE_CONVENTION
-                }),
-                shippingQuery.countShippingInvoiceQuery()
-            ]);
+            const [{ id: idServiceType }] = await findServiceTypeQuery({ where: { type: TYPE_SERVICE.SHIPPING.VALUE_CONVENTION } });
 
-            return responseHelpers.responseSuccess(res, { count: counterShipping, shippingInvoices });
+            let whereInvoice = {
+                idServiceType
+            };
+            let countRegisterFound = 0
+
+            if (filterType) {
+                switch (filterType) {
+                    case 'clientName':
+                        whereInvoice = {
+                            ...whereInvoice,
+                            [Op.and]: [
+                                Sequelize.where(col('InvoiceClient.UserClient.name'), 'LIKE', `%${filterValue}%`)
+                            ]
+                        };
+                        break;
+                    case 'clientNumberDocument':
+                        whereInvoice = {
+                            ...whereInvoice,
+                            [Op.and]: [
+                                Sequelize.where(col('InvoiceClient.UserClient.numberDocument'), 'LIKE', `%${filterValue}%`)
+                            ]
+                        };
+                        break;
+                    case 'sellerName':
+                        whereInvoice = {
+                            ...whereInvoice,
+                            [Op.and]: [
+                                Sequelize.where(col('InvoiceSeller.UserSeller.name'), 'LIKE', `%${filterValue}%`)
+                            ]
+                        };
+                        break;
+                    case 'price':
+                        whereInvoice = {
+                            ...whereInvoice,
+                            [Op.and]: [
+                                Sequelize.where(col('Invoice.price'), '=', parseFloat(filterValue))
+                            ]
+                        };
+                        break;
+                    case 'dateRange':
+                        if (filterValue) {
+                            const containsDash = filterValue.includes("-");
+                            if (!containsDash) {
+                                whereInvoice = {
+                                    ...whereInvoice,
+                                    [Op.and]: [
+                                        Sequelize.where(col('Invoice.date'), '>=', startDate),
+                                        Sequelize.where(col('Invoice.date'), '<=', endDate),
+                                    ],
+                                    [Op.or]: [
+                                        Sequelize.where(col('InvoiceClient.UserClient.name'), 'REGEXP', `${filterValue}`),
+                                        Sequelize.where(col('InvoiceClient.UserClient.numberDocument'), 'REGEXP', `${filterValue}`),
+                                        Sequelize.where(col('InvoiceSeller.UserSeller.name'), 'REGEXP', `${filterValue}`),
+                                        Sequelize.where(col('Invoice.number'), 'REGEXP', `${filterValue}`)
+                                    ]
+                                }
+                            } else {
+                                let parametersFilter = []
+                                filterValue.split("-").map((item, index) => {
+                                    if (index === 0) parametersFilter.push(Sequelize.where(col('Invoice.codeSale'), 'REGEXP', `${item}`))
+                                    if (index === 1) parametersFilter.push(Sequelize.where(col('ResolutionInvoice.PrefixResolution.code'), `${item}`))
+                                    if (index === 2) parametersFilter.push(Sequelize.where(col('Invoice.number'), 'REGEXP', `${item}`))
+                                })
+                                whereInvoice = {
+                                    ...whereInvoice,
+                                    [Op.and]: [
+                                        ...parametersFilter,
+                                        Sequelize.where(col('Invoice.date'), '>=', startDate),
+                                        Sequelize.where(col('Invoice.date'), '<=', endDate),
+                                    ]
+                                }
+                            }
+                        } else {
+                            whereInvoice = {
+                                ...whereInvoice,
+                                [Op.and]: [
+                                    Sequelize.where(col('Invoice.date'), '>=', startDate),
+                                    Sequelize.where(col('Invoice.date'), '<=', endDate),
+                                ]
+                            }
+                        }
+                        break;
+
+                    default:
+                        break;
+                }
+            } else {
+                countRegisterFound = await shippingQuery.countShippingInvoiceQuery()
+            }
+
+            const shippingInvoices = await invoiceQuery.findAllShippingInvoiceQuery({
+                where: whereInvoice,
+                offset: page
+            })
+
+            let rows = [];
+            for (const value of shippingInvoices) {
+
+                if (!value.idTravel) {
+                    rows.push({
+                        municipalityDepart: "",
+                        municipalityArrive: "",
+                        ...value,
+                        idTravel: undefined
+                    })
+                } else {
+                    let whereTravel = {
+                        id: decryptIdDataBase(value.idTravel)
+                    };
+
+                    if (filterType && filterType === 'municipalityArrive') {
+                        whereTravel = {
+                            ...whereTravel,
+                            [Op.and]: [
+                                Sequelize.where(col('TravelRoute.MunicipalityArrive.name'), 'LIKE', `%${filterValue}%`)
+                            ]
+                        };
+                    }
+                    const route = await travelQuery.findRouteToTravel(whereTravel);
+                    if (route.municipalityDepart !== "" && route.municipalityArrive !== "") {
+                        rows.push({
+                            ...route,
+                            ...value,
+                            idTravel: undefined
+                        })
+                    }
+                }
+            }
+
+            if (filterType && filterType === 'municipalityArrive') countRegisterFound = rows.length
+            else countRegisterFound = shippingInvoices.length
+
+            return responseHelpers.responseSuccess(res, { count: countRegisterFound, rows });
         } catch (error) {
             return responseHelpers.responseError(res, 500, error);
         }
