@@ -36,6 +36,12 @@ module.exports = {
             code: result.code,
             numberPhone: result.numberPhone,
             passengerName: result.passengerName,
+            // TODO: LastName and indicative number user ticket
+            passengerLastName: "",
+            indicativePhone: {
+              id: "b663b33970219efab378dcfc92167144",
+              number: "+57"
+            },
             seat: {
               name: result.TicketSeat.name
             }
