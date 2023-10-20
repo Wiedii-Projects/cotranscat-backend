@@ -10,7 +10,8 @@ const { col } = require("sequelize");
 // Models
 const { 
   Seller, Ticket, Seat, Travel, Route, Client, DocumentType, User, Municipality, DriverVehicle, Vehicle, 
-  IndicativeNumber, Department, Shipping, ShippingType, UnitMeasure, MoneyTransfer, Resolution, Prefix, ServiceType, PaymentMethod 
+  IndicativeNumber, Department, Shipping, ShippingType, UnitMeasure, MoneyTransfer, Resolution, Prefix, 
+  PaymentMethod, TemplateVehicle 
 } = require("../index.models");
 const Invoice = require("./invoice.model");
 
@@ -437,6 +438,11 @@ module.exports = {
                                   model: Municipality,
                                   as: 'VehicleMunicipality',
                                   attributes: ['name']
+                                },
+                                {
+                                  model: TemplateVehicle,
+                                  as: 'VehicleTemplateVehicle',
+                                  attributes: ['width', 'height']
                                 }
                               ]
                             }
@@ -533,6 +539,7 @@ module.exports = {
           municipalityArrive: result.TicketInvoice.TicketSeat.TravelSeat.TravelRoute.MunicipalityArrive.name,
           },
           travelSeat: {
+            id: encryptIdDataBase(result.TicketInvoice.TicketSeat.TravelSeat.id),
             date: result.TicketInvoice.TicketSeat.TravelSeat.date,
             time: result.TicketInvoice.TicketSeat.TravelSeat.time,
           },
@@ -541,6 +548,8 @@ module.exports = {
             plate: result.TicketInvoice.TicketSeat.TravelSeat.TravelDriverVehicle.VehicleDriverVehicle.plate,
             mark: result.TicketInvoice.TicketSeat.TravelSeat.TravelDriverVehicle.VehicleDriverVehicle.mark,
             model: result.TicketInvoice.TicketSeat.TravelSeat.TravelDriverVehicle.VehicleDriverVehicle.model,
+            width: result.TicketInvoice.TicketSeat.TravelSeat.TravelDriverVehicle.VehicleDriverVehicle.VehicleTemplateVehicle.width,
+            height: result.TicketInvoice.TicketSeat.TravelSeat.TravelDriverVehicle.VehicleDriverVehicle.VehicleTemplateVehicle.height,
             vehicleMunicipality: {
               name: result.TicketInvoice.TicketSeat.TravelSeat.TravelDriverVehicle.VehicleDriverVehicle.VehicleMunicipality.name
             }
