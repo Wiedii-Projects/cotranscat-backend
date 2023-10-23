@@ -10,7 +10,8 @@ const { col } = require("sequelize");
 // Models
 const { 
   Seller, Ticket, Seat, Travel, Route, Client, DocumentType, User, Municipality, DriverVehicle, Vehicle, 
-  IndicativeNumber, Department, Shipping, ShippingType, UnitMeasure, MoneyTransfer, Resolution, Prefix, ServiceType 
+  IndicativeNumber, Department, Shipping, ShippingType, UnitMeasure, MoneyTransfer, Resolution, Prefix, 
+  PaymentMethod, TemplateVehicle 
 } = require("../index.models");
 const Invoice = require("./invoice.model");
 
@@ -342,7 +343,7 @@ module.exports = {
         const { 
           where
         } = query;
-        return await Invoice.findOne({
+        const result = await Invoice.findOne({
           where,
           attributes: [
             'id',
@@ -355,20 +356,40 @@ module.exports = {
             {
               model: Client,
               as: 'InvoiceClient',
-              attributes: [],
+              attributes: ['email', 'id', 'address', 'numberPhoneWhatsapp'],
               include: [
                 {
                   model: User,
                   as: 'UserClient',
-                  attributes: [ 'numberDocument', 'name', 'lastName' ],
+                  attributes: [ 'numberDocument', 'name', 'lastName', 'numberPhone' ],
                   include: [
                     {
                       model: DocumentType,
                       as: 'UserDocumentType',
                       attributes: [ 'name' ],
                     },
+                    {
+                      model: IndicativeNumber,
+                      as: "UserIndicativePhone",
+                      attributes: [ 'number' ],
+                    }
                   ]
                 },
+                {
+                    model: IndicativeNumber, 
+                    as: "ClientIndicativeNumberWhatsApp",
+                    required: false
+                },
+                {
+                    model: Municipality, 
+                    as: "ClientMunicipality",
+                    required: false,
+                    include: [{
+                        model: Department,
+                        as: "MunicipalityDepartment",
+                        required: false
+                    }]
+                }
               ]
             },
             {
@@ -389,7 +410,7 @@ module.exports = {
                         {
                           model: Route,
                           as: 'TravelRoute',
-                          attributes: [],
+                          attributes: ['id'],
                           include: [
                             {
                               model: Municipality,
@@ -411,12 +432,17 @@ module.exports = {
                             {
                               model: Vehicle,
                               as: 'VehicleDriverVehicle',
-                              attributes: ['plate', 'mark', 'model'],
+                              attributes: ['plate', 'mark', 'model', 'internalNumber'],
                               include: [
                                 {
                                   model: Municipality,
                                   as: 'VehicleMunicipality',
                                   attributes: ['name']
+                                },
+                                {
+                                  model: TemplateVehicle,
+                                  as: 'VehicleTemplateVehicle',
+                                  attributes: ['width', 'height']
                                 }
                               ]
                             }
@@ -438,48 +464,98 @@ module.exports = {
                   as: 'PrefixResolution'
                 }
               ]
+            },
+            {
+              model: PaymentMethod,
+              as: 'InvoicePaymentMethod'
             }
           ],
           raw: true,
           nest: true
         })
-          .then((result) => {
-          const invoice = {
-              id: encryptIdDataBase(result.id),
-              number: result.number,
-              codeSale: result.codeSale,
-              codePrefix: result.ResolutionInvoice.PrefixResolution.code,
-              resolution: {
-                number: result.ResolutionInvoice.number,
-                date: result.ResolutionInvoice.dateOfIssuance,
-                initialRange: result.ResolutionInvoice.initialRange,
-                finalRange: result.ResolutionInvoice.finalRange
-              },
-              date: result.date,
-              price: result.price,
-              invoiceClient: {
-                name: result.InvoiceClient.UserClient.name,
-                lastName: result.InvoiceClient.UserClient.lastName,
-                numberDocument: result.InvoiceClient.UserClient.numberDocument,
-                userDocumentType: result.InvoiceClient.UserClient.UserDocumentType.name
-              },
-              municipalityDepart: result.TicketInvoice.TicketSeat.TravelSeat.TravelRoute.MunicipalityDepart.name,
-              municipalityArrive: result.TicketInvoice.TicketSeat.TravelSeat.TravelRoute.MunicipalityArrive.name,
-              travelSeat: {
-                date:result.TicketInvoice.TicketSeat.TravelSeat.date,
-                time: result.TicketInvoice.TicketSeat.TravelSeat.time,
-              },
-              vehicle: {
-                plate: result.TicketInvoice.TicketSeat.TravelSeat.TravelDriverVehicle.VehicleDriverVehicle.plate,
-                mark: result.TicketInvoice.TicketSeat.TravelSeat.TravelDriverVehicle.VehicleDriverVehicle.mark,
-                model: result.TicketInvoice.TicketSeat.TravelSeat.TravelDriverVehicle.VehicleDriverVehicle.model,
-                vehicleMunicipality: {
-                  name: result.TicketInvoice.TicketSeat.TravelSeat.TravelDriverVehicle.VehicleDriverVehicle.VehicleMunicipality.name
-                }
-              }
-          };
-          return invoice;
-        })
+
+    let municipalitySends = null
+    let departmentSends = null
+
+    if (result.InvoiceClient.ClientMunicipality?.id) {
+      const { id: idMunicipality, name, MunicipalityDepartment: departmentData } = result.InvoiceClient.ClientMunicipality
+      municipalitySends = {
+        id: encryptIdDataBase(idMunicipality),
+        name
+      }
+
+      if (departmentData?.id) {
+        departmentSends = {
+          id: encryptIdDataBase(departmentData.id),
+          name: departmentData.name
+        }
+      }
+    }
+
+        return {
+          id: encryptIdDataBase(result.id),
+          number: result.number,
+          codeSale: result.codeSale,
+          paymentMethod: {
+            ...result.InvoicePaymentMethod,
+            id: encryptIdDataBase(result.InvoicePaymentMethod.id)
+
+          },
+          codePrefix: result.ResolutionInvoice.PrefixResolution.code,
+          resolution: {
+            number: result.ResolutionInvoice.number,
+            date: result.ResolutionInvoice.dateOfIssuance,
+            initialRange: result.ResolutionInvoice.initialRange,
+            finalRange: result.ResolutionInvoice.finalRange
+          },
+          date: result.date,
+          price: result.price,
+          invoiceClient: {
+            name: result.InvoiceClient.UserClient.name,
+            lastName: result.InvoiceClient.UserClient.lastName,
+            UserDocumentType: {
+              name: result.InvoiceClient.UserClient.UserDocumentType.name,
+              id: encryptIdDataBase(result.InvoiceClient.UserClient.UserDocumentType.id)
+            },
+            numberDocument: result.InvoiceClient.UserClient.numberDocument,
+            email: result.InvoiceClient.email ?? null,
+            address: result.InvoiceClient.address ?? null,
+            numberPhoneWhatsapp: result.InvoiceClient.numberPhoneWhatsapp ?? null,
+            indicativeNumberWhatsApp: {
+              ...result.InvoiceClient.ClientIndicativeNumberWhatsApp,
+              id: result.InvoiceClient.ClientIndicativeNumberWhatsApp.id ? encryptIdDataBase(result.InvoiceClient.ClientIndicativeNumberWhatsApp.id) : null
+            },
+            numberPhone: result.InvoiceClient.UserClient.numberPhone,
+            indicativeNumber: {
+              number: result.InvoiceClient.UserClient.UserIndicativePhone.number,
+              id: encryptIdDataBase(result.InvoiceClient.UserClient.UserIndicativePhone.id)
+            },
+            municipality: municipalitySends, 
+            department: departmentSends
+          },
+          route: {
+            id: encryptIdDataBase(result.TicketInvoice.TicketSeat.TravelSeat.TravelRoute.id),
+            municipalityDepart: result.TicketInvoice.TicketSeat.TravelSeat.TravelRoute.MunicipalityDepart.name,
+          municipalityArrive: result.TicketInvoice.TicketSeat.TravelSeat.TravelRoute.MunicipalityArrive.name,
+          },
+          travelSeat: {
+            id: encryptIdDataBase(result.TicketInvoice.TicketSeat.TravelSeat.id),
+            date: result.TicketInvoice.TicketSeat.TravelSeat.date,
+            time: result.TicketInvoice.TicketSeat.TravelSeat.time,
+          },
+          vehicle: {
+            id: result.TicketInvoice.TicketSeat.TravelSeat.TravelDriverVehicle.VehicleDriverVehicle.id ? encryptIdDataBase(result.TicketInvoice.TicketSeat.TravelSeat.TravelDriverVehicle.VehicleDriverVehicle.id) : null,
+            plate: result.TicketInvoice.TicketSeat.TravelSeat.TravelDriverVehicle.VehicleDriverVehicle.plate,
+            mark: result.TicketInvoice.TicketSeat.TravelSeat.TravelDriverVehicle.VehicleDriverVehicle.mark,
+            model: result.TicketInvoice.TicketSeat.TravelSeat.TravelDriverVehicle.VehicleDriverVehicle.model,
+            internalNumber: result.TicketInvoice.TicketSeat.TravelSeat.TravelDriverVehicle.VehicleDriverVehicle.internalNumber,
+            width: result.TicketInvoice.TicketSeat.TravelSeat.TravelDriverVehicle.VehicleDriverVehicle.VehicleTemplateVehicle.width,
+            height: result.TicketInvoice.TicketSeat.TravelSeat.TravelDriverVehicle.VehicleDriverVehicle.VehicleTemplateVehicle.height,
+            vehicleMunicipality: {
+              name: result.TicketInvoice.TicketSeat.TravelSeat.TravelDriverVehicle.VehicleDriverVehicle.VehicleMunicipality.name
+            }
+          }
+        }
     } catch {
         throw errorsConst.invoiceErrors.queryErrors.findAllError;
     }
