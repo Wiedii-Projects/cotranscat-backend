@@ -24,7 +24,7 @@ module.exports = {
         include: [{
           model: Seat,
           as: 'TicketSeat',
-          attributes: ['name'],
+          attributes: ['name', 'id'],
         }],
         raw: true,
         nest: true
@@ -43,6 +43,7 @@ module.exports = {
               number: "+57"
             },
             seat: {
+              id: sharedHelpers.encryptIdDataBase(result.TicketSeat.id),
               name: result.TicketSeat.name
             }
           }))

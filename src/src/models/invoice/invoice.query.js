@@ -432,7 +432,7 @@ module.exports = {
                             {
                               model: Vehicle,
                               as: 'VehicleDriverVehicle',
-                              attributes: ['plate', 'mark', 'model'],
+                              attributes: ['plate', 'mark', 'model', 'internalNumber'],
                               include: [
                                 {
                                   model: Municipality,
@@ -548,6 +548,7 @@ module.exports = {
             plate: result.TicketInvoice.TicketSeat.TravelSeat.TravelDriverVehicle.VehicleDriverVehicle.plate,
             mark: result.TicketInvoice.TicketSeat.TravelSeat.TravelDriverVehicle.VehicleDriverVehicle.mark,
             model: result.TicketInvoice.TicketSeat.TravelSeat.TravelDriverVehicle.VehicleDriverVehicle.model,
+            internalNumber: result.TicketInvoice.TicketSeat.TravelSeat.TravelDriverVehicle.VehicleDriverVehicle.internalNumber,
             width: result.TicketInvoice.TicketSeat.TravelSeat.TravelDriverVehicle.VehicleDriverVehicle.VehicleTemplateVehicle.width,
             height: result.TicketInvoice.TicketSeat.TravelSeat.TravelDriverVehicle.VehicleDriverVehicle.VehicleTemplateVehicle.height,
             vehicleMunicipality: {
