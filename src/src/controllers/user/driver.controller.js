@@ -141,5 +141,13 @@ module.exports = {
     } catch (error) {
       return responseHelpers.responseError(res, 500, error);
     }
+  },
+  getDriverAvailableWithVehicle: async (req, res) => {
+    try {
+      const drivers = await driverQuery.findDriverAvailableWithVehicleQuery({where: { isDriverDefault: false }});
+      return responseHelpers.responseSuccess(res, drivers);
+    } catch (error) {
+      return responseHelpers.responseError(res, 500, error);
+    }
   }
 };

@@ -16,6 +16,9 @@ router.post('/', [
     driverMiddleware.checkCreateDriver(),
 ], driverController.createDriver);
 
+router.get('/getDriverAvailableWithVehicle', [
+], driverController.getDriverAvailableWithVehicle);
+
 router.get('/', [
 ], driverController.getAllDrivers);
 

@@ -9,6 +9,14 @@ module.exports = {
         } catch (error) {
             req.body.driverVehicle = false;
         }
+    },
+    validateIfItIsADefaultDriver: async (req, where) => {
+        try {
+            const driverVehicle = await driverVehicleQuery.findDefaultDriverQuery({ where });
+            req.body.driverVehicle = driverVehicle
+        } catch (error) {
+            req.body.driverVehicle = false;
+        }
     }
 }
 

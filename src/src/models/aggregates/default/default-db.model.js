@@ -407,7 +407,8 @@ class defaultDataBaseModel {
                     idBloodType,
                     idLicenseCategory,
                     idMunicipalityOfBirth: idMunicipality,
-                    idMunicipalityOfResidence: idMunicipality
+                    idMunicipalityOfResidence: idMunicipality,
+                    isDriverDefault: true
                 }),
                 Owner.create({
                     ...defaultOwner,

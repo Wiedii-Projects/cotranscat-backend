@@ -5,7 +5,7 @@ const { errorsConst } = require('../../constants/index.constants');
 const { Op } = require('sequelize');
 
 // Models
-const { DriverVehicle, StateVehicle } = require("../index.models");
+const { DriverVehicle, StateVehicle, Driver } = require("../index.models");
 
 module.exports = {
     createDriverVehicle: async (where, transaction) => {
@@ -40,6 +40,27 @@ module.exports = {
             })
         } catch (error) {
             throw errorsConst.driverVehicleErrors.queryErrors.findOneDriverVehicleByStateQuery
+        }
+    },
+    findDefaultDriverQuery: async (query) => {
+        try {
+            const { where } = query;
+            return await DriverVehicle.findOne({
+                where,
+                raw: true,
+                nest: true,
+                include: [
+                    {
+                        model: Driver,
+                        as: "DriverDriverVehicle",
+                        where: {
+                            isDriverDefault: true
+                        }
+                    }
+                ]
+            })
+        } catch {
+            throw errorsConst.driverVehicleErrors.queryErrors.findDefaultDriverQuery
         }
     }
 }
