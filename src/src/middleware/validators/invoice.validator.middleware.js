@@ -1,5 +1,6 @@
 // Queries
-const { invoiceQuery } = require('../../models/index.queries');
+const { sharedHelpers } = require('../../helpers/index.helpers');
+const { invoiceQuery, seatQuery } = require('../../models/index.queries');
 const ticketQuery = require('../../models/ticket/ticket.query');
 
 module.exports = {
@@ -9,7 +10,15 @@ module.exports = {
                 invoiceQuery.findInvoiceTravelQuery({ where }),
                 ticketQuery.findAllTicketQuery({ where: { idInvoice: where.id} })
             ]);
+
+            const allSeat = await seatQuery.findSeat({ where: { idTravel: sharedHelpers.decryptIdDataBase(invoice.travelSeat.id) } });
+            const seats = allSeat.map(({ id, SeatClient, idTravel, idClient, ...seat }) => ({
+                id: sharedHelpers.encryptIdDataBase(id),
+                ...seat,
+            }));
+
             invoice.tickets = tickets;
+            invoice.seats = seats;
             req.body.invoice = invoice;
         } catch {
             req.body.invoice = false;
