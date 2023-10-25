@@ -328,7 +328,7 @@ module.exports = {
     getAllManifestTravels: async (req, res) => {
         const { offset: pagination = 0, valueFilter = "" } = req.query;
         const queryFilterTravel = [];
-        queryFilterTravel.push({ manifestNumber: { [Op.not]: "" } });
+        
         const offset = pagination * 5;
         try {
             if(valueFilter) {
