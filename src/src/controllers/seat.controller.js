@@ -26,26 +26,36 @@ module.exports = {
     try {
       await seatQuery.updateSeat({ state: 2 }, { id: { [Sequelize.Op.or]: idsSeat } });
       const socketConnection = SocketConnection.getInstance();
+
       socketConnection.seatsSelectedEvent({
         seats: [sharedHelpers.encryptIdDataBase(idsSeat)]
       })
-      setTimeout(() => {
-        seatQuery.updateSeat({ state: 0 }, { id: { [Sequelize.Op.or]: idsSeat } })
-          .then(() => {
-            // TODO: Make an inquiry in advance if the chair has already been vacated before issuance.
-            socketConnection.restoringChairAvailable(
-              {
-                seats: [sharedHelpers.encryptIdDataBase(idsSeat)]
-              }
-            )
+
+      setTimeout(async () => {
+        try {
+          const seatFound = await seatQuery.findSeat({
+            where: {
+              id: {
+                [Sequelize.Op.or]: idsSeat
+              },
+              state: 2
+            }
           })
-          .catch((error) => {
-            console.error(error);
+
+          if (seatFound.length === 0) return;
+
+          await seatQuery.updateSeat({ state: 0 }, { id: { [Sequelize.Op.or]: idsSeat } })
+
+          socketConnection.restoringChairAvailable({
+            seats: [sharedHelpers.encryptIdDataBase(idsSeat)]
           })
-        // }, 240000); 
-      }, 15000); 
+
+        } catch {
+          //TODO: Error handling via socket or logging in a log table
+        }
+      }, 240000);
       return responseHelpers.responseSuccess(res, null);
-    } catch (error){
+    } catch (error) {
       return responseHelpers.responseError(res, 500, error);
     }
   },
