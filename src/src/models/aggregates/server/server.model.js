@@ -19,6 +19,9 @@ const { redisDBConnection } = require('../../../connections/redis.connection');
 // Queues
 const { invoiceSynchronizationJobsQueue } = require('../../../connections/queues/sales.queues.connection');
 
+// Connection WebSocket
+const { connectWebSocket } = require('../../../socket');
+
 class ServerModel {
     constructor() {
         this.app = express();
@@ -68,7 +71,7 @@ class ServerModel {
         await mySqlDBDefaultDataCreation();
         await redisDBConnection()
         await jobsBuilder()
-
+        connectWebSocket()
     }
 
     middleware() {

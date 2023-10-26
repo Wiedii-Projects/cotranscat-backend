@@ -76,6 +76,8 @@ const redisDBConnectionOptions = {
 
 const redisConnectionInstanceBullMq = new RedisConnection(redisDBConnectionOptions);
 
+const domainWebSocket = `http://${process.env.WEBSOCKET_HOST}:${process.env.WEBSOCKET_PORT}`
+
 module.exports = {
   nodeEnv,
   serverHost,
@@ -93,5 +95,6 @@ module.exports = {
   saltBcrypt,
   domainApiTransactionalQueries,
   redisDBConnectionOptions,
-  redisConnectionInstanceBullMq
+  redisConnectionInstanceBullMq,
+  domainWebSocket
 };

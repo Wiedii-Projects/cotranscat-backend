@@ -5,7 +5,7 @@ const { errorsConst } = require('../../constants/index.constants');
 const { col } = require('sequelize');
 
 // Models
-const { Travel, DriverVehicle, Driver, Vehicle, Route, Municipality, User, Seat, Shipping, Ticket, TemplateVehicle } = require('../index.models');
+const { Travel, DriverVehicle, Driver, Vehicle, Route, Municipality, User, Seat, Shipping, Ticket, TemplateVehicle, Owner, Invoice, Resolution, Prefix, Client } = require('../index.models');
 
 module.exports = {
     createTravel: async (where, transaction) => {
@@ -303,6 +303,141 @@ module.exports = {
             return await Travel.create(where, { transaction });
         } catch {
             throw errorsConst.travelErrors.queryErrors.createError;
+        }
+    },
+    findManifestTravelById: async (query = {}) => {
+        try {
+            const {
+                where,
+                include = [
+                    {
+                        model: Route,
+                        as: 'TravelRoute',
+                        attributes: ['idMunicipalityDepart', 'idMunicipalityArrive'],
+                        include: [
+                            {
+                                model: Municipality,
+                                as: 'MunicipalityDepart',
+                                attributes: ['name'],
+                            },
+                            {
+                                model: Municipality,
+                                as: 'MunicipalityArrive',
+                                attributes: ['name'],
+                            }
+                        ]
+                    },
+                    {
+                        model: DriverVehicle,
+                        as: 'TravelDriverVehicle',
+                        include: [
+                            { 
+                                model: Vehicle, 
+                                as: 'VehicleDriverVehicle',
+                                include: [
+                                    {
+                                        model: Owner, 
+                                        as: 'OwnerVehicle',
+                                        include: [
+                                            {
+                                                model: User, 
+                                                as: 'UserOwner'
+                                            }
+                                        ]
+                                    }
+                                ]
+                                
+                            },
+                            { 
+                                model: Driver, 
+                                as: 'DriverDriverVehicle', 
+                                include: [
+                                    {
+                                        model: User, 
+                                        as: 'UserDriver'
+                                    }
+                                ]
+                            },
+                        ]
+                    },
+                    {
+                        model: Seat,
+                        as: 'TravelSeat',
+                        where: {
+                            state: 1
+                        },
+                        include: [
+                            {
+                                model: Ticket,
+                                as: 'TicketSeat',
+                                include: [
+                                    {
+                                        model: Invoice,
+                                        as: 'TicketInvoice',
+                                        include: [
+                                            {
+                                                model: Resolution,
+                                                as: 'ResolutionInvoice',
+                                                attributes: ['idPrefix'],
+                                                include: [
+                                                    {
+                                                        model: Prefix,
+                                                        as: 'PrefixResolution',
+                                                        attributes: ['code', 'isElectronic'],
+                                                    }
+                                                ]
+                                            }
+                                        ]
+                                    }
+                                ]
+                            }
+                        ]
+                    },
+                    {
+                        model: Shipping,
+                        as: 'TravelShipping',
+                        include: [
+                            {
+                                model: Invoice,
+                                as: 'InvoiceShipping',
+                                include: [
+                                    {
+                                        model: Resolution,
+                                        as: 'ResolutionInvoice',
+                                        attributes: ['idPrefix'],
+                                        include: [
+                                            {
+                                                model: Prefix,
+                                                as: 'PrefixResolution',
+                                                attributes: ['code', 'isElectronic'],
+                                            }
+                                        ]
+                                    }
+                                ]
+                            },
+                            {
+                                model: Client,
+                                as: "ClientShipping",
+                                include: [
+                                    {
+                                        model: User,
+                                        as: 'UserClient'
+                                    },
+                                ]
+                            }
+                        ]
+                    }
+                ],
+            } = query;
+            const test = await Travel.findAll({
+                nest: true,
+                where,
+                include
+            });
+            console.log(JSON.stringify(test, null, 2))
+            return test
+        } catch {
+            throw errorsConst.travelErrors.queryErrors.findManifestTravelById;
         }
     }
 }

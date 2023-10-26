@@ -502,6 +502,7 @@ module.exports = {
 
           },
           codePrefix: result.ResolutionInvoice.PrefixResolution.code,
+          isElectronic: result.ResolutionInvoice.PrefixResolution.isElectronic == 1 ? true : false,
           resolution: {
             number: result.ResolutionInvoice.number,
             date: result.ResolutionInvoice.dateOfIssuance,
