@@ -530,4 +530,122 @@ module.exports = {
             return responseHelpers.responseError(res, 500, error);
         }
     },
+    getManifestTravelById: async (req, res) => {
+        const { travel } = req.body
+
+        console.log(travel)
+
+        try {
+            const travelsFound = await travelQuery.findManifestTravelById({
+                where: {
+                    id: travel.id
+                }
+            })
+
+            const calculateTotalTicketsPerInvoiceGrouping = (ticketSeatArray) => {
+
+                const groupedArray = ticketSeatArray.reduce((groupedInvoiceResult, ticketInfo) => {
+                    const key = ticketInfo.TicketSeat.TicketInvoice.id;
+                    let existingGroup = groupedInvoiceResult.find(group => group.idInvoice === key);
+                    if (!existingGroup) {
+                        existingGroup = { idInvoice: key, tickets: [], totalPrice: ticketInfo.TicketSeat.TicketInvoice.price };
+                        groupedInvoiceResult.push(existingGroup);
+                    }
+                    existingGroup.tickets.push({
+                        name: ticketInfo.name,
+                        passengerName: ticketInfo.TicketSeat.passengerName,
+                        // TODO: LastName and indicative number user ticket
+                        passengerLastName: ticketInfo.TicketSeat.passengerName,
+                        prefix: ticketInfo.TicketSeat.TicketInvoice.ResolutionInvoice.PrefixResolution.code,
+                        number: ticketInfo.TicketSeat.TicketInvoice.number
+                    });
+                    return groupedInvoiceResult;
+                }, []);
+
+                let allTickets = []
+                let ticketTotal = 0;
+
+                groupedArray.forEach((element) => {
+                    ticketTotal += element.totalPrice;
+                    element.tickets.forEach((elementTicket) => {
+                        allTickets.push({
+                            price: element.totalPrice / element.tickets.length,
+                            ...elementTicket
+                        })
+                    })
+                })
+
+                return {
+                    data: allTickets,
+                    total: ticketTotal
+                }
+            }
+
+            const manifestTravels = travelsFound.map(
+                ({
+                    id, date, time, TravelSeat, TravelShipping, TravelRoute,
+                    TravelDriverVehicle: { VehicleDriverVehicle, DriverDriverVehicle }
+                }) => {
+
+                    const tickets = calculateTotalTicketsPerInvoiceGrouping(TravelSeat)
+
+                    let shippingTotal = 0;
+
+                    const dataShipping = TravelShipping.map(({ InvoiceShipping, ClientShipping }) => {
+                        shippingTotal += InvoiceShipping.price
+                        return {
+                            prefix: InvoiceShipping.ResolutionInvoice.PrefixResolution.code,
+                            number: InvoiceShipping.number,
+                            clientReceives: {
+                                name: ClientShipping.UserClient.name,
+                                lastName: ClientShipping.UserClient.lastName
+                            },
+                            price: InvoiceShipping.price
+                        }
+                    })
+
+                    return {
+                        travel: {
+                            id: sharedHelpers.encryptIdDataBase(id),
+                            date,
+                            time,
+                            totalManifestPrice: tickets.total + shippingTotal,
+                            route: {
+                                municipalityDepart: TravelRoute.MunicipalityDepart.name,
+                                municipalityArrive: TravelRoute.MunicipalityArrive.name
+                            },
+                            invoices: {
+                                tickets: {
+                                    data: tickets.data,
+                                    total: tickets.total
+                                },
+                                shippings: {
+                                    data: dataShipping,
+                                    total: shippingTotal
+                                }
+                            },
+                        },
+                        driver: {
+                            id: sharedHelpers.encryptIdDataBase(DriverDriverVehicle.id),
+                            name: DriverDriverVehicle.UserDriver.name,
+                            lastName: DriverDriverVehicle.UserDriver.lastName
+                        },
+                        vehicle: {
+                            id: sharedHelpers.encryptIdDataBase(VehicleDriverVehicle.id),
+                            internalNumber: VehicleDriverVehicle.internalNumber,
+                            plate: VehicleDriverVehicle.plate,
+                            owner: {
+                                id: sharedHelpers.encryptIdDataBase(VehicleDriverVehicle.OwnerVehicle.id),
+                                name: VehicleDriverVehicle.OwnerVehicle.UserOwner.name,
+                                lastName: VehicleDriverVehicle.OwnerVehicle.UserOwner.lastName
+                            }
+                        }
+                    }
+                })
+
+            return responseHelpers.responseSuccess(res, manifestTravels);
+        } catch (error) {
+            return responseHelpers.responseError(res, 500, error);
+        }
+    }
 }

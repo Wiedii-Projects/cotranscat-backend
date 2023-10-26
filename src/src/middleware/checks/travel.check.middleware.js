@@ -16,6 +16,7 @@ const {
     driverVehicleValidators,
     vehicleValidator
 } = require('../index.validators.middleware');
+const sharedCheckMiddleware = require('./shared.check.middleware');
 
 // Models
 const { ErrorModel } = require("../../models/index.models");
@@ -251,4 +252,12 @@ module.exports = {
             }),
         sharedValidators.validateError,
     ],
+    checkManifestTravelById: () => [
+        ...sharedCheckMiddleware.checkJwt(),
+        check('id', new ErrorModel(errorsConst.travelErrors.idTravelInvalid))
+            .custom((value, { req }) => travelValidator.validateTravelExist(req, { id: sharedHelpers.decryptIdDataBase(value) }))
+            .custom((value, { req }) => !!req.body.travel)
+            .withMessage(new ErrorModel(errorsConst.travelErrors.travelDoesNotExist)),
+        sharedValidators.validateError
+    ]
 }
