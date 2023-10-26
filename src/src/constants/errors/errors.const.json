@@ -1124,6 +1124,10 @@
       "countError": {
         "code": "TRVL_005",
         "message": "Something went wrong"
+      },
+      "findManifestTravelById": {
+        "code": "TRVL_006",
+        "message": "Something went wrong"
       }
     }
   },

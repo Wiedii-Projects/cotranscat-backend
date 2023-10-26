@@ -65,6 +65,11 @@ router.put('/createManifestNumber/:id', [
     travelMiddleware.checkCreateManifestNumber()
 ], travelController.createManifestNumber);
 
+router.get('/manifest/:id', [
+    //TODO: implementation of role permission validation
+    travelMiddleware.checkManifestTravelById()
+], travelController.getManifestTravelById);
+
 router.get('/listVehicleAvailableToTravel/:id', [
     //TODO: implementation of role permission validation
     sharedCheckMiddleware.checkId(),
