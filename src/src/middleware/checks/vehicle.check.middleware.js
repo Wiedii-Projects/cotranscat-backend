@@ -91,5 +91,18 @@ module.exports = {
         sharedValidators.validateError,
         check('vehicle', new ErrorModel(errorsConst.vehicleErrors.vehicleDoesNotExist)).custom((value) => value),
         sharedValidators.validateError,
+    ]),
+    checkGetAllVehiclesAvailableToTravel: () => ([
+        check('date')
+            .custom((value) => {
+                if (typeof value !== 'string')
+                    throw new ErrorModel(errorsConst.vehicleErrors.dateRequired)
+                return true;
+            })
+            .bail()
+            .isDate()
+            .withMessage(new ErrorModel(errorsConst.vehicleErrors.dateInvalid))
+            .bail(),
+        sharedValidators.validateError,
     ])
 }

@@ -3,6 +3,7 @@ const { errorsConst } = require("../constants/index.constants");
 
 // Helpers
 const { responseHelpers } = require('../helpers/index.helpers');
+const sharedHelpers = require("../helpers/shared.helpers");
 const { decryptIdDataBase } = require("../helpers/shared.helpers");
 
 // Models - Queries
@@ -76,7 +77,7 @@ module.exports = {
         }
     },
     findAllVehiclesAvailableToTravel: async (req, res) => {
-        const { valueFilter = '' } = req.query;
+        const { valueFilter = '', date } = req.query;
         try {
             const vehicles = await vehicleQuery.findAllAvailableVehiclesAndDriverVehicleQuery({
                 where: {
@@ -94,8 +95,26 @@ module.exports = {
                     ],
                     isMaintenance: 0
                 }
+            }, {
+                date: { [Op.between]: [`${date} 00:00:00`, `${date} 23:59:59`] }
             });
-            return responseHelpers.responseSuccess(res, vehicles);
+
+            const vehiclesData = vehicles.map(vehicle => {
+                console.log(JSON.stringify(vehicle.VehicleDriverVehicle.TravelDriverVehicle, null, 4))
+                return ({
+                    vehicle: {
+                        plate: vehicle.plate,
+                        internalNumber: vehicle.internalNumber,
+                        code: vehicle.code,
+                    },
+                    travel: {
+                        id: sharedHelpers.encryptIdDataBase(vehicle.VehicleDriverVehicle.TravelDriverVehicle.id),
+                        time: vehicle.VehicleDriverVehicle.TravelDriverVehicle.time,
+                        date: vehicle.VehicleDriverVehicle.TravelDriverVehicle.date
+                    }
+                })
+            })
+            return responseHelpers.responseSuccess(res, vehiclesData);
         } catch (error) {
             return responseHelpers.responseError(res, 500, error);
         }
