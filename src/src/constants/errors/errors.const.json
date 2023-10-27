@@ -1000,6 +1000,10 @@
       "findOneDriverVehicleByStateQuery": {
         "code": "DVVH_002",
         "message": "Something went wrong"
+      },
+      "findDefaultDriverQuery": {
+        "code": "DVVH_003",
+        "message": "Something went wrong"
       }
     }
   },
@@ -1111,6 +1115,18 @@
     "routeDifferentCurrentTravel": {
       "code": "TRVL027",
       "message": "The route must be the same to perform the trip exchange, please check it and try again."
+    },
+    "observationRequired": {
+      "code": "TRVL028",
+      "message": "Observation is required"
+    },
+    "observationExceededAllowedLimiter": {
+      "code": "TRVL029",
+      "message": "The number of characters allowed for the observation was exceeded."
+    },
+    "invalidDriverToTheManifest": {
+      "code": "TRVL030",
+      "message": "You must assign a invalid driver to the manifest."
     },
     "queryErrors": {
       "createError": {

@@ -270,7 +270,7 @@ module.exports = {
             const manifestTravels = travelsFound.map(
                 ({
                     id, date, time, TravelSeat, TravelShipping,
-                    TravelDriverVehicle: { VehicleDriverVehicle, DriverDriverVehicle }
+                    TravelDriverVehicle: { id: idDriverVehicle, VehicleDriverVehicle, DriverDriverVehicle }
                 }) => ({
                     travel: {
                         id: sharedHelpers.encryptIdDataBase(id),
@@ -280,10 +280,14 @@ module.exports = {
                         totalSeat: TravelSeat.length,
                         totalShipping: TravelShipping.length
                     },
+                    driverVehicle: {
+                        id: sharedHelpers.encryptIdDataBase(idDriverVehicle),  
+                    },
                     driver: {
                         id: sharedHelpers.encryptIdDataBase(DriverDriverVehicle.id),
                         name: DriverDriverVehicle.UserDriver.name,
-                        lastName: DriverDriverVehicle.UserDriver.lastName
+                        lastName: DriverDriverVehicle.UserDriver.lastName,
+                        isDriverDefault: DriverDriverVehicle.isDriverDefault
                     },
                     vehicle: {
                         id: sharedHelpers.encryptIdDataBase(VehicleDriverVehicle.id),
@@ -299,10 +303,16 @@ module.exports = {
     },
     createManifestNumber: async (req, res) => {
         const { decryptId: id } = req.body;
+        const { observation = "" } = req.query;
         try {
             let maxNumber = await travelQuery.maxManifestNumberTravel();
             const nextMaxNumber = maxNumber ? parseInt(maxNumber) + 1 : 1;
-            await travelQuery.updateTravel({ manifestNumber: nextMaxNumber.toString().padStart(12, '0') }, { id });
+            await travelQuery.updateTravel({
+                manifestNumber: nextMaxNumber.toString().padStart(12, '0'),
+                manifestObservation: observation
+            },
+                { id }
+            );
             return responseHelpers.responseSuccess(res, null);
         } catch (error) {
             return responseHelpers.responseError(res, 500, error);
@@ -486,7 +496,7 @@ module.exports = {
             if (verifyDiverVehicle) {
                 idDriverVehicleTemp = verifyDiverVehicle.id
             } else {
-                const driverTemp = await driverQuery.findOneDriverQuery({ where: { email: "driver@driver.co" } });
+                const driverTemp = await driverQuery.findOneDriverQuery({ where: { isDriverDefault: true } });
                 const [stateVehicleAvailable] = await stateVehicleQuery.findStateVehicleQuery({ where: { type: 0 } });
                 const [newDriverVehicle] = await driverVehicleQuery.createDriverVehicle({
                     idDriver: driverTemp.id,

@@ -192,6 +192,15 @@ module.exports = {
         check('travel', new ErrorModel(errorsConst.travelErrors.travelDoesNotExist))
             .custom((value) => !!value),
         sharedValidators.validateError,
+        check('observation').optional({ checkFalsy: false })
+            .isString().withMessage(new ErrorModel(errorsConst.travelErrors.observationRequired)).bail()
+            .isLength({ min: 1, max: 255 }).withMessage(new ErrorModel(errorsConst.travelErrors.observationExceededAllowedLimiter)),
+        sharedValidators.validateError,
+        check('idDriverVehicle').custom(async (value, { req }) => await driverVehicleValidators.validateIfItIsADefaultDriver(req, { id: sharedHelpers.decryptIdDataBase(value) })),
+        sharedValidators.validateError,
+        check('driverVehicle', new ErrorModel(errorsConst.travelErrors.invalidDriverToTheManifest))
+            .custom((value) => value ? false : true),
+        sharedValidators.validateError
     ],
     checkListVehicleAvailableToTravel: () => [
         // TODO: validate role,

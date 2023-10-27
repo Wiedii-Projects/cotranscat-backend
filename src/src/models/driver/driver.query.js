@@ -1,4 +1,5 @@
 // Constants
+const { Op } = require("sequelize");
 const { errorsConst } = require("../../constants/index.constants");
 
 //Helpers
@@ -16,7 +17,8 @@ const {
   BloodType,
   LicenseCategory,
   DriverVehicle,
-  Vehicle
+  Vehicle,
+  StateVehicle
 } = require("../index.models");
 
 module.exports = {
@@ -257,6 +259,65 @@ module.exports = {
       await Driver.update(values, { where, transaction });
     } catch {
       throw errorsConst.driverErrors.queryErrors.updateError;
+    }
+  },
+  findDriverAvailableWithVehicleQuery: async (query) => {
+    const {
+      where,
+      attributes = [],
+      include = [
+        {
+          model: User,
+          as: "UserDriver",
+          attributes: [
+            "numberDocument",
+            "name",
+            "lastName",
+            "numberPhone",
+            "state",
+          ],
+        },
+        {
+          model: DriverVehicle,
+          as: "DriverDriverVehicle",
+          required: true,
+          include: [
+            {
+              model: StateVehicle,
+              as: "DriverVehicleStateVehicle",
+              where: {
+                [Op.or]: [
+                  { type: 0 }
+                ]
+              },
+            }
+          ]
+        },
+      ]
+    } = query;
+    try {
+       const driversAvailable = await Driver.findAll({
+        where,
+        attributes,
+        raw: true,
+        nest: true,
+        include
+      })
+
+      console.log(JSON.stringify(driversAvailable, null, 2));
+
+      const driversAvailableCleaned = driversAvailable.map(({
+        UserDriver: { name, lastName },
+        DriverDriverVehicle: { id: idDriverVehicle }
+      }) => ({
+        name,
+        lastName,
+        idDriverVehicle: sharedHelpers.encryptIdDataBase(idDriverVehicle)
+      }))
+
+      return driversAvailableCleaned
+    } catch {
+      throw errorsConst.driverErrors.queryErrors.findError;
     }
   }
 };
