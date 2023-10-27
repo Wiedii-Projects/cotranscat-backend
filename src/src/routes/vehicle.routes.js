@@ -19,6 +19,7 @@ router.get('/filter/travel/', [
 ], vehicleController.findVehiclesByStateTravel)
 
 router.get('/filter/all/availableVehicleToTravel/', [
+    vehicleMiddleware.checkGetAllVehiclesAvailableToTravel(),
 ], vehicleController.findAllVehiclesAvailableToTravel)
 
 router.get('/:id', [

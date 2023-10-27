@@ -872,6 +872,14 @@
       "code": "VEHI032",
       "message": "The code bodyWork is required"
     },
+    "dateRequired": {
+      "code": "VEHI033",
+      "message": "The date is required"
+    },
+    "dateInvalid": {
+      "code": "VEHI034",
+      "message": "The date is invalid"
+    },
     "queryErrors": {
       "createdError": {
         "code": "VEHI_001",

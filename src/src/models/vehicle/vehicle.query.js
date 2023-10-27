@@ -2,7 +2,7 @@
 const { errorsConst } = require('../../constants/index.constants');
 
 // Models
-const { Vehicle, DriverVehicle, TemplateVehicle, SeatRuler, StateVehicle } = require('./../index.models');
+const { Vehicle, DriverVehicle, TemplateVehicle, SeatRuler, StateVehicle, Travel } = require('./../index.models');
 
 // Helpers
 const { encryptIdDataBase } = require('../../helpers/shared.helpers');
@@ -115,7 +115,7 @@ module.exports = {
             nest: true
         })
     },
-    findAllAvailableVehiclesAndDriverVehicleQuery: async (query) => {
+    findAllAvailableVehiclesAndDriverVehicleQuery: async (query, whereTravel) => {
         const {
             where
         } = query;
@@ -125,7 +125,7 @@ module.exports = {
                 {
                     model: DriverVehicle,
                     as: "VehicleDriverVehicle",
-                    required: false,
+                    required: true,
                     include: [
                         {
                             model: StateVehicle,
@@ -133,8 +133,14 @@ module.exports = {
                             where: {
                                 type: 0
                             },
+                        },
+                        {
+                            model: Travel,
+                            as: "TravelDriverVehicle",
+                            required: true,
+                            where: whereTravel
                         }
-                    ]
+                    ],
                 }
             ],
             where,
