@@ -81,7 +81,7 @@ module.exports = {
                     {
                         model: DriverVehicle,
                         as: 'TravelDriverVehicle',
-                        attributes: [],
+                        attributes: ['id'],
                         include: [
                             { 
                                 model: Vehicle, 
@@ -429,12 +429,11 @@ module.exports = {
                     }
                 ],
             } = query;
-            const test = await Travel.findAll({
+            const test = await Travel.findOne({
                 nest: true,
                 where,
                 include
             });
-            console.log(JSON.stringify(test, null, 2))
             return test
         } catch {
             throw errorsConst.travelErrors.queryErrors.findManifestTravelById;
