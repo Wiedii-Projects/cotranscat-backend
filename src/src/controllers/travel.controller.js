@@ -202,11 +202,13 @@ module.exports = {
                     }
                 }
             });
-            const travelsFormatted = travels.map(({ id, date, time, TravelDriverVehicle: { VehicleDriverVehicle, DriverDriverVehicle } }) => ({
+
+            const travelsFormatted = travels.map(({ id, date, time, TravelDriverVehicle: { id: idDriverVehicle, VehicleDriverVehicle, DriverDriverVehicle } }) => ({
                 travel: {
                     id: sharedHelpers.encryptIdDataBase(id),
                     date,
-                    time
+                    time,
+                    idDriverVehicle: sharedHelpers.encryptIdDataBase(idDriverVehicle),
                 },
                 driver: {
                     id: sharedHelpers.encryptIdDataBase(DriverDriverVehicle.id),
@@ -243,6 +245,7 @@ module.exports = {
                                 content: `${travelData.vehicle.internalNumber} - ${travelData.vehicle.plate}`,
                                 name: `${travelData.driver.name} ${travelData.driver.lastName}`,
                                 idTravel: travelData.travel.id,
+                                idDriverVehicle: travelData.travel.idDriverVehicle
                             },
                         ] : [],
                     };
@@ -543,8 +546,6 @@ module.exports = {
     getManifestTravelById: async (req, res) => {
         const { travel } = req.body
 
-        console.log(travel)
-
         try {
             const travelsFound = await travelQuery.findManifestTravelById({
                 where: {
@@ -591,69 +592,70 @@ module.exports = {
                 }
             }
 
-            const manifestTravels = travelsFound.map(
-                ({
-                    id, date, time, TravelSeat, TravelShipping, TravelRoute,
-                    TravelDriverVehicle: { VehicleDriverVehicle, DriverDriverVehicle }
-                }) => {
+            const {
+                id, date, time, manifestNumber,TravelSeat, TravelShipping, TravelRoute,
+                TravelDriverVehicle: { VehicleDriverVehicle, DriverDriverVehicle }
+            } = travelsFound
 
-                    const tickets = calculateTotalTicketsPerInvoiceGrouping(TravelSeat)
 
-                    let shippingTotal = 0;
+            const tickets = calculateTotalTicketsPerInvoiceGrouping(TravelSeat)
 
-                    const dataShipping = TravelShipping.map(({ InvoiceShipping, ClientShipping }) => {
-                        shippingTotal += InvoiceShipping.price
-                        return {
-                            prefix: InvoiceShipping.ResolutionInvoice.PrefixResolution.code,
-                            number: InvoiceShipping.number,
-                            clientReceives: {
-                                name: ClientShipping.UserClient.name,
-                                lastName: ClientShipping.UserClient.lastName
-                            },
-                            price: InvoiceShipping.price
-                        }
-                    })
+            let shippingTotal = 0;
 
-                    return {
-                        travel: {
-                            id: sharedHelpers.encryptIdDataBase(id),
-                            date,
-                            time,
-                            totalManifestPrice: tickets.total + shippingTotal,
-                            route: {
-                                municipalityDepart: TravelRoute.MunicipalityDepart.name,
-                                municipalityArrive: TravelRoute.MunicipalityArrive.name
-                            },
-                            invoices: {
-                                tickets: {
-                                    data: tickets.data,
-                                    total: tickets.total
-                                },
-                                shippings: {
-                                    data: dataShipping,
-                                    total: shippingTotal
-                                }
-                            },
+            const dataShipping = TravelShipping.map(({ InvoiceShipping, ClientShipping }) => {
+                shippingTotal += InvoiceShipping.price
+                return {
+                    prefix: InvoiceShipping.ResolutionInvoice.PrefixResolution.code,
+                    number: InvoiceShipping.number,
+                    clientReceives: {
+                        name: ClientShipping.UserClient.name,
+                        lastName: ClientShipping.UserClient.lastName
+                    },
+                    price: InvoiceShipping.price
+                }
+            })
+
+            const manifestTravel = {
+                travel: {
+                    id: sharedHelpers.encryptIdDataBase(id),
+                    date,
+                    time,
+                    manifestNumber,
+                    totalManifestPrice: tickets.total + shippingTotal,
+                    discount: 0,
+                    route: {
+                        municipalityDepart: TravelRoute.MunicipalityDepart.name,
+                        municipalityArrive: TravelRoute.MunicipalityArrive.name
+                    },
+                    invoices: {
+                        tickets: {
+                            data: tickets.data,
+                            total: tickets.total
                         },
-                        driver: {
-                            id: sharedHelpers.encryptIdDataBase(DriverDriverVehicle.id),
-                            name: DriverDriverVehicle.UserDriver.name,
-                            lastName: DriverDriverVehicle.UserDriver.lastName
-                        },
-                        vehicle: {
-                            id: sharedHelpers.encryptIdDataBase(VehicleDriverVehicle.id),
-                            internalNumber: VehicleDriverVehicle.internalNumber,
-                            plate: VehicleDriverVehicle.plate,
-                            owner: {
-                                id: sharedHelpers.encryptIdDataBase(VehicleDriverVehicle.OwnerVehicle.id),
-                                name: VehicleDriverVehicle.OwnerVehicle.UserOwner.name,
-                                lastName: VehicleDriverVehicle.OwnerVehicle.UserOwner.lastName
-                            }
+                        shippings: {
+                            data: dataShipping,
+                            total: shippingTotal
                         }
+                    },
+                },
+                driver: {
+                    id: sharedHelpers.encryptIdDataBase(DriverDriverVehicle.id),
+                    name: DriverDriverVehicle.UserDriver.name,
+                    lastName: DriverDriverVehicle.UserDriver.lastName
+                },
+                vehicle: {
+                    id: sharedHelpers.encryptIdDataBase(VehicleDriverVehicle.id),
+                    internalNumber: VehicleDriverVehicle.internalNumber,
+                    plate: VehicleDriverVehicle.plate,
+                    owner: {
+                        id: sharedHelpers.encryptIdDataBase(VehicleDriverVehicle.OwnerVehicle.id),
+                        name: VehicleDriverVehicle.OwnerVehicle.UserOwner.name,
+                        lastName: VehicleDriverVehicle.OwnerVehicle.UserOwner.lastName
                     }
-                })
+                }
+            }
 
-            return responseHelpers.responseSuccess(res, manifestTravels);
+            return responseHelpers.responseSuccess(res, manifestTravel);
         } catch (error) {
             return responseHelpers.responseError(res, 500, error);
         }

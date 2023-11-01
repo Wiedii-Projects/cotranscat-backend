@@ -304,8 +304,6 @@ module.exports = {
         include
       })
 
-      console.log(JSON.stringify(driversAvailable, null, 2));
-
       const driversAvailableCleaned = driversAvailable.map(({
         UserDriver: { name, lastName },
         DriverDriverVehicle: { id: idDriverVehicle }
