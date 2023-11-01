@@ -306,6 +306,10 @@ Owner.hasMany(Vehicle, { as: 'OwnerVehicle', foreignKey: { name: 'idOwner', allo
 Travel.hasMany(Shipping, { as: 'TravelShipping', foreignKey: { name: 'idTravel' } });
 Shipping.belongsTo(Travel, { as: 'TravelShipping', foreignKey: { name: 'idTravel' } });
 
+// Relationship Ticket-IndicativeNumber
+Ticket.belongsTo(IndicativeNumber, { as: 'TicketIndicativeNumber', foreignKey: { name: 'idIndicativeNumber', allowNull: false } });
+IndicativeNumber.hasMany(Ticket, { as: 'TicketIndicativeNumber', foreignKey: { name: "idIndicativeNumber", allowNull: false } });
+
 module.exports = {
   // Aggregates Models
   ServerModel: require("./aggregates/server/server.model"),

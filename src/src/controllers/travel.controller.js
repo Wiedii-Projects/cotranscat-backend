@@ -564,8 +564,7 @@ module.exports = {
                     existingGroup.tickets.push({
                         name: ticketInfo.name,
                         passengerName: ticketInfo.TicketSeat.passengerName,
-                        // TODO: LastName and indicative number user ticket
-                        passengerLastName: ticketInfo.TicketSeat.passengerName,
+                        passengerLastName: ticketInfo.TicketSeat.passengerLastName,
                         prefix: ticketInfo.TicketSeat.TicketInvoice.ResolutionInvoice.PrefixResolution.code,
                         number: ticketInfo.TicketSeat.TicketInvoice.number
                     });

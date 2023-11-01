@@ -1238,7 +1238,7 @@
   "ticketErrors": {
     "passengerNameRequired": {
       "code": "TICK001",
-      "message": "The passenger is required"
+      "message": "The passenger name is required"
     },
     "namePassengerSize": {
       "code": "TICK002",
@@ -1267,6 +1267,14 @@
     "clientNotExist": {
       "code": "TICK008",
       "message": "User client does not exist"
+    },
+    "passengerLastNameRequired": {
+      "code": "TICK009",
+      "message": "The passenger lastName is required"
+    },
+    "lastNamePassengerSize": {
+      "code": "TICK002",
+      "message": "The lastName must have a maximum of 100 characters"
     },
     "queryErrors": {
       "createError": {
