@@ -203,7 +203,7 @@ module.exports = {
                 }
             });
 
-            const travelsFormatted = travels.map(({ id, date, time, TravelDriverVehicle: { id: idDriverVehicle, VehicleDriverVehicle, DriverDriverVehicle } }) => ({
+            let travelsFormatted = travels.map(({ id, date, time, TravelDriverVehicle: { id: idDriverVehicle, VehicleDriverVehicle, DriverDriverVehicle } }) => ({
                 travel: {
                     id: sharedHelpers.encryptIdDataBase(id),
                     date,
@@ -231,24 +231,28 @@ module.exports = {
             const transformedData = hours.map(hour => ({
                 id: dayjs().hour(hour).minute(0).format('h:mm A'),
                 nestedDroppables: days.map((day, index) => {
-                    const travelData = travelsFormatted.find(item => {
-                        const travelDate = dayjs(`${item.travel.date} ${item.travel.time}`);
-                        return travelDate.day() === index && travelDate.hour() === hour;
-                    });
-
-                    return {
+                    let isExistTravelMatching = true
+                    let objectTravel = {
                         id: `${day} ${dayjs().hour(hour).minute(0).format('h:mm A')}`,
                         day,
-                        items: travelData ? [
-                            {
-                                id: uuidv4(),
-                                content: `${travelData.vehicle.internalNumber} - ${travelData.vehicle.plate}`,
-                                name: `${travelData.driver.name} ${travelData.driver.lastName}`,
-                                idTravel: travelData.travel.id,
-                                idDriverVehicle: travelData.travel.idDriverVehicle
-                            },
-                        ] : [],
-                    };
+                        items: []
+                    }
+                    
+                    while (isExistTravelMatching) {
+                        const indexTravelData = travelsFormatted.findIndex(item => {
+                            const travelDate = dayjs(`${item.travel.date} ${item.travel.time}`);
+                            return travelDate.day() === index && travelDate.hour() === hour;
+                        });
+
+                        if (indexTravelData !== -1) {
+                            objectTravel.items.push(travelsFormatted[indexTravelData])
+                            travelsFormatted.splice(indexTravelData, 1)
+                        } else {
+                            isExistTravelMatching = false
+                        }
+                    }
+                    
+                    return objectTravel
                 }),
             }));
 
