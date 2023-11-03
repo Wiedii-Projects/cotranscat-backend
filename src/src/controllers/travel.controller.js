@@ -245,7 +245,15 @@ module.exports = {
                         });
 
                         if (indexTravelData !== -1) {
-                            objectTravel.items.push(travelsFormatted[indexTravelData])
+                            const travelData = travelsFormatted[indexTravelData];
+                            objectTravel.items.push({
+                                id: uuidv4(),
+                                content: `${travelData.vehicle.internalNumber} - ${travelData.vehicle.plate}`,
+                                name: `${travelData.driver.name} ${travelData.driver.lastName}`,
+                                idTravel: travelData.travel.id,
+                                idDriverVehicle: travelData.travel.idDriverVehicle
+                            }
+                            )
                             travelsFormatted.splice(indexTravelData, 1)
                         } else {
                             isExistTravelMatching = false
