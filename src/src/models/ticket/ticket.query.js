@@ -5,6 +5,7 @@ const sharedHelpers = require("../../helpers/shared.helpers");
 // Models
 const Seat = require("../seat/seat.model");
 const Ticket = require("./ticket.model");
+const IndicativeNumberType = require("../indicative-number/indicative-number.model");
 
 module.exports = {
   createNewTicketQuery: async (where, options) => {
@@ -21,11 +22,17 @@ module.exports = {
       } = query;
       return await Ticket.findAll({ 
         where, 
-        include: [{
-          model: Seat,
-          as: 'TicketSeat',
-          attributes: ['name', 'id'],
-        }],
+        include: [
+          {
+            model: Seat,
+            as: 'TicketSeat',
+            attributes: ['name', 'id'],
+          },
+          {
+            model: IndicativeNumberType,
+            as: 'TicketIndicativeNumber',
+          }
+        ],
         raw: true,
         nest: true
       })
@@ -36,11 +43,10 @@ module.exports = {
             code: result.code,
             numberPhone: result.numberPhone,
             passengerName: result.passengerName,
-            // TODO: LastName and indicative number user ticket
-            passengerLastName: "",
+            passengerLastName: result.passengerLastName,
             indicativePhone: {
-              id: "b663b33970219efab378dcfc92167144",
-              number: "+57"
+              id: sharedHelpers.encryptIdDataBase(result.TicketIndicativeNumber.id),
+              number: result.TicketIndicativeNumber.number
             },
             seat: {
               id: sharedHelpers.encryptIdDataBase(result.TicketSeat.id),

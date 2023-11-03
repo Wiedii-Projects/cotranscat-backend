@@ -81,11 +81,38 @@ module.exports = {
                 .isArray()
                 .isLength({min: 1})
                 .withMessage(new ErrorModel(errorsConst.invoiceErrors.ticketsRequired)),
-        sharedValidators.validateError,
+            sharedValidators.validateError,
             check("tickets.*.numberPhone")
                 .isString().withMessage(new ErrorModel(errorsConst.ticketErrors.numberPhoneRequired)).bail()
                 .isLength({ min: 1, max: 12 }).withMessage(new ErrorModel(errorsConst.ticketErrors.phoneNumberCharacter)),
-        sharedValidators.validateError,
+            sharedValidators.validateError,
+            check("tickets.*.idIndicativeNumber")
+                .isString()
+                .withMessage(
+                    new ErrorModel(errorsConst.userErrors.idIndicativePhoneRequired)
+                )
+                .bail()
+                .custom((value, { req }) =>
+                    userValidators.decryptId(value, "idIndicativePhoneValue", req)
+                )
+                .custom((_, { req }) => (req.body.idIndicativePhoneValue ? true : false))
+                .withMessage(
+                    new ErrorModel(errorsConst.userErrors.idIndicativePhoneRequired)
+                )
+                .bail()
+                .custom(
+                    async (_, { req }) =>
+                        await userValidators.validateIdIndicativeNumber(
+                            { where: { id: req.body.idIndicativePhoneValue } },
+                            req
+                        )
+                )
+                .custom((_, { req }) => (req.body.isValid ? true : false))
+                .withMessage(
+                    new ErrorModel(errorsConst.userErrors.idIndicativePhoneInvalid)
+                )
+                .bail(),
+            sharedValidators.validateError,
             check("tickets.*.passengerName")
                 .isString()
                 .withMessage(new ErrorModel(errorsConst.ticketErrors.passengerNameRequired))
@@ -93,12 +120,20 @@ module.exports = {
                 .isLength({ min: 1, max: 50 })
                 .withMessage(new ErrorModel(errorsConst.ticketErrors.namePassengerSize))
                 .bail(),
-        sharedValidators.validateError,
+            sharedValidators.validateError,
+            check("tickets.*.passengerLastName")
+                .isString()
+                .withMessage(new ErrorModel(errorsConst.ticketErrors.passengerLastNameRequired))
+                .bail()
+                .isLength({ min: 1, max: 100 })
+                .withMessage(new ErrorModel(errorsConst.ticketErrors.lastNamePassengerSize))
+                .bail(),
+            sharedValidators.validateError,
             check("tickets.*.idSeat")
                 .isString().withMessage(new ErrorModel(errorsConst.ticketErrors.idSeatRequired)).bail()
                 .custom((value, { req }) => userValidators.decryptId(value, "seat", req))
                 .custom((_, { req }) => req.body.seat ? true : false).withMessage(new ErrorModel(errorsConst.ticketErrors.idSeatWrong)).bail()
-                .custom(async (value, { req }) => await seatValidators.validateArraySeat( value, req))
+                .custom(async (value, { req }) => await seatValidators.validateArraySeat(value, req))
                 .custom((_, { req }) => req.body.seatExist.find(element => element == false) == undefined).withMessage(new ErrorModel(errorsConst.ticketErrors.idSeatNotExist)),
         sharedValidators.validateError,
         ]

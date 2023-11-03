@@ -33,6 +33,11 @@ const TicketSchema = dbConnectionOptions.define(
       field: "passengerName",
       allowNull: true
     },
+    passengerLastName: {
+      type: DataTypes.STRING(100),
+      field: "passengerLastName",
+      allowNull: true
+    },
     idSeat: {
       type: DataTypes.INTEGER,
       allowNull: false,
@@ -53,6 +58,16 @@ const TicketSchema = dbConnectionOptions.define(
       onUpdate: "CASCADE",
       onDelete: "CASCADE",
     },
+    idIndicativeNumber: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+      references: {
+        model: "indicativeNumber",
+        key: "id",
+      },
+      onUpdate: "CASCADE",
+      onDelete: "CASCADE",
+    }
   },
   {
       tableName: "ticket",
