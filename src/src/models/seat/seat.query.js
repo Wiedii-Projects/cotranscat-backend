@@ -15,7 +15,8 @@ module.exports = {
     updateSeat: async (update, where, transaction) => {
         try {
             return await Seat.update(update, { where, transaction });
-        } catch {
+        } catch (e) {
+            console.log(e)
             throw errorsConst.seatErrors.queryErrors.updateError
         }
     },

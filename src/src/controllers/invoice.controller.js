@@ -17,9 +17,9 @@ const { extractInvoice, extractInvoiceMoneyTransfer, extractInvoiceShipping } = 
 const { Op, col, Sequelize } = require('sequelize');
 
 // Queries
-const { createNewInvoiceQuery, findInvoiceShippingQuery, updateInvoiceQuery } = require('../models/invoice/invoice.query');
+const { createNewInvoiceQuery, findInvoiceShippingQuery, updateInvoiceQuery, findAllTravelJHOANInvoiceQuery } = require('../models/invoice/invoice.query');
 const { findServiceTypeQuery } = require('../models/service-type/service-type.query');
-const { invoiceQuery, travelQuery, moneyTransferQuery } = require('../models/index.queries');
+const { invoiceQuery, travelQuery, moneyTransferQuery, seatQuery } = require('../models/index.queries');
 const shipmentTrackingQuery = require('../models/shipment-tracking/shipment-tracking.query');
 const { findPaymentMethodQuery } = require('../models/payment-method/payment-method.query');
 const prefixQuery = require('../models/prefix/prefix.query');
@@ -611,8 +611,38 @@ module.exports = {
         }
     },
     cancelationInvoice: async (req, res) => {
+        let transaction;
         try {
-            const { invoice } = req.body;
+            const { invoice, date, time } = req.body;
+            const [{ type: valueConventionServiceType }] = await findServiceTypeQuery({ where: { id: decryptIdDataBase(invoice.idServiceType) } });
+
+            transaction = await dbConnectionOptions.transaction();
+
+            if (valueConventionServiceType === TYPE_SERVICE.PASSAGE.VALUE_CONVENTION) {
+                let whereInvoice = {
+                    [Op.and]: [
+                        Sequelize.where(col('Invoice.id'), '=', sharedHelpers.decryptIdDataBase(invoice.id)),
+                        Sequelize.where(col('TicketInvoice.TicketSeat.TravelSeat.date'), '>=', new Date(date)),
+                        Sequelize.where(col('TicketInvoice.TicketSeat.TravelSeat.time'), '>=', time),
+                    ]
+                };
+                const [test] = await findAllTravelJHOANInvoiceQuery({ where: whereInvoice })
+                console.log(JSON.stringify(test, null, 4), "test.,,.,..,.,.,")
+
+                let promiseChangeStateAvailableSeat = []
+
+                if (test && test.TicketInvoice.length !== 0) {
+                    
+                    test.TicketInvoice.forEach(element => {
+                        promiseChangeStateAvailableSeat.push(
+                            seatQuery.updateSeat({ state: 0 }, { id: element.TicketSeat.id }, transaction)
+                            )
+                    });
+                    
+                    await Promise.all(promiseChangeStateAvailableSeat)
+                }
+            }
+
             let newSynchronizationType = 2
 
             if (!invoice.isSynchronized && invoice.synchronizationType === 1) newSynchronizationType = 3
@@ -625,10 +655,15 @@ module.exports = {
                     synchronizationType: newSynchronizationType,
                     isSynchronized: false,
                     isCancelled: true
-                }
+                },
+                transaction
             )
+
+            await transaction.commit();
+            
             return responseHelpers.responseSuccess(res, true);
         } catch (error) {
+            if (transaction) await transaction.rollback();
             return responseHelpers.responseError(res, 500, error);
         }
     },
