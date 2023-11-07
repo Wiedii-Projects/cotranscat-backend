@@ -1193,13 +1193,13 @@ module.exports = {
       throw errorsConst.invoiceErrors.queryErrors.findAllError;
     }
   },
-  findAllTravelJHOANInvoiceQuery: async (query, idTravel) => {
+  findChairsAssociatedWithATicketInvoiceQuery: async (query) => {
     try {
       const { 
         where,
       } = query;
-      
-      const test = await Invoice.findAll({
+
+      return await Invoice.findAll({
         where,
         attributes: [
           [col('Invoice.id'), 'idInvoice'],
@@ -1228,11 +1228,9 @@ module.exports = {
           }
         ],
         nest: true,
-      })
-
-      return test 
+      }) 
     } catch {
-      throw errorsConst.invoiceErrors.queryErrors.findAllError;
+      throw errorsConst.invoiceErrors.queryErrors.findChairsAssociatedWithATicketInvoiceError;
     }
   }
   

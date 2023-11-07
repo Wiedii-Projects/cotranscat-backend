@@ -17,7 +17,7 @@ const { extractInvoice, extractInvoiceMoneyTransfer, extractInvoiceShipping } = 
 const { Op, col, Sequelize } = require('sequelize');
 
 // Queries
-const { createNewInvoiceQuery, findInvoiceShippingQuery, updateInvoiceQuery, findAllTravelJHOANInvoiceQuery } = require('../models/invoice/invoice.query');
+const { createNewInvoiceQuery, findInvoiceShippingQuery, updateInvoiceQuery, findChairsAssociatedWithATicketInvoiceQuery } = require('../models/invoice/invoice.query');
 const { findServiceTypeQuery } = require('../models/service-type/service-type.query');
 const { invoiceQuery, travelQuery, moneyTransferQuery, seatQuery } = require('../models/index.queries');
 const shipmentTrackingQuery = require('../models/shipment-tracking/shipment-tracking.query');
@@ -626,14 +626,13 @@ module.exports = {
                         Sequelize.where(col('TicketInvoice.TicketSeat.TravelSeat.time'), '>=', time),
                     ]
                 };
-                const [test] = await findAllTravelJHOANInvoiceQuery({ where: whereInvoice })
-                console.log(JSON.stringify(test, null, 4), "test.,,.,..,.,.,")
+                const [seatFoundByInvoice] = await findChairsAssociatedWithATicketInvoiceQuery({ where: whereInvoice })
 
                 let promiseChangeStateAvailableSeat = []
 
-                if (test && test.TicketInvoice.length !== 0) {
+                if (seatFoundByInvoice && seatFoundByInvoice.TicketInvoice.length !== 0) {
                     
-                    test.TicketInvoice.forEach(element => {
+                    seatFoundByInvoice.TicketInvoice.forEach(element => {
                         promiseChangeStateAvailableSeat.push(
                             seatQuery.updateSeat({ state: 0 }, { id: element.TicketSeat.id }, transaction)
                             )

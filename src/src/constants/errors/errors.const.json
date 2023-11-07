@@ -1392,6 +1392,10 @@
       "updateJobError": {
         "code": "INVO_005",
         "message": "Something went wrong"
+      },
+      "findChairsAssociatedWithATicketInvoiceError": {
+        "code": "INVO_006",
+        "message": "Something went wrong"
       }
     }
   },

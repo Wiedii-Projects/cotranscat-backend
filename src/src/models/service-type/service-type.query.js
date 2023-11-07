@@ -15,13 +15,11 @@ module.exports = {
     findServiceTypeQuery: async (query = {}) => {
         const { where } = query;
         try {
-            const test =  await ServiceType.findAll({
+            return  await ServiceType.findAll({
                 where,
                 raw: true,
                 nest:true
             });
-            console.log(JSON.stringify(test, null, 4))
-            return test
         } catch {
             throw errorsConst.serviceTypeErrors.queryErrors.findAllError
         }

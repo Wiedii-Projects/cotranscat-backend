@@ -304,10 +304,7 @@ module.exports = {
                 .custom((_, { req }) => req.body.isCancelledInvoice === true)
                 .withMessage(new ErrorModel(errorsConst.invoiceErrors.invoiceIsAlreadyCancelled))
                 .bail()
-                .custom((_, { req }) => {
-                    console.log(req.body.invoice)
-                    return serviceTypeValidators.validateServiceType(req, { where: { id: sharedHelpers.decryptIdDataBase(req.body.invoice.idServiceType) } })
-                })
+                .custom((_, { req }) => serviceTypeValidators.validateServiceType(req, { where: { id: sharedHelpers.decryptIdDataBase(req.body.invoice.idServiceType) } }))
                 .custom((_, { req }) => !!req.body.serviceType)
                 .withMessage(new ErrorModel(errorsConst.invoiceErrors.invoiceHasNoAssociatedServiceType))
                 .bail(),
