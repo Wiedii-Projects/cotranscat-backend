@@ -1931,6 +1931,14 @@
       }
     }
   },
+  "prefixManifestErrors": {
+    "queryErrors": {
+      "findOneError": {
+        "code": "PXMN_001",
+        "message": "Something went wrong"
+      }
+    }
+  },
   "appErrors": {
     "letterIsRequired": {
       "code": "APCT001",

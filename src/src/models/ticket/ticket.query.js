@@ -63,7 +63,8 @@ module.exports = {
       const {
         where,
         attributes = [
-          'id', 'number', 'code', 'numberPhone', 'passengerName', 'idSeat', 'idInvoice'
+          'id', 'number', 'code', 'numberPhone', 'passengerName', 'passengerLastName', 
+          'idSeat', 'idInvoice', 'idIndicativeNumber'
         ]
       } = query;
 
@@ -80,8 +81,10 @@ module.exports = {
         code: result.code,
         numberPhone: result.numberPhone,
         passengerName: result.passengerName,
+        passengerLastName: result.passengerLastName,
         idSeat: sharedHelpers.encryptIdDataBase(result.idSeat),
         idInvoice: sharedHelpers.encryptIdDataBase(result.idInvoice),
+        idIndicativeNumber: sharedHelpers.encryptIdDataBase(result.idIndicativeNumber)
       }))
 
       return tickets

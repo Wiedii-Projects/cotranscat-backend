@@ -29,7 +29,8 @@ const {
     defaultSeatRuler,
     defaultDriverVehicle,
     defaultTravel,
-    defaultSeat
+    defaultSeat,
+    defaultPrefixManifest
 } = require('./default-data.model');
 
 //Const
@@ -69,6 +70,7 @@ const SeatRuler = require('../../seat-ruler/seat-ruler.model');
 const DriverVehicle = require('../../driver-vehicle/driver-vehicle.model');
 const Travel = require('../../travel/travel.model');
 const Seat = require('../../seat/seat.model');
+const PrefixManifest = require('../../prefix-manifest/prefix-manifest.model');
 
 class defaultDataBaseModel {
     constructor() {
@@ -283,11 +285,15 @@ class defaultDataBaseModel {
         return await Seat.count();
     }
 
+    async countPrefixManifest() {
+        return await PrefixManifest.count();
+    }
+
     async createDefaultDataBase() {
         let creationArray = [];
         const [stateVehicle, role, bloodType, licenseCategory, indicativeNumber, documentType, country, department, paymentMethod, municipality,
             typeFuel, typeBodywork, typeVehicle, vehicle, unitMeasure, shippingType, serviceType, headquarter, bank, trackingStatus, templateVehicle, seatRuler,
-            driverVehicle, travel, seat
+            driverVehicle, travel, seat, prefixManifest
         ] = await Promise.all([
             this.countStateVehicle(),
             this.countRole(),
@@ -313,7 +319,8 @@ class defaultDataBaseModel {
             this.countSeatRuler(),
             this.countDriverVehicle(),
             this.countTravel(),
-            this.countSeat()
+            this.countSeat(),
+            this.countPrefixManifest()
         ]);
         if (!templateVehicle) creationArray.push(TemplateVehicle.bulkCreate(defaultTemplateVehicle))
         if (!stateVehicle) creationArray.push(StateVehicle.bulkCreate(defaultStateVehicle));
@@ -343,6 +350,8 @@ class defaultDataBaseModel {
         if (!seatRuler) creationArray.push(SeatRuler.bulkCreate(defaultSeatRuler));
 
         await Promise.all(creationArray);
+
+        if (!prefixManifest) PrefixManifest.bulkCreate(defaultPrefixManifest)
 
         const [idMunicipality, idMunicipalityArrive] = await this.getMunicipality();
         await this.countRoute() || await Route.create({ idMunicipalityDepart: idMunicipality, idMunicipalityArrive });

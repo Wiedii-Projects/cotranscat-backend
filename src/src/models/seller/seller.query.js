@@ -10,6 +10,9 @@ const {
   Bank,
   Prefix,
   Resolution,
+  Municipality,
+  Headquarter,
+  PrefixManifest,
 } = require("../index.models");
 
 // Helpers
@@ -169,6 +172,64 @@ module.exports = {
           }
         ]
       })
+    } catch {
+      throw errorsConst.sellerErrors.queryErrors.findSellerBankAssociatedError;
+    }
+  },
+  findPrefixManifestByBankAssociatedToSellerQuery: async (query = {}) => {
+    const {
+      where,
+      attributes = ["id", "nickName", "email"]
+    } = query
+    try {
+      const prefixManifestFound = await Seller.findOne({
+        where,
+        attributes: [],
+        raw: true,
+        nest: true,
+        include: [
+          {
+            model: Bank,
+            as: "BankSeller",
+            attributes: [],
+            include: [
+              {
+                model: Municipality,
+                as: "MunicipalityBank",
+                attributes: [],
+                include: [
+                  {
+                    model: Headquarter,
+                    as: "MunicipalityHeadquarter",
+                    attributes: [],
+                    include: [
+                      {
+                        model: PrefixManifest,
+                        as: "HeadquarterPrefixManifest"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      })
+      if (prefixManifestFound) {
+        const { BankSeller: { MunicipalityBank: { MunicipalityHeadquarter: { HeadquarterPrefixManifest } }} } = prefixManifestFound;
+      
+        return {
+          id: HeadquarterPrefixManifest?.id ? sharedHelpers.encryptIdDataBase(HeadquarterPrefixManifest.id) : "",
+          code: HeadquarterPrefixManifest?.code ? HeadquarterPrefixManifest.code : "",
+          headquarter: HeadquarterPrefixManifest?.idHeadquarter ? sharedHelpers.encryptIdDataBase(HeadquarterPrefixManifest.idHeadquarter) : "",
+        };
+      } else {
+        return {
+          id: "",
+          code: "",
+          headquarter: "",
+        };
+      }      
     } catch {
       throw errorsConst.sellerErrors.queryErrors.findSellerBankAssociatedError;
     }

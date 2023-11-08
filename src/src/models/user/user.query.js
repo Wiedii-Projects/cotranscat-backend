@@ -20,7 +20,7 @@ module.exports = {
           "name",
           "lastName",
           "numberPhone",
-          "state",
+          "state"
         ],
         include = [
           {

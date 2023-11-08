@@ -687,7 +687,9 @@ module.exports = {
                         code: result.code,
                         numberPhone: result.numberPhone,
                         passengerName: result.passengerName,
-                        idSeat: result.idSeat
+                        passengerLastName: result.passengerLastName,
+                        idSeat: result.idSeat,
+                        idIndicativeNumber: sharedHelpers.decryptIdDataBase(result.idIndicativeNumber)
                     }))
                     optionsQuery.price = invoice.price
                     optionsQuery.tickets = tickets

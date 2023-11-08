@@ -44,6 +44,7 @@ const StateVehicle = require('./state-vehicle/stateVehicle.model');
 const TemplateVehicle = require('./template-vehicle/templateVehicle.model');
 const PhotoVehicle = require('./photo-vehicle/photoVehicle.model');
 const PhotoDocumentOwner = require('./photo-document-owner/photoDocumentOwner.model');
+const PrefixManifest = require('./prefix-manifest/prefix-manifest.model');
 
 // Relationships BD
 
@@ -310,6 +311,14 @@ Shipping.belongsTo(Travel, { as: 'TravelShipping', foreignKey: { name: 'idTravel
 Ticket.belongsTo(IndicativeNumber, { as: 'TicketIndicativeNumber', foreignKey: { name: 'idIndicativeNumber', allowNull: false } });
 IndicativeNumber.hasMany(Ticket, { as: 'TicketIndicativeNumber', foreignKey: { name: "idIndicativeNumber", allowNull: false } });
 
+// Relationship Travel-PrefixManifest
+Travel.belongsTo(PrefixManifest, { as: 'TravelPrefixManifest', foreignKey: { name: 'idPrefixManifest', allowNull: false } });
+PrefixManifest.hasMany(Travel, { as: 'TravelPrefixManifest', foreignKey: { name: "idPrefixManifest", allowNull: false } });
+
+// Relationship Headquarter-PrefixManifest
+PrefixManifest.belongsTo(Headquarter, { as: 'HeadquarterPrefixManifest', foreignKey: { name: 'idHeadquarter', allowNull: false } });
+Headquarter.hasOne(PrefixManifest, { as: 'HeadquarterPrefixManifest', foreignKey: { name: 'idHeadquarter', allowNull: false } });
+
 module.exports = {
   // Aggregates Models
   ServerModel: require("./aggregates/server/server.model"),
@@ -359,5 +368,6 @@ module.exports = {
   Owner,
   StateVehicle,
   PhotoVehicle,
-  TemplateVehicle
+  TemplateVehicle,
+  PrefixManifest
 };
