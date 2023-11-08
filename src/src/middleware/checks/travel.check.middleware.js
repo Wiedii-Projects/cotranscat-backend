@@ -23,6 +23,8 @@ const { ErrorModel } = require("../../models/index.models");
 
 module.exports = {
     checkCreateTravel: () => [
+        ...sharedCheckMiddleware.checkJwt(),
+        sharedValidators.validateError,
         check('idDriverVehicle')
             .isString()
             .withMessage(new ErrorModel(errorsConst.travelErrors.idDriverVehicleRequired))
@@ -52,7 +54,7 @@ module.exports = {
                 hourFormat: 'hour24',
                 mode: 'withSeconds'
             }),
-        sharedValidators.validateError,
+        sharedValidators.validateError
     ],
 
     checkGetDriverVehicleTravel: () => [

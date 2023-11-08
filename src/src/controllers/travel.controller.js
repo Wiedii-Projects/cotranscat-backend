@@ -22,15 +22,18 @@ const { Ticket, Invoice, Resolution } = require('../models/index.models');
 
 module.exports = {
     createTravel: async (req, res) => {
-        const { driverVehicle: { id: idDriverVehicle, idVehicle }, date, time, idRoute } = req.body;
+        const { driverVehicle: { id: idDriverVehicle, idVehicle }, date, time, idRoute, user } = req.body;
         let transaction
 
 
         try {
             transaction = await dbConnectionOptions.transaction();
+            
+            const prefixManifest = await sellerQuery.findPrefixManifestByBankAssociatedToSellerQuery({ where: { id: sharedHelpers.decryptIdDataBase(user.id) } })
 
             const [travel, isCreated] = await travelQuery.createTravel({
-                idDriverVehicle, date, time, idRoute
+                idDriverVehicle, date, time, idRoute, 
+                idPrefixManifest: sharedHelpers.decryptIdDataBase(prefixManifest.id)
             }, transaction);
 
             if (!isCreated) {
