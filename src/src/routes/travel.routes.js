@@ -76,7 +76,7 @@ router.get('/listVehicleAvailableToTravel/:id', [
     travelMiddleware.checkListVehicleAvailableToTravel()
 ], travelController.listVehicleAvailableToTravel);
 
-router.get('/assignTravelAnotherVehicle/:id', [
+router.put('/assignTravelAnotherVehicle/:id', [
     //TODO: implementation of role permission validation
     sharedCheckMiddleware.checkId(),
     travelMiddleware.checkAssignTravelAnotherVehicle()

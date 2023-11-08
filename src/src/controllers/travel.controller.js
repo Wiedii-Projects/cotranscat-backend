@@ -467,7 +467,7 @@ module.exports = {
         }
     },
     assignTravelAnotherVehicle: async (req, res) => {
-        const { travel, travelAssigned } = req.body;
+        const { travel, travelAssigned, observation } = req.body;
         let transaction;
         const changeSeatTicket = []
         try {
@@ -490,6 +490,9 @@ module.exports = {
                 changeSeatTicket.push(seatQuery.updateSeat({ state: 1 },{ id: assignedSeat.id }, transaction))
             }
             await Promise.all(changeSeatTicket);
+
+            await travelQuery.updateTravel({ manifestObservation: observation }, { id: travelAssigned.id }, transaction );
+            
             await transaction.commit();
             return responseHelpers.responseSuccess(res, null);
         } catch (error) {
