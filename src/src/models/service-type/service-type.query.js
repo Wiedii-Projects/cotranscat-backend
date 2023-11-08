@@ -15,7 +15,7 @@ module.exports = {
     findServiceTypeQuery: async (query = {}) => {
         const { where } = query;
         try {
-            return await ServiceType.findAll({
+            return  await ServiceType.findAll({
                 where,
                 raw: true,
                 nest:true

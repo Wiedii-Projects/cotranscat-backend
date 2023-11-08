@@ -5,7 +5,7 @@ const { errorsConst } = require("../../constants/index.constants");
 const { encryptIdDataBase } = require("../../helpers/shared.helpers");
 
 // Libraries
-const { col } = require("sequelize");
+const { col, Op } = require("sequelize");
 
 // Models
 const { 
@@ -1192,5 +1192,46 @@ module.exports = {
     } catch {
       throw errorsConst.invoiceErrors.queryErrors.findAllError;
     }
+  },
+  findChairsAssociatedWithATicketInvoiceQuery: async (query) => {
+    try {
+      const { 
+        where,
+      } = query;
+
+      return await Invoice.findAll({
+        where,
+        attributes: [
+          [col('Invoice.id'), 'idInvoice'],
+          [col('TicketInvoice.TicketSeat.TravelSeat.date'), 'TEST'],
+          [col('TicketInvoice.TicketSeat.TravelSeat.time'), 'TEST2'],
+        ],
+        include: [
+          {
+            model: Ticket,
+            as: 'TicketInvoice',
+            attributes: ['id'],
+            include: [
+              {
+                model: Seat,
+                as: 'TicketSeat',
+                attributes: ['id'],
+                include: [
+                  {
+                    model: Travel,
+                    as: 'TravelSeat',
+                    attributes: []
+                  },
+                ]
+              },
+            ]
+          }
+        ],
+        nest: true,
+      }) 
+    } catch {
+      throw errorsConst.invoiceErrors.queryErrors.findChairsAssociatedWithATicketInvoiceError;
+    }
   }
+  
 }

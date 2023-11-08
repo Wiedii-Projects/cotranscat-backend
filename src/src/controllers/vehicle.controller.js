@@ -100,7 +100,6 @@ module.exports = {
             });
 
             const vehiclesData = vehicles.map(vehicle => {
-                console.log(JSON.stringify(vehicle.VehicleDriverVehicle.TravelDriverVehicle, null, 4))
                 return ({
                     vehicle: {
                         plate: vehicle.plate,

@@ -10,10 +10,11 @@ const { ErrorModel } = require("../../models/index.models");
 // Validators - middleware
 const { 
     sharedValidators, userValidators, seatValidators, clientValidator, paymentMethodValidators, 
-    invoiceValidators, unitMeasureValidators, shippingTypeValidators 
+    invoiceValidators, unitMeasureValidators, shippingTypeValidators, serviceTypeValidators 
 } = require('../index.validators.middleware');
 const sharedCheckMiddleware = require('./shared.check.middleware');
 const sharedHelpers = require('../../helpers/shared.helpers');
+const { TYPE_SERVICE } = require('../../constants/core/sales.const');
 
 module.exports = {
     checkGetInvoiceTravel: () => {
@@ -337,6 +338,40 @@ module.exports = {
                 .bail()
                 .custom((_, { req }) => req.body.isCancelledInvoice === true)
                 .withMessage(new ErrorModel(errorsConst.invoiceErrors.invoiceIsAlreadyCancelled))
+                .bail()
+                .custom((_, { req }) => serviceTypeValidators.validateServiceType(req, { where: { id: sharedHelpers.decryptIdDataBase(req.body.invoice.idServiceType) } }))
+                .custom((_, { req }) => !!req.body.serviceType)
+                .withMessage(new ErrorModel(errorsConst.invoiceErrors.invoiceHasNoAssociatedServiceType))
+                .bail(),
+            sharedValidators.validateError,
+            check('date')
+                .optional({ checkFalsy: true })
+                .custom((value, { req }) => {
+                    if (req.body.serviceType.type === TYPE_SERVICE.PASSAGE.VALUE_CONVENTION) {
+                        if (typeof value !== 'string')
+                            {
+                                throw new ErrorModel(errorsConst.invoiceErrors.dateInvoiceRequired)
+                            }
+                        return true;
+                    }
+                    return true;
+                })
+                .bail()
+                .isDate()
+                .withMessage(new ErrorModel(errorsConst.invoiceErrors.dateInvoiceInvalid))
+                .bail(),
+            sharedValidators.validateError,
+            check('time')
+                .custom((value, { req }) => {
+                    if (req.body.serviceType.type === TYPE_SERVICE.PASSAGE.VALUE_CONVENTION) {
+                        if (typeof value !== 'string')
+                            throw new ErrorModel(errorsConst.invoiceErrors.timeInvoiceRequired)
+                        if (!/^([01]\d|2[0-3]):([0-5]\d):([0-5]\d)$/.test(value))
+                            throw new ErrorModel(errorsConst.invoiceErrors.timeInvoiceInvalid)
+                        return true;
+                    }
+                    return true;
+                })
                 .bail(),
             sharedValidators.validateError
         ]

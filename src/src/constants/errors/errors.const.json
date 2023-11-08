@@ -1360,6 +1360,26 @@
       "code": "INVO016",
       "message": "customer's email is required for the creation of the electronic invoice"
     },
+    "invoiceHasNoAssociatedServiceType": {
+      "code": "INVO017",
+      "message": "Invoice has no associated service type"
+    },
+    "dateInvoiceRequired": {
+      "code": "INVO019",
+      "message": "The date invoice is required"
+    },
+    "dateInvoiceInvalid": {
+      "code": "INVO018",
+      "message": "The date invoice is invalid"
+    },
+    "timeInvoiceRequired": {
+      "code": "INVO019",
+      "message": "The time invoice is required"
+    },
+    "timeInvoiceInvalid": {
+      "code": "INVO018",
+      "message": "The time invoice is invalid"
+    },
     "queryErrors": {
       "createError": {
         "code": "INVO_001",
@@ -1379,6 +1399,10 @@
       },
       "updateJobError": {
         "code": "INVO_005",
+        "message": "Something went wrong"
+      },
+      "findChairsAssociatedWithATicketInvoiceError": {
+        "code": "INVO_006",
         "message": "Something went wrong"
       }
     }
