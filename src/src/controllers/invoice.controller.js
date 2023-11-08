@@ -354,10 +354,6 @@ module.exports = {
         let transaction;
         const { tickets, user: { id: idSeller }, price, decryptId: idClient, priceSeat, idPaymentMethod, isElectronic } = req.body;
         try {
-            const dataTicketsCleaned = tickets.map(ticket => ({
-                ...ticket,
-                idIndicativeNumber : decryptIdDataBase(ticket.idIndicativeNumber)
-            }))
 
             const [{ id: idServiceType, type }] = await  findServiceTypeQuery({ where: { type: TYPE_SERVICE.PASSAGE.VALUE_CONVENTION } });
 
@@ -378,7 +374,8 @@ module.exports = {
             invoice.synchronizationType = salesConst.TYPE_SYNCHRONIZATION_INVOICES.ONLY_CREATE_INVOICE
 
             transaction = await dbConnectionOptions.transaction();
-            const { id } = await createNewInvoiceQuery(invoice, { transaction, tickets: dataTicketsCleaned, price: invoice.price/tickets.length, type });
+
+            const { id } = await createNewInvoiceQuery(invoice, { transaction, tickets, price: invoice.price/tickets.length, type });
 
             await prefixQuery.updatePrefixQuery(
                 { id: decryptIdDataBase(idPrefix) },
@@ -689,7 +686,7 @@ module.exports = {
                         passengerName: result.passengerName,
                         passengerLastName: result.passengerLastName,
                         idSeat: result.idSeat,
-                        idIndicativeNumber: sharedHelpers.decryptIdDataBase(result.idIndicativeNumber)
+                        idIndicativeNumber: result.idIndicativeNumber
                     }))
                     optionsQuery.price = invoice.price
                     optionsQuery.tickets = tickets
