@@ -94,97 +94,146 @@ module.exports = {
         }
     },
     getSeatRulesByVehicle: async (query) => {
-        const {
-            where,
-            include = [
-                {
-                    model: TemplateVehicle,
-                    as: 'VehicleTemplateVehicle',
-                    include: [
-                        {
-                            model: SeatRuler,
-                            as: 'SeatRulerTemplateVehicle'
-                        }
-                    ]
-                }
-            ]
-        } = query;
-        return await Vehicle.findOne({
-            where,
-            include,
-            nest: true
-        })
+        try {
+            const {
+                where,
+                include = [
+                    {
+                        model: TemplateVehicle,
+                        as: 'VehicleTemplateVehicle',
+                        include: [
+                            {
+                                model: SeatRuler,
+                                as: 'SeatRulerTemplateVehicle'
+                            }
+                        ]
+                    }
+                ]
+            } = query;
+            return await Vehicle.findOne({
+                where,
+                include,
+                nest: true
+            })
+        } catch {
+            throw errorsConst.vehicleErrors.queryErrors.findSeatRulesByVehicleError
+        }
     },
     findAllAvailableVehiclesAndDriverVehicleQuery: async (query, whereTravel) => {
         const {
             where
         } = query;
-
-        return await Vehicle.findAll({
-            include: [
-                {
-                    model: DriverVehicle,
-                    as: "VehicleDriverVehicle",
-                    required: true,
-                    include: [
-                        {
-                            model: StateVehicle,
-                            as: "DriverVehicleStateVehicle",
-                            where: {
-                                type: 0
+        
+        try {
+            return await Vehicle.findAll({
+                include: [
+                    {
+                        model: DriverVehicle,
+                        as: "VehicleDriverVehicle",
+                        required: true,
+                        include: [
+                            {
+                                model: StateVehicle,
+                                as: "DriverVehicleStateVehicle",
+                                where: {
+                                    type: 0
+                                },
                             },
-                        },
-                        {
-                            model: Travel,
-                            as: "TravelDriverVehicle",
-                            required: true,
-                            where: whereTravel
-                        }
-                    ],
-                }
-            ],
-            where,
-            raw: true,
-            nest: true
-        })
+                            {
+                                model: Travel,
+                                as: "TravelDriverVehicle",
+                                required: true,
+                                where: whereTravel
+                            }
+                        ],
+                    }
+                ],
+                where,
+                raw: true,
+                nest: true
+            })
+        } catch {
+            throw errorsConst.vehicleErrors.queryErrors.findAllAvailableVehiclesAndDriverVehicleError
+        }
     },
     findAllAvailableVehiclesAndDriverVehicleWithSeatQuery: async (query) => {
         const {
             where
         } = query;
-
-        return await Vehicle.findAll({
-            include: [
-                {
-                    model: DriverVehicle,
-                    as: "VehicleDriverVehicle",
-                    required: false,
-                    include: [
-                        {
-                            model: StateVehicle,
-                            as: "DriverVehicleStateVehicle",
-                            where: {
-                                [Op.or]: [
-                                    { type: 0 },
-                                    { type: 2 }
-                                ]
+        
+        try {
+            return await Vehicle.findAll({
+                include: [
+                    {
+                        model: DriverVehicle,
+                        as: "VehicleDriverVehicle",
+                        required: false,
+                        include: [
+                            {
+                                model: StateVehicle,
+                                as: "DriverVehicleStateVehicle",
+                                where: {
+                                    [Op.or]: [
+                                        { type: 0 },
+                                        { type: 2 }
+                                    ]
+                                },
+                            }
+                        ]
+                    },
+                    {
+                        model: TemplateVehicle,
+                        as: "VehicleTemplateVehicle",
+                        include: [
+                            {
+                                model: SeatRuler,
+                                as: "SeatRulerTemplateVehicle"
+                            }
+                        ]
+                    }
+                ],
+                where,
+                nest: true
+            })
+        } catch {
+            throw errorsConst.vehicleErrors.queryErrors.findAllAvailableVehiclesAndDriverVehicleWithSeatError
+        }
+    },
+    findAllAvailableVehiclesByDateCurrentQuery: async (query, whereTravel) => {
+        const {
+            where
+        } = query;
+        
+        try {
+            return await Vehicle.findAll({
+                include: [
+                    {
+                        model: DriverVehicle,
+                        as: "VehicleDriverVehicle",
+                        required: false,
+                        include: [
+                            {
+                                model: StateVehicle,
+                                as: "DriverVehicleStateVehicle",
+                                where: {
+                                    type: 0
+                                },
                             },
-                        }
-                    ]
-                },
-                {
-                    model: TemplateVehicle,
-                    as: "VehicleTemplateVehicle",
-                    include: [
-                        {
-                            model: SeatRuler,
-                            as: "SeatRulerTemplateVehicle"
-                        }
-                    ]
-                }
-            ],
-            where,
-            nest: true
-        })
+                            {
+                                model: Travel,
+                                as: "TravelDriverVehicle",
+                                required: false,
+                                whereTravel
+                            }
+                        ],
+                    }
+                ],
+                where,
+                raw: true,
+                nest: true
+            })
+        } catch {
+            throw errorsConst.vehicleErrors.queryErrors.findAllAvailableVehiclesByDateCurrentError
+        }
     }
 }

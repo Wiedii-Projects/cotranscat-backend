@@ -117,5 +117,46 @@ module.exports = {
         } catch (error) {
             return responseHelpers.responseError(res, 500, error);
         }
-    }
+    },
+    findAllVehiclesAvailableTravelOptional: async (req, res) => {
+        const { date, time, internalNumber } = req.query;
+
+        try {
+            const vehiclesFound = await vehicleQuery.findAllAvailableVehiclesByDateCurrentQuery(
+                {
+                    where: {
+                        [Op.and]: [
+                            { internalNumber: { [Op.like]: `%${internalNumber}%` } }
+                        ]
+                    }
+                },
+                {
+                    where: {
+                        [Op.and]: [
+                            { date: { [Op.gte]: new Date(date) } },
+                            { time: { [Op.gte]: time } },
+                        ]
+                    }
+                }
+            );
+
+            const vehiclesAvailable = []
+            vehiclesFound.map(({ id: idVehicle, VehicleDriverVehicle: { TravelDriverVehicle } }) => {
+                let objectVehicleResponse = {
+                    idVehicle: sharedHelpers.encryptIdDataBase(idVehicle),
+                }
+                if (TravelDriverVehicle.id !== null) {
+                    objectVehicleResponse.idTravel = sharedHelpers.encryptIdDataBase(TravelDriverVehicle.id),
+                        objectVehicleResponse.time = TravelDriverVehicle.time
+                } else {
+                    objectVehicleResponse.idTravel = null,
+                        objectVehicleResponse.time = ""
+                }
+                vehiclesAvailable.push(objectVehicleResponse)
+            })
+            return responseHelpers.responseSuccess(res, vehiclesAvailable);
+        } catch (error) {
+            return responseHelpers.responseError(res, 500, error);
+        }
+    },
 }

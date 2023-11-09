@@ -104,5 +104,28 @@ module.exports = {
             .withMessage(new ErrorModel(errorsConst.vehicleErrors.dateInvalid))
             .bail(),
         sharedValidators.validateError,
+    ]),
+    checkGetAllVehiclesAvailableTravelOptional: () => ([
+        check('date')
+            .custom((value) => {
+                if (typeof value !== 'string')
+                    throw new ErrorModel(errorsConst.vehicleErrors.dateRequired)
+                return true;
+            })
+            .bail()
+            .isDate()
+            .withMessage(new ErrorModel(errorsConst.vehicleErrors.dateInvalid))
+            .bail(),
+        sharedValidators.validateError,
+        check('time', new ErrorModel(errorsConst.vehicleErrors.timeInvalid))
+            .isTime({
+                hourFormat: 'hour24',
+                mode: 'withSeconds'
+            }),
+        sharedValidators.validateError,
+        check('internalNumber')
+            .isString().withMessage(new ErrorModel(errorsConst.vehicleErrors.internalNumberRequired))
+            .bail(),
+        sharedValidators.validateError
     ])
 }

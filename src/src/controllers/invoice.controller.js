@@ -108,8 +108,8 @@ module.exports = {
                                 whereInvoice = {
                                     ...whereInvoice,
                                     [Op.and]: [
-                                        Sequelize.where(col('Invoice.date'), '>=', startDate),
-                                        Sequelize.where(col('Invoice.date'), '<=', endDate),
+                                        Sequelize.where(col('Invoice.date'), '>=', `${startDate} 00:00:00`),
+                                        Sequelize.where(col('Invoice.date'), '<=', `${endDate} 23:59:59`),
                                     ],
                                     [Op.or]: [
                                         Sequelize.where(col('InvoiceClient.UserClient.name'), 'REGEXP', `${filterValue}`),
@@ -129,8 +129,8 @@ module.exports = {
                                     ...whereInvoice,
                                     [Op.and]: [
                                         ...parametersFilter,
-                                        Sequelize.where(col('Invoice.date'), '>=', startDate),
-                                        Sequelize.where(col('Invoice.date'), '<=', endDate),
+                                        Sequelize.where(col('Invoice.date'), '>=', `${startDate} 00:00:00`),
+                                        Sequelize.where(col('Invoice.date'), '<=', `${endDate} 23:59:59`),
                                     ]
                                 }
                             }
@@ -138,8 +138,8 @@ module.exports = {
                             whereInvoice = {
                                 ...whereInvoice,
                                 [Op.and]: [
-                                    Sequelize.where(col('Invoice.date'), '>=', startDate),
-                                    Sequelize.where(col('Invoice.date'), '<=', endDate),
+                                    Sequelize.where(col('Invoice.date'), '>=', `${startDate} 00:00:00`),
+                                    Sequelize.where(col('Invoice.date'), '<=', `${endDate} 23:59:59`),
                                 ]
                             }
                         }
@@ -226,8 +226,8 @@ module.exports = {
                                 whereInvoice = {
                                     ...whereInvoice,
                                     [Op.and]: [
-                                        Sequelize.where(col('Invoice.date'), '>=', startDate),
-                                        Sequelize.where(col('Invoice.date'), '<=', endDate),
+                                        Sequelize.where(col('Invoice.date'), '>=', `${startDate} 00:00:00`),
+                                        Sequelize.where(col('Invoice.date'), '<=', `${endDate} 23:59:59`),
                                     ],
                                     [Op.or]: [
                                         Sequelize.where(col('InvoiceClient.UserClient.name'), 'REGEXP', `${filterValue}`),
@@ -247,8 +247,8 @@ module.exports = {
                                     ...whereInvoice,
                                     [Op.and]: [
                                         ...parametersFilter,
-                                        Sequelize.where(col('Invoice.date'), '>=', startDate),
-                                        Sequelize.where(col('Invoice.date'), '<=', endDate),
+                                        Sequelize.where(col('Invoice.date'), '>=', `${startDate} 00:00:00`),
+                                        Sequelize.where(col('Invoice.date'), '<=', `${endDate} 23:59:59`),
                                     ]
                                 }
                             }
@@ -256,8 +256,8 @@ module.exports = {
                             whereInvoice = {
                                 ...whereInvoice,
                                 [Op.and]: [
-                                    Sequelize.where(col('Invoice.date'), '>=', startDate),
-                                    Sequelize.where(col('Invoice.date'), '<=', endDate),
+                                    Sequelize.where(col('Invoice.date'), '>=', `${startDate} 00:00:00`),
+                                    Sequelize.where(col('Invoice.date'), '<=', `${endDate} 23:59:59`),
                                 ]
                             }
                         }
@@ -524,8 +524,8 @@ module.exports = {
                                 whereInvoice = {
                                     ...whereInvoice,
                                     [Op.and]: [
-                                        Sequelize.where(col('Invoice.date'), '>=', startDate),
-                                        Sequelize.where(col('Invoice.date'), '<=', endDate),
+                                        Sequelize.where(col('Invoice.date'), '>=', `${startDate} 00:00:00`),
+                                        Sequelize.where(col('Invoice.date'), '<=', `${endDate} 23:59:59`),
                                     ],
                                     [Op.or]: [
                                         Sequelize.where(col('InvoiceClient.UserClient.name'), 'REGEXP', `${filterValue}`),
@@ -545,8 +545,8 @@ module.exports = {
                                     ...whereInvoice,
                                     [Op.and]: [
                                         ...parametersFilter,
-                                        Sequelize.where(col('Invoice.date'), '>=', startDate),
-                                        Sequelize.where(col('Invoice.date'), '<=', endDate),
+                                        Sequelize.where(col('Invoice.date'), '>=', `${startDate} 00:00:00`),
+                                        Sequelize.where(col('Invoice.date'), '<=', `${endDate} 23:59:59`),
                                     ]
                                 }
                             }
@@ -554,8 +554,8 @@ module.exports = {
                             whereInvoice = {
                                 ...whereInvoice,
                                 [Op.and]: [
-                                    Sequelize.where(col('Invoice.date'), '>=', startDate),
-                                    Sequelize.where(col('Invoice.date'), '<=', endDate),
+                                    Sequelize.where(col('Invoice.date'), '>=', `${startDate} 00:00:00`),
+                                    Sequelize.where(col('Invoice.date'), '<=', `${endDate} 23:59:59`),
                                 ]
                             }
                         }

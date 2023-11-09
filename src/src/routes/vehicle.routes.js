@@ -29,4 +29,8 @@ router.get('/:id', [
 router.get('/filter/:value', [
 ], vehicleController.filterVehicle)
 
+router.get('/all/findAllVehiclesAvailableTravelOptional/', [
+    vehicleMiddleware.checkGetAllVehiclesAvailableTravelOptional(),
+], vehicleController.findAllVehiclesAvailableTravelOptional)
+
 module.exports = router
