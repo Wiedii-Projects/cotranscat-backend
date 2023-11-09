@@ -1203,8 +1203,8 @@ module.exports = {
         where,
         attributes: [
           [col('Invoice.id'), 'idInvoice'],
-          [col('TicketInvoice.TicketSeat.TravelSeat.date'), 'TEST'],
-          [col('TicketInvoice.TicketSeat.TravelSeat.time'), 'TEST2'],
+          [col('TicketInvoice.TicketSeat.TravelSeat.date'), 'date'],
+          [col('TicketInvoice.TicketSeat.TravelSeat.time'), 'time'],
         ],
         include: [
           {

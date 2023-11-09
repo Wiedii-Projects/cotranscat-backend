@@ -880,6 +880,10 @@
       "code": "VEHI034",
       "message": "The date is invalid"
     },
+    "timeInvalid": {
+      "code": "VEHI035",
+      "message": "The time is invalid"
+    },
     "queryErrors": {
       "createdError": {
         "code": "VEHI_001",
@@ -899,6 +903,22 @@
       },
       "findOneVehicleQuery": {
         "code": "VEHI_005",
+        "message": "Something went wrong"
+      },
+      "findAllAvailableVehiclesByDateCurrentError": {
+        "code": "VEHI_006",
+        "message": "Something went wrong"
+      },
+      "findSeatRulesByVehicleError": {
+        "code": "VEHI_007",
+        "message": "Something went wrong"
+      },
+      "findAllAvailableVehiclesAndDriverVehicleError": {
+        "code": "VEHI_008",
+        "message": "Something went wrong"
+      },
+      "findAllAvailableVehiclesAndDriverVehicleWithSeatError": {
+        "code": "VEHI_009",
         "message": "Something went wrong"
       }
     }
