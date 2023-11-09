@@ -192,10 +192,6 @@ module.exports = {
         check('travel', new ErrorModel(errorsConst.travelErrors.travelDoesNotExist))
             .custom((value) => !!value),
         sharedValidators.validateError,
-        check('observation').optional({ checkFalsy: false })
-            .isString().withMessage(new ErrorModel(errorsConst.travelErrors.observationRequired)).bail()
-            .isLength({ min: 1, max: 255 }).withMessage(new ErrorModel(errorsConst.travelErrors.observationExceededAllowedLimiter)),
-        sharedValidators.validateError,
         check('idDriverVehicle').custom(async (value, { req }) => await driverVehicleValidators.validateIfItIsADefaultDriver(req, { id: sharedHelpers.decryptIdDataBase(value) })),
         sharedValidators.validateError,
         check('driverVehicle', new ErrorModel(errorsConst.travelErrors.invalidDriverToTheManifest))
@@ -234,6 +230,10 @@ module.exports = {
         check('travelAssigned', new ErrorModel(errorsConst.travelErrors.routeDifferentCurrentTravel))
             .custom((value, {req}) => !!(value.idRoute===req.body.travel.idRoute)),
         sharedValidators.validateError,
+        check('observation').optional({ checkFalsy: false })
+            .isString().withMessage(new ErrorModel(errorsConst.travelErrors.observationRequired)).bail()
+            .isLength({ min: 1, max: 255 }).withMessage(new ErrorModel(errorsConst.travelErrors.observationExceededAllowedLimiter)),
+        sharedValidators.validateError
     ],
     checkCreateByIdVehicleTravel: () => [
         check('idVehicle').custom(async (value, { req }) => await vehicleValidator.validateVehicle(req, { where: { id: sharedHelpers.decryptIdDataBase(value) } })),

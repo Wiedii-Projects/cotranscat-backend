@@ -120,9 +120,9 @@ module.exports = {
             throw errorsConst.travelErrors.queryErrors.findError;
         }
     },
-    updateTravel: async (values, where) => {
+    updateTravel: async (values, where, transaction) => {
         try {
-            return await Travel.update(values, { where });
+            return await Travel.update(values, { where, transaction });
         } catch {
             throw errorsConst.travelErrors.queryErrors.updateError;
         }
