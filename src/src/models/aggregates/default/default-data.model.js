@@ -195,7 +195,8 @@ module.exports = {
             manifestNumber: 12010,
             manifestObservation: 12010,
             idRoute: 1,
-            id: 1
+            id: 1,
+            idPrefixManifest: 2
         },
         {
             date: new Date(),
@@ -204,7 +205,8 @@ module.exports = {
             manifestNumber: 12010,
             manifestObservation: 12010,
             idRoute: 1,
-            id: 2
+            id: 2,
+            idPrefixManifest: 2
         }
     ],
     defaultSeat: [
@@ -568,8 +570,8 @@ module.exports = {
         { id: 2, code: "01", description: "Tibu general cash register", idMunicipality: 37 }
     ],
     defaultHeadquarter: [
-        { description: salesConst.HEADQUARTERS.TIBU, idMunicipality: 37 },
-        { description: salesConst.HEADQUARTERS.CUCUTA, idMunicipality: 11 }
+        { id: 1, description: salesConst.HEADQUARTERS.TIBU, idMunicipality: 37 },
+        { id: 2, description: salesConst.HEADQUARTERS.CUCUTA, idMunicipality: 11 }
     ],
     defaultTrackingStatus: [
         { chronologicalPosition: trackingStatusConst.TRACKING_STATUS.RECEIVED.VALUE_CONVENTION, name: trackingStatusConst.TRACKING_STATUS.RECEIVED.VALUE_STRING, description: "" }
@@ -594,5 +596,9 @@ module.exports = {
         { name: 'Camioneta', id: 3 },
         { name: 'Autobús escolar', id: 4 },
         { name: 'Vehículo todoterreno (ATV)', id: 5 }
+    ],
+    defaultPrefixManifest: [
+        { id: 1, code: salesConst.PREFIX_MANIFEST.HEADQUARTER_TIBU, idHeadquarter: 1 },
+        { id: 2, code: salesConst.PREFIX_MANIFEST.HEADQUARTER_CUCUTA, idHeadquarter: 2 }
     ]
 }

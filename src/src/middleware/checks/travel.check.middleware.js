@@ -23,6 +23,8 @@ const { ErrorModel } = require("../../models/index.models");
 
 module.exports = {
     checkCreateTravel: () => [
+        ...sharedCheckMiddleware.checkJwt(),
+        sharedValidators.validateError,
         check('idDriverVehicle')
             .isString()
             .withMessage(new ErrorModel(errorsConst.travelErrors.idDriverVehicleRequired))
@@ -52,7 +54,7 @@ module.exports = {
                 hourFormat: 'hour24',
                 mode: 'withSeconds'
             }),
-        sharedValidators.validateError,
+        sharedValidators.validateError
     ],
 
     checkGetDriverVehicleTravel: () => [
@@ -186,6 +188,8 @@ module.exports = {
     ],
     checkCreateManifestNumber: () => [
         // TODO: validate role,
+        ...sharedCheckMiddleware.checkJwt(),
+        sharedValidators.validateError,
         check('decryptId', new ErrorModel(errorsConst.travelErrors.idTravelInvalid))
             .custom((id, { req }) => travelValidator.validateTravel(req, { id })),
         sharedValidators.validateError,
@@ -236,6 +240,8 @@ module.exports = {
         sharedValidators.validateError
     ],
     checkCreateByIdVehicleTravel: () => [
+        ...sharedCheckMiddleware.checkJwt(),
+        sharedValidators.validateError,
         check('idVehicle').custom(async (value, { req }) => await vehicleValidator.validateVehicle(req, { where: { id: sharedHelpers.decryptIdDataBase(value) } })),
         sharedValidators.validateError,
         check('vehicle', new ErrorModel(errorsConst.vehicleErrors.vehicleDoesNotExist))

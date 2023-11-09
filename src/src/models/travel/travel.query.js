@@ -5,7 +5,7 @@ const { errorsConst } = require('../../constants/index.constants');
 const { col } = require('sequelize');
 
 // Models
-const { Travel, DriverVehicle, Driver, Vehicle, Route, Municipality, User, Seat, Shipping, Ticket, TemplateVehicle, Owner, Invoice, Resolution, Prefix, Client } = require('../index.models');
+const { Travel, DriverVehicle, Driver, Vehicle, Route, Municipality, User, Seat, Shipping, Ticket, TemplateVehicle, Owner, Invoice, Resolution, Prefix, Client, PrefixManifest } = require('../index.models');
 
 module.exports = {
     createTravel: async (where, transaction) => {
@@ -426,6 +426,11 @@ module.exports = {
                                 ]
                             }
                         ]
+                    },
+                    {
+                        model: PrefixManifest,
+                        as: 'TravelPrefixManifest',
+                        attributes: ['code']
                     }
                 ],
             } = query;

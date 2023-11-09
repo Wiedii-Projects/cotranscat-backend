@@ -24,5 +24,9 @@ module.exports = {
         ONLY_CREATE_INVOICE: 1,
         ONLY_CANCEL_INVOICE: 2,
         CREATION_AND_CANCELLATION_INVOICE: 3
+    },
+    PREFIX_MANIFEST: {
+        HEADQUARTER_TIBU: "TI",
+        HEADQUARTER_CUCUTA: "CU"
     }
 }

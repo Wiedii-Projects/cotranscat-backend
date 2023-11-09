@@ -14,20 +14,26 @@ const localeData = require('dayjs/plugin/localeData');
 dayjs.locale('es');
 
 // Models - Queries
-const { travelQuery, seatQuery, userQuery, vehicleQuery, seatRulerQuery, shippingQuery, invoiceQuery, clientQuery, ticketQuery, driverVehicleQuery, driverQuery, stateVehicleQuery } = require('../models/index.queries');
+const { 
+    travelQuery, seatQuery, userQuery, vehicleQuery, seatRulerQuery, shippingQuery, invoiceQuery, 
+    clientQuery, ticketQuery, driverVehicleQuery, driverQuery, stateVehicleQuery, sellerQuery
+} = require('../models/index.queries');
 const { Ticket, Invoice, Resolution } = require('../models/index.models');
 
 module.exports = {
     createTravel: async (req, res) => {
-        const { driverVehicle: { id: idDriverVehicle, idVehicle }, date, time, idRoute } = req.body;
+        const { driverVehicle: { id: idDriverVehicle, idVehicle }, date, time, idRoute, user } = req.body;
         let transaction
 
 
         try {
             transaction = await dbConnectionOptions.transaction();
+            
+            const prefixManifest = await sellerQuery.findPrefixManifestByBankAssociatedToSellerQuery({ where: { id: sharedHelpers.decryptIdDataBase(user.id) } })
 
             const [travel, isCreated] = await travelQuery.createTravel({
-                idDriverVehicle, date, time, idRoute
+                idDriverVehicle, date, time, idRoute, 
+                idPrefixManifest: sharedHelpers.decryptIdDataBase(prefixManifest.id)
             }, transaction);
 
             if (!isCreated) {
@@ -317,14 +323,17 @@ module.exports = {
         }
     },
     createManifestNumber: async (req, res) => {
-        const { decryptId: id } = req.body;
-        const { observation = "" } = req.query;
+        const { decryptId: id, user } = req.body;
+
         try {
+            const prefixManifest = await sellerQuery.findPrefixManifestByBankAssociatedToSellerQuery({ where: { id: sharedHelpers.decryptIdDataBase(user.id) } })
+            
             let maxNumber = await travelQuery.maxManifestNumberTravel();
             const nextMaxNumber = maxNumber ? parseInt(maxNumber) + 1 : 1;
+            
             await travelQuery.updateTravel({
                 manifestNumber: nextMaxNumber.toString().padStart(12, '0'),
-                manifestObservation: observation
+                idPrefixManifest: sharedHelpers.decryptIdDataBase(prefixManifest.id)
             },
                 { id }
             );
@@ -503,7 +512,7 @@ module.exports = {
 
     createByIdVehicleTravel: async (req, res) => {
 
-        const { vehicle, date, time, idRoute } = req.body;
+        const { vehicle, date, time, idRoute, user } = req.body;
 
         let transaction;
         try {
@@ -529,8 +538,11 @@ module.exports = {
 
             let travelId
             if (!isOldTravel) {
+                const prefixManifest = await sellerQuery.findPrefixManifestByBankAssociatedToSellerQuery({ where: { id: sharedHelpers.decryptIdDataBase(user.id) } })
+                
                 const travel = await travelQuery.createTravelQuery({
-                    idDriverVehicle: idDriverVehicleTemp, date, time, idRoute
+                    idDriverVehicle: idDriverVehicleTemp, date, time, idRoute, 
+                    idPrefixManifest: sharedHelpers.decryptIdDataBase(prefixManifest.id)
                 }, transaction);
 
                 const { idTemplateVehicle, price } = await vehicleQuery.findOneVehicleQuery({ where: { id: sharedHelpers.decryptIdDataBase(vehicle.id) } })
@@ -607,7 +619,7 @@ module.exports = {
             }
 
             const {
-                id, date, time, manifestNumber,TravelSeat, TravelShipping, TravelRoute,
+                id, date, time, manifestNumber,TravelSeat, TravelShipping, TravelRoute, TravelPrefixManifest,
                 TravelDriverVehicle: { VehicleDriverVehicle, DriverDriverVehicle }
             } = travelsFound
 
@@ -635,6 +647,7 @@ module.exports = {
                     date,
                     time,
                     manifestNumber,
+                    prefixManifest: TravelPrefixManifest.code,
                     totalManifestPrice: tickets.total + shippingTotal,
                     discount: 0,
                     route: {
