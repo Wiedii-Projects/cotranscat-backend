@@ -223,7 +223,7 @@ module.exports = {
                                 model: Travel,
                                 as: "TravelDriverVehicle",
                                 required: false,
-                                whereTravel
+                                where: whereTravel
                             }
                         ],
                     }
