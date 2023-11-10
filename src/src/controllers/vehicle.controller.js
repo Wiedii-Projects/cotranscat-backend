@@ -131,19 +131,18 @@ module.exports = {
                     }
                 },
                 {
-                    where: {
-                        [Op.and]: [
-                            { date: { [Op.gte]: new Date(date) } },
-                            { time: { [Op.gte]: time } },
-                        ]
-                    }
+                    [Op.and]: [
+                        { date: { [Op.gte]: new Date(date) } },
+                        { time: { [Op.gte]: time } },
+                    ]
                 }
             );
 
             const vehiclesAvailable = []
-            vehiclesFound.map(({ id: idVehicle, VehicleDriverVehicle: { TravelDriverVehicle } }) => {
+            vehiclesFound.map(({ id: idVehicle, internalNumber, VehicleDriverVehicle: { TravelDriverVehicle } }) => {
                 let objectVehicleResponse = {
                     idVehicle: sharedHelpers.encryptIdDataBase(idVehicle),
+                    internalNumber
                 }
                 if (TravelDriverVehicle.id !== null) {
                     objectVehicleResponse.idTravel = sharedHelpers.encryptIdDataBase(TravelDriverVehicle.id),
